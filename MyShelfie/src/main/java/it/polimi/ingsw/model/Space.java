@@ -5,8 +5,9 @@ public class Space {
     private SpaceType type;
     private Position position;
 
-    public Space(){
-
+    public Space(SpaceType type, Position position){
+        this.type = type;
+        this.position = position;
     }
 
     public SpaceType getType(){
