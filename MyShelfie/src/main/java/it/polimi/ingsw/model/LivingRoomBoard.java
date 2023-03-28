@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,7 +15,7 @@ class LivingRoomBoard(){
     private Space[][] spaces = new Space[][];
     private int numberOfPlayers;
 
-    // The followings are the setups for each possible number of players.
+    // The followings are the configurations for each possible number of players.
     // Each sublist has [0] and [2] indexes for FORBIDDEN and [1] for ACTIVE
     // This could change if we decide to use the THREE_PLAYER and FOUR_PLAYER SpaceType's values
     private final int[][] twoPlayerSetup = {{9,0,0},{3,2,4},{3,3,3},{2,6,1},   {1,7,1},   {1,6,2},{3,3,3},{4,2,3},{9,0,0,}};
@@ -55,13 +56,13 @@ class LivingRoomBoard(){
                 spaces[r][c] = new Space(SpaceType.FORBIDDEN, position);
                 c++;
             }
-            //active tiles
+            // active tiles
             for(int i=0; i<list[1]; i++){
                 Position position = new Position(r,c);
                 spaces[r][c] = new Space(SpaceType.DEFAULT, position);
                 c++;
             }
-            //forbidden tiles
+            // forbidden tiles
             for(int i=0; i<list[2]; i++){
                 Position position = new Position(r,c);
                 spaces[r][c] = new Space(SpaceType.FORBIDDEN, position);
@@ -69,20 +70,50 @@ class LivingRoomBoard(){
             }
             r++;
         }
-
-
     }
 
 
-
-    public ItemTile getTile(Position position){
-        // return ItemTile
-        return null;
+    public Space getSpace(Position position){
+        return spaces[position.getRow()][position.getColumn()];
     }
 
+    public List<Space> getAllFree(){
+        List<Space> freeSidesTiles = new ArrayList<Space>();
+
+        for(int i=1; i<MAX_WIDTH-1; i++){
+            for(int j=1; j<MAX_HEIGHT-1; j++){
+                if (getSpace(new Position(i,j)).isFree()){
+                    if ((getSpace(new Position(i,j-1)).isFree() || getSpace(new Position(i,j-1)).getType() == SpaceType.FORBIDDEN)  &&
+                            (getSpace(new Position(i+1,j)).isFree() || getSpace(new Position(i+1,j)).getType() == SpaceType.FORBIDDEN) &&
+                            (getSpace(new Position(i,j+1)).isFree() || getSpace(new Position(i,j+1)).getType() == SpaceType.FORBIDDEN) &&
+                            (getSpace(new Position(i-1,j)).isFree() || getSpace(new Position(i-1,j)).getType() == SpaceType.FORBIDDEN) )){
+                        freeSidesTiles.add(getSpace(new Position(i,j)));
+                    }
+                }
+
+            }
+        }
+        return freeSidesTiles;
+    }
     public List<Space> getDrawableTiles(){
-        // return Space[]
-        return null;
+        List<Space> drawablesTiles = new ArrayList<Space>();
+
+        for(int i=1; i<MAX_WIDTH-1; i++){
+            for(int j=1; j<MAX_HEIGHT-1; j++){
+                if (getSpace(new Position(i,j)).isFree()){
+                    if (
+                            (getSpace(new Position(i,j-1)).isFree() || getSpace(new Position(i,j-1)).getType() == SpaceType.FORBIDDEN)  ||
+                            (getSpace(new Position(i+1,j)).isFree() || getSpace(new Position(i+1,j)).getType() == SpaceType.FORBIDDEN) ||
+                            (getSpace(new Position(i,j+1)).isFree() || getSpace(new Position(i,j+1)).getType() == SpaceType.FORBIDDEN) ||
+                            (getSpace(new Position(i-1,j)).isFree() || getSpace(new Position(i-1,j)).getType() == SpaceType.FORBIDDEN) ){
+
+                        drawablesTiles.add(getSpace(new Position(i,j)));
+                    }
+                }
+
+            }
+        }
+        return drawablesTiles;
     }
 
     public List<CommongGoalCard> getCommonGoalCards(){
@@ -91,16 +122,10 @@ class LivingRoomBoard(){
         return null;
     }
 
-    // This method does not make much sense
-    public boolean allSpaceHaveAdjacent(){
-        //return boolean
-        return false;
-    }
 
     public void refill(){
-
+        if (getDrawableTiles().size() == getAllFree().size()){
+            System.out.println("sooooos");
+        }
     }
-
-
-
 }
