@@ -5,11 +5,12 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
+
 public class Bag {
     private final int MAX_SIZE = 132;
     private final int MAX_SIZE_PER_TYPE = 22;
 
-    private int size = 5; // modified size
+    private int size = 0;
     private List<ItemTile> bag;
 
     public Bag(){
