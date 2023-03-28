@@ -25,21 +25,21 @@ public class Bag {
     // to be done
     public ItemTile drawTile(){
         int randNumber = ThreadLocalRandom.current().nextInt(0, bag.size() + 1);
-        it.polimi.ingsw.model.ItemTile toBeDrawn = bag.get(randNumber);
+        ItemTile toBeDrawn = bag.get(randNumber);
         bag.remove(randNumber);
         return toBeDrawn;
     }
     public List<ItemTile> drawTile(int amount){
-        List<it.polimi.ingsw.model.ItemTile> toBeDrawn = new ArrayList();
+        List<ItemTile> toBeDrawn = new ArrayList();
         for(int i=0; i<amount; i++){
             int randNumber = ThreadLocalRandom.current().nextInt(0, bag.size() + 1);
-            it.polimi.ingsw.model.ItemTile elem = bag.get(randNumber);
-            toBeDrawn = bag.add(elem);
+            ItemTile elem = bag.get(randNumber);
+            toBeDrawn.add(elem);
             bag.remove(randNumber);
         }
         return toBeDrawn;
     }
-    public void insertTiles(ItemTile[] leftovers){
+    public void insertTiles(List<ItemTile> leftovers){
         for(ItemTile item: leftovers){
             bag.add(item);
         }
