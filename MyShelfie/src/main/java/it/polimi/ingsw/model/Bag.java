@@ -1,6 +1,9 @@
 package it.polimi.ingsw.model;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Bag {
     private final int MAX_SIZE = 132;
@@ -20,10 +23,20 @@ public class Bag {
 
     // to be done
     public ItemTile drawTile(){
-        return null;
+        int randNumber = ThreadLocalRandom.current().nextInt(0, bag.size() + 1);
+        it.polimi.ingsw.model.ItemTile toBeDrawn = bag.get(randNumber);
+        bag.remove(randNumber);
+        return toBeDrawn;
     }
     public List<ItemTile> drawTile(int amount){
-        return null;
+        List<it.polimi.ingsw.model.ItemTile> toBeDrawn = new ArrayList();
+        for(int i=0; i<amount; i++){
+            int randNumber = ThreadLocalRandom.current().nextInt(0, bag.size() + 1);
+            it.polimi.ingsw.model.ItemTile elem = bag.get(randNumber);
+            toBeDrawn = bag.add(elem);
+            bag.remove(randNumber);
+        }
+        return toBeDrawn;
     }
     public void insertTiles(ItemTile[] leftovers){
         for(ItemTile item: leftovers){
