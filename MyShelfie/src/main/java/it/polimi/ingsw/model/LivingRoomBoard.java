@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Game's board
+ * Game's board <br>
  * The board is represented as a MAX_WIDTH x MAX_HEIGHT matrix of Spaces
  */
 class LivingRoomBoard() {
@@ -26,12 +26,13 @@ class LivingRoomBoard() {
 
 
     /**
-     * Initialization of game's board
+     * Initialization of game's board <br>
      * Takes as input the number of players, and it initializes the board accordingly.
      * Afterwards, tiles are drawn from the bag and placed on the free spaces
-     * according to the chosen configuration
+     * according to the chosen configuration.
      *
-     * @param numberOfPlayers int
+     * @throws IllegalArgumentException if numberOfPlayers not in interval [2,4]
+     * @param numberOfPlayers
      */
     public LivingRoomBoard(int numberOfPlayers) throws IllegalArgumentException {
         int[][] activeList = null;
@@ -81,11 +82,20 @@ class LivingRoomBoard() {
          */
     }
 
-
+    /**
+     * Given the space's position this method will return the right Space from the LivingRoomBoard
+     * @param position position of the space of interest
+     * @return the space of interest
+    */
     public Space getSpace(Position position) {
         return spaces[position.getRow()][position.getColumn()];
     }
 
+
+    /**
+     * Finds all the spaces from the LivingRoomBoard with all free spaces on their side
+     * @return all those spaces
+     */
     public List<Space> getAllFree() {
         List<Space> freeSidesTiles = new ArrayList<Space>();
 
@@ -105,6 +115,10 @@ class LivingRoomBoard() {
         return freeSidesTiles;
     }
 
+    /**
+     * Finds all the spaces from the LivingRoomBoard that have at least one free side.
+     * @return List<Space>
+     */
     public List<Space> getDrawableTiles() {
         List<Space> drawablesTiles = new ArrayList<Space>();
 
@@ -128,15 +142,22 @@ class LivingRoomBoard() {
 
     }
 
-    public List<CommongGoalCard> getCommonGoalCards() {
+    /**
+     * Returns the two CommonGoalCard associated to the LivingRoomBoard during the match.
+     * @return List<CommonGoalCard>
+     */
+    public List<CommonGoalCard> getCommonGoalCards() {
         // list or array?
         // CommonGoalCard[]
         return null;
     }
 
-
+    /**
+     * LivingRoomBoard is refilled with new ItemTiles. First the not drawable ones are put back in the bag and then
+     * new ones are drawn and placed.
+     */
     public void refill() {
-        if (getDrawableTiles().size() == getAllFree().size()) {
+        if (getDrawableTiles().size() == getAllFree().size()) { // this condition will probably go in the controller
             bag.insertTiles(getAllFree().stream().map(x -> x.getTile()).collect(Collectors.toList()));
             for (Space space : getAllFree()) {
                 space.drawTile();
@@ -145,6 +166,9 @@ class LivingRoomBoard() {
         }
     }
 
+    /**
+     * Draws the ItemTiles from the bag and places them in the LivingRoomBoard on the playable spaces.
+     */
     private void placeTilesRandomly() {
         for (int i = 1; i < MAX_WIDTH; i++) {
             for (int j = 1; j < MAX_HEIGHT; j++) {
@@ -153,7 +177,5 @@ class LivingRoomBoard() {
                 }
             }
         }
-
-
     }
 }
