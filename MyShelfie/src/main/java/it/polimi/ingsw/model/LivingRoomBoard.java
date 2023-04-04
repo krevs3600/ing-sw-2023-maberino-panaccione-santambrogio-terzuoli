@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
  * Game's board <br>
  * The board is represented as a MAX_WIDTH x MAX_HEIGHT matrix of Spaces
  */
-class LivingRoomBoard() {
+class LivingRoomBoard {
     private final int MAX_WIDTH = 9;
     private final int MAX_HEIGHT = 9;
     private Space[][] spaces = new Space[MAX_WIDTH][MAX_HEIGHT];
@@ -90,7 +90,6 @@ class LivingRoomBoard() {
     public Space getSpace(Position position) {
         return spaces[position.getRow()][position.getColumn()];
     }
-
 
     /**
      * Finds all the spaces from the LivingRoomBoard with all free spaces on their side

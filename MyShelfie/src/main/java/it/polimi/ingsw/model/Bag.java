@@ -46,29 +46,37 @@ public class Bag {
      * @param amount number of tiles to be drawn from the bag
      * @return the item tiles that were picked from the bag
      */
-    public List<ItemTile> drawTile(int amount){
-        List<ItemTile> toBeDrawn = new ArrayList();
-        for(int i=0; i<amount; i++){
-            int randNumber = ThreadLocalRandom.current().nextInt(0, bag.size() + 1);
-            ItemTile elem = bag.get(randNumber);
-            toBeDrawn.add(elem);
-            bag.remove(randNumber);
+    public List<ItemTile> drawTile(int amount) throws IllegalArgumentException{
+        if (amount >= 0 && amount <= this.getSize()) {
+            List<ItemTile> toBeDrawn = new ArrayList();
+            for (int i = 0; i < amount; i++) {
+                int randNumber = ThreadLocalRandom.current().nextInt(0, bag.size() + 1);
+                ItemTile elem = bag.get(randNumber);
+                toBeDrawn.add(elem);
+                bag.remove(randNumber);
+            }
+            return toBeDrawn;
+        } else {
+            throw new IllegalArgumentException("You're taking too main items. Bag size is: " + this.getSize());
         }
-        return toBeDrawn;
     }
 
     /**
      * Inserts in the bag a list of item tiles
      * @param leftovers list of item tiles to be inserted in the bag
      */
-    public void insertTiles(List<ItemTile> leftovers){
-        for(ItemTile item: leftovers){
-            bag.add(item);
+    public void insertTiles(List<ItemTile> leftovers) throws IllegalArgumentException{
+        if (this.getSize() + leftovers.size() < MAX_SIZE) {
+            for(ItemTile item: leftovers){
+                bag.add(item);
+            }
+        } else {
+            throw new IllegalArgumentException("Exceeding bag capacity");
         }
+
     }
 
     /**
-     * 
      * @return how many item tiles are left in the bag
      */
     public int getSize(){

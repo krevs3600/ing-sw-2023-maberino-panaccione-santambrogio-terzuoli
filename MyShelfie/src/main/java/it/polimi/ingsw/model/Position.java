@@ -18,7 +18,6 @@ public class Position {
     }
 
     /**
-     *
      * @return row's coordinate
      */
     public int getRow(){
@@ -26,7 +25,6 @@ public class Position {
     }
 
     /**
-     *
      * @return column's coordinate
      */
     public int getColumn(){
