@@ -6,9 +6,9 @@ import java.util.Map;
 
 public class Bookshelf {
     private int NumberOfTiles;
-    private final int MAX_WIDTH=5;
+    private static final int MAX_WIDTH=5;
 
-    private final int MAX_HEIGHT=6;
+    private static final int MAX_HEIGHT=6;
 
     private ItemTile[][] grid=new ItemTile[MAX_HEIGHT][MAX_WIDTH];
 
