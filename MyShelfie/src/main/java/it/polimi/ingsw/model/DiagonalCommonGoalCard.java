@@ -1,8 +1,8 @@
 package it.polimi.ingsw.model;
 
-public class DiagonalMatrixCommonGoalCard extends CommonGoalCard{
+public class DiagonalCommonGoalCard extends CommonGoalCard{
 
-    public DiagonalMatrixCommonGoalCard (NumberOfPlayers nop, RomanNumber roman)  {
+    public DiagonalCommonGoalCard(NumberOfPlayers nop, RomanNumber roman)  {
         super(nop,roman);
     }
 

@@ -45,6 +45,14 @@ public class Bookshelf {
         return this.grid;
     }
 
+    public int getMaxWidth () {
+        return MAX_WIDTH;
+    }
+
+    public int getMaxHeight () {
+        return MAX_HEIGHT;
+    }
+
     public void insertTile(TilePack tp,int column){
         int insertableTiles=getNumberInsertableTilesColumn(column);
         if(insertableTiles>=tp.getTiles().size()){
