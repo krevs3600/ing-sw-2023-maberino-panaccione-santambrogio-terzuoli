@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Bookshelf {
+
     private int NumberOfTiles;
     private static final int MAX_WIDTH=5;
 
@@ -40,8 +41,9 @@ public class Bookshelf {
     }
 
 
-
-
+    public ItemTile[][] getGrid() {
+        return this.grid;
+    }
 
     public void insertTile(TilePack tp,int column){
         int insertableTiles=getNumberInsertableTilesColumn(column);
@@ -49,6 +51,7 @@ public class Bookshelf {
             for(int j=0;j<tp.getTiles().size();j++){
                 grid[MAX_HEIGHT-insertableTiles+j][column] = tp.getTiles().get(j);
             }
+            this.NumberOfTiles += tp.getTiles().size();
         }
 
     }
@@ -59,9 +62,6 @@ public class Bookshelf {
         return false;
 
     }
-
-
-
 
 
     public Map<Integer, Integer> getNumberAdjacentTiles(TileType type) {

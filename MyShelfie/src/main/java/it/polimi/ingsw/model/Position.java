@@ -4,8 +4,8 @@ package it.polimi.ingsw.model;
  * Coordinates of class Space in the LivingRoomBoard
  */
 public class Position {
-    private int row;
-    private int column;
+    private final int row;
+    private final int column;
 
     /**
      * Constructor that encapsulates Space coordinates in the LivingRoomBoard

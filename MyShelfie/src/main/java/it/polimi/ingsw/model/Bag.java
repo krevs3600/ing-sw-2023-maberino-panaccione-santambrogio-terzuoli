@@ -2,7 +2,6 @@ package it.polimi.ingsw.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -14,8 +13,8 @@ import java.util.concurrent.ThreadLocalRandom;
  * Class contructor
  */
 public class Bag {
-    private final int MAX_SIZE = 132;
-    private final int MAX_SIZE_PER_TYPE = 22;
+    private static final int MAX_SIZE = 132;
+    private static final int MAX_SIZE_PER_TYPE = 22;
 
     private int size = 0;
     private List<ItemTile> bag;
@@ -47,7 +46,7 @@ public class Bag {
      * @return the item tiles that were picked from the bag
      */
     public List<ItemTile> drawTile(int amount){
-        List<ItemTile> toBeDrawn = new ArrayList();
+        List<ItemTile> toBeDrawn = new ArrayList<>();
         for(int i=0; i<amount; i++){
             int randNumber = ThreadLocalRandom.current().nextInt(0, bag.size() + 1);
             ItemTile elem = bag.get(randNumber);
