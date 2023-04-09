@@ -10,7 +10,7 @@ public class TwoLinesCommonGoalCard extends CommonGoalCard{
     }
 public boolean differentTypesinOneline(Bookshelf b,int i) {
     boolean found = true;
-    for (int j = 0; j < b.getMaxHeight() && found; j++) {
+    for (int j = 0; j < b.getMaxWidth() && found; j++) {
         for (int k = j + 1; k < b.getMaxWidth() && found; k++) {
             if (b.getGrid()[i][j].equals(b.getGrid()[i][k])) {
                 found = false;
@@ -28,7 +28,7 @@ public boolean differentTypesinOneline(Bookshelf b,int i) {
         TileType[] tts = {TileType.CAT, TileType.BOOK, TileType.GAME, TileType.FRAME, TileType.TROPHY, TileType.PLANT};
         int lines=0;
         if (toBeChecked(b)) {
-            for (int i = 0; i < b.getMaxWidth(); i++) {
+            for (int i = 0; i < b.getMaxHeight(); i++) {
                    if(differentTypesinOneline(b,i)){
                        lines++;
 
