@@ -3,13 +3,14 @@ package it.polimi.ingsw.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CommonGoalCardDeck implements Drawable {
+public class PersonalGoalCardDeck implements Drawable {
     private List<PersonalGoalCard> deck;
 
-    public CommonGoalCardDeck () {
+    public PersonalGoalCardDeck () {
         this.deck = new ArrayList<PersonalGoalCard>();
     }
 
     @Override
     public GoalCard draw() {}
+    
 }

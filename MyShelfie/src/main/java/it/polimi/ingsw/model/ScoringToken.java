@@ -2,15 +2,15 @@ package it.polimi.ingsw.model;
 
 public class ScoringToken {
 
-    private int romanNumber;
-    private int value;
+    private final RomanNumber romanNumber;
+    private final int value;
 
-    public ScoringToken(int rn, int v) {
+    public ScoringToken(RomanNumber rn, int v) {
         this.romanNumber = rn;
         this.value = v;
     }
 
-    public int getRomanNumber() {
+    public RomanNumber getRomanNumber() {
         return romanNumber;
     }
 

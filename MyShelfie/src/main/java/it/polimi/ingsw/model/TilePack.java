@@ -5,7 +5,7 @@ import java.util.*;
 public class TilePack {
     private List<ItemTile> tiles;
 
-    private final int MAX_LENGTH = 3;
+    private static final int MAX_LENGTH = 3;
     public TilePack () {
         this.tiles = new ArrayList<ItemTile>();
     }

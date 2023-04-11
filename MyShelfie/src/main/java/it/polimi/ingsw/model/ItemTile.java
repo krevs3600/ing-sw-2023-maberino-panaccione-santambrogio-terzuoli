@@ -6,7 +6,7 @@ package it.polimi.ingsw.model;
  * points and game strategies.
  * */
 public class ItemTile {
-    private TileType type;
+    private final TileType type;
 
     /**
      * Constructor of class ItemTile
