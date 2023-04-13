@@ -14,8 +14,8 @@ import java.util.concurrent.ThreadLocalRandom;
  * Class contructor
  */
 public class Bag {
-    private final int MAX_SIZE = 132;
-    private final int MAX_SIZE_PER_TYPE = 22;
+    private static final int MAX_SIZE = 132;
+    private static final int MAX_SIZE_PER_TYPE = 22;
 
     private int size = 0;
     private List<ItemTile> bag;

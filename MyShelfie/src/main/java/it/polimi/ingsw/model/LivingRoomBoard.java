@@ -10,8 +10,8 @@ import java.util.stream.Collectors;
  * The board is represented as a MAX_WIDTH x MAX_HEIGHT matrix of Spaces
  */
 class LivingRoomBoard {
-    private final int MAX_WIDTH = 9;
-    private final int MAX_HEIGHT = 9;
+    private static final int MAX_WIDTH = 9;
+    private static final int MAX_HEIGHT = 9;
     private Space[][] spaces = new Space[MAX_WIDTH][MAX_HEIGHT];
 
     private Bag bag = new Bag();
