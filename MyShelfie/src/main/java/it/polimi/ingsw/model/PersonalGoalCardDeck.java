@@ -11,6 +11,8 @@ public class PersonalGoalCardDeck implements Drawable {
     }
 
     @Override
-    public GoalCard draw() {}
+    public GoalCard draw() {
+        return null;
+    }
     
 }

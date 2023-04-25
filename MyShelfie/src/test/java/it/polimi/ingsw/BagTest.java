@@ -16,14 +16,13 @@ import static org.junit.Assert.assertTrue;
 
 public class BagTest {
 
-    @Test
+    @Test (expected = IllegalArgumentException.class)
     public void getZeroTiles(){
         Bag testBag = new Bag();
         int oldSize = testBag.getSize();
         testBag.drawTile(-3);
         int newSize = testBag.getSize();
 
-        assertThrows(new IllegalArgumentException());
     }
 
     public void getZeroTilesSize(){
@@ -36,13 +35,12 @@ public class BagTest {
 
     }
 
-    @Test
+    @Test (expected = IllegalArgumentException.class)
     public void drawTooManyTiles(){
         Bag testBag = new Bag();
         testBag.drawTile(133);
         int newSize = testBag.getSize();
 
-        assertThrows(IllegalArgumentException());
     }
 
     @Test
@@ -85,15 +83,15 @@ public class BagTest {
         assertTrue(newSize == oldSize-25);
     }
 
-    @Test
+    @Test (expected = IllegalArgumentException.class)
     public void insertTilesTestSizeOverflow(){
+
         Bag testBag = new Bag();
         List<ItemTile> drawTiles = testBag.drawTile(132);
         drawTiles.add(132, new ItemTile(TileType.CAT));
         testBag.insertTiles(drawTiles);
         int newSize = testBag.getSize();
 
-        assertThrows(IllegalArgumentException());
     }
 
 
