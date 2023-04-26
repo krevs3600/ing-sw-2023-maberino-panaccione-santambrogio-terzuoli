@@ -17,8 +17,9 @@ public class Bag {
     private static final int MAX_SIZE = 132;
     private static final int MAX_SIZE_PER_TYPE = 22;
 
+    //private Bag bag = new Bag();
     private int size = 0;
-    private List<ItemTile> bag;
+    private List<ItemTile> bag = new ArrayList<ItemTile>();;
 
     public Bag(){
         for(TileType type: TileType.values()){
@@ -33,11 +34,19 @@ public class Bag {
      * Used in order to draw from the bag a random item tile, that will be later placed on the board
       * @return the item that was drawn from the bag
      */
-    public ItemTile drawTile(){
-        int randNumber = ThreadLocalRandom.current().nextInt(0, bag.size() + 1);
-        ItemTile toBeDrawn = bag.get(randNumber);
-        bag.remove(randNumber);
-        return toBeDrawn;
+    public ItemTile drawTile() throws IndexOutOfBoundsException{
+        if(this.size > 0){
+            int randNumber = ThreadLocalRandom.current().nextInt(0, bag.size() + 0);
+            ItemTile toBeDrawn = bag.get(randNumber);
+            bag.remove(randNumber);
+            size--;
+            return toBeDrawn;
+        } else {
+            throw new IndexOutOfBoundsException("The bag is empty ");
+        }
+
+
+
     }
 
     /**
@@ -50,10 +59,12 @@ public class Bag {
         if (amount >= 0 && amount <= this.getSize()) {
             List<ItemTile> toBeDrawn = new ArrayList();
             for (int i = 0; i < amount; i++) {
-                int randNumber = ThreadLocalRandom.current().nextInt(0, bag.size() + 1);
+                int randNumber = ThreadLocalRandom.current().nextInt(0, bag.size() + 0);
                 ItemTile elem = bag.get(randNumber);
                 toBeDrawn.add(elem);
                 bag.remove(randNumber);
+                size--;
+
             }
             return toBeDrawn;
         } else {
@@ -69,6 +80,7 @@ public class Bag {
         if (this.getSize() + leftovers.size() < MAX_SIZE) {
             for(ItemTile item: leftovers){
                 bag.add(item);
+                size++;
             }
         } else {
             throw new IllegalArgumentException("Exceeding bag capacity");

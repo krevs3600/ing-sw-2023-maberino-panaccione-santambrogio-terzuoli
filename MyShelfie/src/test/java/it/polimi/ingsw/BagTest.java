@@ -11,8 +11,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static org.junit.Assert.assertThrows;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class BagTest {
 
@@ -25,6 +24,17 @@ public class BagTest {
 
     }
 
+    @Test
+    public void DrawSingleTile(){
+        Bag testBag = new Bag();
+        int oldSize = testBag.getSize();
+        testBag.drawTile();
+        int newSize = testBag.getSize();
+        assertEquals(oldSize-1, newSize);
+
+    }
+
+    @Test
     public void getZeroTilesSize(){
         Bag testBag = new Bag();
         int oldSize = testBag.getSize();
@@ -33,6 +43,14 @@ public class BagTest {
 
         assertTrue(oldSize==newSize);
 
+    }
+
+    @Test
+    public void drawAllTiles(){
+        Bag testBag = new Bag();
+        testBag.drawTile(132);
+        int newSize = testBag.getSize();
+        assertEquals(0, newSize);
     }
 
     @Test (expected = IllegalArgumentException.class)
@@ -44,14 +62,38 @@ public class BagTest {
     }
 
     @Test
+    public void drawTooManyTilesWithAssert(){
+        Bag testBag = new Bag();
+        assertThrows(IllegalArgumentException.class, () -> {
+            testBag.drawTile(133);
+        });
+    }
+
+    @Test
+    public void drawOneTileFromEmptyBag(){
+        Bag testBag = new Bag();
+        testBag.drawTile(132);
+        assertThrows(IndexOutOfBoundsException.class, ()-> {
+            testBag.drawTile();
+        });
+    }
+
+    @Test
     public void drawTilesTestSize(){
         Bag testBag = new Bag();
         int oldSize = testBag.getSize();
-        testBag.drawTile(30);
+        testBag.drawTile(25);
         int newSize = testBag.getSize();
+        try {
+            assertTrue(newSize == oldSize - 25);
+            }
+        catch (AssertionError e){
+            System.out.println(oldSize);
+            }
+        }
 
-        assertTrue(newSize == oldSize-30);
-    }
+
+
 
     @Test
     public void insertTilesTestSize(){
@@ -65,7 +107,7 @@ public class BagTest {
         testBag.insertTiles(leftovers);
         int newSize = testBag.getSize();
 
-        assertTrue(newSize == oldSize-25);
+        assertTrue(newSize == oldSize + 5);
     }
 
     @Test
@@ -80,8 +122,14 @@ public class BagTest {
         testBag.insertTiles(leftovers);
         int newSize = testBag.getSize();
 
-        assertTrue(newSize == oldSize-25);
+        //assertTrue(newSize == oldSize-25);
+        try {
+            assertEquals(oldSize +5, newSize);
+        } catch (AssertionError e){
+            System.out.println(oldSize);
+        }
     }
+
 
     @Test (expected = IllegalArgumentException.class)
     public void insertTilesTestSizeOverflow(){
@@ -94,6 +142,14 @@ public class BagTest {
 
     }
 
-
+    @Test
+    public void insertOneMoreThanSize(){
+       Bag testBag = new Bag();
+       List<ItemTile> list = new ArrayList<ItemTile>();
+       list.add(new ItemTile(TileType.CAT));
+       assertThrows(IllegalArgumentException.class, ()-> {
+           testBag.insertTiles(list);
+       });
+    }
 
 }

@@ -53,21 +53,25 @@ public class Space {
      * @throws IllegalAccessError if the space was not free
      */
     public void setTile(ItemTile tile) throws IllegalAccessError{
-        if (getType() == SpaceType.DEFAULT) {
+        if (getType().equals(SpaceType.DEFAULT) && this.isFree()) {
             this.tile = tile;
-            this.free = true;
+            this.free = false;
         } else {
             throw new IllegalAccessError();
         }
     }
 
+
     /**
      *
      * @return the tile that is placed on the space
      */
-    public ItemTile getTile(){
-        return this.tile;
-
+    public ItemTile getTile() throws IllegalAccessError{
+       if(this.getType().equals(SpaceType.FORBIDDEN) || this.isFree()){
+           throw new IllegalAccessError("The selected space is not playable");
+       } else {
+           return this.tile;
+       }
     }
 
     /**
@@ -76,10 +80,10 @@ public class Space {
      * @throws IllegalAccessError if the space was free or not playable
      */
     public ItemTile drawTile() throws IllegalAccessError{
-        if (!isFree()){
+        if (!isFree() && this.getType().equals(SpaceType.DEFAULT)){
             ItemTile tempTile = this.tile;
             this.tile = null;
-            this.free = false;
+            this.free = true;
             return tempTile;
         }
         else {
