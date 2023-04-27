@@ -57,9 +57,12 @@ public class Bookshelf {
         int insertableTiles=getNumberInsertableTilesColumn(column);
         if(insertableTiles>=tp.getTiles().size()){
             for(int j=0;j<tp.getTiles().size();j++){
-                grid[MAX_HEIGHT-insertableTiles+j][column] = tp.getTiles().get(j);
+                grid[insertableTiles-j-1][column] = tp.getTiles().get(j);
             }
             this.NumberOfTiles += tp.getTiles().size();
+        }
+        else {
+            throw new IndexOutOfBoundsException("invalid column, please select another column or remove some tiles from the tile pack");
         }
 
     }
@@ -78,7 +81,6 @@ public class Bookshelf {
         boolean due = false;
         int counter = 0;
         boolean onefound = true;
-        boolean stop = false;
         int[][] auxiliary = new int[MAX_HEIGHT][MAX_WIDTH];
 
         for (int i = 0; i < MAX_HEIGHT; i++) {
@@ -93,21 +95,21 @@ public class Bookshelf {
                 if (grid[i][j]!=null && grid[i][j].getType().equals(type) && auxiliary[i][j] == 0) {
                     auxiliary[i][j] = 1;
                     counter++;
-                    if (grid[i+1][j]!=null && grid[i + 1][j].getType().equals(type) &&  auxiliary[i + 1][j] ==0 ) {
+                    if (i<5 && grid[i+1][j]!=null && grid[i + 1][j].getType().equals(type) &&  auxiliary[i + 1][j] ==0 ) {
                         auxiliary[i + 1][j] = 2;
 
                     }
-                    if (grid[i-1][j]!=null && grid[i - 1][j].getType().equals(type) && auxiliary[i - 1][j]== 0 ) {
+                    if (i>0 && grid[i-1][j]!=null && grid[i - 1][j].getType().equals(type) && auxiliary[i - 1][j]== 0 ) {
                         auxiliary[i - 1][j] = 2;
 
                     }
 
-                    if (grid[i][j+1]!=null && grid[i][j + 1].getType().equals(type) && auxiliary[j][j + 1]== 0) {
-                        auxiliary[j][j + 1] = 2;
+                    if (j<4 && grid[i][j+1]!=null && grid[i][j + 1].getType().equals(type) && auxiliary[i][j + 1]== 0) {
+                        auxiliary[i][j + 1] = 2;
 
                     }
 
-                    if (grid[i][j-1]!=null && grid[i][j - 1].getType().equals(type) && auxiliary[i][j - 1] ==0) {
+                    if (j>0 && grid[i][j-1]!=null && grid[i][j - 1].getType().equals(type) && auxiliary[i][j - 1] ==0) {
                         auxiliary[i][j - 1] = 2;
 
                     }
@@ -117,18 +119,18 @@ public class Bookshelf {
                             if (auxiliary[i][j] == 2) {
                                 auxiliary[i][j] = 1;
                                 counter++;
-                                if (grid[i+1][j]!=null && grid[i + 1][j].getType().equals(type) && auxiliary[i+1][j]==0) {
+                                if (i<5 && grid[i+1][j]!=null && grid[i + 1][j].getType().equals(type) && auxiliary[i+1][j]==0) {
                                     auxiliary[i + 1][j] = 2;
                                 }
-                                if (grid[i-1][j]!=null && grid[i - 1][j].getType().equals(type) && auxiliary[i-1][j]==0) {
+                                if (i>0 && grid[i-1][j]!=null && grid[i - 1][j].getType().equals(type) && auxiliary[i-1][j]==0) {
                                     auxiliary[i - 1][j] = 2;
                                 }
 
-                                if (grid[i][j+1]!=null && grid[i][j + 1].getType().equals(type) && auxiliary[i][j+1]==0) {
-                                    auxiliary[j][j + 1] = 2;
+                                if (j<4 && grid[i][j+1]!=null && grid[i][j + 1].getType().equals(type) && auxiliary[i][j+1]==0) {
+                                    auxiliary[i][j + 1] = 2;
                                 }
 
-                                if (grid[i][j-1]!=null && grid[i][j - 1].getType().equals(type) && auxiliary[i][j-1]==0) {
+                                if (j>0 && grid[i][j-1]!=null && grid[i][j - 1].getType().equals(type) && auxiliary[i][j-1]==0) {
                                     auxiliary[i][j - 1] = 2;
                                 }
 
@@ -153,6 +155,8 @@ public class Bookshelf {
 
                             }
                             i++;
+                            j=0;
+
 
                         }
 
@@ -170,6 +174,9 @@ public class Bookshelf {
 
                     }
                     counter = 0;
+                    i=0;
+                    j=0;
+                    onefound=true;
 
 
                 }

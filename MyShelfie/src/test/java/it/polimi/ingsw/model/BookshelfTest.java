@@ -2,7 +2,10 @@ package it.polimi.ingsw.model;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeAll;
+
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -134,5 +137,58 @@ public class BookshelfTest {
             assertEquals(tp2.getTiles().get(i).getType(), b2.getGrid()[tp2.getTiles().size()-1-i][4].getType());
         }
         assertNull(b1.getGrid()[5][0]);
+    }
+    @Test
+    public void correctGetNumberAdjacentTiles() {
+        Map<Integer, Integer> m = new HashMap<>();
+        m.put(2, 2);
+        m.put(4, 2);
+        assertEquals(m, b2.getNumberAdjacentTiles(TileType.BOOK));
+        Map<Integer, Integer> m1 = new HashMap<>();
+        m1.put(2, 2);
+        assertEquals(m1, b2.getNumberAdjacentTiles(TileType.CAT));
+        Bookshelf b8 = new Bookshelf();
+        for (int i = 0; i < 5; i++) {
+            b8.insertTile(tp1, i);
+            b8.insertTile(tp1, i);
+        }
+        Map<Integer, Integer> m2 = new HashMap<>();
+        m2.put(5, 2);
+        assertEquals(m2, b8.getNumberAdjacentTiles(TileType.CAT));
+        Bookshelf b9 = new Bookshelf();
+        i1 = new ItemTile(TileType.CAT);
+        i2 = new ItemTile(TileType.BOOK);
+        i3 = new ItemTile(TileType.BOOK);
+        i4 = new ItemTile(TileType.FRAME);
+        i5 = new ItemTile(TileType.TROPHY);
+        i6 = new ItemTile(TileType.PLANT);
+        i7 = new ItemTile(TileType.GAME);
+        i8 = new ItemTile(TileType.BOOK);
+        i9 = new ItemTile(TileType.BOOK);
+        TilePack tp10=new TilePack();
+        tp10.insertTile(i1);
+        tp10.insertTile(i3);
+        tp10.insertTile(i4); // t10-->CAT BOOK FRAME
+
+            b9.insertTile(tp10,0);
+            b9.insertTile(tp1,0);
+
+        b9.insertTile(tp1,1);
+        b9.insertTile(tp10,1);
+
+        b9.insertTile(tp10,2);
+        b9.insertTile(tp1,2);
+
+        b9.insertTile(tp1,3);
+        b9.insertTile(tp10,3);
+
+        b9.insertTile(tp10,4);
+        b9.insertTile(tp1,4);
+
+        Map<Integer, Integer> m3 = new HashMap<>();
+        m3.put(1,5);
+        assertEquals(m3, b9.getNumberAdjacentTiles(TileType.FRAME));
+
+
     }
 }
