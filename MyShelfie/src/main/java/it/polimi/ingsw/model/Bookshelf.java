@@ -22,7 +22,7 @@ public class Bookshelf {
     }
 
     public int getNumberInsertableTiles(){
-        int count=0,max=0;
+        int count,max=0;
         for(int j=0;j<MAX_WIDTH;j++){
             count=getNumberInsertableTilesColumn(j);
             if(count>max) max=count;
@@ -55,13 +55,13 @@ public class Bookshelf {
 
     public void insertTile(TilePack tp,int column){
         int insertableTiles=getNumberInsertableTilesColumn(column);
-        if(insertableTiles>=tp.getTiles().size()) {
-            for (int j = 0; j < tp.getTiles().size(); j++) {
-                grid[MAX_HEIGHT - insertableTiles + j][column] = tp.getTiles().get(j);
+        if(insertableTiles>=tp.getTiles().size()){
+            for(int j=0;j<tp.getTiles().size();j++){
+                grid[MAX_HEIGHT-insertableTiles+j][column] = tp.getTiles().get(j);
             }
             this.NumberOfTiles += tp.getTiles().size();
         }
-// manca eccezione
+
     }
 
 

@@ -13,12 +13,12 @@ public class IncreasingColumnsCommonGoalCard extends CommonGoalCard{
     public boolean CheckPattern (Bookshelf b) {
         boolean increasingOrder = true;
         for (int i=0; i<b.getMaxWidth()-1 && increasingOrder; i++) {
-            increasingOrder = (b.getNumberInsertableTilesColumn(i) == b.getNumberInsertableTilesColumn(i+1) - 1);
+            increasingOrder = (b.getNumberInsertableTilesColumn(i) == b.getNumberInsertableTilesColumn(i+1) + 1);
         }
         if (increasingOrder) return increasingOrder;
         increasingOrder = true;
         for (int i=b.getMaxWidth()-1; i>0 && increasingOrder; i--) {
-            increasingOrder = (b.getNumberInsertableTilesColumn(i) == b.getNumberInsertableTilesColumn(i-1) - 1);
+            increasingOrder = (b.getNumberInsertableTilesColumn(i) == b.getNumberInsertableTilesColumn(i-1) + 1);
         }
         return increasingOrder;
     }
