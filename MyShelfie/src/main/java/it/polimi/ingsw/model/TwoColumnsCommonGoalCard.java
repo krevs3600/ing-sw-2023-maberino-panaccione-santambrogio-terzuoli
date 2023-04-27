@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model;
 
-public class TwoColumnCommonGoalCard extends CommonGoalCard{
-    public TwoColumnCommonGoalCard(NumberOfPlayers nop, RomanNumber roman)  {
+public class TwoColumnsCommonGoalCard extends CommonGoalCard{
+    public TwoColumnsCommonGoalCard(NumberOfPlayers nop, RomanNumber roman)  {
         super(nop,roman);
     }
 
@@ -9,7 +9,7 @@ public class TwoColumnCommonGoalCard extends CommonGoalCard{
         return b.getNumberOfTiles()>=12;
     }
 
-    public boolean differentTypesinOneColumn(Bookshelf b,int j) {
+    public boolean differentTypesInOneColumn(Bookshelf b,int j) {
         boolean found = true;
         for (int i = 0; i < b.getMaxHeight() && found; i++) {
             for (int k = i + 1; k < b.getMaxHeight() && found; k++) {
@@ -27,7 +27,7 @@ public class TwoColumnCommonGoalCard extends CommonGoalCard{
         int columns=0;
         if (toBeChecked(b)) {
             for (int j = 0; j < b.getMaxWidth(); j++) {
-                if(differentTypesinOneColumn(b,j)){
+                if(differentTypesInOneColumn(b,j)){
                     columns++;
 
                 }

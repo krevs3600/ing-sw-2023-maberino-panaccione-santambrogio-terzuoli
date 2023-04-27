@@ -20,11 +20,13 @@ public class SixGroupsCommonGoalCard extends CommonGoalCard {
             for (TileType tt : tts) {
                 Map m = b.getNumberAdjacentTiles(tt);
                 for (int i = 2; i < b.getNumberOfTiles(); i++) {
-                    counter += (int) m.get(i); // casting!!!
+                    if (m.containsKey(i)) {
+                        counter += (int) m.get(i); // casting!!!
+                    }
                 }
+                return counter >= 6;
             }
-            return counter >= 6;
         }
-        else return false;
+         return false;
     }
 }

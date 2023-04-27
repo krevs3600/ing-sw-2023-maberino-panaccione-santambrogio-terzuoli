@@ -57,9 +57,11 @@ public class Bookshelf {
         int insertableTiles=getNumberInsertableTilesColumn(column);
         if(insertableTiles>=tp.getTiles().size()){
             for(int j=0;j<tp.getTiles().size();j++){
-                grid[insertableTiles-j-1][column] = tp.getTiles().get(j);
+                grid[insertableTiles-j-1][column] = tp.getTiles().get(0);
+               tp.getTiles().remove(0);
+                this.NumberOfTiles ++;
             }
-            this.NumberOfTiles += tp.getTiles().size();
+
         }
         else {
             throw new IndexOutOfBoundsException("invalid column, please select another column or remove some tiles from the tile pack");

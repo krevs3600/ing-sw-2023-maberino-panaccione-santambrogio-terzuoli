@@ -8,7 +8,7 @@ public class TwoLinesCommonGoalCard extends CommonGoalCard{
     public boolean toBeChecked (Bookshelf b) {
         return b.getNumberOfTiles()>=10;
     }
-public boolean differentTypesinOneline(Bookshelf b,int i) {
+public boolean differentTypesInOneline(Bookshelf b,int i) {
     boolean found = true;
     for (int j = 0; j < b.getMaxWidth() && found; j++) {
         for (int k = j + 1; k < b.getMaxWidth() && found; k++) {
@@ -29,7 +29,7 @@ public boolean differentTypesinOneline(Bookshelf b,int i) {
         int lines=0;
         if (toBeChecked(b)) {
             for (int i = 0; i < b.getMaxHeight(); i++) {
-                   if(differentTypesinOneline(b,i)){
+                   if(differentTypesInOneline(b,i)){
                        lines++;
 
                         }

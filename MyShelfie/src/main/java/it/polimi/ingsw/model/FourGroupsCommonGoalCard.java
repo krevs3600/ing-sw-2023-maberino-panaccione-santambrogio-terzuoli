@@ -20,11 +20,13 @@ public class FourGroupsCommonGoalCard extends CommonGoalCard {
             for (TileType tt : tts) {
                 Map m = b.getNumberAdjacentTiles(tt);
                 for (int i = 4; i < b.getNumberOfTiles(); i++) {
-                    counter += (int) m.get(i); // casting!!!
+                    if (m.containsKey(i)) {
+                        counter += (int) m.get(i); // casting!!!
+                    }
                 }
+                return counter >= 4;
             }
-            return counter >= 4;
         }
-        else return false;
+        return false;
     }
 }

@@ -6,7 +6,7 @@ public class ThreeColumnsCommonGoalCard extends CommonGoalCard {
     }
 
     public boolean toBeChecked (Bookshelf b) {
-        return b.getNumberOfTiles()>=20;
+        return b.getNumberOfTiles()>=18;
     }
     public boolean AtMostThreeDifferentTypesInOneColumn(Bookshelf b, int j) {
         boolean found = false;

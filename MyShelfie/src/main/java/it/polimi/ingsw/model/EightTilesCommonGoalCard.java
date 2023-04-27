@@ -1,8 +1,8 @@
 package it.polimi.ingsw.model;
 
-public class EightCardsCommonGoalCard extends CommonGoalCard {
+public class EightTilesCommonGoalCard extends CommonGoalCard {
 
-    public EightCardsCommonGoalCard(NumberOfPlayers nop, RomanNumber roman)  {
+    public EightTilesCommonGoalCard(NumberOfPlayers nop, RomanNumber roman)  {
         super(nop,roman);
     }
 
@@ -16,6 +16,7 @@ public class EightCardsCommonGoalCard extends CommonGoalCard {
         int counter=0;
         if (toBeChecked(b)) {
                 for (TileType tt : tts) {
+                    counter=0;
                     for (int i = 0; i < b.getMaxWidth() && !found; i++) {
                         for (int j = 0; j < b.getMaxHeight() && !found; j++) {
                             if (b.getGrid()[i][j].getType().equals(tt)) {

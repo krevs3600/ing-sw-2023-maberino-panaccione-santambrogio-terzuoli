@@ -13,23 +13,19 @@ public class CrossCommonGoalCard extends CommonGoalCard{
 
     public boolean CheckPattern (Bookshelf b) {
         if(toBeChecked(b)){
-        boolean found=false;
-        for(int i=0;i<b.getMaxWidth()-2 && !found;i++){
-            for(int j=0;j<b.getMaxHeight() &&! found;j++){
+        for(int i=0;i<b.getMaxWidth()-2;i++){
+            for(int j=0;j<b.getMaxHeight()-2 ;j++){
                 if(b.getGrid()[i][j].getType().equals(b.getGrid()[i+2][j].getType()) &&
                         b.getGrid()[i][j].getType().equals(b.getGrid()[i][j+2].getType())  &&
                         b.getGrid()[i][j].getType().equals(b.getGrid()[i+1][j+1].getType()) &&
-                        b.getGrid()[i][j].getType().equals(b.getGrid()[i+2][j+2].getType())){
-                    found=true;
-
-                }
+                        b.getGrid()[i][j].getType().equals(b.getGrid()[i+2][j+2].getType()))
+                    { return true;}
 
                 }
             }
-            return found;
 
         }
-        else return false;
+       return false;
     }
 
 
