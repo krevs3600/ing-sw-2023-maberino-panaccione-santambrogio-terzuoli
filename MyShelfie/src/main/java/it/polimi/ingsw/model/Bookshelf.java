@@ -55,13 +55,13 @@ public class Bookshelf {
 
     public void insertTile(TilePack tp,int column){
         int insertableTiles=getNumberInsertableTilesColumn(column);
-        if(insertableTiles>=tp.getTiles().size()){
-            for(int j=0;j<tp.getTiles().size();j++){
-                grid[MAX_HEIGHT-insertableTiles+j][column] = tp.getTiles().get(j);
+        if(insertableTiles>=tp.getTiles().size()) {
+            for (int j = 0; j < tp.getTiles().size(); j++) {
+                grid[MAX_HEIGHT - insertableTiles + j][column] = tp.getTiles().get(j);
             }
             this.NumberOfTiles += tp.getTiles().size();
         }
-
+// manca eccezione
     }
 
 
@@ -90,24 +90,24 @@ public class Bookshelf {
 
         for (int i = 0; i < MAX_HEIGHT; i++) {
             for (int j = 0; j < MAX_WIDTH; j++) {
-                if (grid[i][j].getType().equals(type) && auxiliary[i][j] == 0) {
+                if (grid[i][j]!=null && grid[i][j].getType().equals(type) && auxiliary[i][j] == 0) {
                     auxiliary[i][j] = 1;
                     counter++;
-                    if (grid[i + 1][j].getType().equals(type) &&  auxiliary[i + 1][j] ==0 ) {
+                    if (grid[i+1][j]!=null && grid[i + 1][j].getType().equals(type) &&  auxiliary[i + 1][j] ==0 ) {
                         auxiliary[i + 1][j] = 2;
 
                     }
-                    if (grid[i - 1][j].getType().equals(type) && auxiliary[i - 1][j]== 0 ) {
+                    if (grid[i-1][j]!=null && grid[i - 1][j].getType().equals(type) && auxiliary[i - 1][j]== 0 ) {
                         auxiliary[i - 1][j] = 2;
 
                     }
 
-                    if (grid[i][j + 1].getType().equals(type) && auxiliary[j][j + 1]== 0) {
+                    if (grid[i][j+1]!=null && grid[i][j + 1].getType().equals(type) && auxiliary[j][j + 1]== 0) {
                         auxiliary[j][j + 1] = 2;
 
                     }
 
-                    if (grid[i][j - 1].getType().equals(type) && auxiliary[i][j - 1] ==0) {
+                    if (grid[i][j-1]!=null && grid[i][j - 1].getType().equals(type) && auxiliary[i][j - 1] ==0) {
                         auxiliary[i][j - 1] = 2;
 
                     }
@@ -117,18 +117,18 @@ public class Bookshelf {
                             if (auxiliary[i][j] == 2) {
                                 auxiliary[i][j] = 1;
                                 counter++;
-                                if (grid[i + 1][j].getType().equals(type) && auxiliary[i+1][j]==0) {
+                                if (grid[i+1][j]!=null && grid[i + 1][j].getType().equals(type) && auxiliary[i+1][j]==0) {
                                     auxiliary[i + 1][j] = 2;
                                 }
-                                if (grid[i - 1][j].getType().equals(type) && auxiliary[i-1][j]==0) {
+                                if (grid[i-1][j]!=null && grid[i - 1][j].getType().equals(type) && auxiliary[i-1][j]==0) {
                                     auxiliary[i - 1][j] = 2;
                                 }
 
-                                if (grid[i][j + 1].getType().equals(type) && auxiliary[i][j+1]==0) {
+                                if (grid[i][j+1]!=null && grid[i][j + 1].getType().equals(type) && auxiliary[i][j+1]==0) {
                                     auxiliary[j][j + 1] = 2;
                                 }
 
-                                if (grid[i][j - 1].getType().equals(type) && auxiliary[i][j-1]==0) {
+                                if (grid[i][j-1]!=null && grid[i][j - 1].getType().equals(type) && auxiliary[i][j-1]==0) {
                                     auxiliary[i][j - 1] = 2;
                                 }
 
