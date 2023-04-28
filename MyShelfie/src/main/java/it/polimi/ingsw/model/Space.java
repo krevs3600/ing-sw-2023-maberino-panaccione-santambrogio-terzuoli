@@ -21,6 +21,7 @@ public class Space {
         this.type = type;
         this.position = position;
         this.tile = null;
+        this.free = this.getType() != SpaceType.FORBIDDEN;
     }
 
     /**
@@ -61,17 +62,16 @@ public class Space {
         }
     }
 
-
     /**
      *
      * @return the tile that is placed on the space
      */
     public ItemTile getTile() throws IllegalAccessError{
-       if(this.getType().equals(SpaceType.FORBIDDEN) || this.isFree()){
-           throw new IllegalAccessError("The selected space is not playable");
-       } else {
-           return this.tile;
-       }
+        if(this.getType().equals(SpaceType.FORBIDDEN) || this.isFree()){
+            throw new IllegalAccessError("The selected space is not playable");
+        } else {
+            return this.tile;
+        }
     }
 
     /**
@@ -90,6 +90,17 @@ public class Space {
             throw new IllegalAccessError();
         }
 
+    }
+
+    @Override
+    public String toString(){
+        if (!this.isFree() && this.getType() == SpaceType.DEFAULT){
+            return this.getTile().getType().colorBackground + " " + this.getTile().getType().abbreviation + " " + "\033[0m";
+        } else if (this.getType() == SpaceType.FORBIDDEN) {
+            return " X ";
+        } else {
+            return "   ";
+        }
     }
 
 }
