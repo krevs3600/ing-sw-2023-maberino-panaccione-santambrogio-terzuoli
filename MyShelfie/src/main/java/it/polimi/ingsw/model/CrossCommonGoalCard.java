@@ -13,14 +13,17 @@ public class CrossCommonGoalCard extends CommonGoalCard{
 
     public boolean CheckPattern (Bookshelf b) {
         if(toBeChecked(b)){
-        for(int i=0;i<b.getMaxWidth()-2;i++){
-            for(int j=0;j<b.getMaxHeight()-2 ;j++){
-                if(b.getGrid()[i][j].getType().equals(b.getGrid()[i+2][j].getType()) &&
-                        b.getGrid()[i][j].getType().equals(b.getGrid()[i][j+2].getType())  &&
-                        b.getGrid()[i][j].getType().equals(b.getGrid()[i+1][j+1].getType()) &&
-                        b.getGrid()[i][j].getType().equals(b.getGrid()[i+2][j+2].getType()))
-                    { return true;}
-
+        for(int i=0;i<b.getMaxHeight()-2;i++){
+            for(int j=0;j<b.getMaxWidth()-2 ;j++){
+                if(b.getGrid()[i][j]!=null && b.getGrid()[i+2][j]!=null &&  b.getGrid()[i+1][j+1]!=null &&
+                        b.getGrid()[i][j+2]!=null && b.getGrid()[i+2][j+2]!=null) {
+                    if (b.getGrid()[i][j].getType().equals(b.getGrid()[i + 2][j].getType()) &&
+                            b.getGrid()[i][j].getType().equals(b.getGrid()[i][j + 2].getType()) &&
+                            b.getGrid()[i][j].getType().equals(b.getGrid()[i + 1][j + 1].getType()) &&
+                            b.getGrid()[i][j].getType().equals(b.getGrid()[i + 2][j + 2].getType())) {
+                        return true;
+                    }
+                }
                 }
             }
 
