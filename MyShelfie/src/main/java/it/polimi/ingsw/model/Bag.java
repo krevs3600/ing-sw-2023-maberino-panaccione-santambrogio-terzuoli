@@ -2,7 +2,6 @@ package it.polimi.ingsw.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -22,10 +21,10 @@ public class Bag {
 
     //private Bag bag = new Bag();
     private int size = 0;
-    private List<ItemTile> bag = new ArrayList<ItemTile>();;
+    private final List<ItemTile> bag = new ArrayList<ItemTile>();;
 
     /**
-     * Class contructor
+     * Class constructor
      */
     public Bag(){
         for(TileType type: TileType.values()){
@@ -43,7 +42,7 @@ public class Bag {
      */
     public ItemTile drawTile() throws IndexOutOfBoundsException{
         if(this.size > 0){
-            int randNumber = ThreadLocalRandom.current().nextInt(0, bag.size() + 0);
+            int randNumber = ThreadLocalRandom.current().nextInt(0, bag.size());
             ItemTile toBeDrawn = bag.get(randNumber);
             bag.remove(randNumber);
             size--;
@@ -51,9 +50,6 @@ public class Bag {
         } else {
             throw new IndexOutOfBoundsException("The bag is empty ");
         }
-
-
-
     }
 
     /**
@@ -65,9 +61,9 @@ public class Bag {
      */
     public List<ItemTile> drawTile(int amount) throws IllegalArgumentException{
         if (amount >= 0 && amount <= this.getSize()) {
-            List<ItemTile> toBeDrawn = new ArrayList();
+            List<ItemTile> toBeDrawn = new ArrayList<>();
             for (int i = 0; i < amount; i++) {
-                int randNumber = ThreadLocalRandom.current().nextInt(0, bag.size() + 0);
+                int randNumber = ThreadLocalRandom.current().nextInt(0, bag.size());
                 ItemTile elem = bag.get(randNumber);
                 toBeDrawn.add(elem);
                 bag.remove(randNumber);

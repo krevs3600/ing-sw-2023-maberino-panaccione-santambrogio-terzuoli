@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model;
 
-import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,7 +7,7 @@ import java.util.Map;
  * <h1>Class Bookshelf</h1>
  * The class Bookshelf contains a matrix of item tiles owned by a Player
  *
- * @author Francsca Pia Panaccione, Francesco Santambrogio
+ * @author Francesca Pia Panaccione, Francesco Santambrogio
  * @version 1.0
  * @since 4/8/2023
  */
@@ -20,10 +19,10 @@ public class Bookshelf {
 
     private static final int MAX_HEIGHT=6;
 
-    private ItemTile[][] grid=new ItemTile[MAX_HEIGHT][MAX_WIDTH];
+    private final ItemTile[][] grid=new ItemTile[MAX_HEIGHT][MAX_WIDTH];
 
     /**
-     * Class contructor
+     * Class constructor
      */
     public Bookshelf() {
         this.NumberOfTiles = 0;
@@ -74,9 +73,7 @@ public class Bookshelf {
      */
 
     public boolean isFull(){
-        if (this.getNumberInsertableTiles()==0) return true;
-        return false;
-
+        return this.getNumberInsertableTiles() == 0;
     }
 
     /**
