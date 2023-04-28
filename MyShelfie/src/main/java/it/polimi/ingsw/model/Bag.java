@@ -12,9 +12,6 @@ import java.util.concurrent.ThreadLocalRandom;
  * @version 1.0
  * @since 3/28/2023
  */
-
-
-
 public class Bag {
     private static final int MAX_SIZE = 132;
     private static final int MAX_SIZE_PER_TYPE = 22;

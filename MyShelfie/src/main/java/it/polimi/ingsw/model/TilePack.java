@@ -13,7 +13,7 @@ import java.util.*;
  */
 
 public class TilePack {
-    private final List<ItemTile> tiles;
+    private List<ItemTile> tiles;
 
     private static final int MAX_LENGTH = 3;
 
@@ -52,12 +52,18 @@ public class TilePack {
      * This method is used to switch the position within the pack of two item tiles
      * @param position1 the specified first position to be switched with the second one
      * @param position2 the specified second position to be switched with the first one
+     * @exception IllegalArgumentException The exception is thrown if the given positions are not within the proper range
      */
-    //TODO: exception
-    public void switchTiles (int position1, int position2) {
-        ItemTile it = new ItemTile(this.getTiles().get(position1).getType());
-        this.tiles.set(position1, this.tiles.get(position2));
-        this.tiles.set(position2, it);
+
+    public void switchTiles (int position1, int position2) throws IllegalArgumentException {
+        if (position1 >= 0 && position1 < 3 && position2 >= 0 && position2 < 3) {
+            ItemTile it = new ItemTile(this.getTiles().get(position1).getType());
+            this.tiles.set(position1, this.tiles.get(position2));
+            this.tiles.set(position2, it);
+        }
+        else {
+            throw new IllegalArgumentException("Invalid positions, please choose proper positions within the available range");
+        }
     }
 
     /**
