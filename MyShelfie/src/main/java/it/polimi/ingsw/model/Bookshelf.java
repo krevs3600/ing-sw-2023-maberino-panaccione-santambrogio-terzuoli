@@ -56,9 +56,10 @@ public class Bookshelf {
     public void insertTile(TilePack tp,int column){
         int insertableTiles=getNumberInsertableTilesColumn(column);
         if(insertableTiles>=tp.getTiles().size()){
-            for(int j=0;j<tp.getTiles().size();j++){
+            int size=tp.getTiles().size();
+            for(int j=0;j<size;j++){ //
                 grid[insertableTiles-j-1][column] = tp.getTiles().get(0);
-               tp.getTiles().remove(0);
+                tp.getTiles().remove(0);
                 this.NumberOfTiles ++;
             }
 

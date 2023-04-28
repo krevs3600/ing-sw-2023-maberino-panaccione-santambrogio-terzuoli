@@ -13,31 +13,35 @@ public class EightTilesCommonGoalCard extends CommonGoalCard {
     public boolean CheckPattern (Bookshelf b) {
         boolean found=false;
         TileType[] tts = {TileType.CAT, TileType.BOOK, TileType.GAME, TileType.FRAME, TileType.TROPHY, TileType.PLANT};
-        int counter=0;
+        int counter;
         if (toBeChecked(b)) {
-                for (TileType tt : tts) {
-                    counter=0;
-                    for (int i = 0; i < b.getMaxWidth() && !found; i++) {
-                        for (int j = 0; j < b.getMaxHeight() && !found; j++) {
-                            if (b.getGrid()[i][j].getType().equals(tt)) {
-                                counter++;
-                            }
-                            if (counter == 8) {
-                                found = true;
-                            }
+            for (TileType tt : tts) {
+                counter=0;
+                for (int i = 0; i < b.getMaxHeight() && !found; i++) {
+                    for (int j = 0; j < b.getMaxWidth() && !found; j++) {
+                        if (b.getGrid()[i][j]!=null && b.getGrid()[i][j].getType().equals(tt)) {
+                            counter++;
                         }
                     }
-
                 }
-                return found;
-
-
+                if (counter == 8) {
+                    found = true;
+                }
             }
-        else return false;
         }
 
 
+        return found;
+
 
     }
+}
+
+
+
+
+
+
+
 
 

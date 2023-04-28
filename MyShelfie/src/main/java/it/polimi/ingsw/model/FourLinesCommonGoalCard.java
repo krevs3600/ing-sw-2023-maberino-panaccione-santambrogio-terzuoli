@@ -81,7 +81,7 @@ public class FourLinesCommonGoalCard extends CommonGoalCard  {
     }
 
 
-        public boolean CheckPattern (Bookshelf b) {
+    public boolean CheckPattern (Bookshelf b) {
         int lines=0;
         if (toBeChecked(b)) {
             for (int i = 0; i < b.getMaxHeight(); i++) {
