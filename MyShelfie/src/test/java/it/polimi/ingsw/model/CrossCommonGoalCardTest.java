@@ -112,7 +112,7 @@ public class CrossCommonGoalCardTest {
         b1.insertTile(tp5,3);
         b1.insertTile(tp6,3);
         b1.insertTile(tp7,4);
-        b1.insertTile(tp7,4);
+        b1.insertTile(tp8,4);
 
         i23 = new ItemTile(TileType.GAME);
         i24 = new ItemTile(TileType.FRAME);
