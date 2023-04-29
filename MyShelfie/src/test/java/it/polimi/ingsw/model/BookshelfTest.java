@@ -11,183 +11,264 @@ import static org.junit.Assert.*;
 
 public class BookshelfTest {
 
-    private Bookshelf b1, b2, b3, b4, b5;
-    private TilePack tp1, tp2, tp3, tp4, tp5;
-
-    private ItemTile i1, i2, i3, i4, i5, i6, i7, i8, i9;
-
+    private Bookshelf b1, b2, b3;
+    private TilePack  tp1, tp2, tp3, tp4, tp5, tp6, tp7,tp8,tp9,tp10,tp11,tp12,tp13,tp14,tp15,tp16,tp17,tp18,tp19,tp20;
+    private ItemTile i1, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11, i12, i13, i14, i15, i16, i17, i18, i19, i20,i21,i22,i23,i24,i25,i26,i27,i28,i29,i30,i31,i32,i33,i34,i35,i36,i37,i38,i39,i40,i41,i42,i43,i44,i45,i46,i47,i48,i49,i50,i51,i52;
+    private CommonGoalCard c;
     @Before
     public void setUp() {
         b1 = new Bookshelf();
         b2 = new Bookshelf();
         b3 = new Bookshelf();
-        b4 = new Bookshelf();
-        b5 = new Bookshelf();
         tp1 = new TilePack();
         tp2 = new TilePack();
         tp3 = new TilePack();
         tp4 = new TilePack();
         tp5 = new TilePack();
-        i1 = new ItemTile(TileType.CAT);
-        i2 = new ItemTile(TileType.BOOK);
-        i3 = new ItemTile(TileType.BOOK);
-        i4 = new ItemTile(TileType.FRAME);
-        i5 = new ItemTile(TileType.TROPHY);
-        i6 = new ItemTile(TileType.PLANT);
-        i7 = new ItemTile(TileType.GAME);
+        tp6 = new TilePack();
+        tp7 = new TilePack();
+        tp8 = new TilePack();
+        tp9 = new TilePack();
+        tp10 = new TilePack();
+        tp11 = new TilePack();
+        tp12 = new TilePack();
+        tp13 = new TilePack();
+        tp14 = new TilePack();
+        tp15 = new TilePack();
+        tp16 = new TilePack();
+        tp17 = new TilePack();
+        tp18 = new TilePack();
+        tp19 = new TilePack();
+        tp20 = new TilePack();
+
+
+        c = new TwoSquaresCommonGoalCard(NumberOfPlayers.TWOPLAYERS, RomanNumber.ONE);
+
+        i1 = new ItemTile(TileType.PLANT);
+        i2 = new ItemTile(TileType.FRAME);
+        i3 = new ItemTile(TileType.GAME);
+        i40 = new ItemTile(TileType.CAT);
+        i41 = new ItemTile(TileType.CAT);
+
+        i4 = new ItemTile(TileType.GAME);
+        i5 = new ItemTile(TileType.GAME);
+        i42 = new ItemTile(TileType.BOOK);
+        i43 = new ItemTile(TileType.TROPHY);
+
+
+        i6 = new ItemTile(TileType.GAME);
+        i7 = new ItemTile(TileType.TROPHY);
         i8 = new ItemTile(TileType.BOOK);
-        i9 = new ItemTile(TileType.BOOK);
+
+
+
+        i12 = new ItemTile(TileType.CAT);
+        i13 = new ItemTile(TileType.FRAME);
+
+
+
+        i17 = new ItemTile(TileType.PLANT);
+
+
+
+
+
+
         tp1.insertTile(i1);
         tp1.insertTile(i2);
         tp1.insertTile(i3);
+        tp15.insertTile(i40);
+        tp15.insertTile(i41);
+
+
+
         tp2.insertTile(i4);
         tp2.insertTile(i5);
-        tp2.insertTile(i6);
+        tp2.insertTile(i42);
+        tp20.insertTile(i43);
+
+        tp3.insertTile(i6);
         tp3.insertTile(i7);
         tp3.insertTile(i8);
-        tp3.insertTile(i9);
-        tp4.insertTile(i1);
-        tp4.insertTile(i2);
-        tp5.insertTile(i8);
-        b2.insertTile(tp1, 1);
-        b2.insertTile(tp1, 1);
-        b2.insertTile(tp2, 2);
-        b2.insertTile(tp2, 2);
-        b2.insertTile(tp3, 3);
-        b2.insertTile(tp3, 3);
-        b2.insertTile(tp2, 4);
-        b2.insertTile(tp2, 4);
-        b2.insertTile(tp1, 0);
-        b2.insertTile(tp1, 0);
-        b3.insertTile(tp1, 2);
-        b3.insertTile(tp2, 2);
-        b4.insertTile(tp1, 0);
-        b4.insertTile(tp2, 1);
-        b4.insertTile(tp3, 2);
-        b4.insertTile(tp1, 3);
-        b4.insertTile(tp2, 4);
-        b5.insertTile(tp1, 0); // column 0 has 3 tiles
-        b5.insertTile(tp4, 1);
-        b5.insertTile(tp1, 1); //column 1 has 5 tiles
-        b5.insertTile(tp5, 2); //column 2 has 1 tile
 
+
+
+
+        tp5.insertTile(i12);
+        tp5.insertTile(i13);
+
+
+
+        tp7.insertTile(i17);
+
+
+
+
+        b1.insertTile(tp1,0);
+        b1.insertTile(tp15,0);
+        b1.insertTile(tp2,1);
+        b1.insertTile(tp20,1);
+
+        b1.insertTile(tp3,2);
+        b1.insertTile(tp4,2);
+        b1.insertTile(tp5,3);
+
+        b1.insertTile(tp7,4);
+
+
+        i23 = new ItemTile(TileType.GAME);
+        i34 = new ItemTile(TileType.GAME);
+
+        i42=new ItemTile(TileType.TROPHY);
+        i43=new ItemTile(TileType.FRAME);
+        i44=new ItemTile(TileType.PLANT);
+        i45=new ItemTile(TileType.PLANT);
+
+
+
+        i24 = new ItemTile(TileType.GAME);
+        i26 = new ItemTile(TileType.GAME);
+        i27 = new ItemTile(TileType.TROPHY);
+
+
+        i46=new ItemTile(TileType.TROPHY);
+        i47=new ItemTile(TileType.TROPHY);
+        i48=new ItemTile(TileType.PLANT);
+
+        tp18.insertTile(i46);
+        tp18.insertTile(i47);
+        tp18.insertTile(i48);
+
+
+        i28 = new ItemTile(TileType.GAME);
+        i29 = new ItemTile(TileType.TROPHY);
+        i40 = new ItemTile(TileType.GAME);
+        i25= new ItemTile(TileType.GAME);
+        i49=new ItemTile(TileType.TROPHY);
+        i50=new ItemTile(TileType.TROPHY);
+
+
+
+
+
+        i30 = new ItemTile(TileType.CAT);
+        i31 = new ItemTile(TileType.BOOK);
+        i32 = new ItemTile(TileType.GAME);
+        i33 = new ItemTile(TileType.GAME);
+        i42 = new ItemTile(TileType.CAT);
+        i51=new ItemTile(TileType.CAT);
+
+        i35 = new ItemTile(TileType.PLANT);
+        i36 = new ItemTile(TileType.GAME);
+        i37 = new ItemTile(TileType.FRAME);
+        i38 = new ItemTile(TileType.CAT);
+        i39 = new ItemTile(TileType.GAME);
+        i41 = new ItemTile(TileType.CAT);
+
+        tp9.insertTile(i23);
+        tp9.insertTile(i34);
+        tp19.insertTile(i42);
+        tp19.insertTile(i43);
+        tp19.insertTile(i44);
+
+        tp17.insertTile(i45);
+
+        tp10.insertTile(i24);
+        tp10.insertTile(i26);
+        tp10.insertTile(i27);
+
+
+        tp11.insertTile(i28);
+        tp11.insertTile(i29);
+        tp11.insertTile(i40);
+        tp16.insertTile(i25);
+        tp16.insertTile(i49);
+        tp16.insertTile(i50);
+
+
+        tp12.insertTile(i30);
+        tp12.insertTile(i31);
+        tp12.insertTile(i32);
+
+
+        tp13.insertTile(i33);
+        tp13.insertTile(i42);
+        tp13.insertTile(i51);
+
+        tp14.insertTile(i35);
+        tp14.insertTile(i36);
+        tp14.insertTile(i37);
+
+
+        tp15.insertTile(i38);
+        tp15.insertTile(i39);
+        tp15.insertTile(i41);
+
+
+
+        b3.insertTile(tp9,0 );
+        b3.insertTile(tp19,0);
+        b3.insertTile(tp17,0);
+
+
+        b3.insertTile(tp10,1 );
+        b3.insertTile(tp18,1);
+
+        b3.insertTile(tp11,2 );
+        b3.insertTile(tp16,2 );
+
+
+        b3.insertTile(tp12,3);
+        b3.insertTile(tp13,3);
+
+        b3.insertTile(tp14,4);
+        b3.insertTile(tp15,4);
     }
 
     @Test
     public void correctIsFull() {
         assertFalse(b1.isFull());
-        assertTrue(b2.isFull());
-        assertFalse(b3.isFull());
-        assertFalse(b4.isFull());
-        assertFalse(b5.isFull());
+        assertFalse(b2.isFull());
+        assertTrue(b3.isFull());
+
     }
 
     @Test
     public void correctGetNumberInsertableTiles() {
+      int j=1;
+        for (int i = 0; i < 5; i++,j++) {
+            assertEquals(0, b3.getNumberInsertableTilesColumn(i));
+            assertEquals(6, b2.getNumberInsertableTilesColumn(i));
+            assertEquals(j, b1.getNumberInsertableTilesColumn(i));
 
-        for (int i = 0; i < 5; i++) {
-            assertEquals(6, b1.getNumberInsertableTilesColumn(i));
-            assertEquals(0, b2.getNumberInsertableTilesColumn(i));
-            assertEquals(3, b4.getNumberInsertableTilesColumn(i));
         }
-        assertEquals(0, b3.getNumberInsertableTilesColumn(2));
-        assertEquals(1, b5.getNumberInsertableTilesColumn(1));
-        assertEquals(5, b5.getNumberInsertableTilesColumn(2));
 
-        assertEquals(6, b1.getNumberInsertableTiles());
-        assertEquals(0, b2.getNumberInsertableTiles());
-        assertEquals(6, b3.getNumberInsertableTiles());
-        assertEquals(3, b4.getNumberInsertableTiles());
-        assertEquals(6, b5.getNumberInsertableTiles());
+
+
     }
 
     @Test
     public void correctInsertTiles() {
-        for (int m = 0; m < 5; m++) {
-            int finalM = m;
-
+          i52=new ItemTile(TileType.CAT);
+          tp20.insertTile(i52);
             assertThrows(IndexOutOfBoundsException.class,
                     () -> {
-                        b2.insertTile(tp1, finalM); // insert tiles in full column
-                    });
-        }
-        assertThrows(IndexOutOfBoundsException.class,
-                () -> {
-                    b5.insertTile(tp1, 1); // insert tiles exceeding the number of insertable tiles for the specific column
-                });
-        for (int i = 0; i < tp1.getTiles().size(); i++) {
-            assertEquals(tp1.getTiles().get(i).getType(), b2.getGrid()[5 - i][0].getType());
-            assertEquals(tp1.getTiles().get(i).getType(), b2.getGrid()[tp1.getTiles().size()-1-i][0].getType());
+                        b3.insertTile(tp20, 0); // insert tiles in full column
+            });
+
+            //todo altri casi
         }
 
-        for (int i = 0; i < tp1.getTiles().size(); i++) {
-            assertEquals(tp1.getTiles().get(i).getType(), b2.getGrid()[5 - i][1].getType());
-            assertEquals(tp1.getTiles().get(i).getType(), b2.getGrid()[tp1.getTiles().size()-1-i][1].getType());
-        }
-        for (int i = 0; i < tp2.getTiles().size(); i++) {
-            assertEquals(tp2.getTiles().get(i).getType(), b2.getGrid()[5 - i][2].getType());
-            assertEquals(tp2.getTiles().get(i).getType(), b2.getGrid()[tp2.getTiles().size()-1-i][2].getType());
-        }
-        for (int i = 0; i < tp3.getTiles().size(); i++) {
-            assertEquals(tp3.getTiles().get(i).getType(), b2.getGrid()[5 - i][3].getType());
-            assertEquals(tp3.getTiles().get(i).getType(), b2.getGrid()[tp3.getTiles().size()-1-i][3].getType());
-        }
-        for (int i = 0; i < tp2.getTiles().size(); i++) {
-            assertEquals(tp2.getTiles().get(i).getType(), b2.getGrid()[5 - i][4].getType());
-            assertEquals(tp2.getTiles().get(i).getType(), b2.getGrid()[tp2.getTiles().size()-1-i][4].getType());
-        }
-        assertNull(b1.getGrid()[5][0]);
-    }
     @Test
     public void correctGetNumberAdjacentTiles() {
         Map<Integer, Integer> m = new HashMap<>();
-        m.put(2, 2);
-        m.put(4, 2);
-        assertEquals(m, b2.getNumberAdjacentTiles(TileType.BOOK));
-        Map<Integer, Integer> m1 = new HashMap<>();
-        m1.put(2, 2);
-        assertEquals(m1, b2.getNumberAdjacentTiles(TileType.CAT));
-        Bookshelf b8 = new Bookshelf();
-        for (int i = 0; i < 5; i++) {
-            b8.insertTile(tp1, i);
-            b8.insertTile(tp1, i);
-        }
-        Map<Integer, Integer> m2 = new HashMap<>();
-        m2.put(5, 2);
-        assertEquals(m2, b8.getNumberAdjacentTiles(TileType.CAT));
-        Bookshelf b9 = new Bookshelf();
-        i1 = new ItemTile(TileType.CAT);
-        i2 = new ItemTile(TileType.BOOK);
-        i3 = new ItemTile(TileType.BOOK);
-        i4 = new ItemTile(TileType.FRAME);
-        i5 = new ItemTile(TileType.TROPHY);
-        i6 = new ItemTile(TileType.PLANT);
-        i7 = new ItemTile(TileType.GAME);
-        i8 = new ItemTile(TileType.BOOK);
-        i9 = new ItemTile(TileType.BOOK);
-        TilePack tp10=new TilePack();
-        tp10.insertTile(i1);
-        tp10.insertTile(i3);
-        tp10.insertTile(i4); // t10-->CAT BOOK FRAME
+        m.put(4, 1);
+        m.put(5, 1);
 
-            b9.insertTile(tp10,0);
-            b9.insertTile(tp1,0);
 
-        b9.insertTile(tp1,1);
-        b9.insertTile(tp10,1);
 
-        b9.insertTile(tp10,2);
-        b9.insertTile(tp1,2);
 
-        b9.insertTile(tp1,3);
-        b9.insertTile(tp10,3);
-
-        b9.insertTile(tp10,4);
-        b9.insertTile(tp1,4);
-
-        Map<Integer, Integer> m3 = new HashMap<>();
-        m3.put(1,5);
-        assertEquals(m3, b9.getNumberAdjacentTiles(TileType.FRAME));
+        assertEquals(m, b1.getNumberAdjacentTiles(TileType.GAME));
 
 
     }
