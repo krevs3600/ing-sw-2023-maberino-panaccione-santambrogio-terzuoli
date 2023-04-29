@@ -38,7 +38,6 @@ public class FourGroupsCommonGoalCardTest {
         tp19 = new TilePack();
         tp20 = new TilePack();
 
-
         c = new FourGroupsCommonGoalCard(NumberOfPlayers.THREEPLAYERS, RomanNumber.ONE);
 
         i1 = new ItemTile(TileType.PLANT);

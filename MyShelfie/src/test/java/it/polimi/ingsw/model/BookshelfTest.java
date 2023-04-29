@@ -267,7 +267,5 @@ public class BookshelfTest {
         m.put(5, 1);
 
         assertEquals(m, b3.getNumberAdjacentTiles(TileType.GAME));
-
-
     }
 }

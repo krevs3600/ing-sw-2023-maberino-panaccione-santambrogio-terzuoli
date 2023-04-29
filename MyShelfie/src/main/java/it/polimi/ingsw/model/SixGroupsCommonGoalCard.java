@@ -37,7 +37,6 @@ public class SixGroupsCommonGoalCard extends CommonGoalCard {
     public boolean toBeChecked(Bookshelf b) {
         return b.getNumberOfTiles() >= 12;
     }
-
     /**
      * This method is the implementation of the CommonGoalCard's one
      * It is used to check whether the given bookshelf has the disposition of item tiles described by the common goal

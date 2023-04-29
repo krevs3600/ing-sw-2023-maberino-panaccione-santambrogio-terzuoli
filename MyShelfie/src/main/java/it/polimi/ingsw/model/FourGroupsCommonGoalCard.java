@@ -2,6 +2,7 @@ package it.polimi.ingsw.model;
 
 import java.util.Map;
 
+
 /**
  * <h1>Class FourGroupsCommonGoalCard</h1>
  * The class FourGroupsCommonGoalCard extends the CommonGoalCard abstract class

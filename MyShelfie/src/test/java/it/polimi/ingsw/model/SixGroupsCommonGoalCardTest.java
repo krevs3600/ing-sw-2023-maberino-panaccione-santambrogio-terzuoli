@@ -187,6 +187,5 @@ public class SixGroupsCommonGoalCardTest {
         assertFalse(c.CheckPattern(b2));
         assertFalse(c.CheckPattern(b3));
 
-
     }
 }

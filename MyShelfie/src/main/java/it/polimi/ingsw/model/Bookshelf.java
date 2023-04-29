@@ -211,7 +211,6 @@ public class Bookshelf {
     public int getNumberOfTiles(){
         return this.NumberOfTiles;
     }
-
     /**
      * This getter method gets the grid of the bookshelf
      * @return ItemTile[][] It returns the matrix of item tiles representing the bookshelf
