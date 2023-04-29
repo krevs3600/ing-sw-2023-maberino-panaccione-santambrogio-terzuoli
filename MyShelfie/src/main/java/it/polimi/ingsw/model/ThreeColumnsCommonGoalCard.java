@@ -11,8 +11,8 @@ public class ThreeColumnsCommonGoalCard extends CommonGoalCard {
     public boolean AtMostThreeDifferentTypesInOneColumn(Bookshelf b, int j) {
         boolean found = false;
         int counter = 0;
-        for (int i = 0; i < b.getMaxHeight() && !found; j++) {
-            if (b.getGrid()[i][j].getType().equals(TileType.CAT)) {
+        for (int i = 0; i < b.getMaxHeight() && !found; i++) {
+            if (b.getGrid()[i][j]!=null && b.getGrid()[i][j].getType().equals(TileType.CAT)) {
                 counter++;
                 found = true;
 
@@ -21,7 +21,7 @@ public class ThreeColumnsCommonGoalCard extends CommonGoalCard {
 
         found = false;
         for (int i = 0; i < b.getMaxHeight() && !found; i++) {
-            if (b.getGrid()[i][j].getType().equals(TileType.BOOK)) {
+            if (b.getGrid()[i][j]!=null && b.getGrid()[i][j].getType().equals(TileType.BOOK)) {
                 counter++;
                 found = true;
 
@@ -30,7 +30,7 @@ public class ThreeColumnsCommonGoalCard extends CommonGoalCard {
 
         found = false;
         for (int i = 0; i < b.getMaxHeight() && !found; i++) {
-            if (b.getGrid()[i][j].getType().equals(TileType.GAME)) {
+            if (b.getGrid()[i][j]!=null && b.getGrid()[i][j].getType().equals(TileType.GAME)) {
                 counter++;
                 found = true;
 
@@ -39,7 +39,7 @@ public class ThreeColumnsCommonGoalCard extends CommonGoalCard {
 
         found = false;
         for (int i = 0; i < b.getMaxHeight() && !found; i++) {
-            if (b.getGrid()[i][j].getType().equals(TileType.FRAME)) {
+            if (b.getGrid()[i][j]!=null && b.getGrid()[i][j].getType().equals(TileType.FRAME)) {
                 counter++;
                 found = true;
 
@@ -48,7 +48,7 @@ public class ThreeColumnsCommonGoalCard extends CommonGoalCard {
 
         found = false;
         for (int i = 0; i < b.getMaxHeight() && !found; i++) {
-            if (b.getGrid()[i][j].getType().equals(TileType.TROPHY)) {
+            if (b.getGrid()[i][j]!=null && b.getGrid()[i][j].getType().equals(TileType.TROPHY)) {
                 counter++;
                 found = true;
 
@@ -57,7 +57,7 @@ public class ThreeColumnsCommonGoalCard extends CommonGoalCard {
 
         found = false;
         for (int i = 0; i < b.getMaxHeight() && !found; i++) {
-            if (b.getGrid()[i][j].getType().equals(TileType.PLANT)) {
+            if (b.getGrid()[i][j]!=null && b.getGrid()[i][j].getType().equals(TileType.PLANT)) {
                 counter++;
                 found = true;
 
