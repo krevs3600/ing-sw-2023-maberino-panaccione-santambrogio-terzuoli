@@ -173,9 +173,8 @@ public class CrossCommonGoalCardTest {
 
     @Test
     public void correctCheckPattern() {
-        assertTrue(c.CheckPattern(b1)); // check on a random configuration
-        assertFalse(c.CheckPattern(b2)); // check on a totally empty book ( the ifchecked is  false)
-        assertFalse(c.CheckPattern(b3));// check bookshelf with 8 tiles but not of the same type
-
+        assertTrue(c.CheckPattern(b1)); // all conditions are true
+        assertFalse(c.CheckPattern(b2)); // toBeChecked condition false (empty bookshelf)
+        assertFalse(c.CheckPattern(b3));// toBeChecked condition true but checkPattern conditions false (no item tiles of the same type forming an X)
     }
 }

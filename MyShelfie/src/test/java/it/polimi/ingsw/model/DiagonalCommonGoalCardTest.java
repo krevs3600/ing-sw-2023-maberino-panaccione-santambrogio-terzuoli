@@ -183,9 +183,9 @@ public class DiagonalCommonGoalCardTest {
 
     @Test
     public  void correctCheckPattern(){
-        assertTrue(c.CheckPattern(b1));// diagonal
-         assertFalse(c.CheckPattern(b2));
-        assertTrue(c.CheckPattern(b3)); //antidiagonal (The method depicts correctly a wrong configuration as well, I try to change some cards but I didn't create
-                                        // another bookshelf otherwise the method would be too long
+        assertTrue(c.CheckPattern(b1));// all conditions are true (diagonal checked)
+         assertFalse(c.CheckPattern(b2)); // toBeChecked condition false (empty bookshelf)
+        assertTrue(c.CheckPattern(b3)); // all conditions are true (anti-diagonal checked)
+        //(The method depicts correctly a wrong configuration as well, I try to change some cards but I didn't create another bookshelf otherwise the method would be too long
     }
 }

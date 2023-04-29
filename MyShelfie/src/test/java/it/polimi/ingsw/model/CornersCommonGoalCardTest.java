@@ -179,8 +179,8 @@ public class CornersCommonGoalCardTest {
 
     @Test
     public  void correctCheckPattern(){
-        assertTrue(c.CheckPattern(b1));
-       assertFalse(c.CheckPattern(b2));
-        assertFalse(c.CheckPattern(b3)); //return false not the exception
+        assertTrue(c.CheckPattern(b1)); // all conditions are true
+        assertFalse(c.CheckPattern(b2)); // toBeChecked condition false (empty bookshelf)
+        assertFalse(c.CheckPattern(b3)); // toBeChecked condition true but checkPattern conditions false (one corner missing)
     }
 }
