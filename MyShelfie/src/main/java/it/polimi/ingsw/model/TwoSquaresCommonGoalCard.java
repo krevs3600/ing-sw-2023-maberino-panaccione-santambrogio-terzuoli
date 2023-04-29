@@ -33,7 +33,8 @@ public class TwoSquaresCommonGoalCard extends CommonGoalCard{
                             auxiliary[i + 1][j + 1] = 1;
                             tipeFound = b.getGrid()[i][j].getType();
                             squares++;
-                        } else if (squares > 0 && b.getGrid()[i][j].getType().equals(tipeFound) && b.getGrid()[i][j].getType().equals(b.getGrid()[i + 1][j].getType()) && auxiliary[i][j] == 0 &&
+                        } else if
+                        (squares > 0 && b.getGrid()[i][j].getType().equals(tipeFound) && b.getGrid()[i][j].getType().equals(b.getGrid()[i + 1][j].getType()) && auxiliary[i][j] == 0 &&
                                 b.getGrid()[i][j].getType().equals(b.getGrid()[i][j + 1].getType()) && auxiliary[i][j + 1] == 0 &&
                                 b.getGrid()[i][j].getType().equals(b.getGrid()[i + 1][j + 1].getType()) && auxiliary[i + 1][j] == 0) {
                             auxiliary[i][j] = 1;

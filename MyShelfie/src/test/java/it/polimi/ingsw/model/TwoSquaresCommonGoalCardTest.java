@@ -174,6 +174,7 @@ public class TwoSquaresCommonGoalCardTest {
 
         b3.insertTile(tp9,0 );
         b3.insertTile(tp10,1 );
+
         b3.insertTile(tp11,2 );
         b3.insertTile(tp16,2 );
 
