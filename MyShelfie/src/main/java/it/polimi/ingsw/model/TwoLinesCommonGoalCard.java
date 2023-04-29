@@ -9,10 +9,15 @@ public class TwoLinesCommonGoalCard extends CommonGoalCard{
         return b.getNumberOfTiles()>=10;
     }
 public boolean differentTypesInOneline(Bookshelf b,int i) {
-    boolean found = true;
-    for (int j = 0; j < b.getMaxWidth() && found; j++) {
+    boolean found = false;
+    for (int j = 0; j < b.getMaxWidth(); j++){ // controllo che nella riga che sto passando non ci siano null
+        if(b.getGrid()[i][j]==null)
+            return found;
+    }
+    found=true;
+        for (int j = 0; j < b.getMaxWidth() && found; j++) {
         for (int k = j + 1; k < b.getMaxWidth() && found; k++) {
-            if (b.getGrid()[i][j].equals(b.getGrid()[i][k])) {
+            if (b.getGrid()[i][j].getType().equals(b.getGrid()[i][k].getType())) {
                 found = false;
             }
         }
@@ -24,8 +29,7 @@ public boolean differentTypesInOneline(Bookshelf b,int i) {
 
 
     public boolean CheckPattern (Bookshelf b) {
-        boolean found=true;
-        TileType[] tts = {TileType.CAT, TileType.BOOK, TileType.GAME, TileType.FRAME, TileType.TROPHY, TileType.PLANT};
+
         int lines=0;
         if (toBeChecked(b)) {
             for (int i = 0; i < b.getMaxHeight(); i++) {
