@@ -54,8 +54,9 @@ public class FourGroupsCommonGoalCard extends CommonGoalCard {
                         counter += m.get(i);
                     }
                 }
-                return counter >= 4;
+
             }
+            return counter >= 4;
         }
         return false;
     }

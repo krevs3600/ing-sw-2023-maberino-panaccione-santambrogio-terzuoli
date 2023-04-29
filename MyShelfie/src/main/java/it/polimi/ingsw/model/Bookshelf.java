@@ -105,38 +105,6 @@ public class Bookshelf {
     }
 
     /**
-     * This method is used within the getNumberAdjacentTiles method to check if the neighbour tiles of a given position has the same tile type
-     * @param i the row of the specified position
-     * @param j the column of the specified position
-     * @param auxiliary the auxiliary matrix of integers recording if the item tile of the same position has been already passed through (1), type checked (2) or otherwise (0)
-     * @param counter the counter of the number of adjacent tiles of the group being checked
-     * @param type the type of item tiles whose group of adjacent ones is being checked
-     * @exception IndexOutOfBoundsException The exception is thrown if the selected column is not within the available range,
-     * or if the selected column has not enough space to receive all the item tiles to insert
-     */
-    private void checkNeighbourTiles (int i, int j, int[][]auxiliary, int counter, TileType type) {
-        auxiliary[i][j] = 1;
-        counter++;
-        if (i < 5 && grid[i + 1][j] != null && grid[i + 1][j].getType().equals(type) && auxiliary[i + 1][j] == 0) {
-            auxiliary[i + 1][j] = 2;
-
-        }
-        if (i > 0 && grid[i - 1][j] != null && grid[i - 1][j].getType().equals(type) && auxiliary[i - 1][j] == 0) {
-            auxiliary[i - 1][j] = 2;
-        }
-
-        if (j < 4 && grid[i][j + 1] != null && grid[i][j + 1].getType().equals(type) && auxiliary[i][j + 1] == 0) {
-            auxiliary[i][j + 1] = 2;
-
-        }
-
-        if (j > 0 && grid[i][j - 1] != null && grid[i][j - 1].getType().equals(type) && auxiliary[i][j - 1] == 0) {
-            auxiliary[i][j - 1] = 2;
-
-        }
-    }
-
-    /**
      * This method is used to know if and how many groups of adjacent item tiles of the same given type are there in the bookshelf
      * @param type the type of adjacent item tiles
      * @return Map<Integer, Integer> It returns a map where the keys are the number of adjacent tiles of a group
@@ -160,12 +128,48 @@ public class Bookshelf {
         for (int i = 0; i < MAX_HEIGHT; i++) {
             for (int j = 0; j < MAX_WIDTH; j++) {
                 if (grid[i][j]!=null && grid[i][j].getType().equals(type) && auxiliary[i][j] == 0) {
-                    checkNeighbourTiles (i,j,auxiliary,counter,type);
+                    auxiliary[i][j] = 1;
+                    counter++;
+                    if (i < 5 && grid[i + 1][j] != null && grid[i + 1][j].getType().equals(type) && auxiliary[i + 1][j] == 0) {
+                        auxiliary[i + 1][j] = 2;
+
+                    }
+                    if (i > 0 && grid[i - 1][j] != null && grid[i - 1][j].getType().equals(type) && auxiliary[i - 1][j] == 0) {
+                        auxiliary[i - 1][j] = 2;
+                    }
+
+                    if (j < 4 && grid[i][j + 1] != null && grid[i][j + 1].getType().equals(type) && auxiliary[i][j + 1] == 0) {
+                        auxiliary[i][j + 1] = 2;
+
+                    }
+
+                    if (j > 0 && grid[i][j - 1] != null && grid[i][j - 1].getType().equals(type) && auxiliary[i][j - 1] == 0) {
+                        auxiliary[i][j - 1] = 2;
+
+                    }
 
                     while (i < MAX_HEIGHT && onefound) {
                         while (j < MAX_WIDTH) {
                             if (auxiliary[i][j] == 2) {
-                                checkNeighbourTiles (i,j,auxiliary,counter,type);
+                                auxiliary[i][j] = 1;
+                                counter++;
+                                if (i < 5 && grid[i + 1][j] != null && grid[i + 1][j].getType().equals(type) && auxiliary[i + 1][j] == 0) {
+                                    auxiliary[i + 1][j] = 2;
+
+                                }
+                                if (i > 0 && grid[i - 1][j] != null && grid[i - 1][j].getType().equals(type) && auxiliary[i - 1][j] == 0) {
+                                    auxiliary[i - 1][j] = 2;
+                                }
+
+                                if (j < 4 && grid[i][j + 1] != null && grid[i][j + 1].getType().equals(type) && auxiliary[i][j + 1] == 0) {
+                                    auxiliary[i][j + 1] = 2;
+
+                                }
+
+                                if (j > 0 && grid[i][j - 1] != null && grid[i][j - 1].getType().equals(type) && auxiliary[i][j - 1] == 0) {
+                                    auxiliary[i][j - 1] = 2;
+
+                                }
                             }
                             j++;
                         }

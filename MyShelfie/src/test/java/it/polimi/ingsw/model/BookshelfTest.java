@@ -263,12 +263,10 @@ public class BookshelfTest {
     public void correctGetNumberAdjacentTiles() {
         Map<Integer, Integer> m = new HashMap<>();
         m.put(4, 1);
+        m.put(1, 2);
         m.put(5, 1);
 
-
-
-
-        assertEquals(m, b1.getNumberAdjacentTiles(TileType.GAME));
+        assertEquals(m, b3.getNumberAdjacentTiles(TileType.GAME));
 
 
     }
