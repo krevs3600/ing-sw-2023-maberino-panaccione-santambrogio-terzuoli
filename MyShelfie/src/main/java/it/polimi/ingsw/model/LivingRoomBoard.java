@@ -1,7 +1,16 @@
 package it.polimi.ingsw.model;
 
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,67 +34,60 @@ public class LivingRoomBoard {
 
     private final Bag bag = new Bag();
 
-    // The followings are the configurations for each possible number of players.
-    // Each sublist has [0] and [2] indexes for FORBIDDEN and [1] for ACTIVE
-    // This could change if we decide to use the THREE_PLAYER and FOUR_PLAYER SpaceType's values
-    private final int[][] twoPlayerSetup = {{9, 0, 0}, {3, 2, 4}, {3, 3, 3}, {2, 6, 1}, {1, 7, 1}, {1, 6, 2}, {3, 3, 3}, {4, 2, 3}, {9, 0, 0,}};
-    private final int[][] threePlayerSetup = {{3, 1, 5}, {3, 2, 4}, {2, 5, 2}, {2, 7, 0}, {1, 7, 1}, {0, 7, 2}, {2, 5, 2}, {4, 2, 3}, {5, 1, 3,}};
-    private final int[][] fourPlayerSetup = {{3, 2, 4}, {3, 3, 3}, {2, 5, 2}, {1, 8, 0}, {0, 9, 0}, {0, 8, 1}, {2, 5, 2}, {3, 3, 3}, {4, 2, 3,}};
-
-
     /**
      * Class constructor
      * @param numberOfPlayers the number of players on which the configuration of playable spaces depends
      * @exception  IllegalArgumentException The exception is thrown if numberOfPlayers is not within the proper interval
      */
 
-    //TODO: modify the input numberOfPlayers as an enum and not an int
-    public LivingRoomBoard(int numberOfPlayers) throws IllegalArgumentException {
-        int[][] activeList;
+    public LivingRoomBoard(NumberOfPlayers numberOfPlayers) throws IllegalArgumentException {
+        ArrayList<ArrayList<Long>> activeList;
         CommonGoalCardDeck commonGoalCardDeck = new CommonGoalCardDeck();
 
-        switch (numberOfPlayers) {
-            case 2 -> {
-                activeList = twoPlayerSetup;
+        String path = "src/main/java/it/polimi/ingsw/model/LivinRoomBoard.json";
+        try {
+            Reader file = new FileReader(path);
+            JSONParser parser = new JSONParser();
+            Object jsonObj = parser.parse(file);
+            JSONObject jsonObject = (JSONObject) jsonObj;
+            // read config from json
+            activeList = (ArrayList<ArrayList<Long>>) jsonObject.get(numberOfPlayers.name());
+
+            int c = 0, r = 0;
+            for (ArrayList<Long> list : activeList) {
+                // forbidden tiles
+                for (int i = 0; i < list.get(0); i++) {
+                    Position position = new Position(r, c);
+                    spaces[r][c] = new Space(SpaceType.FORBIDDEN, position);
+                    c++;
+                }
+                // active tiles
+                for (int i = 0; i < list.get(1); i++) {
+                    Position position = new Position(r, c);
+                    spaces[r][c] = new Space(SpaceType.DEFAULT, position);
+                    c++;
+                }
+                // forbidden tiles
+                for (int i = 0; i < list.get(2); i++) {
+                    Position position = new Position(r, c);
+                    spaces[r][c] = new Space(SpaceType.FORBIDDEN, position);
+                    c++;
+                }
+                c=0;
+                r++;
             }
-            case 3 -> {
-                activeList = threePlayerSetup;
-            }
-            case 4 -> {
-                activeList = fourPlayerSetup;
-            }
-            default -> {
-                throw new IllegalArgumentException("Invalid number of players, please insert 2, 3 or 4 players");
-            }
+            placeTilesRandomly();
+            // TODO: modify draw method introducing a correct input (nop, roman)
+            this.firstCommonGoalCard = commonGoalCardDeck.draw();
+            this.secondCommonGoalCard = commonGoalCardDeck.draw();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
         }
 
-        int c = 0, r = 0;
-        for (int[] list : activeList) {
-            // forbidden tiles
-            for (int i = 0; i < list[0]; i++) {
-                Position position = new Position(r, c);
-                spaces[r][c] = new Space(SpaceType.FORBIDDEN, position);
-                c++;
-            }
-            // active tiles
-            for (int i = 0; i < list[1]; i++) {
-                Position position = new Position(r, c);
-                spaces[r][c] = new Space(SpaceType.DEFAULT, position);
-                c++;
-            }
-            // forbidden tiles
-            for (int i = 0; i < list[2]; i++) {
-                Position position = new Position(r, c);
-                spaces[r][c] = new Space(SpaceType.FORBIDDEN, position);
-                c++;
-            }
-            c=0;
-            r++;
-        }
-        placeTilesRandomly();
-        // TODO: modify draw method introducing a correct input (nop, roman)
-        this.firstCommonGoalCard = commonGoalCardDeck.draw();
-        this.secondCommonGoalCard = commonGoalCardDeck.draw();
     }
 
     /**
