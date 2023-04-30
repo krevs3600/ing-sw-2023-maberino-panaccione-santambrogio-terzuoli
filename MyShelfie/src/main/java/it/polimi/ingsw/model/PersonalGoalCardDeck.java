@@ -71,7 +71,6 @@ public class PersonalGoalCardDeck implements Drawable {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     /**
