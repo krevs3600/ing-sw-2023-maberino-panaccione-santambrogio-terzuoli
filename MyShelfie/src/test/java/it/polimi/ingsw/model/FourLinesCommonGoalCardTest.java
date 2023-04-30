@@ -190,10 +190,5 @@ public class FourLinesCommonGoalCardTest {
         assertTrue(c.CheckPattern(b1));// check on a random configuration
         assertFalse(c.CheckPattern(b2));
         assertFalse(c.CheckPattern(b3));// check on an empty bookshelf
-
-
-
     }
-
-
 }

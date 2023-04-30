@@ -3,17 +3,12 @@ package it.polimi.ingsw.model;
 import org.junit.Before;
 import org.junit.Test;
 
-
-import java.util.HashMap;
-import java.util.Map;
-
 import static org.junit.Assert.*;
 
-public class BookshelfTest {
-
+public class TwoLinesCommonGoalCardTest {
     private Bookshelf b1, b2, b3;
     private TilePack  tp1, tp2, tp3, tp4, tp5, tp6, tp7,tp8,tp9,tp10,tp11,tp12,tp13,tp14,tp15,tp16,tp17,tp18,tp19,tp20;
-    private ItemTile i1, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11, i12, i13, i14, i15, i16, i17, i18, i19, i20,i21,i22,i23,i24,i25,i26,i27,i28,i29,i30,i31,i32,i33,i34,i35,i36,i37,i38,i39,i40,i41,i42,i43,i44,i45,i46,i47,i48,i49,i50,i51,i52;
+    private ItemTile i1, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11, i12, i13, i14, i15, i16, i17, i18, i19, i20,i21,i22,i23,i24,i25,i26,i27,i28,i29,i30,i31,i32,i33,i34,i35,i36,i37,i38,i39,i40,i41,i42,i43;
     private CommonGoalCard c;
     @Before
     public void setUp() {
@@ -42,33 +37,34 @@ public class BookshelfTest {
         tp20 = new TilePack();
 
 
-        c = new TwoSquaresCommonGoalCard(NumberOfPlayers.TWOPLAYERS, RomanNumber.ONE);
+        c = new TwoLinesCommonGoalCard(NumberOfPlayers.FOURPLAYERS, RomanNumber.TWO);
 
         i1 = new ItemTile(TileType.PLANT);
         i2 = new ItemTile(TileType.FRAME);
         i3 = new ItemTile(TileType.GAME);
         i40 = new ItemTile(TileType.CAT);
-        i41 = new ItemTile(TileType.CAT);
+        i41 = new ItemTile(TileType.PLANT);
 
         i4 = new ItemTile(TileType.GAME);
         i5 = new ItemTile(TileType.GAME);
         i42 = new ItemTile(TileType.BOOK);
-        i43 = new ItemTile(TileType.TROPHY);
+        i43 = new ItemTile(TileType.PLANT);
 
 
-        i6 = new ItemTile(TileType.GAME);
+        i6 = new ItemTile(TileType.TROPHY);
         i7 = new ItemTile(TileType.TROPHY);
-        i8 = new ItemTile(TileType.BOOK);
+        i8 = new ItemTile(TileType.PLANT);
 
 
 
         i12 = new ItemTile(TileType.CAT);
-        i13 = new ItemTile(TileType.FRAME);
+        i13 = new ItemTile(TileType.PLANT);
 
 
 
-        i17 = new ItemTile(TileType.PLANT);
-
+        i17 = new ItemTile(TileType.BOOK);
+        i18 = new ItemTile(TileType.BOOK);
+        i19 = new ItemTile(TileType.FRAME);
 
 
 
@@ -100,7 +96,8 @@ public class BookshelfTest {
 
 
         tp7.insertTile(i17);
-
+        tp7.insertTile(i18);
+        tp7.insertTile(i19);
 
 
 
@@ -117,46 +114,21 @@ public class BookshelfTest {
 
 
         i23 = new ItemTile(TileType.GAME);
-        i34 = new ItemTile(TileType.GAME);
+        i24 = new ItemTile(TileType.FRAME);
+        i25 = new ItemTile(TileType.GAME);
 
-        i42=new ItemTile(TileType.TROPHY);
-        i43=new ItemTile(TileType.FRAME);
-        i44=new ItemTile(TileType.PLANT);
-        i45=new ItemTile(TileType.PLANT);
-
-
-
-        i24 = new ItemTile(TileType.GAME);
-        i26 = new ItemTile(TileType.GAME);
-        i27 = new ItemTile(TileType.TROPHY);
-
-
-        i46=new ItemTile(TileType.TROPHY);
-        i47=new ItemTile(TileType.TROPHY);
-        i48=new ItemTile(TileType.PLANT);
-
-        tp18.insertTile(i46);
-        tp18.insertTile(i47);
-        tp18.insertTile(i48);
-
+        i26 = new ItemTile(TileType.TROPHY);
+        i27 = new ItemTile(TileType.GAME);
 
         i28 = new ItemTile(TileType.GAME);
         i29 = new ItemTile(TileType.TROPHY);
         i40 = new ItemTile(TileType.GAME);
-        i25= new ItemTile(TileType.GAME);
-        i49=new ItemTile(TileType.TROPHY);
-        i50=new ItemTile(TileType.TROPHY);
-
-
-
-
 
         i30 = new ItemTile(TileType.CAT);
         i31 = new ItemTile(TileType.BOOK);
-        i32 = new ItemTile(TileType.GAME);
+        i32 = new ItemTile(TileType.TROPHY);
         i33 = new ItemTile(TileType.GAME);
-        i42 = new ItemTile(TileType.CAT);
-        i51=new ItemTile(TileType.CAT);
+        i34 = new ItemTile(TileType.CAT);
 
         i35 = new ItemTile(TileType.PLANT);
         i36 = new ItemTile(TileType.GAME);
@@ -166,14 +138,9 @@ public class BookshelfTest {
         i41 = new ItemTile(TileType.CAT);
 
         tp9.insertTile(i23);
-        tp9.insertTile(i34);
-        tp19.insertTile(i42);
-        tp19.insertTile(i43);
-        tp19.insertTile(i44);
+        tp9.insertTile(i24);
+        tp9.insertTile(i25);
 
-        tp17.insertTile(i45);
-
-        tp10.insertTile(i24);
         tp10.insertTile(i26);
         tp10.insertTile(i27);
 
@@ -181,9 +148,6 @@ public class BookshelfTest {
         tp11.insertTile(i28);
         tp11.insertTile(i29);
         tp11.insertTile(i40);
-        tp16.insertTile(i25);
-        tp16.insertTile(i49);
-        tp16.insertTile(i50);
 
 
         tp12.insertTile(i30);
@@ -192,8 +156,7 @@ public class BookshelfTest {
 
 
         tp13.insertTile(i33);
-        tp13.insertTile(i42);
-        tp13.insertTile(i51);
+        tp13.insertTile(i34);
 
         tp14.insertTile(i35);
         tp14.insertTile(i36);
@@ -207,65 +170,22 @@ public class BookshelfTest {
 
 
         b3.insertTile(tp9,0 );
-        b3.insertTile(tp19,0);
-        b3.insertTile(tp17,0);
-
-
         b3.insertTile(tp10,1 );
-        b3.insertTile(tp18,1);
-
         b3.insertTile(tp11,2 );
-        b3.insertTile(tp16,2 );
-
-
         b3.insertTile(tp12,3);
         b3.insertTile(tp13,3);
 
         b3.insertTile(tp14,4);
         b3.insertTile(tp15,4);
-    }
-
-    @Test
-    public void correctIsFull() {
-        assertFalse(b1.isFull());
-        assertFalse(b2.isFull());
-        assertTrue(b3.isFull());
 
     }
 
     @Test
-    public void correctGetNumberInsertableTiles() {
-      int j=1;
-        for (int i = 0; i < 5; i++,j++) {
-            assertEquals(0, b3.getNumberInsertableTilesColumn(i));
-            assertEquals(6, b2.getNumberInsertableTilesColumn(i));
-            assertEquals(j, b1.getNumberInsertableTilesColumn(i));
-
-        }
-
-
-
+    public  void correctCheckPattern(){
+          assertTrue(c.CheckPattern(b1));// diagonal
+         assertFalse(c.CheckPattern(b2));
+         assertFalse(c.CheckPattern(b3)); //antidiagonal (The method depicts correctly a wrong configuration as well, I try to change some cards but I didn't create
+        // another bookshelf otherwise the method would be too long
     }
 
-    @Test
-    public void correctInsertTiles() {
-          i52=new ItemTile(TileType.CAT);
-          tp20.insertTile(i52);
-            assertThrows(IndexOutOfBoundsException.class,
-                    () -> {
-                        b3.insertTile(tp20, 0); // insert tiles in full column
-            });
-
-            //todo altri casi
-        }
-
-    @Test
-    public void correctGetNumberAdjacentTiles() {
-        Map<Integer, Integer> m = new HashMap<>();
-        m.put(4, 1);
-        m.put(1, 2);
-        m.put(5, 1);
-
-        assertEquals(m, b3.getNumberAdjacentTiles(TileType.GAME));
-    }
 }

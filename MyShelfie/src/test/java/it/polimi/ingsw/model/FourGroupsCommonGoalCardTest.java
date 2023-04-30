@@ -5,11 +5,13 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class CornersCommonGoalCardTest {
+public class FourGroupsCommonGoalCardTest {
     private Bookshelf b1, b2, b3;
-    private TilePack  tp1, tp2, tp3, tp4, tp5, tp6, tp7,tp8,tp9,tp10,tp11,tp12,tp13,tp14,tp15,tp16,tp17,tp18,tp19,tp20;
-    private ItemTile i1, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11, i12, i13, i14, i15, i16, i17, i18, i19, i20,i21,i22,i23,i24,i25,i26,i27,i28,i29,i30,i31,i32,i33,i34,i35,i36,i37,i38,i39,i40,i41,i42;
+    private TilePack tp1, tp2, tp3, tp4, tp5, tp6, tp7,tp8,tp9,tp10,tp11,tp12,tp13,tp14,tp15,tp16,tp17,tp18,tp19,tp20;;
+    private ItemTile i1, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11, i12,i13,i14,i15,i16,i17,i18,i19,i20,i21,i22,i23,i24,i25,i26,i27,i28,i29,i30,i31,i32,i33,i34,i35,i36,i37,i38,i39,i40,i41;
     private CommonGoalCard c;
+
+
     @Before
     public void setUp() {
         b1 = new Bookshelf();
@@ -36,90 +38,92 @@ public class CornersCommonGoalCardTest {
         tp19 = new TilePack();
         tp20 = new TilePack();
 
-
-        c = new CornersCommonGoalCard(NumberOfPlayers.THREEPLAYERS, RomanNumber.ONE);
+        c = new FourGroupsCommonGoalCard(NumberOfPlayers.THREEPLAYERS, RomanNumber.ONE);
 
         i1 = new ItemTile(TileType.PLANT);
-        i2 = new ItemTile(TileType.FRAME);
-        i3 = new ItemTile(TileType.GAME);
+        i2 = new ItemTile(TileType.TROPHY);
+        i3 = new ItemTile(TileType.FRAME);
+
+        i4 = new ItemTile(TileType.FRAME);
 
 
-        i4 = new ItemTile(TileType.GAME);
         i5 = new ItemTile(TileType.GAME);
-
-
-        i6 = new ItemTile(TileType.GAME);
+        i6 = new ItemTile(TileType.TROPHY);
         i7 = new ItemTile(TileType.TROPHY);
-        i8 = new ItemTile(TileType.GAME);
-        i9 = new ItemTile(TileType.CAT);
-        i10 = new ItemTile(TileType.PLANT);
-        i11 = new ItemTile(TileType.CAT);
+
+        i8 = new ItemTile(TileType.FRAME);
+
+        i9 = new ItemTile(TileType.PLANT);
+        i10 = new ItemTile(TileType.FRAME);
+        i11 = new ItemTile(TileType.TROPHY);
+        i12 = new ItemTile(TileType.FRAME);
+        i13 = new ItemTile(TileType.FRAME);
 
 
-
-        i12 = new ItemTile(TileType.CAT);
-        i13 = new ItemTile(TileType.BOOK);
-        i14 = new ItemTile(TileType.TROPHY);
-        i15 = new ItemTile(TileType.TROPHY);
-        i16 = new ItemTile(TileType.CAT);
-
-
+        i14 = new ItemTile(TileType.GAME);
+        i15 = new ItemTile(TileType.PLANT);
+        i16 = new ItemTile(TileType.PLANT);
         i17 = new ItemTile(TileType.PLANT);
-        i18 = new ItemTile(TileType.GAME);
-        i19 = new ItemTile(TileType.FRAME);
-        i20 = new ItemTile(TileType.CAT);
-        i21 = new ItemTile(TileType.GAME);
-        i22 = new ItemTile(TileType.PLANT);
+        i18 = new ItemTile(TileType.PLANT);
 
-        i40 = new ItemTile(TileType.CAT);
-        i41 = new ItemTile(TileType.GAME);
-        i42 = new ItemTile(TileType.PLANT);
+
+        i19 = new ItemTile(TileType.GAME);
+        i20 = new ItemTile(TileType.GAME);
+        i21 = new ItemTile(TileType.GAME);
+
 
 
         tp1.insertTile(i1);
         tp1.insertTile(i2);
         tp1.insertTile(i3);
-        tp15.insertTile(i40);
-        tp15.insertTile(i41);
-        tp15.insertTile(i42);
-
 
         tp2.insertTile(i4);
-        tp2.insertTile(i5);
 
+
+        tp3.insertTile(i5);
         tp3.insertTile(i6);
         tp3.insertTile(i7);
-        tp3.insertTile(i8);
-        tp4.insertTile(i9);
-        tp4.insertTile(i10);
-        tp4.insertTile(i11);
+
+        tp4.insertTile(i8);
+
+
+        tp5.insertTile(i9);
+        tp5.insertTile(i10);
+        tp5.insertTile(i11);
+        tp6.insertTile(i12);
+        tp6.insertTile(i13);
 
 
 
-        tp5.insertTile(i12);
-        tp5.insertTile(i13);
-        tp5.insertTile(i14);
-        tp6.insertTile(i15);
-        tp6.insertTile(i16);
+        tp7.insertTile(i14);
+        tp7.insertTile(i15);
+        tp7.insertTile(i16);
+
+        tp8.insertTile(i17);
+        tp8.insertTile(i18);
 
 
-        tp7.insertTile(i17);
-        tp7.insertTile(i18);
-        tp7.insertTile(i19);
-        tp8.insertTile(i20);
-        tp8.insertTile(i21);
-        tp8.insertTile(i22);
+        tp9.insertTile(i19);
+        tp9.insertTile(i20);
+        tp9.insertTile(i21);
 
 
         b1.insertTile(tp1,0);
-        b1.insertTile(tp15,0);
-        b1.insertTile(tp2,1);
-        b1.insertTile(tp3,2);
-        b1.insertTile(tp4,2);
-        b1.insertTile(tp5,3);
-        b1.insertTile(tp6,3);
-        b1.insertTile(tp7,4);
-        b1.insertTile(tp8,4);
+        b1.insertTile(tp2,0);
+
+        b1.insertTile(tp3,1);
+        b1.insertTile(tp4,1);
+
+        b1.insertTile(tp5,2);
+        b1.insertTile(tp6,2);
+
+
+        b1.insertTile(tp7,3);
+        b1.insertTile(tp8,3);
+
+        b1.insertTile(tp9,4);
+
+
 
         i23 = new ItemTile(TileType.GAME);
         i24 = new ItemTile(TileType.FRAME);
@@ -175,12 +179,15 @@ public class CornersCommonGoalCardTest {
         b3.insertTile(tp13,3);
         b3.insertTile(tp13,4);
         b3.insertTile(tp14,4);
+
     }
 
     @Test
-    public  void correctCheckPattern(){
-        assertTrue(c.CheckPattern(b1)); // all conditions are true
-        assertFalse(c.CheckPattern(b2)); // toBeChecked condition false (empty bookshelf)
-        assertFalse(c.CheckPattern(b3)); // toBeChecked condition true but checkPattern conditions false (one corner missing)
+    public void correctCheckPattern() {
+        assertFalse(c.CheckPattern(b1)); // check on a random configuration
+        assertFalse(c.CheckPattern(b2)); // check on a totally empty book ( the ifchecked is  false)
+       assertFalse(c.CheckPattern(b3));// check bookshelf with 8 tiles but not of the same type
+
     }
+
 }

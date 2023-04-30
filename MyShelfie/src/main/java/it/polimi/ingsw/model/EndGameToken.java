@@ -19,8 +19,5 @@ public class EndGameToken {
      * This method is used to pick the end game token as soon as a player fills all the spaces of his bookshelf
      * @return EndGameToken It returns the end game token itself
      */
-    public EndGameToken pick(){
-
-        return this;
-    }
+    public EndGameToken pick(){return this;}
 }

@@ -50,32 +50,32 @@ public class EightTilesCommonGoalCardTest {
         i20 = new ItemTile(TileType.BOOK);
 
 
-        tp1.insertTile(i1);//tp1--> CAT BOOK BOOK
+        tp1.insertTile(i1);
         tp1.insertTile(i2);
         tp1.insertTile(i3);
 
-        tp2.insertTile(i4); //Frame trophy BOOK
+        tp2.insertTile(i4);
         tp2.insertTile(i5);
         tp2.insertTile(i6);
 
-        tp3.insertTile(i8); //BOOK GAME BOOK
+        tp3.insertTile(i8);
         tp3.insertTile(i7);
         tp3.insertTile(i9);
 
-        tp6.insertTile(i10); //book
+        tp6.insertTile(i10);
 
-        tp7.insertTile(i11); //book book
+        tp7.insertTile(i11);
         tp7.insertTile(i12);
 
-        tp8.insertTile(i13); // plant trophy  frame
+        tp8.insertTile(i13);
         tp8.insertTile(i14);
         tp8.insertTile(i15);
 
-        tp9.insertTile(i16); // game frame game
+        tp9.insertTile(i16);
         tp9.insertTile(i17);
         tp9.insertTile(i18);
 
-        tp10.insertTile(i19); // trophy book
+        tp10.insertTile(i19);
         tp10.insertTile(i20);
 
 
@@ -90,8 +90,6 @@ public class EightTilesCommonGoalCardTest {
 
         b1.insertTile(tp3, 4);
 
-        // bookshelf with 8 tiles but not 8 tiles of the same type
-
         b3.insertTile(tp8, 0);
         b3.insertTile(tp9, 4);
         b3.insertTile(tp10, 2);
@@ -100,9 +98,9 @@ public class EightTilesCommonGoalCardTest {
 
     @Test
     public void correctCheckPattern() {
-        assertTrue(c.CheckPattern(b1)); // check on a random configuration
-        assertFalse(c.CheckPattern(b2)); // check on a totally empty book ( the ifchecked is  false)
-        assertFalse(c.CheckPattern(b3));// check bookshelf with 8 tiles but not of the same type
+        assertTrue(c.CheckPattern(b1)); // all conditions are true
+        assertFalse(c.CheckPattern(b2));  // toBeChecked condition false (empty bookshelf)
+        assertFalse(c.CheckPattern(b3));// toBeChecked condition true but checkPattern conditions false (bookshelf with wight tiles but not of the same type)
 
     }
 
