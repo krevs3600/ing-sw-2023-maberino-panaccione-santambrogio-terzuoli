@@ -2,6 +2,7 @@ package it.polimi.ingsw.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * <h1>Class PersonalGoalCardDeck</h1>
@@ -13,11 +14,15 @@ import java.util.List;
  */
 
 public class PersonalGoalCardDeck implements Drawable {
+
+    private int size = 0;
     private final List<PersonalGoalCard> deck;
 
     /**
      * Class constructor
      */
+
+    //TODO: create configurations for personal goal cards
     public PersonalGoalCardDeck () {
         this.deck = new ArrayList<PersonalGoalCard>();
     }
@@ -28,7 +33,13 @@ public class PersonalGoalCardDeck implements Drawable {
      */
     //TODO: draw method
     @Override
-    public GoalCard draw() { return null;}
+    public GoalCard draw() {
+        int randNumber = ThreadLocalRandom.current().nextInt(0, getDeck().size());
+        PersonalGoalCard toBeDrawn = getDeck().get(randNumber);
+        deck.remove(randNumber);
+        size--;
+        return toBeDrawn;
+    }
 
     /**
      * This getter method gets the deck of personal goal cards

@@ -20,6 +20,9 @@ public class LivingRoomBoard {
     private static final int MAX_HEIGHT = 9;
     private final Space[][] spaces = new Space[MAX_WIDTH][MAX_HEIGHT];
 
+    private CommonGoalCard firstCommonGoalCard;
+    private CommonGoalCard secondCommonGoalCard;
+
     private final Bag bag = new Bag();
 
     // The followings are the configurations for each possible number of players.
@@ -35,7 +38,9 @@ public class LivingRoomBoard {
      * @param numberOfPlayers the number of players on which the configuration of playable spaces depends
      * @exception  IllegalArgumentException The exception is thrown if numberOfPlayers is not within the proper interval
      */
-    public LivingRoomBoard(int numberOfPlayers) throws IllegalArgumentException {
+
+    //TODO: modify the input numberOfPlayers as an enum and not an int
+    public LivingRoomBoard(int numberOfPlayers, CommonGoalCardDeck deck) throws IllegalArgumentException {
         int[][] activeList;
 
         switch (numberOfPlayers) {
@@ -77,8 +82,9 @@ public class LivingRoomBoard {
             r++;
         }
         placeTilesRandomly();
-        // TODO: add CommonGoalCard
-
+        // TODO: modify draw method introducing a correct input (nop, roman)
+        this.firstCommonGoalCard = deck.draw();
+        this.secondCommonGoalCard = deck.draw();
     }
 
     /**

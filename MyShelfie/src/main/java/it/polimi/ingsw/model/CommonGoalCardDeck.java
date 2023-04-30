@@ -2,6 +2,7 @@ package it.polimi.ingsw.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 /**
@@ -14,22 +15,47 @@ import java.util.List;
  */
 
 public class CommonGoalCardDeck implements Drawable {
+
+    private int size = 0;
     private final List<CommonGoalCard> deck;
 
     /**
      * Class constructor
      */
     public CommonGoalCardDeck () {
+        CommonGoalCard corners = new CornersCommonGoalCard(NumberOfPlayers.TWOPLAYERS, RomanNumber.TWO);
+        CommonGoalCard cross = new CornersCommonGoalCard(NumberOfPlayers.TWOPLAYERS, RomanNumber.TWO);
+        CommonGoalCard diagonal = new CornersCommonGoalCard(NumberOfPlayers.TWOPLAYERS, RomanNumber.TWO);
+        CommonGoalCard eightTiles =  new CornersCommonGoalCard(NumberOfPlayers.TWOPLAYERS, RomanNumber.TWO);
+        CommonGoalCard fourGroups =  new CornersCommonGoalCard(NumberOfPlayers.TWOPLAYERS, RomanNumber.TWO);
+        CommonGoalCard fourLines =  new CornersCommonGoalCard(NumberOfPlayers.TWOPLAYERS, RomanNumber.TWO);
+        CommonGoalCard increasingColumns =  new CornersCommonGoalCard(NumberOfPlayers.TWOPLAYERS, RomanNumber.TWO);
+        CommonGoalCard sixGroups = new CornersCommonGoalCard(NumberOfPlayers.TWOPLAYERS, RomanNumber.TWO);
+        CommonGoalCard threeColumns =  new CornersCommonGoalCard(NumberOfPlayers.TWOPLAYERS, RomanNumber.TWO);
+        CommonGoalCard twoColumns =   new CornersCommonGoalCard(NumberOfPlayers.TWOPLAYERS, RomanNumber.TWO);
+        CommonGoalCard twoLines =  new CornersCommonGoalCard(NumberOfPlayers.TWOPLAYERS, RomanNumber.TWO);
+        CommonGoalCard twoSquares =  new CornersCommonGoalCard(NumberOfPlayers.TWOPLAYERS, RomanNumber.TWO);
+        CommonGoalCard[] allCommonGoalCards = {corners, cross, diagonal, eightTiles, fourGroups, fourLines, increasingColumns, sixGroups, threeColumns, twoColumns, twoLines, twoSquares};
         this.deck = new ArrayList<CommonGoalCard>();
+            for(CommonGoalCard cgc: allCommonGoalCards) {
+                deck.add(cgc);
+                this.size++;
+            }
     }
 
     /**
      * This method is used to draw a random common goal card from the deck
-     * @return GoalCard the randomly drawn goal card
+     * @return GoalCard It returns the randomly drawn goal card
      */
     //TODO: draw method
     @Override
-    public GoalCard draw() { return null;}
+    public CommonGoalCard draw() {
+        int randNumber = ThreadLocalRandom.current().nextInt(0, getDeck().size());
+        CommonGoalCard toBeDrawn = getDeck().get(randNumber);
+        deck.remove(randNumber);
+        size--;
+        return toBeDrawn;
+    }
 
     /**
      * This getter method gets the deck of common goal cards
