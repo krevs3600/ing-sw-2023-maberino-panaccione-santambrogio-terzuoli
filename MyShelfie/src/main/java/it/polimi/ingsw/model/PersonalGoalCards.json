@@ -1,0 +1,59 @@
+{
+  "points" : [0,1,2,4,6,9,12],
+
+  "configurations" : [
+    {
+      "position" : [0, 2, 9, 13, 16, 27],
+      "type" : ["PLANT", "FRAME" ,"CAT" ,"BOOK" ,"GAME" ,"TROPHY"]
+    },
+    {
+      "position" : [6, 10, 12, 19, 23, 29],
+      "type" : ["PLANT", "CAT" ,"GAME" ,"BOOK" ,"TROPHY" ,"FRAME"]
+    },
+    {
+      "position" : [5, 8, 12, 16, 19, 25],
+      "type" : ["FRAME", "GAME" ,"PLANT","CAT" ,"TROPHY" ,"BOOK"]
+    },
+    {
+      "position" : [4, 10, 12, 18, 21, 22],
+      "type" : ["GAME", "TROPHY" ,"FRAME" ,"PLANT" ,"BOOK" ,"CAT"]
+    },
+    {
+      "position" : [6, 16, 17, 24, 25, 28],
+      "type" : ["TROPHY", "FRAME" ,"BOOK" ,"PLANT" ,"GAME" ,"CAT"]
+    },
+    {
+      "position" : [2, 4, 13, 21, 23, 25],
+      "type" : ["TROPHY", "CAT" ,"BOOK" ,"GAME" ,"FRAME" ,"PLANT"]
+    },
+    {
+      "position" : [0, 8, 11, 15, 24, 27],
+      "type" : ["CAT", "FRAME" ,"PLANT" ,"TROPHY" ,"GAME" ,"BOOK"]
+    },
+
+    {
+      "position" : [4, 6, 12, 15, 23, 28],
+      "type" : ["FRAME", "CAT" ,"TROPHY" ,"PLANT" ,"BOOK" ,"GAME"]
+    },
+
+    {
+      "position" : [2, 12, 19, 21, 24, 25],
+      "type" : ["GAME", "CAT" ,"TROPHY" ,"BOOK" ,"PLANT" ,"FRAME"]
+    },
+
+    {
+      "position" : [4, 6, 10, 18, 21, 28],
+      "type" : ["TROPHY", "GAME" ,"BOOK" ,"CAT" ,"FRAME" ,"PLANT"]
+    },
+
+    {
+      "position" : [2, 6, 10, 17, 24, 28],
+      "type" : ["PLANT", "BOOK" ,"GAME" ,"FRAME" ,"CAT" ,"TROPHY"]
+    },
+
+    {
+      "position" : [2, 6, 12, 18, 24, 25],
+      "type" : ["BOOK", "PLANT" ,"FRAME" ,"TROPHY" ,"GAME" ,"CAT"]
+    }
+  ]
+}

@@ -20,19 +20,9 @@ public enum TileType {
     final String abbreviation;
     final String colorBackground;
 
-    /**
-     * Class constructor
-     */
     private TileType(String abbreviation, String colorBackground){
         this.abbreviation = abbreviation;
         this.colorBackground = colorBackground;
     }
 
-    /**
-     * This getter method gets the abbreviation of the tile type
-     * @return String It returns the string with the characters of the tile type abbreviation
-     */
-    public String getAbbreviation() {
-        return abbreviation;
-    }
 }

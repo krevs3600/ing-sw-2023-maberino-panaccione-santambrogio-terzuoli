@@ -37,7 +37,7 @@ public class TwoLinesCommonGoalCardTest {
         tp20 = new TilePack();
 
 
-        c = new TwoLinesCommonGoalCard(NumberOfPlayers.FOURPLAYERS, RomanNumber.TWO);
+        c = new TwoLinesCommonGoalCard(NumberOfPlayers.FOUR_PLAYERS, RomanNumber.TWO);
 
         i1 = new ItemTile(TileType.PLANT);
         i2 = new ItemTile(TileType.FRAME);

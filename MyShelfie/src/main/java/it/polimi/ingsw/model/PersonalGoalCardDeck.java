@@ -1,6 +1,16 @@
 package it.polimi.ingsw.model;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -22,20 +32,56 @@ public class PersonalGoalCardDeck implements Drawable {
      * Class constructor
      */
 
-    //TODO: create configurations for personal goal cards
     public PersonalGoalCardDeck () {
         this.deck = new ArrayList<PersonalGoalCard>();
+        try {
+            Reader file = new FileReader("src/main/java/it/polimi/ingsw/model/PersonalGoalCards.json");
+            JSONParser parser = new JSONParser();
+            Object jsonObj = parser.parse(file);
+            JSONObject jsonObject = (JSONObject) jsonObj;
+            // read points from json
+            ArrayList<Integer> points = (ArrayList<Integer>) jsonObject.get("points");
+            System.out.println("points: " + points);
+            // read configs from json
+            ArrayList<HashMap> configurations = (ArrayList<HashMap>) jsonObject.get("configurations");
+            // for each conf create the corresponding card
+            for (HashMap conf : configurations) {
+                JSONObject jsonConf = (JSONObject) conf;
+                ArrayList<Integer> position = (ArrayList<Integer>) jsonConf.get("position");
+                ArrayList<String> type = (ArrayList<String>) jsonConf.get("type");
+
+                // check configs
+                if (position.size() == type.size()) {
+                    HashMap map = new HashMap<Integer, TileType>();
+                    for (int i = 0; i < position.size(); i++) {
+                        map.put(position.get(i), TileType.valueOf(type.get(i)));
+                    }
+                    this.deck.add(new PersonalGoalCard(map));
+                    size++;
+                } else {
+                    System.out.println("Please check config file.");
+                }
+            }
+            System.out.println(deck.size());
+
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     /**
      * This method is used to draw a random personal goal card from the deck
      * @return GoalCard the randomly drawn goal card
      */
-    //TODO: draw method
     @Override
     public GoalCard draw() {
         int randNumber = ThreadLocalRandom.current().nextInt(0, getDeck().size());
-        PersonalGoalCard toBeDrawn = getDeck().get(randNumber);
+        GoalCard toBeDrawn = getDeck().get(randNumber);
         deck.remove(randNumber);
         size--;
         return toBeDrawn;

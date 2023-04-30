@@ -37,7 +37,7 @@ public class ThreeColumnsCommonGoalCardTest {
         tp20 = new TilePack();
 
 
-        c = new ThreeColumnsCommonGoalCard(NumberOfPlayers.THREEPLAYERS, RomanNumber.ONE);
+        c = new ThreeColumnsCommonGoalCard(NumberOfPlayers.THREE_PLAYERS, RomanNumber.ONE);
 
         i1 = new ItemTile(TileType.PLANT);
         i2 = new ItemTile(TileType.FRAME);

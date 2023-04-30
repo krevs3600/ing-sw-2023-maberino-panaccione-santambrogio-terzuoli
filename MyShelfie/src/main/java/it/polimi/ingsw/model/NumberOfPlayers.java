@@ -11,7 +11,12 @@ package it.polimi.ingsw.model;
  * @since 4/8/2023
  */
 public enum NumberOfPlayers {
-    TWOPLAYERS,
-    THREEPLAYERS,
-    FOURPLAYERS
+    TWO_PLAYERS(2),
+    THREE_PLAYERS(3),
+    FOUR_PLAYERS(4);
+    private int numberOfPlayers;
+
+    private NumberOfPlayers(int numberOfPlayers) {
+        this.numberOfPlayers = numberOfPlayers;
+    }
 }

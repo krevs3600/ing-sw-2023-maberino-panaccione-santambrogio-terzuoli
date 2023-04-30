@@ -51,6 +51,7 @@ public class Player {
         } else {
             throw new IllegalArgumentException();
         }
+        return null;
     }
 
     public int computeScore(){

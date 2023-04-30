@@ -10,19 +10,19 @@ import java.util.*;
  * @version 1.0
  * @since 4/8/2023
  */
-public class PersonalGoalCard {
+public class PersonalGoalCard extends GoalCard{
     private static final int DIMENSION=6;
-    private final int[] scores=new int[]{1, 2, 4, 6, 9, 12};
+    private final int[] scores = new int[]{1, 2, 4, 6, 9, 12};
 
-    private Map<Position,TileType> scoringItem=new HashMap<>();
+    private Map<Position,TileType> scoringItem = new HashMap<>();
 
     /**
      * Class constructor
-     * @param m the map containing the specific configuration of item tiles to have in the bookshelf in order to achieve the personal goal
+     * @param configuration the map containing the specific configuration of item tiles to have in the bookshelf in order to achieve the personal goal
      * the keys are the positions of the item tiles, while the values are the types of item tiles
      */
-    public PersonalGoalCard(HashMap<Position,TileType> m){
-        this.scoringItem=m;
+    public PersonalGoalCard(HashMap<Position,TileType> configuration){
+        this.scoringItem = configuration;
     }
 
     /**

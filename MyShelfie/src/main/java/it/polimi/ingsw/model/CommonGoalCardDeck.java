@@ -23,18 +23,18 @@ public class CommonGoalCardDeck implements Drawable {
      * Class constructor
      */
     public CommonGoalCardDeck () {
-        CommonGoalCard corners = new CornersCommonGoalCard(NumberOfPlayers.TWOPLAYERS, RomanNumber.TWO);
-        CommonGoalCard cross = new CornersCommonGoalCard(NumberOfPlayers.TWOPLAYERS, RomanNumber.TWO);
-        CommonGoalCard diagonal = new CornersCommonGoalCard(NumberOfPlayers.TWOPLAYERS, RomanNumber.TWO);
-        CommonGoalCard eightTiles =  new CornersCommonGoalCard(NumberOfPlayers.TWOPLAYERS, RomanNumber.TWO);
-        CommonGoalCard fourGroups =  new CornersCommonGoalCard(NumberOfPlayers.TWOPLAYERS, RomanNumber.TWO);
-        CommonGoalCard fourLines =  new CornersCommonGoalCard(NumberOfPlayers.TWOPLAYERS, RomanNumber.TWO);
-        CommonGoalCard increasingColumns =  new CornersCommonGoalCard(NumberOfPlayers.TWOPLAYERS, RomanNumber.TWO);
-        CommonGoalCard sixGroups = new CornersCommonGoalCard(NumberOfPlayers.TWOPLAYERS, RomanNumber.TWO);
-        CommonGoalCard threeColumns =  new CornersCommonGoalCard(NumberOfPlayers.TWOPLAYERS, RomanNumber.TWO);
-        CommonGoalCard twoColumns =   new CornersCommonGoalCard(NumberOfPlayers.TWOPLAYERS, RomanNumber.TWO);
-        CommonGoalCard twoLines =  new CornersCommonGoalCard(NumberOfPlayers.TWOPLAYERS, RomanNumber.TWO);
-        CommonGoalCard twoSquares =  new CornersCommonGoalCard(NumberOfPlayers.TWOPLAYERS, RomanNumber.TWO);
+        CommonGoalCard corners = new CornersCommonGoalCard(NumberOfPlayers.TWO_PLAYERS, RomanNumber.TWO);
+        CommonGoalCard cross = new CornersCommonGoalCard(NumberOfPlayers.TWO_PLAYERS, RomanNumber.TWO);
+        CommonGoalCard diagonal = new CornersCommonGoalCard(NumberOfPlayers.TWO_PLAYERS, RomanNumber.TWO);
+        CommonGoalCard eightTiles =  new CornersCommonGoalCard(NumberOfPlayers.TWO_PLAYERS, RomanNumber.TWO);
+        CommonGoalCard fourGroups =  new CornersCommonGoalCard(NumberOfPlayers.TWO_PLAYERS, RomanNumber.TWO);
+        CommonGoalCard fourLines =  new CornersCommonGoalCard(NumberOfPlayers.TWO_PLAYERS, RomanNumber.TWO);
+        CommonGoalCard increasingColumns =  new CornersCommonGoalCard(NumberOfPlayers.TWO_PLAYERS, RomanNumber.TWO);
+        CommonGoalCard sixGroups = new CornersCommonGoalCard(NumberOfPlayers.TWO_PLAYERS, RomanNumber.TWO);
+        CommonGoalCard threeColumns =  new CornersCommonGoalCard(NumberOfPlayers.TWO_PLAYERS, RomanNumber.TWO);
+        CommonGoalCard twoColumns =   new CornersCommonGoalCard(NumberOfPlayers.TWO_PLAYERS, RomanNumber.TWO);
+        CommonGoalCard twoLines =  new CornersCommonGoalCard(NumberOfPlayers.TWO_PLAYERS, RomanNumber.TWO);
+        CommonGoalCard twoSquares =  new CornersCommonGoalCard(NumberOfPlayers.TWO_PLAYERS, RomanNumber.TWO);
         CommonGoalCard[] allCommonGoalCards = {corners, cross, diagonal, eightTiles, fourGroups, fourLines, increasingColumns, sixGroups, threeColumns, twoColumns, twoLines, twoSquares};
         this.deck = new ArrayList<CommonGoalCard>();
             for(CommonGoalCard cgc: allCommonGoalCards) {

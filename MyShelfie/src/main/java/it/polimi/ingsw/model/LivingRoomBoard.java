@@ -40,8 +40,9 @@ public class LivingRoomBoard {
      */
 
     //TODO: modify the input numberOfPlayers as an enum and not an int
-    public LivingRoomBoard(int numberOfPlayers, CommonGoalCardDeck deck) throws IllegalArgumentException {
+    public LivingRoomBoard(int numberOfPlayers) throws IllegalArgumentException {
         int[][] activeList;
+        CommonGoalCardDeck commonGoalCardDeck = new CommonGoalCardDeck();
 
         switch (numberOfPlayers) {
             case 2 -> {
@@ -83,8 +84,8 @@ public class LivingRoomBoard {
         }
         placeTilesRandomly();
         // TODO: modify draw method introducing a correct input (nop, roman)
-        this.firstCommonGoalCard = deck.draw();
-        this.secondCommonGoalCard = deck.draw();
+        this.firstCommonGoalCard = commonGoalCardDeck.draw();
+        this.secondCommonGoalCard = commonGoalCardDeck.draw();
     }
 
     /**

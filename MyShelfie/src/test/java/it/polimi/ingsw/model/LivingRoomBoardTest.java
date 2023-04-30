@@ -16,7 +16,7 @@ public class LivingRoomBoardTest {
         int[] testNumberOfPlayers = {2,3,4};
         for (int i: testNumberOfPlayers){
             LivingRoomBoard testLivingRoomBoard = new LivingRoomBoard(i);
-            assertTrue(testLivingRoomBoard != null); // no errors in the creation of the object
+            assertNotNull(testLivingRoomBoard); // no errors in the creation of the object
         }
 
         int[] testExceptions = {0,1,5};
@@ -24,7 +24,6 @@ public class LivingRoomBoardTest {
             assertThrows(IllegalArgumentException.class, () -> {
                 new LivingRoomBoard(i);;
             });
-
         }
     }
 
@@ -45,7 +44,7 @@ public class LivingRoomBoardTest {
             for(int i = 0; i < MAX_WIDTH; i++){
                 for(int j = 0; j < MAX_HEIGHT; j++){
                     assertNotNull(livingRoomBoard.getSpace(new Position(i,j)));
-                    assertTrue(!livingRoomBoard.getSpace(new Position(i,j)).isFree());
+                    assertFalse(livingRoomBoard.getSpace(new Position(i, j)).isFree());
                 }
             }
             System.out.println(livingRoomBoard.getAllFree().size());

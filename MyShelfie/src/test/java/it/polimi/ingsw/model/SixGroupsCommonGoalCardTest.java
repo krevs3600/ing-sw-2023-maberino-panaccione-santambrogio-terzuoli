@@ -38,7 +38,7 @@ public class SixGroupsCommonGoalCardTest {
         tp19 = new TilePack();
         tp20 = new TilePack();
 
-        c=new SixGroupsCommonGoalCard(NumberOfPlayers.FOURPLAYERS,RomanNumber.TWO);
+        c=new SixGroupsCommonGoalCard(NumberOfPlayers.FOUR_PLAYERS,RomanNumber.TWO);
 
         i1=new ItemTile(TileType.FRAME);
         i2=new ItemTile(TileType.TROPHY);

@@ -11,7 +11,7 @@ import java.util.Stack;
  * @version 1.0
  * @since 4/8/2023
  */
-public abstract class CommonGoalCard {
+public abstract class CommonGoalCard extends GoalCard {
 
     private final Stack<ScoringToken> stack = new Stack<>();
 
@@ -21,16 +21,16 @@ public abstract class CommonGoalCard {
      * @param roman the roman number on the back of a scoring item which defines on which of the two common goal cards the item is stacked
      */
     public CommonGoalCard (NumberOfPlayers nop, RomanNumber roman) {
-        if (nop.equals(NumberOfPlayers.TWOPLAYERS)) {
+        if (nop.equals(NumberOfPlayers.TWO_PLAYERS)) {
             this.stack.push(new ScoringToken(roman, 4));
             this.stack.push(new ScoringToken(roman, 8));
         }
-        if (nop.equals(NumberOfPlayers.THREEPLAYERS)) {
+        if (nop.equals(NumberOfPlayers.THREE_PLAYERS)) {
             this.stack.push(new ScoringToken(roman, 4));
             this.stack.push(new ScoringToken(roman, 6));
             this.stack.push(new ScoringToken(roman, 8));
         }
-        if (nop.equals(NumberOfPlayers.FOURPLAYERS)) {
+        if (nop.equals(NumberOfPlayers.FOUR_PLAYERS)) {
             this.stack.push(new ScoringToken(roman, 2));
             this.stack.push(new ScoringToken(roman, 4));
             this.stack.push(new ScoringToken(roman, 6));
