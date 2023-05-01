@@ -14,9 +14,13 @@ public enum NumberOfPlayers {
     TWO_PLAYERS(2),
     THREE_PLAYERS(3),
     FOUR_PLAYERS(4);
-    private int numberOfPlayers;
+    private final int value;
 
-    private NumberOfPlayers(int numberOfPlayers) {
-        this.numberOfPlayers = numberOfPlayers;
+    NumberOfPlayers(int numberOfPlayers) {
+        this.value = numberOfPlayers;
+    }
+
+    public int getValue() {
+        return value;
     }
 }

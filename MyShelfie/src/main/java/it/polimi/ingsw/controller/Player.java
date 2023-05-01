@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.HashMap;
 import java.util.Map;
 
 public class Player {
@@ -20,10 +19,11 @@ public class Player {
     //private final Player nextPlayer;
     //private final boolean firstPlayer;
 
-    private Bookshelf myShelfie;
+    private final Bookshelf myShelfie;
     private int score;
 
-    private PersonalGoalCard personalGoalCard;
+    private final PersonalGoalCard personalGoalCard;
+    private List<ScoringToken> tokens;
 
     /**
      * Class constructor
@@ -35,6 +35,7 @@ public class Player {
         this.myShelfie = new Bookshelf();
         this.score = 0;
         this.personalGoalCard = (PersonalGoalCard) personalGoalCardDeck.draw();
+        this.tokens = new ArrayList<>();
     }
 
     public PlayerStatus getStatus(){
@@ -53,9 +54,9 @@ public class Player {
      * This method allows a player to insert an Item tile he pulled in his bookshelf
      * @param tp the tile pack from which the tile is retrieved
      * @param column the column of the bookshelf in which the tile will then be placed
-     * @throws IndexOutOfBoundsException
+     * @throws IndexOutOfBoundsException for invalid column index
      */
-    public void insertTile(TilePack tp,int column) throws IndexOutOfBoundsException{
+    public void insertTile(TilePack tp, int column) throws IndexOutOfBoundsException{
         try{
             myShelfie.insertTile(tp, column);
         }
@@ -73,9 +74,8 @@ public class Player {
      * @throws IllegalArgumentException if it is not possible to pick the tile from the selected position
      */
     public ItemTile pickUpTile(LivingRoomBoard board, Position pos) throws IllegalArgumentException{
-        if(board.getDrawableTiles().stream().map(x -> x.getPosition()).collect(Collectors.toList()).contains(pos)){
-            ItemTile toBeDrawn = board.getSpace(pos).drawTile();
-            return toBeDrawn;
+        if(board.getDrawableTiles().stream().map(Space::getPosition).toList().contains(pos)){
+            return board.getSpace(pos).drawTile();
         } else {
             throw new IllegalArgumentException();
         }
@@ -105,8 +105,6 @@ public class Player {
             JSONObject jsonObject = (JSONObject) jsonObj;
             // read points from json
             points = (ArrayList<Integer>) jsonObject.get("points");
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (ParseException e) {
@@ -116,7 +114,7 @@ public class Player {
         score+=points.get(count);
 
         //Computation of points from adjacent tiles groups at end of game
-        ArrayList<List<Integer>> pointsAdj = new ArrayList<List<Integer>>();
+        ArrayList<List<Integer>> pointsAdj = new ArrayList<>();
         pointsAdj.add(Arrays.asList(3, 4, 5, 6));
         pointsAdj.add(Arrays.asList(2, 3, 5, 8));
 
@@ -135,9 +133,6 @@ public class Player {
         }
         return score;
     }
-
-
-
 
 
     /**
@@ -167,7 +162,11 @@ public class Player {
         return null;
     }
 
+    public void setStatus(PlayerStatus status) {
+        this.status = status;
+    }
 
-
-
+    public void winToken(ScoringToken scoringToken){
+        this.tokens.add(scoringToken);
+    }
 }

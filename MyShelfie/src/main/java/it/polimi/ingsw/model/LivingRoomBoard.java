@@ -10,7 +10,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,8 +28,7 @@ public class LivingRoomBoard {
     private static final int MAX_HEIGHT = 9;
     private final Space[][] spaces = new Space[MAX_WIDTH][MAX_HEIGHT];
 
-    private CommonGoalCard firstCommonGoalCard;
-    private CommonGoalCard secondCommonGoalCard;
+    private List<CommonGoalCard> commonGoalCards;
 
     private final Bag bag = new Bag();
 
@@ -78,10 +76,8 @@ public class LivingRoomBoard {
             }
             placeTilesRandomly();
             // TODO: modify draw method introducing a correct input (nop, roman)
-            this.firstCommonGoalCard = commonGoalCardDeck.draw();
-            this.secondCommonGoalCard = commonGoalCardDeck.draw();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+            this.commonGoalCards.add(commonGoalCardDeck.draw());
+            this.commonGoalCards.add(commonGoalCardDeck.draw());
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (ParseException e) {
@@ -104,7 +100,7 @@ public class LivingRoomBoard {
      * @return List<Space> It returns a list with all the free spaces
      */
     public List<Space> getAllFree() {
-        List<Space> freeSidesTiles = new ArrayList<Space>();
+        List<Space> freeSidesTiles = new ArrayList<>();
 
         for (int i = 1; i < MAX_WIDTH - 1; i++) {
             for (int j = 1; j < MAX_HEIGHT - 1; j++) {
@@ -128,7 +124,7 @@ public class LivingRoomBoard {
      * @return List<Space> It returns a list with all the spaces with one free side
      */
     public List<Space> getDrawableTiles() {
-        List<Space> drawablesTiles = new ArrayList<Space>();
+        List<Space> drawablesTiles = new ArrayList<>();
 
         for (int i = 0; i < MAX_WIDTH; i++) {
             for (int j = 0; j < MAX_HEIGHT; j++) {
@@ -156,11 +152,7 @@ public class LivingRoomBoard {
     }
 
     //TODO: getCommonGoalCards
-    public List<CommonGoalCard> getCommonGoalCards(CommonGoalCardDeck commonGoalCardDeck) {
-        List<CommonGoalCard> commonGoalCards = new ArrayList<CommonGoalCard>();
-        for(int i=0; i<2; i++){
-            commonGoalCards.add(commonGoalCardDeck.draw());
-        }
+    public List<CommonGoalCard> getCommonGoalCards() {
         return commonGoalCards;
     }
 

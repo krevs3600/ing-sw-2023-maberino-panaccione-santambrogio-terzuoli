@@ -1,11 +1,9 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.model.CommonGoalCard;
-import it.polimi.ingsw.model.CommonGoalCardDeck;
-import it.polimi.ingsw.model.LivingRoomBoard;
-import it.polimi.ingsw.model.NumberOfPlayers;
+import it.polimi.ingsw.model.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -17,9 +15,10 @@ import java.util.List;
  */
 public class Game {
      private final String id;
-     private List<Player> subscribers = new ArrayList<Player>();
-     private LivingRoomBoard livingRoomBoard;
-     private NumberOfPlayers numberOfPlayers;
+     private List<Player> subscribers = new ArrayList<>();
+     private final LivingRoomBoard livingRoomBoard;
+     private final NumberOfPlayers numberOfPlayers;
+     private int cursor;
 
     /**
      * Class constructor
@@ -44,26 +43,33 @@ public class Game {
      * This method choose the order of play of the game and set to PICKING_TILES the first player
      */
     public void startGame(){
-
+        Collections.shuffle(subscribers);
+        Player firstPlayer = subscribers.get(0);
+        firstPlayer.setStatus(PlayerStatus.PICKING_TILES);
+        this.cursor = 0;
     }
     /**
      * This method stop the game.
      */
     public void endGame(){
-
+        for(Player player : subscribers){
+            player.setStatus(PlayerStatus.INACTIVE);
+        }
+        // maybe call to a method to show results
     }
 
     /**
      * This method returns the current Player
      */
     public Player getCurrentPlayer(){
-        return null;
+        return subscribers.get(cursor);
+        //subscribers.stream().filter(x -> x.getStatus() != PlayerStatus.INACTIVE).collect(Collectors.toList()).get(0);
     }
     /**
      * This method returns the next Player
      */
     public Player getNextPlayer(){
-        return null;
+        return cursor < subscribers.size()-1 ? subscribers.get(cursor+1) : subscribers.get(0);
     }
 
     /**
@@ -76,14 +82,14 @@ public class Game {
     /**
      * This method returns the game id
      */
-    public String getGameId(){
+    public String getId(){
         return this.id;
     }
 
     /**
      * This method returns the number of Players in the game
      */
-    public NumberOfPlayers numberOfPlayers(){
+    public NumberOfPlayers getNumberOfPlayers(){
         return this.numberOfPlayers;
     }
 
@@ -100,13 +106,8 @@ public class Game {
      * @param player the scoring player
      */
     public void pullScoringTokens(CommonGoalCard commonGoalCard, Player player){
-
-    }
-    /**
-     * This method assigns a PersonalGoalCard to each Player
-     */
-    public void dealPersonalGoalCards(){
-
+        ScoringToken scoringToken = commonGoalCard.pop();
+        player.winToken(scoringToken);
     }
 
     /**
