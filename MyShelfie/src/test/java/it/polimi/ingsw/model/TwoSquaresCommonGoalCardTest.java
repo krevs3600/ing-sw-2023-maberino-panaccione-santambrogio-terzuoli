@@ -37,7 +37,7 @@ public class TwoSquaresCommonGoalCardTest {
         tp20 = new TilePack();
 
 
-        c = new TwoSquaresCommonGoalCard(NumberOfPlayers.TWO_PLAYERS, RomanNumber.ONE);
+        c = new TwoSquaresCommonGoalCard();
 
         i1 = new ItemTile(TileType.PLANT);
         i2 = new ItemTile(TileType.FRAME);

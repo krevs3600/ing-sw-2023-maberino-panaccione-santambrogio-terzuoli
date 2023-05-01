@@ -38,7 +38,7 @@ public class FourLinesCommonGoalCardTest {
         tp20 = new TilePack();
 
 
-        c = new FourLinesCommonGoalCard(NumberOfPlayers.THREE_PLAYERS, RomanNumber.ONE);
+        c = new FourLinesCommonGoalCard();
         i1 = new ItemTile(TileType.CAT);
         i2 = new ItemTile(TileType.BOOK);
         i3 = new ItemTile(TileType.BOOK);

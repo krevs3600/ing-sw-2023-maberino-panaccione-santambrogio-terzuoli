@@ -38,7 +38,7 @@ public class DiagonalCommonGoalCardTest {
         tp20 = new TilePack();
 
 
-        c = new DiagonalCommonGoalCard(NumberOfPlayers.FOUR_PLAYERS, RomanNumber.TWO);
+        c = new DiagonalCommonGoalCard();
 
         i1 = new ItemTile(TileType.PLANT);
         i2 = new ItemTile(TileType.FRAME);

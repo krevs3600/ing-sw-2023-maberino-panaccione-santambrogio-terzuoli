@@ -1,10 +1,8 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.LivingRoomBoard;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import java.util.ArrayList;
-import java.util.List;
+
 
 public class LivingRoomBoardTest {
 
@@ -43,8 +41,8 @@ public class LivingRoomBoardTest {
             for(Space space : livingRoomBoard.getDrawableTiles()){
                 System.out.println(space.getPosition().toString());
             }
-            assertTrue(livingRoomBoard.getAllFree().size() == 0);
-            assertTrue(livingRoomBoard.getDrawableTiles().size() == testDrawableTiles[n]);
+            assertEquals(0, livingRoomBoard.getAllFree().size());
+            assertEquals(livingRoomBoard.getDrawableTiles().size(), testDrawableTiles[n]);
         }
 
     }

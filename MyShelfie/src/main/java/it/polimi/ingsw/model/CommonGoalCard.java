@@ -12,7 +12,6 @@ import java.util.Stack;
  * @since 4/8/2023
  */
 public abstract class CommonGoalCard extends GoalCard {
-
     private final Stack<ScoringToken> stack = new Stack<>();
 
     /**
@@ -20,7 +19,7 @@ public abstract class CommonGoalCard extends GoalCard {
      * @param nop the number of players which affects the stack of scoring items upon a common goal card
      * @param roman the roman number on the back of a scoring item which defines on which of the two common goal cards the item is stacked
      */
-    public CommonGoalCard (NumberOfPlayers nop, RomanNumber roman) {
+    public void stackScoringTokens (NumberOfPlayers nop, RomanNumber roman) {
         if (nop.equals(NumberOfPlayers.TWO_PLAYERS)) {
             this.stack.push(new ScoringToken(roman, 4));
             this.stack.push(new ScoringToken(roman, 8));

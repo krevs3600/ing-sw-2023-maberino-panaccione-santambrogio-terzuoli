@@ -37,7 +37,7 @@ public class CornersCommonGoalCardTest {
         tp20 = new TilePack();
 
 
-        c = new CornersCommonGoalCard(NumberOfPlayers.THREE_PLAYERS, RomanNumber.ONE);
+        c = new CornersCommonGoalCard();
 
         i1 = new ItemTile(TileType.PLANT);
         i2 = new ItemTile(TileType.FRAME);

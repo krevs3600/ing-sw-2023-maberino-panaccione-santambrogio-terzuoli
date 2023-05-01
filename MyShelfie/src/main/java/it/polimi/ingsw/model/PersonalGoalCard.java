@@ -14,7 +14,7 @@ public class PersonalGoalCard extends GoalCard{
     private static final int DIMENSION=6;
     private final int[] scores = new int[]{1, 2, 4, 6, 9, 12};
 
-    private HashMap<Integer, TileType> scoringItem = new HashMap<Integer, TileType>();
+    private final HashMap<Integer, TileType> scoringItem;
 
     /**
      * Class constructor

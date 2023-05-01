@@ -75,12 +75,10 @@ public class LivingRoomBoard {
                 r++;
             }
             placeTilesRandomly();
-            // TODO: modify draw method introducing a correct input (nop, roman)
+
             this.commonGoalCards.add(commonGoalCardDeck.draw());
             this.commonGoalCards.add(commonGoalCardDeck.draw());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ParseException e) {
+        } catch (IOException | ParseException e) {
             throw new RuntimeException(e);
         }
 
@@ -151,7 +149,6 @@ public class LivingRoomBoard {
 
     }
 
-    //TODO: getCommonGoalCards
     public List<CommonGoalCard> getCommonGoalCards() {
         return commonGoalCards;
     }
