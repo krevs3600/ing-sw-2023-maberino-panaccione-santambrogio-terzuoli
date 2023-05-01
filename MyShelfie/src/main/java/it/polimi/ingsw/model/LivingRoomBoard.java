@@ -28,7 +28,7 @@ public class LivingRoomBoard {
     private static final int MAX_HEIGHT = 9;
     private final Space[][] spaces = new Space[MAX_WIDTH][MAX_HEIGHT];
 
-    private List<CommonGoalCard> commonGoalCards;
+    private List<CommonGoalCard> commonGoalCards = new ArrayList<>();
 
     private final Bag bag = new Bag();
 

@@ -100,7 +100,7 @@ public class Space {
     @Override
     public String toString(){
         if (!this.isFree() && this.getType() == SpaceType.DEFAULT){
-            return this.getTile().getType().colorBackground + " " + this.getTile().getType().abbreviation + " " + "\033[0m";
+            return getTile().toString();
         } else if (this.getType() == SpaceType.FORBIDDEN) {
             return " X ";
         } else {

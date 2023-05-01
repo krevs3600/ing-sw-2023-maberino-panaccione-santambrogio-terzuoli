@@ -62,7 +62,6 @@ public class PersonalGoalCardDeck implements Drawable {
                     System.out.println("Please check config file.");
                 }
             }
-            System.out.println(deck.size());
 
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);

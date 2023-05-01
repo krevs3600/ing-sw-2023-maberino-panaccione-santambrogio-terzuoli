@@ -2,9 +2,7 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * <h1>Class Game</h1>
@@ -63,13 +61,14 @@ public class Game {
      */
     public Player getCurrentPlayer(){
         return subscribers.get(cursor);
-        //subscribers.stream().filter(x -> x.getStatus() != PlayerStatus.INACTIVE).collect(Collectors.toList()).get(0);
+        // subscribers.stream().filter(x -> x.getStatus() != PlayerStatus.INACTIVE).toList().get(0);
     }
     /**
      * This method returns the next Player
      */
     public Player getNextPlayer(){
         return cursor < subscribers.size()-1 ? subscribers.get(cursor+1) : subscribers.get(0);
+        // cursor < subscribers.size()-1 ? subscribers.get(cursor+1) : subscribers.get(0);
     }
 
     /**
@@ -116,5 +115,76 @@ public class Game {
     public List<Player> getSubscribers(){
         return subscribers;
     }
+
+    /**
+     * This method returns the LivingRoomBoard of the game
+     */
+    public LivingRoomBoard getLivingRoomBoard() {
+        return livingRoomBoard;
+    }
+
+    public void nextPlayer(){
+        this.cursor = cursor < subscribers.size()-1 ? cursor+1 : 0;
+    }
+    public static void main(String[] args){
+        PersonalGoalCardDeck personalGoalCardDeck = new PersonalGoalCardDeck();
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("How many players are going to play? ");
+        int numberOfPlayers = scanner.nextInt();
+        Game game = new Game(Arrays.stream(NumberOfPlayers.values()).filter(x -> x.getValue() == numberOfPlayers).toList().get(0));
+        for (int i = 0; i<numberOfPlayers; i++){
+            System.out.print("Enter your name: ");
+            String name = scanner.next();
+            game.subscribe(new Player(name, personalGoalCardDeck));
+        }
+        System.out.println("Game " + game.getId());
+        TilePack tilePack = new TilePack();
+        game.startGame();
+        LivingRoomBoard livingRoomBoard = game.getLivingRoomBoard();
+
+        while(true){
+            Player currentPlayer = game.getCurrentPlayer();
+            Player nextPlayer = game.getNextPlayer();
+            List<Space> drawableTiles = livingRoomBoard.getDrawableTiles();
+            System.out.println(livingRoomBoard);
+            System.out.println(drawableTiles);
+            System.out.print(currentPlayer.getName() + " how many tiles would you like to get? ");
+
+            int numberOfTiles = scanner.nextInt();
+            for (int i=0; i<numberOfTiles; i++) {
+                while (tilePack.getSize() < numberOfTiles) {
+                    System.out.print("x: ");
+                    int x = scanner.nextInt();
+                    System.out.print("y: ");
+                    int y = scanner.nextInt();
+
+                    if (drawableTiles.contains(livingRoomBoard.getSpace(new Position(x, y)))) {
+                        tilePack.insertTile(currentPlayer.pickUpTile(livingRoomBoard, new Position(x, y)));
+                        System.out.println(tilePack);
+                        System.out.println(livingRoomBoard);
+                    } else {
+                        System.out.println("You can't take this tile, try again");
+                    }
+                }
+            }
+            currentPlayer.setStatus(PlayerStatus.INSERTING_TILES);
+            // while(tilePack.getSize() > 0){
+            System.out.println(currentPlayer.getBookshelf());
+            System.out.println(tilePack);
+            System.out.print("In which column do you want to put your tiles? ");
+            int column = scanner.nextInt();
+            currentPlayer.insertTile(tilePack, column);
+            System.out.println(currentPlayer.getBookshelf());
+            //}
+            currentPlayer.setStatus(PlayerStatus.INACTIVE);
+            nextPlayer.setStatus(PlayerStatus.PICKING_TILES);
+            game.nextPlayer();
+
+        }
+
+
+    }
+
 
 }

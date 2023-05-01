@@ -85,7 +85,8 @@ public class Bookshelf {
      * or if the selected column has not enough space to receive all the item tiles to insert
      */
 
-    public void insertTile(TilePack tp,int column) throws IndexOutOfBoundsException{
+    // TODO: player must choose the order of the tiles. Insert tile should take just the tile, not the tilePack.
+    public void insertTile(TilePack tp, int column) throws IndexOutOfBoundsException{
         if (column >= 0 && column < MAX_WIDTH) {
             int insertableTiles = getNumberInsertableTilesColumn(column);
             if (insertableTiles >= tp.getTiles().size()) {
@@ -234,6 +235,24 @@ public class Bookshelf {
      */
     public int getMaxHeight () {
         return MAX_HEIGHT;
+    }
+
+    @Override
+    public String toString(){
+        String number = "";
+        for(int i=0; i<MAX_WIDTH; i++){
+            number = number.concat("   " + String.valueOf(i));
+        }
+
+        String rows = "";
+        for(int i=0; i<MAX_HEIGHT;i++){
+            rows = rows.concat(String.valueOf(MAX_HEIGHT-1-i) + " ");
+            for(int j=0; j<MAX_WIDTH;j++){
+                rows = rows.concat(getGrid()[i][j] != null ? getGrid()[i][j].toString() + " " : "    ");
+            }
+            rows = rows.concat("\n");
+        }
+        return number.concat("\n").concat(rows);
     }
 
 }

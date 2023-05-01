@@ -5,12 +5,10 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.Map;
 
 public class Player {
@@ -19,7 +17,7 @@ public class Player {
     //private final Player nextPlayer;
     //private final boolean firstPlayer;
 
-    private final Bookshelf myShelfie;
+    private final Bookshelf bookshelf;
     private int score;
 
     private final PersonalGoalCard personalGoalCard;
@@ -32,7 +30,7 @@ public class Player {
      */
     public Player(String name, PersonalGoalCardDeck personalGoalCardDeck){
         this.name = name;
-        this.myShelfie = new Bookshelf();
+        this.bookshelf = new Bookshelf();
         this.score = 0;
         this.personalGoalCard = (PersonalGoalCard) personalGoalCardDeck.draw();
         this.tokens = new ArrayList<>();
@@ -58,7 +56,7 @@ public class Player {
      */
     public void insertTile(TilePack tp, int column) throws IndexOutOfBoundsException{
         try{
-            myShelfie.insertTile(tp, column);
+            bookshelf.insertTile(tp, column);
         }
         catch (IndexOutOfBoundsException e) {
             System.out.println("Error, please select a valid column");
@@ -71,14 +69,9 @@ public class Player {
      * @param board from which the tile is picked
      * @param pos the position inside the board from which the tile is picked
      * @return the item tile that is picked by the player
-     * @throws IllegalArgumentException if it is not possible to pick the tile from the selected position
      */
-    public ItemTile pickUpTile(LivingRoomBoard board, Position pos) throws IllegalArgumentException{
-        if(board.getDrawableTiles().stream().map(Space::getPosition).toList().contains(pos)){
-            return board.getSpace(pos).drawTile();
-        } else {
-            throw new IllegalArgumentException();
-        }
+    public ItemTile pickUpTile(LivingRoomBoard board, Position pos) {
+        return board.getSpace(pos).drawTile();
     }
 
     /**
@@ -87,7 +80,7 @@ public class Player {
      */
     public int computeScoreEndGame() {
         //Computation of points from personal goal card
-        ItemTile[][] bookshelf = myShelfie.getGrid();
+        ItemTile[][] bookshelf = this.bookshelf.getGrid();
         //personalGoalCard.getScoringItem().forEach((key, value) -> );
         int count = 0;
         for (Map.Entry<Integer, TileType> element :
@@ -119,7 +112,7 @@ public class Player {
         pointsAdj.add(Arrays.asList(2, 3, 5, 8));
 
         for (TileType type : TileType.values()) {
-            Map<Integer, Integer> adjacentTiles = myShelfie.getNumberAdjacentTiles(type);
+            Map<Integer, Integer> adjacentTiles = this.bookshelf.getNumberAdjacentTiles(type);
             for (Integer key : adjacentTiles.keySet()) {
                 for (int i = 0; i < pointsAdj.get(0).size(); i++) {
                     if (key.equals(pointsAdj.get(0).get(i))) {
@@ -143,8 +136,8 @@ public class Player {
     public int computeScoreMidGame(CommonGoalCardDeck deck){
         List<CommonGoalCard> commonGoalCards = deck.getDeck();
         for(CommonGoalCard card : commonGoalCards) {
-            if (card.toBeChecked(myShelfie)) {
-                if(card.CheckPattern(myShelfie)){
+            if (card.toBeChecked(bookshelf)) {
+                if(card.CheckPattern(bookshelf)){
                     //ScoringToken tempToken = card.getStack().pop();
                     //score+=tempToken.getValue();
                     score+=card.getStack().pop().getValue();
@@ -168,5 +161,9 @@ public class Player {
 
     public void winToken(ScoringToken scoringToken){
         this.tokens.add(scoringToken);
+    }
+
+    public Bookshelf getBookshelf(){
+        return this.bookshelf;
     }
 }

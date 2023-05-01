@@ -74,4 +74,27 @@ public class TilePack {
         return this.tiles;
     }
 
+    public int getSize(){
+        return this.tiles.size();
+    }
+
+    @Override
+    public String toString(){
+        String tilePack = "";
+        String position = "  ";
+        for (int i=0; i<3; i++){
+            position = position.concat(String.valueOf(i)).concat("   ");
+        }
+        tilePack = tilePack.concat("[");
+        for (int i=0; i<3;i++){
+            tilePack = tilePack.concat(getTiles().size() > i ? this.getTiles().get(i).toString() : "   ");
+            if (i==2){
+                tilePack = tilePack.concat("]");
+            } else {
+                tilePack = tilePack.concat(",");
+            }
+        }
+        return position.concat("\n").concat(tilePack);
+    }
+
 }

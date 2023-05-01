@@ -23,4 +23,9 @@ public class ItemTile {
     public TileType getType() {
         return type;
     }
+
+    @Override
+    public String toString() {
+        return getType().colorBackground + " " + getType().abbreviation + " " + "\033[0m";
+    }
 }
