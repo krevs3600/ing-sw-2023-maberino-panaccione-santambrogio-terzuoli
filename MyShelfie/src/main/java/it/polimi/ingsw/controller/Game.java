@@ -6,7 +6,7 @@ import java.util.*;
 
 /**
  * <h1>Class Game</h1>
- * The class Game initiate LivingRoomBoard and keeps track of the players
+ * The class Game initiates LivingRoomBoard and keeps track of the players
  *
  * @version 1.0
  * @since 4/30/2023
@@ -20,7 +20,7 @@ public class Game {
 
     /**
      * Class constructor
-     * @param numberOfPlayers enum
+     * @param numberOfPlayers the number of players on which the game setting depends
      */
     public Game(NumberOfPlayers numberOfPlayers){
         //initialize id with random string, This should be quiet random...
@@ -30,7 +30,7 @@ public class Game {
     }
 
     /**
-     * This method add a Player to the game
+     * This method adds a Player to the game
      * @param player the player to be subscribed
      */
     public void subscribe(Player player){
@@ -38,7 +38,7 @@ public class Game {
     }
 
     /**
-     * This method choose the order of play of the game and set to PICKING_TILES the first player
+     * This method chooses the order of play of the game and set to PICKING_TILES the status of the first player
      */
     public void startGame(){
         Collections.shuffle(subscribers);
@@ -47,7 +47,7 @@ public class Game {
         this.cursor = 0;
     }
     /**
-     * This method stop the game.
+     * This method stops the game by setting all the players to inactive.
      */
     public void endGame(){
         for(Player player : subscribers){
@@ -58,13 +58,16 @@ public class Game {
 
     /**
      * This method returns the current Player
+     * @return Player the player who is currently playing his turn
      */
     public Player getCurrentPlayer(){
         return subscribers.get(cursor);
         // subscribers.stream().filter(x -> x.getStatus() != PlayerStatus.INACTIVE).toList().get(0);
     }
+
     /**
      * This method returns the next Player
+     * @return Player the player who has to play his turn after the current one
      */
     public Player getNextPlayer(){
         return cursor < subscribers.size()-1 ? subscribers.get(cursor+1) : subscribers.get(0);
@@ -72,36 +75,40 @@ public class Game {
     }
 
     /**
-     * This method refills the LivingRoomBoard
+     * This method refills the living room board by calling its proper method
      */
     public void refillLivingRoomBoard(){
         livingRoomBoard.refill();
     }
 
     /**
-     * This method returns the game id
+     * This getter method gets the id of the game
+     * @return String It returns the identifying string of the game
      */
     public String getId(){
         return this.id;
     }
 
     /**
-     * This method returns the number of Players in the game
+     * This getter method gets the number of players of the game
+     * @return NumberOfPlayers It returns the enumeration value reporting the number of players
      */
     public NumberOfPlayers getNumberOfPlayers(){
         return this.numberOfPlayers;
     }
 
     /**
-     * This method returns the list of chosen CommonGoalCards
+     * This method gets the two active common goal cards of the game
+     * @return List<CommonGoalCard> It returns the list of the two common goal cards in play
      */
     // don't remember why private
     private List<CommonGoalCard> getCommonGoalCards(){
         return livingRoomBoard.getCommonGoalCards();
     }
+
     /**
-     * This method take the ScoringToken from the commonGoalCard and gives it to the correct Player
-     * @param commonGoalCard the achieved commonGoalCard
+     * This method takes the ScoringToken from the commonGoalCard and gives it to the given Player
+     * @param commonGoalCard the card of the achieved common goal
      * @param player the scoring player
      */
     public void pullScoringTokens(CommonGoalCard commonGoalCard, Player player){
@@ -110,7 +117,8 @@ public class Game {
     }
 
     /**
-     * This method returns the list of Players in the game
+     * This getter method gets the subscribed players
+     * @return List<Player> It returns the list of players in game
      */
     public List<Player> getSubscribers(){
         return subscribers;
