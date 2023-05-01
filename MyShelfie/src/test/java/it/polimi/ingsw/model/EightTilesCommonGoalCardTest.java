@@ -27,7 +27,7 @@ public class EightTilesCommonGoalCardTest {
         tp9 = new TilePack();
         tp10 = new TilePack();
 
-        c = new EightTilesCommonGoalCard(NumberOfPlayers.THREE_PLAYERS, RomanNumber.ONE);
+        c = new EightTilesCommonGoalCard();
         i1 = new ItemTile(TileType.CAT);
         i2 = new ItemTile(TileType.BOOK);
         i3 = new ItemTile(TileType.BOOK);

@@ -23,20 +23,20 @@ public class CommonGoalCardDeck implements Drawable {
      * Class constructor
      */
     public CommonGoalCardDeck () {
-        CommonGoalCard corners = new CornersCommonGoalCard(NumberOfPlayers.TWO_PLAYERS, RomanNumber.TWO);
-        CommonGoalCard cross = new CornersCommonGoalCard(NumberOfPlayers.TWO_PLAYERS, RomanNumber.TWO);
-        CommonGoalCard diagonal = new CornersCommonGoalCard(NumberOfPlayers.TWO_PLAYERS, RomanNumber.TWO);
-        CommonGoalCard eightTiles =  new CornersCommonGoalCard(NumberOfPlayers.TWO_PLAYERS, RomanNumber.TWO);
-        CommonGoalCard fourGroups =  new CornersCommonGoalCard(NumberOfPlayers.TWO_PLAYERS, RomanNumber.TWO);
-        CommonGoalCard fourLines =  new CornersCommonGoalCard(NumberOfPlayers.TWO_PLAYERS, RomanNumber.TWO);
-        CommonGoalCard increasingColumns =  new CornersCommonGoalCard(NumberOfPlayers.TWO_PLAYERS, RomanNumber.TWO);
-        CommonGoalCard sixGroups = new CornersCommonGoalCard(NumberOfPlayers.TWO_PLAYERS, RomanNumber.TWO);
-        CommonGoalCard threeColumns =  new CornersCommonGoalCard(NumberOfPlayers.TWO_PLAYERS, RomanNumber.TWO);
-        CommonGoalCard twoColumns =   new CornersCommonGoalCard(NumberOfPlayers.TWO_PLAYERS, RomanNumber.TWO);
-        CommonGoalCard twoLines =  new CornersCommonGoalCard(NumberOfPlayers.TWO_PLAYERS, RomanNumber.TWO);
-        CommonGoalCard twoSquares =  new CornersCommonGoalCard(NumberOfPlayers.TWO_PLAYERS, RomanNumber.TWO);
+        CommonGoalCard corners = new CornersCommonGoalCard();
+        CommonGoalCard cross = new CornersCommonGoalCard();
+        CommonGoalCard diagonal = new CornersCommonGoalCard();
+        CommonGoalCard eightTiles =  new CornersCommonGoalCard();
+        CommonGoalCard fourGroups =  new CornersCommonGoalCard();
+        CommonGoalCard fourLines =  new CornersCommonGoalCard();
+        CommonGoalCard increasingColumns =  new CornersCommonGoalCard();
+        CommonGoalCard sixGroups = new CornersCommonGoalCard();
+        CommonGoalCard threeColumns =  new CornersCommonGoalCard();
+        CommonGoalCard twoColumns =   new CornersCommonGoalCard();
+        CommonGoalCard twoLines =  new CornersCommonGoalCard();
+        CommonGoalCard twoSquares =  new CornersCommonGoalCard();
         CommonGoalCard[] allCommonGoalCards = {corners, cross, diagonal, eightTiles, fourGroups, fourLines, increasingColumns, sixGroups, threeColumns, twoColumns, twoLines, twoSquares};
-        this.deck = new ArrayList<CommonGoalCard>();
+        this.deck = new ArrayList<>();
             for(CommonGoalCard cgc: allCommonGoalCards) {
                 deck.add(cgc);
                 this.size++;
@@ -47,7 +47,6 @@ public class CommonGoalCardDeck implements Drawable {
      * This method is used to draw a random common goal card from the deck
      * @return GoalCard It returns the randomly drawn goal card
      */
-    //TODO: draw method
     @Override
     public CommonGoalCard draw() {
         int randNumber = ThreadLocalRandom.current().nextInt(0, getDeck().size());

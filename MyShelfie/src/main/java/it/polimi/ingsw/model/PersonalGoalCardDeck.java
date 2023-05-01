@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -52,22 +51,18 @@ public class PersonalGoalCardDeck implements Drawable {
 
                 // check configs
                 if (position.size() == type.size()) {
-                    HashMap map = new HashMap<Integer, TileType>();
+                    HashMap<Integer, TileType> map = new HashMap<>();
                     for (int i = 0; i < position.size(); i++) {
                         map.put(position.get(i), TileType.valueOf(type.get(i)));
                     }
                     this.deck.add(new PersonalGoalCard(map));
                     size++;
                 } else {
-                    System.out.println("Please check config file.");
+                    System.out.println("Please check configuration file.");
                 }
             }
 
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ParseException e) {
+        } catch (ParseException | IOException e) {
             throw new RuntimeException(e);
         }
     }

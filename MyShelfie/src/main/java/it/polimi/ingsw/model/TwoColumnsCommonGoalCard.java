@@ -12,15 +12,6 @@ package it.polimi.ingsw.model;
 public class TwoColumnsCommonGoalCard extends CommonGoalCard{
 
     /**
-     * Class constructor
-     * @param nop the number of players necessary to determine the scoring tokens stacking on the card
-     * @param roman the identifying roman number necessary to determine whether it is the first or the second goal of the game
-     */
-    public TwoColumnsCommonGoalCard(NumberOfPlayers nop, RomanNumber roman)  {
-        super(nop,roman);
-    }
-
-    /**
      * This method is the implementation of the CommonGoalCard's one
      * It is used to determine whether the goal card is to be checked or not,
      * namely if the bookshelf has the minimum requirements to be checked

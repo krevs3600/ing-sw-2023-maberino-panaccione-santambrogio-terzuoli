@@ -38,7 +38,7 @@ public class CrossCommonGoalCardTest {
         tp20 = new TilePack();
 
 
-        c = new CrossCommonGoalCard(NumberOfPlayers.THREE_PLAYERS, RomanNumber.ONE);
+        c = new CrossCommonGoalCard();
 
         i1 = new ItemTile(TileType.GAME);
         i2 = new ItemTile(TileType.FRAME);

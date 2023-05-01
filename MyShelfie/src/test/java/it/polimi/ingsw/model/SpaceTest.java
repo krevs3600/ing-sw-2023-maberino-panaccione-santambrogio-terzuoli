@@ -20,7 +20,7 @@ public class SpaceTest{
         Position pos = new Position(5,5);
         Space cell = new Space(SpaceType.DEFAULT, pos);
         cell.setTile(new ItemTile(TileType.CAT));
-        assertTrue(!cell.isFree());
+        assertFalse(cell.isFree());
     }
 
 
@@ -58,18 +58,14 @@ public class SpaceTest{
         Space cell = new Space(SpaceType.DEFAULT, pos);
         cell.setTile(new ItemTile(TileType.CAT));
         cell.drawTile();
-        assertThrows(IllegalAccessError.class, () -> {
-            cell.getTile();
-        });
+        assertThrows(IllegalAccessError.class, cell::getTile);
     }
 
     @Test
     public void getTileFromForbiddenCell() {
         Position pos = new Position(5, 5);
         Space cell = new Space(SpaceType.FORBIDDEN, pos);
-        assertThrows(IllegalAccessError.class, () -> {
-            cell.getTile();
-        });
+        assertThrows(IllegalAccessError.class, cell::getTile);
     }
 
     @Test
@@ -78,18 +74,14 @@ public class SpaceTest{
         Space cell = new Space(SpaceType.DEFAULT, pos);
         cell.setTile(new ItemTile(TileType.CAT));
         cell.drawTile();
-        assertThrows(IllegalAccessError.class, () -> {
-            cell.drawTile();
-        });
+        assertThrows(IllegalAccessError.class, cell::drawTile);
     }
 
     @Test
     public void drawTileFromForbiddenCell() {
         Position pos = new Position(5, 5);
         Space cell = new Space(SpaceType.FORBIDDEN, pos);
-        assertThrows(IllegalAccessError.class, () -> {
-            cell.drawTile();
-        });
+        assertThrows(IllegalAccessError.class, cell::drawTile);
     }
 
 
