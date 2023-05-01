@@ -156,10 +156,12 @@ public class LivingRoomBoard {
     }
 
     //TODO: getCommonGoalCards
-    public List<CommonGoalCard> getCommonGoalCards() {
-        // list or array?
-        // CommonGoalCard[]
-        return null;
+    public List<CommonGoalCard> getCommonGoalCards(CommonGoalCardDeck commonGoalCardDeck) {
+        List<CommonGoalCard> commonGoalCards = new ArrayList<CommonGoalCard>();
+        for(int i=0; i<2; i++){
+            commonGoalCards.add(commonGoalCardDeck.draw());
+        }
+        return commonGoalCards;
     }
 
     /**

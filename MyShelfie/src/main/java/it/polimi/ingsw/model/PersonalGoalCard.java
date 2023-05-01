@@ -14,14 +14,14 @@ public class PersonalGoalCard extends GoalCard{
     private static final int DIMENSION=6;
     private final int[] scores = new int[]{1, 2, 4, 6, 9, 12};
 
-    private Map<Position,TileType> scoringItem = new HashMap<>();
+    private HashMap<Integer, TileType> scoringItem = new HashMap<Integer, TileType>();
 
     /**
      * Class constructor
      * @param configuration the map containing the specific configuration of item tiles to have in the bookshelf in order to achieve the personal goal
      * the keys are the positions of the item tiles, while the values are the types of item tiles
      */
-    public PersonalGoalCard(HashMap<Position,TileType> configuration){
+    public PersonalGoalCard(HashMap<Integer,TileType> configuration){
         this.scoringItem = configuration;
     }
 
@@ -29,7 +29,7 @@ public class PersonalGoalCard extends GoalCard{
      * This getter method gets the scoring item
      * @return Map<Position, TileType> It returns the map with the configuration of the personal goal
      */
-    public Map<Position, TileType> getScoringItem() {
+    public Map<Integer, TileType> getScoringItem() {
         return scoringItem;
     }
 }

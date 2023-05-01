@@ -19,13 +19,14 @@ public class Bookshelf {
 
     private static final int MAX_HEIGHT=6;
 
-    private final ItemTile[][] grid=new ItemTile[MAX_HEIGHT][MAX_WIDTH];
+    private final ItemTile[][] grid;
 
     /**
      * Class constructor
      */
     public Bookshelf() {
         this.NumberOfTiles = 0;
+        this.grid = new ItemTile[MAX_HEIGHT][MAX_WIDTH];
     }
 
 
