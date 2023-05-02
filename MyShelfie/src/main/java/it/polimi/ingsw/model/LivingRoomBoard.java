@@ -45,7 +45,7 @@ public class LivingRoomBoard {
         ArrayList<ArrayList<Long>> activeList;
         CommonGoalCardDeck commonGoalCardDeck = new CommonGoalCardDeck();
 
-        String path = "src/main/java/it/polimi/ingsw/model/LivinRoomBoard.json";
+        String path = "src/main/java/it/polimi/ingsw/model/configs/LivinRoomBoard.json";
         try {
             Reader file = new FileReader(path);
             JSONParser parser = new JSONParser();
