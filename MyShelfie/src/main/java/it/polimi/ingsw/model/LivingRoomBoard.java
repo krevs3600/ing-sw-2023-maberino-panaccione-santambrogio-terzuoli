@@ -76,8 +76,12 @@ public class LivingRoomBoard {
             }
             placeTilesRandomly();
 
-            this.commonGoalCards.add(commonGoalCardDeck.draw());
-            this.commonGoalCards.add(commonGoalCardDeck.draw());
+            CommonGoalCard cgc1 = commonGoalCardDeck.draw();
+            CommonGoalCard cgc2 = commonGoalCardDeck.draw();
+            this.commonGoalCards.add(cgc1);
+            this.commonGoalCards.add(cgc2);
+            cgc1.stackScoringTokens(numberOfPlayers, RomanNumber.ONE);
+            cgc2.stackScoringTokens(numberOfPlayers, RomanNumber.TWO);
         } catch (IOException | ParseException e) {
             throw new RuntimeException(e);
         }
