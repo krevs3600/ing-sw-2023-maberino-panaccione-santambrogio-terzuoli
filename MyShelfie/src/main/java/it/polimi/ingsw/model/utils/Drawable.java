@@ -1,4 +1,6 @@
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.model.utils;
+
+import it.polimi.ingsw.model.GoalCard;
 
 /**
  * <h1>Interface Drawable</h1>

@@ -1,4 +1,6 @@
 package it.polimi.ingsw.model;
+import it.polimi.ingsw.model.utils.TileType;
+
 import java.util.*;
 
 /**

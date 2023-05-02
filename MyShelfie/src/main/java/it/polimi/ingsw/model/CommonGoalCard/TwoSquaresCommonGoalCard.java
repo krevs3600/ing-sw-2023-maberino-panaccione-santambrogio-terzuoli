@@ -1,4 +1,7 @@
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.model.CommonGoalCard;
+
+import it.polimi.ingsw.model.Bookshelf;
+import it.polimi.ingsw.model.utils.TileType;
 
 /**
  * <h1>Class TwoSquaresCommonGoalCard</h1>

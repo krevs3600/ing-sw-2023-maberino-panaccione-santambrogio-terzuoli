@@ -1,11 +1,14 @@
 package it.polimi.ingsw.model;
 
 
+import it.polimi.ingsw.model.CommonGoalCard.CommonGoalCard;
+import it.polimi.ingsw.model.utils.NumberOfPlayers;
+import it.polimi.ingsw.model.utils.Position;
+import it.polimi.ingsw.model.utils.SpaceType;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;

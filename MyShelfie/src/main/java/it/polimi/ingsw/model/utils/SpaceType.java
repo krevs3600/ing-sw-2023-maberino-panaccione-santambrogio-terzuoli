@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.model.utils;
 
 /**
  * <h1>Enumeration SpaceType</h1>

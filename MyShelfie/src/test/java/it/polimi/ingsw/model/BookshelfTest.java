@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.CommonGoalCard.CommonGoalCard;
+import it.polimi.ingsw.model.CommonGoalCard.TwoSquaresCommonGoalCard;
+import it.polimi.ingsw.model.utils.TileType;
 import org.junit.Before;
 import org.junit.Test;
 

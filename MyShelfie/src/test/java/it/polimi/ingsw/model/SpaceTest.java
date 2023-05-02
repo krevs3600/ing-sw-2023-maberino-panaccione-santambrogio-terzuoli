@@ -1,14 +1,9 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.Bag;
-import it.polimi.ingsw.model.ItemTile;
-import it.polimi.ingsw.model.TileType;
-import org.junit.Before;
+import it.polimi.ingsw.model.utils.Position;
+import it.polimi.ingsw.model.utils.SpaceType;
+import it.polimi.ingsw.model.utils.TileType;
 import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 
 import static org.junit.Assert.*;

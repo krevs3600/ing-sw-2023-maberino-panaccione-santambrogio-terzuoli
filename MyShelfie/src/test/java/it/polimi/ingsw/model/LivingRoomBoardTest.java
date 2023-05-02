@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.utils.NumberOfPlayers;
+import it.polimi.ingsw.model.utils.Position;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

@@ -1,4 +1,6 @@
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.model.CommonGoalCard;
+
+import it.polimi.ingsw.model.Bookshelf;
 
 /**
  * <h1>Class IncreasingColumnsCommonGoalCard</h1>

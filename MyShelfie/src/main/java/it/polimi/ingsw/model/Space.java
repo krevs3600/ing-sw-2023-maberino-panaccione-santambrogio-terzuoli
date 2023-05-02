@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.utils.Position;
+import it.polimi.ingsw.model.utils.SpaceType;
+
 /**
  * <h1>Class Space</h1>
  * The class Space represents the unit of which the living room board is composed

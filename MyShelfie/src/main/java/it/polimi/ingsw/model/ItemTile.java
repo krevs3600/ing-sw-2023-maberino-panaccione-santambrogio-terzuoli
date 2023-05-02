@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.utils.TileType;
+
 /**
  * <h1>Class ItemTile</h1>
  * The class ItemTile represents the pivotal objects of the game occupying spaces in the living room board
@@ -30,6 +32,6 @@ public class ItemTile {
      */
     @Override
     public String toString() {
-        return getType().colorBackground + " " + getType().abbreviation + " " + "\033[0m";
+        return getType().getColorBackground() + " " + getType().getAbbreviation() + " " + "\033[0m";
     }
 }

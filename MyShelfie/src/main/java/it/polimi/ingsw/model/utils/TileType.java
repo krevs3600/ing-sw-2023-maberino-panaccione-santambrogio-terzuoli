@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.model.utils;
 
 /**
  * <h1>Enumeration TileType</h1>
@@ -25,4 +25,11 @@ public enum TileType {
         this.colorBackground = colorBackground;
     }
 
+    public String getAbbreviation() {
+        return abbreviation;
+    }
+
+    public String getColorBackground() {
+        return colorBackground;
+    }
 }

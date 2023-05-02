@@ -2,13 +2,11 @@ package it.polimi.ingsw;
 
 import it.polimi.ingsw.model.Bag;
 import it.polimi.ingsw.model.ItemTile;
-import it.polimi.ingsw.model.TileType;
-import org.junit.Before;
+import it.polimi.ingsw.model.utils.TileType;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static org.junit.Assert.*;

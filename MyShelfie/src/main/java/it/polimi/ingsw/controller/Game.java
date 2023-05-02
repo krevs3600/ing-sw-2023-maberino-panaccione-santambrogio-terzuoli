@@ -1,6 +1,9 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.CommonGoalCard.CommonGoalCard;
+import it.polimi.ingsw.model.utils.NumberOfPlayers;
+import it.polimi.ingsw.model.utils.Position;
 
 import java.util.*;
 
