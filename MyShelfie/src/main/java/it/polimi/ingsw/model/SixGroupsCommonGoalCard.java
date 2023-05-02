@@ -51,7 +51,17 @@ public class SixGroupsCommonGoalCard extends CommonGoalCard {
             }
         }
         return counter >= 6;
-            }
-        }
+    }
+
+    /**
+     * This method overrides the toString method of the Object class
+     * @return String It returns the textual representation of an object of the class
+     */
+    @Override
+    public String toString(){
+        return "Six groups each containing at least two tiles of the same type.\n" +
+                "The tiles of one group can be different from those of another group";
+    }
+}
 
 

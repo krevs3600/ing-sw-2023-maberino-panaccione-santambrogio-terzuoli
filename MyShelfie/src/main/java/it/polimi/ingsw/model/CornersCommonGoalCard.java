@@ -43,4 +43,13 @@ public class CornersCommonGoalCard extends CommonGoalCard {
         }
         return false;
     }
+
+    /**
+     * This method overrides the toString method of the Object class
+     * @return String It returns the textual representation of an object of the class
+     */
+    @Override
+    public String toString(){
+        return "Four tiles of the same type in the four corners";
+    }
 }

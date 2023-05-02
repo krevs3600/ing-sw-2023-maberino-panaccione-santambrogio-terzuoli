@@ -51,6 +51,15 @@ public class EightTilesCommonGoalCard extends CommonGoalCard {
         }
         return found;
     }
+
+    /**
+     * This method overrides the toString method of the Object class
+     * @return String It returns the textual representation of an object of the class
+     */
+    @Override
+    public String toString(){
+        return "Eight tiles of the same type. There is no restriction about the position of these tiles";
+    }
 }
 
 

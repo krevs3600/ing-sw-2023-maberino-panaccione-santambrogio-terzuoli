@@ -62,7 +62,7 @@ public class LivingRoomBoard {
                 // active tiles
                 for (int i = 0; i < list.get(1); i++) {
                     Position position = new Position(r, c);
-                    spaces[r][c] = new Space(SpaceType.DEFAULT, position);
+                    spaces[r][c] = new Space(SpaceType.PLAYABLE, position);
                     c++;
                 }
                 // forbidden tiles
@@ -126,7 +126,7 @@ public class LivingRoomBoard {
 
         for (int i = 0; i < MAX_WIDTH; i++) {
             for (int j = 0; j < MAX_HEIGHT; j++) {
-                if (!getSpace(new Position(i, j)).isFree() && getSpace(new Position(i,j)).getType() == SpaceType.DEFAULT) {
+                if (!getSpace(new Position(i, j)).isFree() && getSpace(new Position(i,j)).getType() == SpaceType.PLAYABLE) {
                     // inner spaces
                     if (i==0 || i==MAX_HEIGHT-1 || j==0 || j==MAX_WIDTH-1){
                         drawablesTiles.add(getSpace(new Position(i, j)));
@@ -174,13 +174,17 @@ public class LivingRoomBoard {
     private void placeTilesRandomly() {
         for (int i = 0; i < MAX_WIDTH; i++) {
             for (int j = 0; j < MAX_HEIGHT; j++) {
-                if (getSpace(new Position(i, j)).getType() == SpaceType.DEFAULT) {
+                if (getSpace(new Position(i, j)).getType() == SpaceType.PLAYABLE) {
                     getSpace(new Position(i, j)).setTile(bag.drawTile());
                 }
             }
         }
     }
 
+    /**
+     * This method overrides the toString method of the Object class
+     * @return String It returns the textual representation of an object of the class
+     */
     @Override
     public String toString(){
         String board = "";
@@ -197,6 +201,10 @@ public class LivingRoomBoard {
         return board;
     }
 
+    /**
+     * This private method is an auxiliary method for the toString method of the class
+     * @return String It returns the string representing the horizontal numbers
+     */
     private String cliPrintHorizontalNums(){
         String line = "   ".concat("\033[0;31m");
         for (int i=0; i<MAX_WIDTH; i++){
@@ -204,6 +212,11 @@ public class LivingRoomBoard {
         }
         return line.concat("\033[0m");
     }
+
+    /**
+     * This private method is an auxiliary method for the toString method of the class
+     * @return String It returns the string representing a line of the board
+     */
     private String cliPrintLine(){
         String line = "  +";
         for (int i=0; i<MAX_WIDTH; i++){

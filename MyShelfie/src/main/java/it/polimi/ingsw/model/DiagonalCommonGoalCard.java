@@ -66,4 +66,12 @@ public class DiagonalCommonGoalCard extends CommonGoalCard{
         return diagonal1 == 4 || diagonal2 == 4;
     }
 
+    /**
+     * This method overrides the toString method of the Object class
+     * @return String It returns the textual representation of an object of the class
+     */
+    @Override
+    public String toString(){
+        return "Five tiles of the same type forming a diagonal";
+    }
 }

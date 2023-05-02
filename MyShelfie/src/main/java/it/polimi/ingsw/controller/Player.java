@@ -11,11 +11,17 @@ import java.io.Reader;
 import java.util.*;
 import java.util.Map;
 
+/**
+ * <h1>Class Bag</h1>
+ * The class Bag contains all the item tiles that are not placed on the board or on the Players' bookshelves
+ *
+ * @author Carlo Terzuoli, Francesco Maberino
+ * @version 1.0
+ * @since 3/28/2023
+ */
 public class Player {
     private final String name;
     private PlayerStatus status;
-    //private final Player nextPlayer;
-    //private final boolean firstPlayer;
 
     private final Bookshelf bookshelf;
     private int score;
@@ -25,8 +31,8 @@ public class Player {
 
     /**
      * Class constructor
-     * @param name name of the player
-     * @param personalGoalCardDeck from which the player will get his own personal goal card
+     * @param name the name of the player
+     * @param personalGoalCardDeck the goal card deck from which the player takes his own personal goal card
      */
     public Player(String name, PersonalGoalCardDeck personalGoalCardDeck){
         this.name = name;
@@ -36,47 +42,35 @@ public class Player {
         this.tokens = new ArrayList<>();
     }
 
-    public PlayerStatus getStatus(){
-        return this.status;
-    }
-
-    public String getName(){
-        return this.name;
-    }
-
-    //public Player getNextPlayer() {
-    //    return nextPlayer;
-    //}
-
-    /**
-     * This method allows a player to insert an Item tile he pulled in his bookshelf
-     * @param tp the tile pack from which the tile is retrieved
-     * @param column the column of the bookshelf in which the tile will then be placed
-     * @throws IndexOutOfBoundsException for invalid column index
-     */
-    public void insertTile(TilePack tp, int column) throws IndexOutOfBoundsException{
-        try{
-            bookshelf.insertTile(tp, column);
-        }
-        catch (IndexOutOfBoundsException e) {
-            System.out.println("Error, please select a valid column");
-        }
-
-    }
-
     /**
      * This method allows a player to pick a tile from the board
-     * @param board from which the tile is picked
+     * @param board the living room board from which the tile is picked
      * @param pos the position inside the board from which the tile is picked
-     * @return the item tile that is picked by the player
+     * @return ItemTile It returns the item tile picked by the player
      */
     public ItemTile pickUpTile(LivingRoomBoard board, Position pos) {
         return board.getSpace(pos).drawTile();
     }
 
     /**
+     * This method allows a player to insert an Item tile he previously picked in his bookshelf
+     * @param tp the tile pack from which the tile is retrieved
+     * @param column the column of the bookshelf in which the tile will then be placed
+     * @throws IndexOutOfBoundsException The exception is thrown if the chosen column index is invalid
+     */
+    public void insertTile(TilePack tp, int column) throws IndexOutOfBoundsException{
+        try{
+            bookshelf.insertTile(tp, column);
+        }
+        catch (IndexOutOfBoundsException e) {
+            System.out.println("Invalid column, please select another one valid");
+        }
+
+    }
+
+    /**
      * This method is used to compute the final score of the player at the end of the game
-     * @return the final score of the player
+     * @return int It returns the final score of the player
      */
     public int computeScoreEndGame() {
         //Computation of points from personal goal card
@@ -129,9 +123,9 @@ public class Player {
 
 
     /**
-     * This method is used to keep track of changes in the score of a player during the game. In particular,
-     * the score is updated every time the player receives a scoring token
-     * @return the updated score of the player
+     * This method is used to keep track of score changes of a player during the game.
+     * In particular, the score is updated every time the player receives a scoring token
+     * @return int It returns the updated score of the player
      */
     public int computeScoreMidGame(CommonGoalCardDeck deck){
         List<CommonGoalCard> commonGoalCards = deck.getDeck();
@@ -147,22 +141,50 @@ public class Player {
 
         return score;
     }
-    //public boolean isFirstPlayer() {
-    //    return firstPlayer;
-    //}
 
-    public FirstPlayerSeat getFirstPlayerSeat(){
-        return null;
-    }
-
-    public void setStatus(PlayerStatus status) {
-        this.status = status;
-    }
-
+    /**
+     * This method is used to add a scoring token to the player's collection when he wins it
+     */
     public void winToken(ScoringToken scoringToken){
         this.tokens.add(scoringToken);
     }
 
+
+    /**
+     * This getter method gets the status of the player
+     * @return PlayerStatus It returns the value of an enumeration representing the current status of the player
+     */
+    public PlayerStatus getStatus(){
+        return this.status;
+    }
+
+    /**
+     * This getter method gets the name of the player
+     * @return String It returns the string representing the name of the player
+     */
+    public String getName(){
+        return this.name;
+    }
+
+    /**
+     * This getter method gets the first player seat, if he is the first player
+     * @return String It returns the string representing the name of the player
+     */
+    public FirstPlayerSeat getFirstPlayerSeat(){
+        return null;
+    }
+
+    /**
+     * This setter method sets the status of the player
+     */
+    public void setStatus(PlayerStatus status) {
+        this.status = status;
+    }
+
+    /**
+     * This getter method gets the bookshelf of the player
+     * @return Bookshelf It returns the personal bookshelf of the player
+     */
     public Bookshelf getBookshelf(){
         return this.bookshelf;
     }

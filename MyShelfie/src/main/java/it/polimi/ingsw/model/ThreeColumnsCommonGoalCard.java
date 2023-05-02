@@ -111,4 +111,14 @@ public class ThreeColumnsCommonGoalCard extends CommonGoalCard {
         }
         return false;
     }
+
+    /**
+     * This method overrides the toString method of the Object class
+     * @return String It returns the textual representation of an object of the class
+     */
+    @Override
+    public String toString(){
+        return "Three columns each formed by six tiles of maximum three different types.\n" +
+                "One column can show the same or a different combination of another column";
+    }
 }

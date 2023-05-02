@@ -58,7 +58,7 @@ public class Space {
      * @throws IllegalAccessError The exception is thrown if the space is not free
      */
     public void setTile(ItemTile tile) throws IllegalAccessError{
-        if (getType().equals(SpaceType.DEFAULT) && this.isFree()) {
+        if (getType().equals(SpaceType.PLAYABLE) && this.isFree()) {
             this.tile = tile;
             this.free = false;
         } else {
@@ -85,7 +85,7 @@ public class Space {
      * @throws IllegalAccessError The exception is thrown if the space is free or not playable
      */
     public ItemTile drawTile() throws IllegalAccessError{
-        if (!isFree() && this.getType().equals(SpaceType.DEFAULT)){
+        if (!isFree() && this.getType().equals(SpaceType.PLAYABLE)){
             ItemTile tempTile = this.tile;
             this.tile = null;
             this.free = true;
@@ -97,9 +97,13 @@ public class Space {
 
     }
 
+    /**
+     * This method overrides the toString method of the Object class
+     * @return String It returns the textual representation of an object of the class
+     */
     @Override
     public String toString(){
-        if (!this.isFree() && this.getType() == SpaceType.DEFAULT){
+        if (!this.isFree() && this.getType() == SpaceType.PLAYABLE){
             return getTile().toString();
         } else if (this.getType() == SpaceType.FORBIDDEN) {
             return " X ";

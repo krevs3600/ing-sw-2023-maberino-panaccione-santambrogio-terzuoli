@@ -18,7 +18,7 @@ public class SpaceTest{
     @Test
     public void setTileTestFree(){
         Position pos = new Position(5,5);
-        Space cell = new Space(SpaceType.DEFAULT, pos);
+        Space cell = new Space(SpaceType.PLAYABLE, pos);
         cell.setTile(new ItemTile(TileType.CAT));
         assertFalse(cell.isFree());
     }
@@ -27,7 +27,7 @@ public class SpaceTest{
     @Test
     public void setTileTestTile(){
         Position pos = new Position(5,5);
-        Space cell = new Space(SpaceType.DEFAULT, pos);
+        Space cell = new Space(SpaceType.PLAYABLE, pos);
         ItemTile tile = new ItemTile(TileType.CAT);
         cell.setTile(new ItemTile(TileType.CAT));
         assertEquals(cell.getTile().getType(), tile.getType());
@@ -36,7 +36,7 @@ public class SpaceTest{
     @Test
     public void drawTileTest(){
         Position pos = new Position(5,5);
-        Space cell = new Space(SpaceType.DEFAULT, pos);
+        Space cell = new Space(SpaceType.PLAYABLE, pos);
         cell.setTile(new ItemTile(TileType.CAT));
         cell.drawTile();
         assertTrue(cell.isFree());
@@ -46,7 +46,7 @@ public class SpaceTest{
     @Test
     public void drawTileTestTile(){
         Position pos = new Position(5,5);
-        Space cell = new Space(SpaceType.DEFAULT, pos);
+        Space cell = new Space(SpaceType.PLAYABLE, pos);
         cell.setTile(new ItemTile(TileType.CAT));
         ItemTile tile = new ItemTile(TileType.CAT);
         assertEquals(cell.drawTile().getType(), tile.getType());
@@ -55,7 +55,7 @@ public class SpaceTest{
     @Test
     public void getTileFromFreeCell(){
         Position pos = new Position(5,5);
-        Space cell = new Space(SpaceType.DEFAULT, pos);
+        Space cell = new Space(SpaceType.PLAYABLE, pos);
         cell.setTile(new ItemTile(TileType.CAT));
         cell.drawTile();
         assertThrows(IllegalAccessError.class, cell::getTile);
@@ -71,7 +71,7 @@ public class SpaceTest{
     @Test
     public void drawTileFromFreeCell(){
         Position pos = new Position(5,5);
-        Space cell = new Space(SpaceType.DEFAULT, pos);
+        Space cell = new Space(SpaceType.PLAYABLE, pos);
         cell.setTile(new ItemTile(TileType.CAT));
         cell.drawTile();
         assertThrows(IllegalAccessError.class, cell::drawTile);
@@ -89,7 +89,7 @@ public class SpaceTest{
     @Test
     public void SetTileOnOccupiedCell(){
         Position pos = new Position(5,5);
-        Space cell = new Space(SpaceType.DEFAULT, pos);
+        Space cell = new Space(SpaceType.PLAYABLE, pos);
         cell.setTile(new ItemTile(TileType.CAT));
         assertThrows(IllegalAccessError.class, () -> {
             cell.setTile(new ItemTile(TileType.BOOK));

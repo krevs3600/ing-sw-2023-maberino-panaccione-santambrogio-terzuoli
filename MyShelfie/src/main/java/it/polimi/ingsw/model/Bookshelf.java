@@ -237,6 +237,10 @@ public class Bookshelf {
         return MAX_HEIGHT;
     }
 
+    /**
+     * This method overrides the toString method of the Object class
+     * @return String It returns the textual representation of an object of the class
+     */
     @Override
     public String toString(){
         String number = "";

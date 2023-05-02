@@ -74,10 +74,18 @@ public class TilePack {
         return this.tiles;
     }
 
+    /**
+     * This getter method gets the size of the tile pack
+     * @return int It returns the size of the list of item tiles representing the tile pack
+     */
     public int getSize(){
         return this.tiles.size();
     }
 
+    /**
+     * This method overrides the toString method of the Object class
+     * @return String It returns the textual representation of an object of the class
+     */
     @Override
     public String toString(){
         String tilePack = "";

@@ -52,4 +52,14 @@ public class FourGroupsCommonGoalCard extends CommonGoalCard {
         }
         return false;
     }
+
+    /**
+     * This method overrides the toString method of the Object class
+     * @return String It returns the textual representation of an object of the class
+     */
+    @Override
+    public String toString(){
+        return "Four groups each containing at least 4 tiles of the same type.\n" +
+                "The tiles of one group can be different from those of another group";
+    }
 }

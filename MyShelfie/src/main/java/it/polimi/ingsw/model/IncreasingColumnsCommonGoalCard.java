@@ -37,11 +37,23 @@ public class IncreasingColumnsCommonGoalCard extends CommonGoalCard{
         for (int i=0; i<b.getMaxWidth()-1 && increasingOrder; i++) {
             increasingOrder = (b.getNumberInsertableTilesColumn(i) == b.getNumberInsertableTilesColumn(i+1) + 1);
         }
-        if (increasingOrder) return increasingOrder;
+        if (increasingOrder) return true;
         increasingOrder = true;
         for (int i=b.getMaxWidth()-1; i>0 && increasingOrder; i--) {
             increasingOrder = (b.getNumberInsertableTilesColumn(i) == b.getNumberInsertableTilesColumn(i-1) + 1);
         }
         return increasingOrder;
+    }
+
+    /**
+     * This method overrides the toString method of the Object class
+     * @return String It returns the textual representation of an object of the class
+     */
+    @Override
+    public String toString(){
+        return """
+                Five columns of increasing or decreasing height.
+                Starting from the first column on the left or on the right, each next column must be made of exactly one more tile.\s
+                Tiles can be of any type""";
     }
 }

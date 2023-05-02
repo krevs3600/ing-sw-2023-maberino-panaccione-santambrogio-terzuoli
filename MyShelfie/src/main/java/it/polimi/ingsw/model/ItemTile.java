@@ -24,6 +24,10 @@ public class ItemTile {
         return type;
     }
 
+    /**
+     * This method overrides the toString method of the Object class
+     * @return String It returns the textual representation of an object of the class
+     */
     @Override
     public String toString() {
         return getType().colorBackground + " " + getType().abbreviation + " " + "\033[0m";

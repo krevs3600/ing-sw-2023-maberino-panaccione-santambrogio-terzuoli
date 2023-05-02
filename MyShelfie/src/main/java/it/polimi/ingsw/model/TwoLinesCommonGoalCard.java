@@ -66,6 +66,16 @@ public class TwoLinesCommonGoalCard extends CommonGoalCard{
         }
         return false;
     }
+
+    /**
+     * This method overrides the toString method of the Object class
+     * @return String It returns the textual representation of an object of the class
+     */
+    @Override
+    public String toString(){
+        return "Two lines each formed by five different types of tiles\n" +
+                "One line can show the same or a different combination of the other line.";
+    }
 }
 
 

@@ -62,6 +62,15 @@ public class TwoColumnsCommonGoalCard extends CommonGoalCard{
         }
         return columns>=2;
     }
+
+    /**
+     * This method overrides the toString method of the Object class
+     * @return String It returns the textual representation of an object of the class
+     */
+    @Override
+    public String toString(){
+        return "Two columns each formed by six different types of tiles";
+    }
 }
 
 
