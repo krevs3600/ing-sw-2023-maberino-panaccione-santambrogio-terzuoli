@@ -46,14 +46,14 @@ public class PersonalGoalCardDeck implements Drawable {
             // for each conf create the corresponding card
             for (HashMap conf : configurations) {
                 JSONObject jsonConf = (JSONObject) conf;
-                ArrayList<Integer> position = (ArrayList<Integer>) jsonConf.get("position");
+                ArrayList<Long> position = (ArrayList<Long>) jsonConf.get("position");
                 ArrayList<String> type = (ArrayList<String>) jsonConf.get("type");
 
                 // check configs
                 if (position.size() == type.size()) {
                     HashMap<Integer, TileType> map = new HashMap<>();
                     for (int i = 0; i < position.size(); i++) {
-                        map.put(position.get(i), TileType.valueOf(type.get(i)));
+                        map.put(position.get(i).intValue(), TileType.valueOf(type.get(i)));
                     }
                     this.deck.add(new PersonalGoalCard(map));
                     size++;
