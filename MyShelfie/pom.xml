@@ -20,12 +20,17 @@
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-controls</artifactId>
-      <version>20.0.1</version>
+      <version>17.0.2</version>
     </dependency>
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-fxml</artifactId>
-      <version>20.0.1</version>
+      <version>17.0.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.controlsfx</groupId>
+      <artifactId>controlsfx</artifactId>
+      <version>11.1.1</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
@@ -108,7 +113,24 @@
           <artifactId>maven-project-info-reports-plugin</artifactId>
           <version>3.4.2</version>
         </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.10.1</version>
+          <configuration>
+            <source>19</source>
+            <target>19</target>
+          </configuration>
+        </plugin>
+
+        <plugin>
+          <groupId>org.openjfx</groupId>
+          <artifactId>javafx-maven-plugin</artifactId>
+          <version>0.0.8</version>
+        </plugin>
       </plugins>
+
     </pluginManagement>
   </build>
 </project>
