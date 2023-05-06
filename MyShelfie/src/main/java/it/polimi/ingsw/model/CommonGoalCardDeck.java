@@ -3,6 +3,7 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.CommonGoalCard.CommonGoalCard;
 import it.polimi.ingsw.model.CommonGoalCard.CornersCommonGoalCard;
 import it.polimi.ingsw.model.utils.Drawable;
+import it.polimi.ingsw.observer.Observable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class CommonGoalCardDeck implements Drawable {
 
     private int size = 0;
-    private final List<CommonGoalCard> deck;
+    private List<CommonGoalCard> deck;
 
     /**
      * Class constructor
@@ -67,4 +68,6 @@ public class CommonGoalCardDeck implements Drawable {
     public List<CommonGoalCard> getDeck() {
         return deck;
     }
+
+    public int getSize () { return size;}
 }

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.utils.TileType;
+import it.polimi.ingsw.observer.Observable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,7 @@ public class Bag {
 
     //private Bag bag = new Bag();
     private int size = 0;
-    private final List<ItemTile> bag = new ArrayList<ItemTile>();;
+    private final List<ItemTile> bag = new ArrayList<ItemTile>();
 
     /**
      * Class constructor
@@ -98,5 +99,9 @@ public class Bag {
      */
     public int getSize(){
         return size;
+    }
+
+    public List<ItemTile> getBag () {
+        return this.bag;
     }
 }

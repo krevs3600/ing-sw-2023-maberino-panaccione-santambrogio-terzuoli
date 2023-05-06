@@ -29,11 +29,11 @@ import java.util.stream.Collectors;
 public class LivingRoomBoard {
     private static final int MAX_WIDTH = 9;
     private static final int MAX_HEIGHT = 9;
-    private final Space[][] spaces = new Space[MAX_WIDTH][MAX_HEIGHT];
+    private Space[][] spaces = new Space[MAX_WIDTH][MAX_HEIGHT];
 
     private List<CommonGoalCard> commonGoalCards = new ArrayList<>();
 
-    private final Bag bag = new Bag();
+    private Bag bag = new Bag();
 
     /**
      * Class constructor
@@ -188,19 +188,12 @@ public class LivingRoomBoard {
         }
     }
 
-    public ItemTile[][] getImmutableLivingRoomBoard(){
-        ItemTile[][] immutableLivingRoomBoard = new ItemTile[MAX_WIDTH][MAX_HEIGHT];
-        for (int i = 0; i < MAX_WIDTH; i++) {
-            for (int j = 0; j < MAX_HEIGHT; j++) {
-                try {
-                    immutableLivingRoomBoard[i][j] = this.getSpace(new Position(i,j)).getTile();
-                } catch (IllegalArgumentException e) {
-                    immutableLivingRoomBoard[i][j] = null;
-                }
+    public Space[][] getSpaces () {
+        return spaces;
+    }
 
-            }
-        }
-        return immutableLivingRoomBoard;
+    public Bag getBag () {
+        return bag;
     }
     /**
      * This method overrides the toString method of the Object class

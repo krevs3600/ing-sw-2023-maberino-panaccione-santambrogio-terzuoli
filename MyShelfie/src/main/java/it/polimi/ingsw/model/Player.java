@@ -22,13 +22,13 @@ import java.util.Map;
  * @since 3/28/2023
  */
 public class Player {
-    private final String name;
+    private String name;
     private PlayerStatus status;
 
-    private final Bookshelf bookshelf;
+    private Bookshelf bookshelf;
     private int score;
 
-    private final PersonalGoalCard personalGoalCard;
+    private PersonalGoalCard personalGoalCard;
     private List<ScoringToken> tokens;
 
     /**
@@ -190,4 +190,10 @@ public class Player {
     public Bookshelf getBookshelf(){
         return this.bookshelf;
     }
+
+    public int getScore () { return this.score;}
+
+    public PersonalGoalCard getPersonalGoalCard () { return this.personalGoalCard;}
+
+    public List<ScoringToken> getTokens () { return this.tokens;}
 }

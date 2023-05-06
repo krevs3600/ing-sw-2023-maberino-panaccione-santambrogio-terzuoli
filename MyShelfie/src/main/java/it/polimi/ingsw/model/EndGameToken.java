@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.observer.Observable;
+
 /**
  * <h1>Class EndGameToken</h1>
  * The class EndGameToken represents the token taken by the first player who fills all the spaces of his bookshelf

@@ -15,8 +15,8 @@ import it.polimi.ingsw.model.utils.SpaceType;
 
 public class Space {
     private boolean free;
-    private final SpaceType type;
-    private final Position position;
+    private SpaceType type;
+    private Position position;
     private ItemTile tile;
 
     /**

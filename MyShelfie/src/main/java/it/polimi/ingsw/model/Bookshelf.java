@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.utils.TileType;
+import it.polimi.ingsw.observer.Observable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +22,7 @@ public class Bookshelf {
 
     private static final int MAX_HEIGHT=6;
 
-    private final ItemTile[][] grid;
+    private ItemTile[][] grid;
 
     /**
      * Class constructor

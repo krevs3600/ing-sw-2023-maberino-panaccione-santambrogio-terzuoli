@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.observer.Observable;
+
 /**
  * <h1>Class FirstPlayerSeat</h1>
  * The class FirstPlayerSeat represents the seat of the first player of a game

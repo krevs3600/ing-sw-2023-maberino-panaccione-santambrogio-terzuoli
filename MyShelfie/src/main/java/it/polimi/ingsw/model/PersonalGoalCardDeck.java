@@ -26,7 +26,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class PersonalGoalCardDeck implements Drawable {
 
     private int size = 0;
-    private final List<PersonalGoalCard> deck;
+    private List<PersonalGoalCard> deck;
 
     /**
      * Class constructor
@@ -88,4 +88,6 @@ public class PersonalGoalCardDeck implements Drawable {
     public List<PersonalGoalCard> getDeck() {
         return deck;
     }
+
+    public int getSize () { return size;}
 }
