@@ -42,7 +42,6 @@ public class PersonalGoalCardDeck implements Drawable {
             JSONObject jsonObject = (JSONObject) jsonObj;
             // read points from json
             ArrayList<Integer> points = (ArrayList<Integer>) jsonObject.get("points");
-            System.out.println("points: " + points);
             // read configs from json
             ArrayList<HashMap> configurations = (ArrayList<HashMap>) jsonObject.get("configurations");
             // for each conf create the corresponding card

@@ -100,19 +100,4 @@ public class Space {
 
     }
 
-    /**
-     * This method overrides the toString method of the Object class
-     * @return String It returns the textual representation of an object of the class
-     */
-    @Override
-    public String toString(){
-        if (!this.isFree() && this.getType() == SpaceType.PLAYABLE){
-            return getTile().toString();
-        } else if (this.getType() == SpaceType.FORBIDDEN) {
-            return " X ";
-        } else {
-            return "   ";
-        }
-    }
-
 }

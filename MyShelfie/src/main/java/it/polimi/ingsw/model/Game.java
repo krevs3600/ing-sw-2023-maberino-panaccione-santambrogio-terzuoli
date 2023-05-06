@@ -1,6 +1,5 @@
-package it.polimi.ingsw.controller;
+package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.CommonGoalCard.CommonGoalCard;
 import it.polimi.ingsw.model.utils.NumberOfPlayers;
 import it.polimi.ingsw.model.utils.Position;
@@ -15,10 +14,11 @@ import java.util.*;
  * @version 1.0
  * @since 4/30/2023
  */
-public class Game {
+public class Game extends Observable {
      private final String id;
-     private List<Player> subscribers = new ArrayList<>();
-     private final LivingRoomBoard livingRoomBoard;
+    private final PersonalGoalCardDeck personalGoalCardDeck;
+    private List<Player> subscribers = new ArrayList<>();
+     private LivingRoomBoard livingRoomBoard;
      private final NumberOfPlayers numberOfPlayers;
      private int cursor;
 
@@ -31,6 +31,7 @@ public class Game {
         this.id = String.valueOf(String.format("%d", System.currentTimeMillis()).hashCode());
         this.livingRoomBoard = new LivingRoomBoard(numberOfPlayers);
         this.numberOfPlayers = numberOfPlayers;
+        this.personalGoalCardDeck = new PersonalGoalCardDeck();
     }
 
     /**
@@ -39,6 +40,8 @@ public class Game {
      */
     public void subscribe(Player player){
         subscribers.add(player);
+        setChanged();;
+        notifyObservers(this);
     }
 
     /**
@@ -142,6 +145,8 @@ public class Game {
     public LivingRoomBoard getLivingRoomBoard() {
         return livingRoomBoard;
     }
+
+    public PersonalGoalCardDeck getPersonalGoalCardDeck(){ return personalGoalCardDeck;}
 
     public static void main(String[] args){
         PersonalGoalCardDeck personalGoalCardDeck = new PersonalGoalCardDeck();

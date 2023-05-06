@@ -188,6 +188,20 @@ public class LivingRoomBoard {
         }
     }
 
+    public ItemTile[][] getImmutableLivingRoomBoard(){
+        ItemTile[][] immutableLivingRoomBoard = new ItemTile[MAX_WIDTH][MAX_HEIGHT];
+        for (int i = 0; i < MAX_WIDTH; i++) {
+            for (int j = 0; j < MAX_HEIGHT; j++) {
+                try {
+                    immutableLivingRoomBoard[i][j] = this.getSpace(new Position(i,j)).getTile();
+                } catch (IllegalArgumentException e) {
+                    immutableLivingRoomBoard[i][j] = null;
+                }
+
+            }
+        }
+        return immutableLivingRoomBoard;
+    }
     /**
      * This method overrides the toString method of the Object class
      * @return String It returns the textual representation of an object of the class

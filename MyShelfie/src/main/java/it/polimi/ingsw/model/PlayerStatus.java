@@ -1,4 +1,4 @@
-package it.polimi.ingsw.controller;
+package it.polimi.ingsw.model;
 
 /**
  * <h1>Enumeration PlayerStatus</h1>
