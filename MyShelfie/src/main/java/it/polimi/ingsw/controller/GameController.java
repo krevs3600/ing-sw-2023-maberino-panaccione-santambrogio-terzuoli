@@ -1,10 +1,7 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.model.Game;
+import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.ModelView.GameView;
-import it.polimi.ingsw.model.PersonalGoalCard;
-import it.polimi.ingsw.model.PersonalGoalCardDeck;
-import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.utils.NumberOfPlayers;
 import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.view.cli.TextualUI;
@@ -61,9 +58,17 @@ public class GameController implements Observer {
         }
 
         if (arg instanceof Integer) {
-            game.setDrawableTiles();
-            if (((Integer) arg).intValue() <= 0 | ((Integer) arg).intValue() > 3) {
-                throw new IllegalArgumentException();
+            if (game.getTurnPhase().equals(Game.Phase.INIT_TURN)) {
+                game.setDrawableTiles();
+                if (((Integer) arg).intValue() <= 0 | ((Integer) arg).intValue() > 3) {
+                    throw new IllegalArgumentException();
+                }
+            }
+            else if (game.getTurnPhase().equals(Game.Phase.PICKING_TILES)) {
+                game.setTurnPhase(Game.Phase.PLACING_TILES);
+                game.getSubscribers().get(0).insertTile(game.getTilePack(), (int) arg);
+                game.setColumnChoice((int) arg);
+                game.setTurnPhase(Game.Phase.INIT_TURN);
             }
         }
 
@@ -75,7 +80,8 @@ public class GameController implements Observer {
                 case INIT_TURN -> {
                     game.setTurnPhase(Game.Phase.PICKING_TILES);
                     if (game.getDrawableTiles().contains(game.getLivingRoomBoard().getSpace(position))) {
-                        game.drawTile(position);
+                        ItemTile itemTile = game.drawTile(position);
+                        game.insertTileInTilePack(itemTile);
                     } else {
                         throw new IllegalAccessError("Space forbidden or empty");
                     }
@@ -85,11 +91,11 @@ public class GameController implements Observer {
                     // se arriva una cosa diversa dalla posizione bisogna processarla come messa nella libreria
 
                     if (game.getDrawableTiles().contains(game.getLivingRoomBoard().getSpace(position))) {
-                        game.drawTile(position);
+                        ItemTile itemTile = game.drawTile(position);
+                        game.insertTileInTilePack(itemTile);
                     } else {
                         throw new IllegalAccessError("Space forbidden or empty");
                     }
-
                 }
             }
         }

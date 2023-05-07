@@ -27,9 +27,6 @@ public class Player {
 
     private Bookshelf bookshelf;
     private int score;
-
-    private TilePack tilePack;
-
     private PersonalGoalCard personalGoalCard;
     private List<ScoringToken> tokens;
 
@@ -44,7 +41,6 @@ public class Player {
         this.score = 0;
         this.personalGoalCard = (PersonalGoalCard) personalGoalCardDeck.draw();
         this.tokens = new ArrayList<>();
-        this.tilePack = new TilePack();
     }
 
     /**
@@ -62,9 +58,9 @@ public class Player {
      * @param column the column of the bookshelf in which the tile will then be placed
      * @throws IndexOutOfBoundsException The exception is thrown if the chosen column index is invalid
      */
-    public void insertTile(int column) throws IndexOutOfBoundsException{
+    public void insertTile(TilePack tilePack, int column) throws IndexOutOfBoundsException{
         try{
-            bookshelf.insertTile(this.tilePack, column);
+            bookshelf.insertTile(tilePack, column);
         }
         catch (IndexOutOfBoundsException e) {
             System.out.println("Invalid column, please select another one valid");
@@ -198,4 +194,5 @@ public class Player {
     public PersonalGoalCard getPersonalGoalCard () { return this.personalGoalCard;}
 
     public List<ScoringToken> getTokens () { return this.tokens;}
+
 }

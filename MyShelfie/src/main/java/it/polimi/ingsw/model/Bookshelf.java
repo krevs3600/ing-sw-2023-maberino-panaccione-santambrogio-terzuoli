@@ -244,22 +244,5 @@ public class Bookshelf {
      * This method overrides the toString method of the Object class
      * @return String It returns the textual representation of an object of the class
      */
-    @Override
-    public String toString(){
-        String number = "";
-        for(int i=0; i<MAX_WIDTH; i++){
-            number = number.concat("   " + String.valueOf(i));
-        }
-
-        String rows = "";
-        for(int i=0; i<MAX_HEIGHT;i++){
-            rows = rows.concat(String.valueOf(MAX_HEIGHT-1-i) + " ");
-            for(int j=0; j<MAX_WIDTH;j++){
-                rows = rows.concat(getGrid()[i][j] != null ? getGrid()[i][j].toString() + " " : "    ");
-            }
-            rows = rows.concat("\n");
-        }
-        return number.concat("\n").concat(rows);
-    }
 
 }

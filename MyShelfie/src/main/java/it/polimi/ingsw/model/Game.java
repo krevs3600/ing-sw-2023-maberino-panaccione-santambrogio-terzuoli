@@ -16,6 +16,7 @@ import java.util.*;
  * @since 4/30/2023
  */
 public class Game extends Observable {
+
     public enum Phase {
         INIT_GAME,
         INIT_TURN,
@@ -32,6 +33,10 @@ public class Game extends Observable {
      private Phase turnPhase;
      private List<Space> drawableTiles = new ArrayList<>();
 
+     private TilePack tilePack;
+
+     private int columnChoice;
+
     /**
      * Class constructor
      * @param numberOfPlayers the number of players on which the game setting depends
@@ -42,6 +47,7 @@ public class Game extends Observable {
         this.livingRoomBoard = new LivingRoomBoard(numberOfPlayers);
         this.numberOfPlayers = numberOfPlayers;
         this.personalGoalCardDeck = new PersonalGoalCardDeck();
+        this.tilePack = new TilePack();
         this.turnPhase = Phase.INIT_TURN;
     }
 
@@ -53,12 +59,21 @@ public class Game extends Observable {
         return itemTile;
     }
 
+    public void insertTileInTilePack (ItemTile itemTile) {
+
+        this.getTilePack().insertTile(itemTile);
+        setChanged();
+        notifyObservers(this);
+    }
+
     /**
      * This method adds a Player to the game
      * @param player the player to be subscribed
      */
     public void subscribe(Player player){
         subscribers.add(player);
+        setChanged();
+        notifyObservers(this.getSubscribers().get(0).getName());
         setChanged();
         notifyObservers(this);
     }
@@ -238,5 +253,15 @@ public class Game extends Observable {
     public Phase getTurnPhase() {return this.turnPhase;};
     public void setTurnPhase(Phase turnPhase) {this.turnPhase = turnPhase;}
 
+    public TilePack getTilePack () { return tilePack;}
 
+    public void setColumnChoice (int columnChoice) {
+        this.columnChoice = columnChoice;
+        setChanged();
+        notifyObservers(this);
+    }
+
+    public int getColumnChoice() {
+        return columnChoice;
+    }
 }

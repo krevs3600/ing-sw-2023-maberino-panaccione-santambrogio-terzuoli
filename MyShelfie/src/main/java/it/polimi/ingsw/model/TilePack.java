@@ -29,6 +29,7 @@ public class TilePack {
      * @param tile the specified item tile to insert
      */
     public void insertTile(ItemTile tile) {
+
         this.tiles.add(tile);
     }
 
@@ -86,23 +87,6 @@ public class TilePack {
      * This method overrides the toString method of the Object class
      * @return String It returns the textual representation of an object of the class
      */
-    @Override
-    public String toString(){
-        String tilePack = "";
-        String position = "  ";
-        for (int i=0; i<3; i++){
-            position = position.concat(String.valueOf(i)).concat("   ");
-        }
-        tilePack = tilePack.concat("[");
-        for (int i=0; i<3;i++){
-            tilePack = tilePack.concat(getTiles().size() > i ? this.getTiles().get(i).toString() : "   ");
-            if (i==2){
-                tilePack = tilePack.concat("]");
-            } else {
-                tilePack = tilePack.concat(",");
-            }
-        }
-        return position.concat("\n").concat(tilePack);
-    }
+
 
 }

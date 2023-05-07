@@ -23,9 +23,9 @@ public class TextualUI extends Observable implements Observer, Runnable {
         printTitle();
         gameMenu();
         while (true) {
-            int numberOfTiles = 0;
+            int numberOfTiles;
             do {
-                out.print("How many tiles would you like to get?");
+                out.print("How many tiles would you like to get? ");
                 try {
                     numberOfTiles = in.nextInt();
                     setChanged();
@@ -48,11 +48,15 @@ public class TextualUI extends Observable implements Observer, Runnable {
                     out.println(e.getMessage());
                     i--;
                 }
-
             }
 
+            out.print("In which column you want to insert your item tiles? ");
+            int column = in.nextInt();
+            setChanged();
+            notifyObservers(numberOfTiles);
         }
     }
+
 
 
     public void gameMenu(){
@@ -94,14 +98,31 @@ public class TextualUI extends Observable implements Observer, Runnable {
 
     @Override
     public void update(Observable o, Object arg) {
+
         if (!(o instanceof GameView model)){
             System.err.println("Discarding update from " + o);
         }
 
+        if (arg instanceof String subscriber) {
+            /* New choice available */
+            out.println( subscriber + " got subscribed");
+        }
+
         if (arg instanceof GameView game) {
             /* New choice available */
-            out.println( " got subscribed");
+            out.println("\n-----------------------------------------------------------------------\n LIVING ROOM BOARD:");
             out.println(game.getLivingRoomBoard().toString());
+            out.println("\n-----------------------------------------------------------------------\n TILE PACK:");
+            out.println(game.getTilePack().toString());
+            out.println("\n-----------------------------------------------------------------------\n" + game.getSubscribers().get(0).getName() + "'s BOOKSHELF:");
+            out.println(game.getSubscribers().get(0).getBookshelf().toString());
+            out.println("\n-----------------------------------------------------------------------\n");
+            out.println("First common goal card: " + game.getLivingRoomBoard().getCommonGoalCards().get(0).toString());
+            out.println("\n-----------------------------------------------------------------------\n");
+            out.println("S1econd common goal card: " + game.getLivingRoomBoard().getCommonGoalCards().get(1).toString());
+            out.println("\n-----------------------------------------------------------------------\n");
+            out.println(game.getSubscribers().get(0).getName() + "'s personal goal card: " + game.getSubscribers().get(0).getPersonalGoalCard().toString());
+            out.println("\n-----------------------------------------------------------------------\n");
         }
     }
 }

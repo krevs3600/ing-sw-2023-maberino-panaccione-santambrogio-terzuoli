@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.CommonGoalCard.CommonGoalCard;
-import it.polimi.ingsw.model.CommonGoalCard.CornersCommonGoalCard;
+import it.polimi.ingsw.model.CommonGoalCard.*;
 import it.polimi.ingsw.model.utils.Drawable;
 import it.polimi.ingsw.observer.Observable;
 
@@ -29,17 +28,17 @@ public class CommonGoalCardDeck implements Drawable {
      */
     public CommonGoalCardDeck () {
         CommonGoalCard corners = new CornersCommonGoalCard();
-        CommonGoalCard cross = new CornersCommonGoalCard();
-        CommonGoalCard diagonal = new CornersCommonGoalCard();
-        CommonGoalCard eightTiles =  new CornersCommonGoalCard();
-        CommonGoalCard fourGroups =  new CornersCommonGoalCard();
-        CommonGoalCard fourLines =  new CornersCommonGoalCard();
-        CommonGoalCard increasingColumns =  new CornersCommonGoalCard();
-        CommonGoalCard sixGroups = new CornersCommonGoalCard();
-        CommonGoalCard threeColumns =  new CornersCommonGoalCard();
-        CommonGoalCard twoColumns =   new CornersCommonGoalCard();
-        CommonGoalCard twoLines =  new CornersCommonGoalCard();
-        CommonGoalCard twoSquares =  new CornersCommonGoalCard();
+        CommonGoalCard cross = new CrossCommonGoalCard();
+        CommonGoalCard diagonal = new DiagonalCommonGoalCard();
+        CommonGoalCard eightTiles =  new EightTilesCommonGoalCard();
+        CommonGoalCard fourGroups =  new FourGroupsCommonGoalCard();
+        CommonGoalCard fourLines =  new FourLinesCommonGoalCard();
+        CommonGoalCard increasingColumns =  new IncreasingColumnsCommonGoalCard();
+        CommonGoalCard sixGroups = new SixGroupsCommonGoalCard();
+        CommonGoalCard threeColumns =  new ThreeColumnsCommonGoalCard();
+        CommonGoalCard twoColumns =   new TwoColumnsCommonGoalCard();
+        CommonGoalCard twoLines =  new TwoLinesCommonGoalCard();
+        CommonGoalCard twoSquares =  new TwoSquaresCommonGoalCard();
         CommonGoalCard[] allCommonGoalCards = {corners, cross, diagonal, eightTiles, fourGroups, fourLines, increasingColumns, sixGroups, threeColumns, twoColumns, twoLines, twoSquares};
         this.deck = new ArrayList<>();
             for(CommonGoalCard cgc: allCommonGoalCards) {

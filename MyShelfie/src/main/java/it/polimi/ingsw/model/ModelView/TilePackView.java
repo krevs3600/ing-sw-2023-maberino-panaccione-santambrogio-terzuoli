@@ -18,4 +18,23 @@ public class TilePackView extends Observable implements Observer {
     public List<ItemTile> getTiles () {
         return tilePack.getTiles();
     }
+
+    @Override
+    public String toString(){
+        String tilePack = "";
+        String position = "  ";
+        for (int i=0; i<3; i++){
+            position = position.concat(String.valueOf(i)).concat("   ");
+        }
+        tilePack = tilePack.concat("[");
+        for (int i=0; i<3;i++){
+            tilePack = tilePack.concat(getTiles().size() > i ? this.getTiles().get(i).toString() : "   ");
+            if (i==2){
+                tilePack = tilePack.concat("]");
+            } else {
+                tilePack = tilePack.concat(",");
+            }
+        }
+        return position.concat("\n").concat(tilePack);
+    }
 }
