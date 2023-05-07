@@ -60,13 +60,19 @@ public class GameController implements Observer {
             game.setTurnPhase(Game.Phase.INIT_TURN);
         }
 
+        if (arg instanceof Integer) {
+            game.setDrawableTiles();
+            if (((Integer) arg).intValue() <= 0 | ((Integer) arg).intValue() > 3) {
+                throw new IllegalArgumentException();
+            }
+        }
+
         if (arg instanceof Position position) {
             Game.Phase turnPhase = game.getTurnPhase();
 
             switch (turnPhase) {
 
                 case INIT_TURN -> {
-                    game.setDrawableTiles();
                     game.setTurnPhase(Game.Phase.PICKING_TILES);
                     if (game.getDrawableTiles().contains(game.getLivingRoomBoard().getSpace(position))) {
                         game.drawTile(position);

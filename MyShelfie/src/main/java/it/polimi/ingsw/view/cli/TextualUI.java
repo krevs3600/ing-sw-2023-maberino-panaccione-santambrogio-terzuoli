@@ -10,6 +10,7 @@ import java.io.PrintStream;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Scanner;
+import java.util.SortedMap;
 
 public class TextualUI extends Observable implements Observer, Runnable {
 
@@ -22,15 +23,26 @@ public class TextualUI extends Observable implements Observer, Runnable {
         printTitle();
         gameMenu();
         while (true) {
-            out.print("How many tiles would you like to get?");
-            int numberOfTiles = in.nextInt();
+            int numberOfTiles = 0;
+            do {
+                out.print("How many tiles would you like to get?");
+                try {
+                    numberOfTiles = in.nextInt();
+                    setChanged();
+                    notifyObservers(numberOfTiles);
+                } catch (IllegalArgumentException e){
+                    System.out.println("You can pick from 1 to 3 item tiles");
+                    numberOfTiles = 0;
+                }
+            } while (numberOfTiles == 0);
+
             for (int i = 0; i < numberOfTiles; i++) {
                 out.print("r: ");
                 int r = in.nextInt();
                 System.out.print("c: ");
                 int c = in.nextInt();
                 try {
-                    setChanged();;
+                    setChanged();
                     notifyObservers(new Position(r,c));
                 } catch (IllegalAccessError e) {
                     out.println(e.getMessage());

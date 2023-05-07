@@ -52,6 +52,7 @@ public class Game extends Observable {
         notifyObservers(this);
         return itemTile;
     }
+
     /**
      * This method adds a Player to the game
      * @param player the player to be subscribed
