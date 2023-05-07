@@ -16,12 +16,21 @@ import java.util.*;
  * @since 4/30/2023
  */
 public class Game extends Observable {
+    public enum Phase {
+        INIT_GAME,
+        INIT_TURN,
+        PICKING_TILES,
+        PLACING_TILES,
+        END_TURN;
+    }
     private String id;
     private PersonalGoalCardDeck personalGoalCardDeck;
     private List<Player> subscribers = new ArrayList<>();
      private LivingRoomBoard livingRoomBoard;
      private NumberOfPlayers numberOfPlayers;
      private int cursor;
+     private Phase turnPhase;
+     private List<Space> drawableTiles = new ArrayList<>();
 
     /**
      * Class constructor
@@ -33,8 +42,16 @@ public class Game extends Observable {
         this.livingRoomBoard = new LivingRoomBoard(numberOfPlayers);
         this.numberOfPlayers = numberOfPlayers;
         this.personalGoalCardDeck = new PersonalGoalCardDeck();
+        this.turnPhase = Phase.INIT_TURN;
     }
 
+
+    public ItemTile drawTile(Position position) throws IllegalArgumentException{
+        ItemTile itemTile = getLivingRoomBoard().getSpace(position).drawTile();
+        setChanged();
+        notifyObservers(this);
+        return itemTile;
+    }
     /**
      * This method adds a Player to the game
      * @param player the player to be subscribed
@@ -45,6 +62,12 @@ public class Game extends Observable {
         notifyObservers(this);
     }
 
+    public void setDrawableTiles(){
+        this.drawableTiles = getLivingRoomBoard().getDrawableTiles();
+    }
+    public List<Space> getDrawableTiles(){
+        return this.drawableTiles;
+    }
     /**
      * This method chooses the order of play of the game and sets to PICKING_TILES the status of the first player
      */
@@ -210,6 +233,9 @@ public class Game extends Observable {
 
 
     }
+    
+    public Phase getTurnPhase() {return this.turnPhase;};
+    public void setTurnPhase(Phase turnPhase) {this.turnPhase = turnPhase;}
 
 
 }

@@ -2,6 +2,8 @@ package it.polimi.ingsw.view.cli;
 
 import it.polimi.ingsw.controller.GameController;
 import it.polimi.ingsw.model.Game;
+import it.polimi.ingsw.model.ModelView.GameView;
+import it.polimi.ingsw.model.utils.Position;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -19,8 +21,25 @@ public class TextualUI extends Observable implements Observer, Runnable {
         // initial setup
         printTitle();
         gameMenu();
+        while (true) {
+            out.print("How many tiles would you like to get?");
+            int numberOfTiles = in.nextInt();
+            for (int i = 0; i < numberOfTiles; i++) {
+                out.print("r: ");
+                int r = in.nextInt();
+                System.out.print("c: ");
+                int c = in.nextInt();
+                try {
+                    setChanged();;
+                    notifyObservers(new Position(r,c));
+                } catch (IllegalAccessError e) {
+                    out.println(e.getMessage());
+                    i--;
+                }
 
+            }
 
+        }
     }
 
 
@@ -32,6 +51,7 @@ public class TextualUI extends Observable implements Observer, Runnable {
             case 1 -> {
                 setChanged();
                 notifyObservers(GameController.Event.CREATE_GAME);
+                // --------------------------
                 out.print("Insert your name: ");
                 String name = in.next();
                 this.joined = true;
@@ -62,14 +82,14 @@ public class TextualUI extends Observable implements Observer, Runnable {
 
     @Override
     public void update(Observable o, Object arg) {
-        if (!(o instanceof Game model)){
+        if (!(o instanceof GameView model)){
             System.err.println("Discarding update from " + o);
         }
 
-        if (arg instanceof Game game) {
+        if (arg instanceof GameView game) {
             /* New choice available */
-            out.println(game.getSubscribers().get(0).getName() + " got subscribed");
-            out.println(game.getLivingRoomBoard());
+            out.println( " got subscribed");
+            out.println(game.getLivingRoomBoard().toString());
         }
     }
 }

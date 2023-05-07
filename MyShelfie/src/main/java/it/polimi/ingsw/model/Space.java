@@ -3,6 +3,9 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.model.utils.SpaceType;
 
+import java.util.Observable;
+import java.util.Observer;
+
 /**
  * <h1>Class Space</h1>
  * The class Space represents the unit of which the living room board is composed
@@ -13,7 +16,7 @@ import it.polimi.ingsw.model.utils.SpaceType;
  */
 
 
-public class Space {
+public class Space extends Observable {
     private boolean free;
     private SpaceType type;
     private Position position;

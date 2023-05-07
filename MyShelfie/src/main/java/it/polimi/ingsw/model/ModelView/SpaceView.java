@@ -17,8 +17,8 @@ public class SpaceView extends Observable implements Observer {
         this.space = space;
     }
 
-    public Space getSpace() {
-        return space;
+    public SpaceView getSpace() {
+        return new SpaceView(space);
     }
 
     public SpaceType getType() { return space.getType(); }

@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.PersonalGoalCard;
 import it.polimi.ingsw.model.PersonalGoalCardDeck;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.utils.NumberOfPlayers;
+import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.view.cli.TextualUI;
 
 import java.util.*;
@@ -29,14 +30,11 @@ public class GameController implements Observer {
 
 
 
-
-
     @Override
-    public void update(Observable o, Object arg) {
+    public void update(Observable o, Object arg) throws IllegalArgumentException{
         if (o != this.view) {
             System.err.println("Discarding event from " + o);
         }
-
         /**
         Event event = (Event)arg;
         switch (event) {
@@ -49,14 +47,45 @@ public class GameController implements Observer {
         }
          */
 
-        if (arg instanceof Event event){
-            if (event.equals(Event.CREATE_GAME)){
+        if (arg instanceof Event event) {
+            if (event.equals(Event.CREATE_GAME)) {
                 this.game = new Game(NumberOfPlayers.TWO_PLAYERS);
-                game.addObserver(this.view);
+                GameView gameView = new GameView(this.game);
+                gameView.addObserver(this.view);
+                this.game.addObserver(gameView);
             }
         } else if (arg instanceof String name) {
             Player player = new Player(name, game.getPersonalGoalCardDeck());
             game.subscribe(player);
+            game.setTurnPhase(Game.Phase.INIT_TURN);
+        }
+
+        if (arg instanceof Position position) {
+            Game.Phase turnPhase = game.getTurnPhase();
+
+            switch (turnPhase) {
+
+                case INIT_TURN -> {
+                    game.setDrawableTiles();
+                    game.setTurnPhase(Game.Phase.PICKING_TILES);
+                    if (game.getDrawableTiles().contains(game.getLivingRoomBoard().getSpace(position))) {
+                        game.drawTile(position);
+                    } else {
+                        throw new IllegalAccessError("Space forbidden or empty");
+                    }
+                }
+
+                case PICKING_TILES -> {
+                    // se arriva una cosa diversa dalla posizione bisogna processarla come messa nella libreria
+
+                    if (game.getDrawableTiles().contains(game.getLivingRoomBoard().getSpace(position))) {
+                        game.drawTile(position);
+                    } else {
+                        throw new IllegalAccessError("Space forbidden or empty");
+                    }
+
+                }
+            }
         }
     }
 }

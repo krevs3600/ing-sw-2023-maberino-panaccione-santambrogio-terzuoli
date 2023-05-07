@@ -2,10 +2,11 @@ package it.polimi.ingsw.model.ModelView;
 
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.utils.NumberOfPlayers;
-import it.polimi.ingsw.observer.Observable;
-import it.polimi.ingsw.observer.Observer;
+import javafx.scene.effect.Light;
 
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 public class GameView extends Observable implements Observer {
     private final Game game;
@@ -26,8 +27,8 @@ public class GameView extends Observable implements Observer {
         return game.getSubscribers();
     }
 
-    public LivingRoomBoard getLivingRoomBoard () {
-        return game.getLivingRoomBoard();
+    public LivingRoomBoardView getLivingRoomBoard () {
+        return new LivingRoomBoardView(game.getLivingRoomBoard());
     }
 
     public NumberOfPlayers getNumberOfPlayers () {
@@ -38,4 +39,16 @@ public class GameView extends Observable implements Observer {
         return game.getCursor();
     }
 
+    @Override
+    public void update(Observable o, Object arg) {
+        if (!(o instanceof Game model)){
+            System.err.println("Discarding update from " + o);
+        }
+
+        if (arg instanceof Game game){
+            setChanged();
+            notifyObservers(new GameView(game));
+        }
+
+    }
 }

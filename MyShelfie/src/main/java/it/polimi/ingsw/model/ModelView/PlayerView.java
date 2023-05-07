@@ -22,8 +22,8 @@ public class PlayerView extends Observable implements Observer {
         return player.getStatus();
     }
 
-    public Bookshelf getBookshelf () {
-        return player.getBookshelf();
+    public BookshelfView getBookshelf () {
+        return new BookshelfView(player.getBookshelf());
     }
 
     public int getScore () {
