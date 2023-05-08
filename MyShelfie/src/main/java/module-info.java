@@ -3,6 +3,5 @@ module PSP47 {
     requires javafx.controls;
     requires json.simple;
 
-
     opens it.polimi.ingsw.client.view.gui;
 }
