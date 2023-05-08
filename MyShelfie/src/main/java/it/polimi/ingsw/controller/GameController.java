@@ -1,11 +1,19 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.CommonGoalCard.CommonGoalCard;
 import it.polimi.ingsw.model.ModelView.GameView;
 import it.polimi.ingsw.model.utils.NumberOfPlayers;
 import it.polimi.ingsw.model.utils.Position;
+import it.polimi.ingsw.model.utils.TileType;
 import it.polimi.ingsw.view.cli.TextualUI;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
 import java.util.*;
 
 public class GameController implements Observer {
@@ -68,7 +76,14 @@ public class GameController implements Observer {
                 game.setTurnPhase(Game.Phase.PLACING_TILES);
                 game.getSubscribers().get(0).insertTile(game.getTilePack(), (int) arg);
                 game.setColumnChoice((int) arg);
-                game.setTurnPhase(Game.Phase.INIT_TURN);
+                if (!game.getSubscribers().get(0).getBookshelf().isFull()) {
+                    game.setTurnPhase(Game.Phase.INIT_TURN);
+                    computeScoreMidGame();
+                }
+                else {
+                    game.setTurnPhase(Game.Phase.END_GAME);
+                    computeScoreEndGame();
+                }
             }
         }
 
@@ -100,4 +115,84 @@ public class GameController implements Observer {
             }
         }
     }
+    /**
+     * This method is used to keep track of score changes of a player during the game.
+     * In particular, the score is updated every time the player receives a scoring token
+     * @return int It returns the updated score of the player
+     */
+    //TODO: change getSubscribers().get(0) into getCurrentPlayer()
+    private void computeScoreMidGame(){
+        List<CommonGoalCard> commonGoalCards = game.getLivingRoomBoard().getCommonGoalCards();
+        for(CommonGoalCard card : commonGoalCards) {
+            if (card.toBeChecked(game.getSubscribers().get(0).getBookshelf())) {
+                if(card.CheckPattern(game.getSubscribers().get(0).getBookshelf())){
+                    //ScoringToken tempToken = card.getStack().pop();
+                    //score+=tempToken.getValue();
+                    if(card.equals(commonGoalCards.get(0)) && !game.getSubscribers().get(0).isFirstCommonGoalAchieved()) {
+                        game.setCurrentPlayerScore(card.getStack().pop().getValue());
+                        game.getSubscribers().get(0).hasAchievedFirstGoal();
+                    }
+                    if(card.equals(commonGoalCards.get(1)) && !game.getSubscribers().get(0).isSecondCommonGoalAchieved()) {
+                        game.setCurrentPlayerScore(card.getStack().pop().getValue());
+                        game.getSubscribers().get(1).hasAchievedSecondGoal();
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * This method is used to compute the final score of the player at the end of the game
+     * @return int It returns the final score of the player
+     */
+    public void computeScoreEndGame() {
+        //Computation of points from personal goal card
+        ItemTile[][] bookshelf = this.game.getSubscribers().get(0).getBookshelf().getGrid();
+        int score;
+        //personalGoalCard.getScoringItem().forEach((key, value) -> );
+        int count = 0;
+        for (Map.Entry<Integer, TileType> element :
+                game.getSubscribers().get(0).getPersonalGoalCard().getScoringItem().entrySet()) {
+            if (bookshelf[(element.getKey())/5][(element.getKey())%5].getType().equals(element.getValue())) {
+                count++;
+            }
+        }
+
+        ArrayList<Integer> points;
+        try {
+            Reader file = new FileReader("src/main/java/it/polimi/ingsw/model/PersonalGoalCards.json");
+            JSONParser parser = new JSONParser();
+            Object jsonObj = parser.parse(file);
+            JSONObject jsonObject = (JSONObject) jsonObj;
+            // read points from json
+            points = (ArrayList<Integer>) jsonObject.get("points");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        score=points.get(count);
+
+        //Computation of points from adjacent tiles groups at end of game
+        ArrayList<List<Integer>> pointsAdj = new ArrayList<>();
+        pointsAdj.add(Arrays.asList(3, 4, 5, 6));
+        pointsAdj.add(Arrays.asList(2, 3, 5, 8));
+
+        for (TileType type : TileType.values()) {
+            Map<Integer, Integer> adjacentTiles = this.game.getSubscribers().get(0).getBookshelf().getNumberAdjacentTiles(type);
+            for (Integer key : adjacentTiles.keySet()) {
+                for (int i = 0; i < pointsAdj.get(0).size(); i++) {
+                    if (key.equals(pointsAdj.get(0).get(i))) {
+                        score = score + (pointsAdj.get(1).get(i)) * adjacentTiles.get(key);
+                    } else if (key > pointsAdj.get(0).get(3)) {
+                        score = score + (pointsAdj.get(1).get(3)) * adjacentTiles.get(key);
+                    }
+                }
+            }
+
+        }
+        game.setCurrentPlayerScore(score);
+    }
+
 }

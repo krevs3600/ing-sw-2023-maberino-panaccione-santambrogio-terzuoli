@@ -22,7 +22,8 @@ public class Game extends Observable {
         INIT_TURN,
         PICKING_TILES,
         PLACING_TILES,
-        END_TURN;
+        END_TURN,
+        END_GAME;
     }
     private String id;
     private PersonalGoalCardDeck personalGoalCardDeck;
@@ -36,6 +37,8 @@ public class Game extends Observable {
      private TilePack tilePack;
 
      private int columnChoice;
+
+     private int currentPlayerScore;
 
     /**
      * Class constructor
@@ -264,4 +267,11 @@ public class Game extends Observable {
     public int getColumnChoice() {
         return columnChoice;
     }
+
+    public void setCurrentPlayerScore (int score) {
+        this.currentPlayerScore += score;
+        setChanged();
+        notifyObservers(this);
+    }
+    public int getCurrentPlayerScore () {return this.currentPlayerScore;}
 }

@@ -43,6 +43,8 @@ public class GameView extends Observable implements Observer {
 
     public TilePackView getTilePack () { return new TilePackView(game.getTilePack());}
 
+    public int getCurrentPlayerScore () { return game.getCurrentPlayerScore();}
+
     @Override
     public void update(Observable o, Object arg) {
         if (!(o instanceof Game model)){

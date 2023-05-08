@@ -30,6 +30,9 @@ public class Player {
     private PersonalGoalCard personalGoalCard;
     private List<ScoringToken> tokens;
 
+    private boolean firstCommonGoalAchieved;
+    private boolean secondCommonGoalAchieved;
+
     /**
      * Class constructor
      * @param name the name of the player
@@ -41,6 +44,8 @@ public class Player {
         this.score = 0;
         this.personalGoalCard = (PersonalGoalCard) personalGoalCardDeck.draw();
         this.tokens = new ArrayList<>();
+        this.firstCommonGoalAchieved = false;
+        this.secondCommonGoalAchieved = false;
     }
 
     /**
@@ -66,80 +71,6 @@ public class Player {
             System.out.println("Invalid column, please select another one valid");
         }
 
-    }
-
-    /**
-     * This method is used to compute the final score of the player at the end of the game
-     * @return int It returns the final score of the player
-     */
-    public int computeScoreEndGame() {
-        //Computation of points from personal goal card
-        ItemTile[][] bookshelf = this.bookshelf.getGrid();
-        //personalGoalCard.getScoringItem().forEach((key, value) -> );
-        int count = 0;
-        for (Map.Entry<Integer, TileType> element :
-                personalGoalCard.getScoringItem().entrySet()) {
-            if (bookshelf[(element.getKey())/5][(element.getKey())%5].getType().equals(element.getValue())) {
-                count++;
-            }
-        }
-
-        ArrayList<Integer> points;
-        try {
-            Reader file = new FileReader("src/main/java/it/polimi/ingsw/model/PersonalGoalCards.json");
-            JSONParser parser = new JSONParser();
-            Object jsonObj = parser.parse(file);
-            JSONObject jsonObject = (JSONObject) jsonObj;
-            // read points from json
-            points = (ArrayList<Integer>) jsonObject.get("points");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-
-        score+=points.get(count);
-
-        //Computation of points from adjacent tiles groups at end of game
-        ArrayList<List<Integer>> pointsAdj = new ArrayList<>();
-        pointsAdj.add(Arrays.asList(3, 4, 5, 6));
-        pointsAdj.add(Arrays.asList(2, 3, 5, 8));
-
-        for (TileType type : TileType.values()) {
-            Map<Integer, Integer> adjacentTiles = this.bookshelf.getNumberAdjacentTiles(type);
-            for (Integer key : adjacentTiles.keySet()) {
-                for (int i = 0; i < pointsAdj.get(0).size(); i++) {
-                    if (key.equals(pointsAdj.get(0).get(i))) {
-                        score = score + (pointsAdj.get(1).get(i)) * adjacentTiles.get(key);
-                    } else if (key > pointsAdj.get(0).get(3)) {
-                        score = score + (pointsAdj.get(1).get(3)) * adjacentTiles.get(key);
-                    }
-                }
-            }
-
-        }
-        return score;
-    }
-
-
-    /**
-     * This method is used to keep track of score changes of a player during the game.
-     * In particular, the score is updated every time the player receives a scoring token
-     * @return int It returns the updated score of the player
-     */
-    public int computeScoreMidGame(CommonGoalCardDeck deck){
-        List<CommonGoalCard> commonGoalCards = deck.getDeck();
-        for(CommonGoalCard card : commonGoalCards) {
-            if (card.toBeChecked(bookshelf)) {
-                if(card.CheckPattern(bookshelf)){
-                    //ScoringToken tempToken = card.getStack().pop();
-                    //score+=tempToken.getValue();
-                    score+=card.getStack().pop().getValue();
-                }
-            }
-        }
-
-        return score;
     }
 
     /**
@@ -194,5 +125,10 @@ public class Player {
     public PersonalGoalCard getPersonalGoalCard () { return this.personalGoalCard;}
 
     public List<ScoringToken> getTokens () { return this.tokens;}
+    public void setScore (int incremental) { this.score += incremental;}
+    public boolean isFirstCommonGoalAchieved () { return this.firstCommonGoalAchieved;}
+    public boolean isSecondCommonGoalAchieved () { return this.secondCommonGoalAchieved;}
+    public void hasAchievedFirstGoal () { this.firstCommonGoalAchieved=true;}
+    public void hasAchievedSecondGoal () { this.secondCommonGoalAchieved=true;}
 
 }
