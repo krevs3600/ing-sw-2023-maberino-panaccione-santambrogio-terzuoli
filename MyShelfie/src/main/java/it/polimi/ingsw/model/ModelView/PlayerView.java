@@ -37,4 +37,6 @@ public class PlayerView extends Observable implements Observer {
     public List<ScoringToken> getTokens () {
         return player.getTokens();
     }
+    public boolean isFirstCommonGoalAchieved () { return player.isFirstCommonGoalAchieved();}
+    public boolean isSecondCommonGoalAchieved () { return player.isSecondCommonGoalAchieved();}
 }

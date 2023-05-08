@@ -53,7 +53,7 @@ public class TextualUI extends Observable implements Observer, Runnable {
             out.print("In which column you want to insert your item tiles? ");
             int column = in.nextInt();
             setChanged();
-            notifyObservers(numberOfTiles);
+            notifyObservers(column);
         }
     }
 
@@ -119,9 +119,11 @@ public class TextualUI extends Observable implements Observer, Runnable {
             out.println("\n-----------------------------------------------------------------------\n");
             out.println("First common goal card: " + game.getLivingRoomBoard().getCommonGoalCards().get(0).toString());
             out.println("\n-----------------------------------------------------------------------\n");
-            out.println("S1econd common goal card: " + game.getLivingRoomBoard().getCommonGoalCards().get(1).toString());
+            out.println("Second common goal card: " + game.getLivingRoomBoard().getCommonGoalCards().get(1).toString());
             out.println("\n-----------------------------------------------------------------------\n");
             out.println(game.getSubscribers().get(0).getName() + "'s personal goal card: " + game.getSubscribers().get(0).getPersonalGoalCard().toString());
+            out.println("\n-----------------------------------------------------------------------\n");
+            out.println(game.getSubscribers().get(0).getName() + "'s score: " + game.getCurrentPlayerScore());
             out.println("\n-----------------------------------------------------------------------\n");
         }
     }
