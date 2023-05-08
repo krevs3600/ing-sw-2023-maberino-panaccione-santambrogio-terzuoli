@@ -1,4 +1,4 @@
-package it.polimi.ingsw.client.view.GUI;
+package it.polimi.ingsw.client.view;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -7,10 +7,10 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class HelloApp extends Application {
+public class JavaFxMain extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("menu.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("start.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Hello!");
         stage.setScene(scene);
@@ -20,4 +20,5 @@ public class HelloApp extends Application {
     public static void main(String[] args) {
         launch();
     }
+
 }
