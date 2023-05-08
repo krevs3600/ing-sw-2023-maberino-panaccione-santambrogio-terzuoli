@@ -40,6 +40,11 @@ public class Game extends Observable {
 
      private int currentPlayerScore;
 
+     private List<Position> buffer;
+
+     private boolean alongSideRow;
+     private boolean alongSideColumn;
+
     /**
      * Class constructor
      * @param numberOfPlayers the number of players on which the game setting depends
@@ -52,6 +57,9 @@ public class Game extends Observable {
         this.personalGoalCardDeck = new PersonalGoalCardDeck();
         this.tilePack = new TilePack();
         this.turnPhase = Phase.INIT_TURN;
+        this.buffer = new ArrayList<>();
+        this.alongSideRow = false;
+        this.alongSideColumn = false;
     }
 
 
@@ -135,7 +143,7 @@ public class Game extends Observable {
      * This method refills the LivingRoomBoard by calling its proper method
      */
     public void refillLivingRoomBoard(){
-        livingRoomBoard.refill();
+        getLivingRoomBoard().refill();
     }
 
     /**
@@ -274,4 +282,14 @@ public class Game extends Observable {
         notifyObservers(this);
     }
     public int getCurrentPlayerScore () {return this.currentPlayerScore;}
+
+    public List<Position> getBuffer(){
+        return this.buffer;
+    }
+
+    public boolean isAlongSideRow () {return this.alongSideRow; }
+    public void setAlongSideRow (boolean alongSideRow) {this.alongSideRow = alongSideRow; }
+
+    public boolean isAlongSideColumn () {return this.alongSideColumn; }
+    public void setAlongSideColumn (boolean alongSideColumn) {this.alongSideColumn = alongSideColumn; }
 }

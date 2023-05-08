@@ -46,6 +46,22 @@ public class Position {
         return column;
     }
 
+    public boolean isAdjacent(Position position){
+        if(this.getColumn() == position.getColumn()){
+            if((this.getRow() == position.getRow() +1) || (this.getRow() == position.getRow() -1)){
+                return true;
+
+            }
+        }
+
+        if(this.getRow() == position.getRow()) {
+            if ((this.getColumn() == position.getColumn() + 1) || (this.getColumn() == position.getColumn() - 1)) {
+                return true;
+            }
+        }
+        return false;
+}
+
     @Override
     public String toString(){
         return "(" + this.row + "," + this.column + ")";

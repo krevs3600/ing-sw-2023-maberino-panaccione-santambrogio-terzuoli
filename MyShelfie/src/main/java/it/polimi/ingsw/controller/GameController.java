@@ -71,11 +71,15 @@ public class GameController implements Observer {
                 if (((Integer) arg).intValue() <= 0 | ((Integer) arg).intValue() > 3) {
                     throw new IllegalArgumentException();
                 }
+                game.setAlongSideColumn(false);
+                game.setAlongSideRow(false);
+                game.getBuffer().clear();
             }
             else if (game.getTurnPhase().equals(Game.Phase.PICKING_TILES)) {
                 game.setTurnPhase(Game.Phase.PLACING_TILES);
                 game.getSubscribers().get(0).insertTile(game.getTilePack(), (int) arg);
                 game.setColumnChoice((int) arg);
+                if (game.getLivingRoomBoard().getAllFree().size()==game.getLivingRoomBoard().getDrawableTiles().size()) game.refillLivingRoomBoard();
                 if (!game.getSubscribers().get(0).getBookshelf().isFull()) {
                     game.setTurnPhase(Game.Phase.INIT_TURN);
                     computeScoreMidGame();
@@ -96,6 +100,7 @@ public class GameController implements Observer {
                     game.setTurnPhase(Game.Phase.PICKING_TILES);
                     if (game.getDrawableTiles().contains(game.getLivingRoomBoard().getSpace(position))) {
                         ItemTile itemTile = game.drawTile(position);
+                        game.getBuffer().add(position);
                         game.insertTileInTilePack(itemTile);
                     } else {
                         throw new IllegalAccessError("Space forbidden or empty");
@@ -106,10 +111,36 @@ public class GameController implements Observer {
                     // se arriva una cosa diversa dalla posizione bisogna processarla come messa nella libreria
 
                     if (game.getDrawableTiles().contains(game.getLivingRoomBoard().getSpace(position))) {
-                        ItemTile itemTile = game.drawTile(position);
-                        game.insertTileInTilePack(itemTile);
-                    } else {
-                        throw new IllegalAccessError("Space forbidden or empty");
+                        boolean fairPosition = false;
+                        for (Position pos : game.getBuffer()) {
+                            if (pos.isAdjacent(position)) {
+                                fairPosition = true;
+                                break;
+                            }
+                        }
+                        if (fairPosition) {
+                            game.getBuffer().add(position);
+                            if (game.getBuffer().size()==2) {
+                                if(position.getColumn() == game.getBuffer().get(0).getColumn()) {
+                                    game.setAlongSideRow(true);
+                                }else game.setAlongSideColumn(true);
+                            }
+                            else if (game.getBuffer().size()==3) {
+                                if (game.isAlongSideRow()) {
+                                    if (position.getColumn() != game.getBuffer().get(0).getColumn()) {
+                                        throw new IllegalAccessError("Space forbidden or empty");
+                                    }
+                                } else if (game.isAlongSideColumn()) {
+                                    if (position.getRow() != game.getBuffer().get(0).getRow()) {
+                                        throw new IllegalAccessError("Space forbidden or empty");
+                                    }
+                                }
+                            }
+                            ItemTile itemTile = game.drawTile(position);
+                            game.insertTileInTilePack(itemTile);
+                        } else {
+                            throw new IllegalAccessError("Space forbidden or empty");
+                        }
                     }
                 }
             }
@@ -134,7 +165,7 @@ public class GameController implements Observer {
                     }
                     if(card.equals(commonGoalCards.get(1)) && !game.getSubscribers().get(0).isSecondCommonGoalAchieved()) {
                         game.setCurrentPlayerScore(card.getStack().pop().getValue());
-                        game.getSubscribers().get(1).hasAchievedSecondGoal();
+                        game.getSubscribers().get(0).hasAchievedSecondGoal();
                     }
                 }
             }
@@ -160,7 +191,7 @@ public class GameController implements Observer {
 
         ArrayList<Integer> points;
         try {
-            Reader file = new FileReader("src/main/java/it/polimi/ingsw/model/PersonalGoalCards.json");
+            Reader file = new FileReader("src/main/java/it/polimi/ingsw/model/configs/PersonalGoalCards.json");
             JSONParser parser = new JSONParser();
             Object jsonObj = parser.parse(file);
             JSONObject jsonObject = (JSONObject) jsonObj;
