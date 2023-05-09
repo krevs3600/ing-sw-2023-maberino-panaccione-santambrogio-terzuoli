@@ -1,8 +1,8 @@
-package network.message;
+package it.polimi.ingsw.network.message;
 
 public enum MessageType {
-
-    NICKNAME_MESSAGE,
+    ERROR,
+    NICKNAME,
     MENU_OPTION,
     NUM_OF_PLAYERS,
     TILE_POSITION,
@@ -13,5 +13,6 @@ public enum MessageType {
     TILE_PACK,
     PERSONAL_GOAL_CARD,
     COMMON_GOAL_CARD,
-    SCORE;
+    SCORE,
+    END_GAME;
 }
