@@ -60,4 +60,9 @@ public abstract class CommonGoalCard extends GoalCard {
     public abstract boolean toBeChecked (Bookshelf b);
 
     public abstract boolean CheckPattern (Bookshelf b);
+
+    @Override
+    public String toString(){
+        return "AbstractCommonGoalCard";
+    }
 }
