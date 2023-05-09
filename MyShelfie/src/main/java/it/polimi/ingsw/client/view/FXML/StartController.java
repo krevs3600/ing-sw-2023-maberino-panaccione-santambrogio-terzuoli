@@ -1,6 +1,5 @@
 package it.polimi.ingsw.client.view.FXML;
 
-import it.polimi.ingsw.client.view.FXML.JavaFxMain;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,7 +11,7 @@ import java.io.IOException;
 import java.net.URL;
 
 
-public class startcontroller {
+public class StartController {
 
 
     private Stage stage;

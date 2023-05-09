@@ -7,7 +7,7 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<StackPane prefHeight="760.0" prefWidth="1300.0" styleClass="rootPane" stylesheets="@../css/start_scene.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.FXML.startcontroller">
+<StackPane prefHeight="760.0" prefWidth="1300.0" styleClass="rootPane" stylesheets="@../css/start_scene.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.FXML.StartController">
     <children>
         <Group scaleX="1.5" scaleY="1.5">
             <children>
