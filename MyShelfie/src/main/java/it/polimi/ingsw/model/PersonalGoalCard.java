@@ -34,4 +34,34 @@ public class PersonalGoalCard extends GoalCard{
     public Map<Integer, TileType> getScoringItem() {
         return scoringItem;
     }
+
+    @Override
+    public String toString() {
+        String number = "";
+        for(int i=0; i<5; i++){
+            number = number.concat("   " + String.valueOf(i));
+        }
+
+        String rows = "";
+        Set<Integer> keys = scoringItem.keySet();
+        for(int i=0; i<29;i++){
+            // new row
+            if (i%5 == 0){
+                rows = rows.concat("\n").concat(String.valueOf(5-i/5)+ " ");
+            }
+
+            if(keys.contains(i)){
+                TileType tileType = scoringItem.get(i);
+                rows = rows.concat(tileType.getColorBackground() + " " + tileType.getAbbreviation() + " " + "\033[0m ");
+            }
+            else{
+                rows = rows.concat("    ");
+            }
+
+
+        }
+        return number.concat("\n").concat(rows);
+
+    }
+   
 }

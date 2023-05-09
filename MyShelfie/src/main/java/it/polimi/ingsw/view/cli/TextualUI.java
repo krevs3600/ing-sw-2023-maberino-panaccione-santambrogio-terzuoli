@@ -121,7 +121,7 @@ public class TextualUI extends Observable implements Observer, Runnable {
             out.println("\n-----------------------------------------------------------------------\n");
             out.println("Second common goal card: " + game.getLivingRoomBoard().getCommonGoalCards().get(1).toString());
             out.println("\n-----------------------------------------------------------------------\n");
-            out.println(game.getSubscribers().get(0).getName() + "'s personal goal card: " + game.getSubscribers().get(0).getPersonalGoalCard().toString());
+            out.println(game.getSubscribers().get(0).getName() + "'s personal goal card: \n" + game.getSubscribers().get(0).getPersonalGoalCard().toString());
             out.println("\n-----------------------------------------------------------------------\n");
             out.println(game.getSubscribers().get(0).getName() + "'s score: " + game.getCurrentPlayerScore());
             out.println("\n-----------------------------------------------------------------------\n");
