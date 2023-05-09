@@ -16,4 +16,9 @@ public abstract class Message {
         return type;
     }
 
+    @Override
+    public String toString(){
+        return this.nickName + " sends message of type " + type.name();
+    }
+
 }

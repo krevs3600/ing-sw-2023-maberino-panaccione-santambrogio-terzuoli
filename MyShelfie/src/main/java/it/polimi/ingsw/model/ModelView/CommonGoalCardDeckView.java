@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.CommonGoalCardDeck;
 import it.polimi.ingsw.observer.Observable;
 import it.polimi.ingsw.observer.Observer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CommonGoalCardDeckView extends Observable implements Observer {
@@ -19,7 +20,7 @@ public class CommonGoalCardDeckView extends Observable implements Observer {
         return commonGoalCardDeck.getSize();
     }
 
-    public List<CommonGoalCard> getDeck () {
-        return commonGoalCardDeck.getDeck();
+    public List<CommonGoalCardView> getDeck () {
+        return new ArrayList<>(this.commonGoalCardDeck.getDeck().stream().map(CommonGoalCardView::new).toList());
     }
 }
