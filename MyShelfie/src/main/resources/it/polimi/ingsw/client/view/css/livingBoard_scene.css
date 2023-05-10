@@ -1,0 +1,9 @@
+.rootPane {
+    -fx-background-image: url("../misc/sfondoparquet.jpg");
+    -fx-background-size: stretch;
+}
+
+.Board {
+    -fx-background-image: url("../boards/livingroom.png");
+    -fx-background-size: stretch;
+}
