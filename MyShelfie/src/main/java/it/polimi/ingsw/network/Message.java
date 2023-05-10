@@ -2,11 +2,11 @@ package it.polimi.ingsw.network;
 
 import it.polimi.ingsw.network.eventMessages.MessageType;
 
-public abstract class EventMessage {
+public abstract class Message {
     private String nickName;
     private MessageType type;
 
-    public EventMessage(String nickName, MessageType messageType){
+    public Message(String nickName, MessageType messageType){
         this.nickName = nickName;
         this.type = messageType;
     }

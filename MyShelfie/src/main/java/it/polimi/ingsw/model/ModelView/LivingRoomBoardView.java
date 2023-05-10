@@ -3,7 +3,6 @@ package it.polimi.ingsw.model.ModelView;
 import it.polimi.ingsw.model.Bag;
 import it.polimi.ingsw.model.CommonGoalCard.CommonGoalCard;
 import it.polimi.ingsw.model.LivingRoomBoard;
-import it.polimi.ingsw.model.Space;
 import it.polimi.ingsw.model.utils.Position;
 
 

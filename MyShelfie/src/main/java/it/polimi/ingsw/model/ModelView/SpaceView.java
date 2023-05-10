@@ -5,7 +5,7 @@ import it.polimi.ingsw.model.Space;
 import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.model.utils.SpaceType;
 
-import java.io.Serializable;
+public class SpaceView {
 
 public class SpaceView{
 
