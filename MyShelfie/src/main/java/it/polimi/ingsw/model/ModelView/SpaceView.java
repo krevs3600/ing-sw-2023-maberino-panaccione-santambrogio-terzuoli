@@ -7,8 +7,6 @@ import it.polimi.ingsw.model.utils.SpaceType;
 
 public class SpaceView {
 
-public class SpaceView{
-
     private final Space space;
 
     public SpaceView(Space space){

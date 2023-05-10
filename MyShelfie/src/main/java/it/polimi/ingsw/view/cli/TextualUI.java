@@ -3,6 +3,7 @@ package it.polimi.ingsw.view.cli;
 import it.polimi.ingsw.model.ModelView.GameView;
 import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.network.EventMessage;
+import it.polimi.ingsw.network.eventMessages.BookshelfColumnMessage;
 import it.polimi.ingsw.network.eventMessages.NicknameMessage;
 import it.polimi.ingsw.network.eventMessages.NumOfPlayerMessage;
 import it.polimi.ingsw.network.eventMessages.TilePositionMessage;
@@ -155,6 +156,14 @@ public class TextualUI extends Observable implements Runnable {
                         break;
                     }
                 }
+                out.println("\n-----------------------------------------------------------------------\n" + game.getSubscribers().get(0).getName() + "'s BOOKSHELF:");
+                out.println(game.getSubscribers().get(0).getBookshelf().toString());
+                out.println("\n-----------------------------------------------------------------------\n");
+                out.print("In which column you want to insert your item tiles? ");
+                int column = in.nextInt();
+                setChanged();
+                notifyObservers(new BookshelfColumnMessage(eventMessage.getNickName(), column));
+
             }
 
             case TILE_POSITION -> {
@@ -165,6 +174,11 @@ public class TextualUI extends Observable implements Runnable {
             case TILE_PACK -> {
                 out.println("\n-----------------------------------------------------------------------\n TILE PACK:");
                 out.println(game.getTilePack().toString());
+            }
+
+            case BOOKSHELF -> {
+                out.println("\n-----------------------------------------------------------------------\n" + game.getSubscribers().get(0).getName() + "'s BOOKSHELF:");
+                out.println(game.getSubscribers().get(0).getBookshelf().toString());
             }
 
         }

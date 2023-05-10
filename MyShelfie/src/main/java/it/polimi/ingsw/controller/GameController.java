@@ -8,6 +8,7 @@ import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.model.utils.TileType;
 import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.EventMessage;
+import it.polimi.ingsw.network.eventMessages.BookshelfColumnMessage;
 import it.polimi.ingsw.network.eventMessages.NumOfPlayerMessage;
 import it.polimi.ingsw.network.eventMessages.TilePositionMessage;
 import it.polimi.ingsw.observer_observable.Observable;
@@ -55,13 +56,13 @@ public class GameController {
 
         switch (eventMessage.getType()) {
             /**case NICKNAME -> {
-                if (game.getSubscribers().size() == 0) {
-                    game = new Game();
-                }
-                Player player = new Player(eventMessage.getNickName(), game.getPersonalGoalCardDeck());
-                game.subscribe(player);
+             if (game.getSubscribers().size() == 0) {
+             game = new Game();
+             }
+             Player player = new Player(eventMessage.getNickName(), game.getPersonalGoalCardDeck());
+             game.subscribe(player);
 
-            }
+             }
              */
 
             case NUM_OF_PLAYERS -> {
@@ -69,6 +70,7 @@ public class GameController {
                 Player player = new Player(eventMessage.getNickName(), game.getPersonalGoalCardDeck());
                 game.subscribe(player);
                 game.initLivingRoomBoard(Arrays.stream(NumberOfPlayers.values()).filter(x -> x.getValue() == numOfPlayerMessage.getNumOfPlayers()).toList().get(0));
+                game.setDrawableTiles();
             }
 
             case TILE_POSITION -> {
@@ -79,11 +81,9 @@ public class GameController {
                         ItemTile itemTile = game.drawTile(tilePositionMessage.getPosition());
                         game.getBuffer().add(tilePositionMessage.getPosition());
                         game.insertTileInTilePack(itemTile);
-                    } else {
-                        throw new IllegalAccessError("Space forbidden or empty");
                     }
 
-                    if (game.getBuffer().size() == 1) {
+                    else if (game.getBuffer().size() == 1) {
 
                         boolean fairPosition = false;
                         for (Position pos : game.getBuffer()) {
@@ -102,7 +102,7 @@ public class GameController {
                             } else game.setAlongSideColumn(true);
                         }
                     }
-                    if (game.getBuffer().size() == 2) {
+                    else if (game.getBuffer().size() == 2) {
                         boolean fairPosition = false;
                         for (Position pos : game.getBuffer()) {
                             if (pos.isAdjacent(tilePositionMessage.getPosition())) {
@@ -128,11 +128,30 @@ public class GameController {
                         throw new IllegalAccessError("Space forbidden or empty");
                     }
                 }
+                else {
+                    throw new IllegalAccessError("Space forbidden or empty");
+                }
+            }
 
-
+            case BOOKSHELF_COLUMN -> {
+                BookshelfColumnMessage bookshelfColumnMessage = (BookshelfColumnMessage) eventMessage;
+                game.getSubscribers().get(0).insertTile(game.getTilePack(), bookshelfColumnMessage.getColumn());
+                game.setColumnChoice(bookshelfColumnMessage.getColumn());
+                /**if (game.getLivingRoomBoard().getAllFree().size()==game.getLivingRoomBoard().getDrawableTiles().size()) game.refillLivingRoomBoard();
+                if (!game.getSubscribers().get(0).getBookshelf().isFull()) {
+                    game.setTurnPhase(Game.Phase.INIT_TURN);
+                    computeScoreMidGame();
+                }
+                else {
+                    game.setTurnPhase(Game.Phase.END_GAME);
+                    computeScoreEndGame();
+                }
+                 */
             }
         }
+
     }
+}
 
 /**
         if (eventMessage.getType()== instanceof EventMessage event) {
@@ -321,5 +340,3 @@ public class GameController {
     }
      */
 
-
-}

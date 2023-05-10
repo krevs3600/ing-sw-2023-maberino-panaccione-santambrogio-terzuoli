@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.CommonGoalCard.CommonGoalCard;
+import it.polimi.ingsw.model.ModelView.BookshelfView;
 import it.polimi.ingsw.model.ModelView.GameView;
 import it.polimi.ingsw.model.ModelView.LivingRoomBoardView;
 import it.polimi.ingsw.model.ModelView.TilePackView;
@@ -66,9 +67,6 @@ public class Game extends Observable<EventMessage> {
     public void initLivingRoomBoard(NumberOfPlayers numOfPlayers){
         this.livingRoomBoard = new LivingRoomBoard((numOfPlayers));
         this.numberOfPlayers = numOfPlayers;
-        LivingRoomBoardView livingRoomBoardView = new LivingRoomBoardView(this.getLivingRoomBoard());
-        setChanged();
-        notifyObservers(new BoardMessage(getCurrentPlayer().getName(), livingRoomBoardView));
     }
 
 
@@ -99,7 +97,11 @@ public class Game extends Observable<EventMessage> {
     }
 
     public void setDrawableTiles(){
+
         this.drawableTiles = getLivingRoomBoard().getDrawableTiles();
+        LivingRoomBoardView livingRoomBoardView = new LivingRoomBoardView(this.getLivingRoomBoard());
+        setChanged();
+        notifyObservers(new BoardMessage(getCurrentPlayer().getName(), livingRoomBoardView));
     }
     public List<Space> getDrawableTiles(){
         return this.drawableTiles;
@@ -281,13 +283,13 @@ public class Game extends Observable<EventMessage> {
 
     public TilePack getTilePack () { return tilePack;}
 
-//TODO
-    /**public void setColumnChoice (int columnChoice) {
+    //TODO: change getSubscribers into getCurrentPlayer
+    public void setColumnChoice (int columnChoice) {
         this.columnChoice = columnChoice;
         setChanged();
-        notifyObservers(this);
+        BookshelfView bookshelfView = new BookshelfView(getSubscribers().get(0).getBookshelf());
+        notifyObservers(new BookshelfMessage(getCurrentPlayer().getName(), bookshelfView));
     }
-     */
 
     public int getColumnChoice() {
         return columnChoice;
