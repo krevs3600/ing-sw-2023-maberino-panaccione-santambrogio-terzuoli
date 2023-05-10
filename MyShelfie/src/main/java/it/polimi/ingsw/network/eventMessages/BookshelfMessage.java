@@ -1,8 +1,9 @@
-package it.polimi.ingsw.network.message;
+package it.polimi.ingsw.network.eventMessages;
 
 import it.polimi.ingsw.model.ModelView.BookshelfView;
+import it.polimi.ingsw.network.EventMessage;
 
-public class BookshelfMessage extends Message{
+public class BookshelfMessage extends EventMessage {
 
     private BookshelfView bookshelfView;
     public BookshelfMessage(String nickName, BookshelfView bookshelfView) {

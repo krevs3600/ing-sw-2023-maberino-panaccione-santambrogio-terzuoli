@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.utils.TileType;
-import it.polimi.ingsw.observer.Observable;
+
 
 import java.util.ArrayList;
 import java.util.List;

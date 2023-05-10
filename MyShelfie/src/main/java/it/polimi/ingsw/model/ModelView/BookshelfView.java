@@ -2,10 +2,9 @@ package it.polimi.ingsw.model.ModelView;
 
 import it.polimi.ingsw.model.Bookshelf;
 import it.polimi.ingsw.model.ItemTile;
-import it.polimi.ingsw.observer.Observable;
-import it.polimi.ingsw.observer.Observer;
 
-public class BookshelfView extends Observable implements Observer {
+
+public class BookshelfView{
 
     private final Bookshelf bookshelf;
 

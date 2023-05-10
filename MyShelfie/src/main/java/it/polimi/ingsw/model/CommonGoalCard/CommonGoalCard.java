@@ -22,6 +22,9 @@ public abstract class CommonGoalCard extends GoalCard {
      * @param nop the number of players which affects the stack of scoring items upon a common goal card
      * @param roman the roman number on the back of a scoring item which defines on which of the two common goal cards the item is stacked
      */
+
+
+    //@TODO: spostare in controller
     public void stackScoringTokens (NumberOfPlayers nop, RomanNumber roman) {
         if (nop.equals(NumberOfPlayers.TWO_PLAYERS)) {
             this.stack.push(new ScoringToken(roman, 4));

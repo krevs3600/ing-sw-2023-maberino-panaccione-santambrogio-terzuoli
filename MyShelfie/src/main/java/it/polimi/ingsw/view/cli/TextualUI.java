@@ -1,28 +1,42 @@
 package it.polimi.ingsw.view.cli;
 
-import it.polimi.ingsw.controller.GameController;
-import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.ModelView.GameView;
 import it.polimi.ingsw.model.utils.Position;
+import it.polimi.ingsw.network.EventMessage;
+import it.polimi.ingsw.network.eventMessages.NicknameMessage;
+import it.polimi.ingsw.network.eventMessages.NumOfPlayerMessage;
+import it.polimi.ingsw.network.eventMessages.TilePositionMessage;
+import it.polimi.ingsw.observer_observable.Observable;
 
-import java.io.OutputStream;
 import java.io.PrintStream;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.Scanner;
-import java.util.SortedMap;
 
-public class TextualUI extends Observable implements Observer, Runnable {
+public class TextualUI extends Observable implements Runnable {
 
     private final PrintStream out = System.out;
     private final Scanner in = new Scanner(System.in);
     private boolean joined = false;
+
     @Override
-    public void run(){
+    public void run() {
         // initial setup
         printTitle();
-        gameMenu();
-        while (true) {
+        String nickName = "";
+        while (nickName.length() < 1) {
+            out.println("Please insert your name: ");
+            nickName = in.next();
+        }
+        //setChanged();
+        //notifyObservers(new NicknameMessage(nickName));
+
+        out.println("Please insert the number of players: ");
+        int numOfPlayers = in.nextInt();
+        setChanged();
+        notifyObservers(new NumOfPlayerMessage(nickName, numOfPlayers));
+
+
+
+        /**while (true) {
             int numberOfTiles;
             do {
                 out.print("How many tiles would you like to get? ");
@@ -30,7 +44,7 @@ public class TextualUI extends Observable implements Observer, Runnable {
                     numberOfTiles = in.nextInt();
                     setChanged();
                     notifyObservers(numberOfTiles);
-                } catch (IllegalArgumentException e){
+                } catch (IllegalArgumentException e) {
                     System.out.println("You can pick from 1 to 3 item tiles");
                     numberOfTiles = 0;
                 }
@@ -43,7 +57,7 @@ public class TextualUI extends Observable implements Observer, Runnable {
                 int c = in.nextInt();
                 try {
                     setChanged();
-                    notifyObservers(new Position(r,c));
+                    notifyObservers(new Position(r, c));
                 } catch (IllegalAccessError e) {
                     out.println(e.getMessage());
                     i--;
@@ -55,18 +69,18 @@ public class TextualUI extends Observable implements Observer, Runnable {
             setChanged();
             notifyObservers(column);
         }
+
+         */
     }
 
 
-
-    public void gameMenu(){
+    public void gameMenu() {
         printMenu();
         int menuOption = in.nextInt();
 
         switch (menuOption) {
             case 1 -> {
                 setChanged();
-                notifyObservers(GameController.Event.CREATE_GAME);
                 // --------------------------
                 out.print("Insert your name: ");
                 String name = in.next();
@@ -96,35 +110,98 @@ public class TextualUI extends Observable implements Observer, Runnable {
         out.println(MessageCLI.MENU);
     }
 
-    @Override
-    public void update(Observable o, Object arg) {
+    public void update(GameView game, EventMessage eventMessage) {
+        switch (eventMessage.getType()) {
+            /**
+             * case NUM_OF_PLAYERS_REQUEST -> {
+                out.println("Please insert the number of players: ");
+                int numOfPlayers = in.nextInt();
+                setChanged();
+                notifyObservers(new NumOfPlayerMessage(eventMessage.getNickName(), numOfPlayers));
+            }
+             */
+            case BOARD -> {
+                out.println("\n-----------------------------------------------------------------------\n LIVING ROOM BOARD:");
+                out.println(game.getLivingRoomBoard().toString());
+                out.println("\n-----------------------------------------------------------------------\n TILE PACK:");
+                out.println(game.getTilePack().toString());
+                out.println("\n-----------------------------------------------------------------------\n" + game.getSubscribers().get(0).getName() + "'s BOOKSHELF:");
+                out.println(game.getSubscribers().get(0).getBookshelf().toString());
+                out.println("\n-----------------------------------------------------------------------\n");
+                out.println("First common goal card: " + game.getLivingRoomBoard().getCommonGoalCards().get(0).toString());
+                out.println("\n-----------------------------------------------------------------------\n");
+                out.println("Second common goal card: " + game.getLivingRoomBoard().getCommonGoalCards().get(1).toString());
+                out.println("\n-----------------------------------------------------------------------\n");
+                out.println(game.getSubscribers().get(0).getName() + "'s personal goal card: \n" + game.getSubscribers().get(0).getPersonalGoalCard().toString());
+                out.println("\n-----------------------------------------------------------------------\n");
+                out.println(game.getSubscribers().get(0).getName() + "'s score: " + game.getCurrentPlayerScore());
+                out.println("\n-----------------------------------------------------------------------\n");
+                out.println("Please enter a position: ");
+                for (int i = 0; i < 3; i++) {
+                    out.print("r: ");
+                    int r = in.nextInt();
+                    System.out.print("c: ");
+                    int c = in.nextInt();
+                    try {
+                        setChanged();
+                        notifyObservers(new TilePositionMessage(eventMessage.getNickName(), new Position(r, c)));
+                    } catch (IllegalAccessError e) {
+                        out.println(e.getMessage());
+                        i--;
 
-        if (!(o instanceof GameView model)){
-            System.err.println("Discarding update from " + o);
+                    }
+                    System.out.println("If you whish to stop picking tiles type 'stop', otherwise just press enter");
+                    if (in.next().equals("stop")) {
+                        break;
+                    }
+                }
+            }
+
+            case TILE_POSITION -> {
+                out.println("\n-----------------------------------------------------------------------\n LIVING ROOM BOARD:");
+                out.println(game.getLivingRoomBoard().toString());
+            }
+
+            case TILE_PACK -> {
+                out.println("\n-----------------------------------------------------------------------\n TILE PACK:");
+                out.println(game.getTilePack().toString());
+            }
+
         }
 
-        if (arg instanceof String subscriber) {
-            /* New choice available */
-            out.println( subscriber + " got subscribed");
-        }
 
-        if (arg instanceof GameView game) {
-            /* New choice available */
-            out.println("\n-----------------------------------------------------------------------\n LIVING ROOM BOARD:");
-            out.println(game.getLivingRoomBoard().toString());
-            out.println("\n-----------------------------------------------------------------------\n TILE PACK:");
-            out.println(game.getTilePack().toString());
-            out.println("\n-----------------------------------------------------------------------\n" + game.getSubscribers().get(0).getName() + "'s BOOKSHELF:");
-            out.println(game.getSubscribers().get(0).getBookshelf().toString());
-            out.println("\n-----------------------------------------------------------------------\n");
-            out.println("First common goal card: " + game.getLivingRoomBoard().getCommonGoalCards().get(0).toString());
-            out.println("\n-----------------------------------------------------------------------\n");
-            out.println("Second common goal card: " + game.getLivingRoomBoard().getCommonGoalCards().get(1).toString());
-            out.println("\n-----------------------------------------------------------------------\n");
-            out.println(game.getSubscribers().get(0).getName() + "'s personal goal card: \n" + game.getSubscribers().get(0).getPersonalGoalCard().toString());
-            out.println("\n-----------------------------------------------------------------------\n");
-            out.println(game.getSubscribers().get(0).getName() + "'s score: " + game.getCurrentPlayerScore());
-            out.println("\n-----------------------------------------------------------------------\n");
-        }
+/**
+ if (!( instanceof GameView model)){
+ System.err.println("Discarding update from " + o);
+ }
+
+ if (arg instanceof String subscriber) {
+ /* New choice available */
+
+/**
+
+
+ if (arg instanceof GameView game) {
+ /* New choice available */
+/**
+ out.println("\n-----------------------------------------------------------------------\n LIVING ROOM BOARD:");
+ out.println(game.getLivingRoomBoard().toString());
+ out.println("\n-----------------------------------------------------------------------\n TILE PACK:");
+ out.println(game.getTilePack().toString());
+ out.println("\n-----------------------------------------------------------------------\n" + game.getSubscribers().get(0).getName() + "'s BOOKSHELF:");
+ out.println(game.getSubscribers().get(0).getBookshelf().toString());
+ out.println("\n-----------------------------------------------------------------------\n");
+ out.println("First common goal card: " + game.getLivingRoomBoard().getCommonGoalCards().get(0).toString());
+ out.println("\n-----------------------------------------------------------------------\n");
+ out.println("Second common goal card: " + game.getLivingRoomBoard().getCommonGoalCards().get(1).toString());
+ out.println("\n-----------------------------------------------------------------------\n");
+ out.println(game.getSubscribers().get(0).getName() + "'s personal goal card: \n" + game.getSubscribers().get(0).getPersonalGoalCard().toString());
+ out.println("\n-----------------------------------------------------------------------\n");
+ out.println(game.getSubscribers().get(0).getName() + "'s score: " + game.getCurrentPlayerScore());
+ out.println("\n-----------------------------------------------------------------------\n");
+ }
+
+ }
+ */
     }
 }

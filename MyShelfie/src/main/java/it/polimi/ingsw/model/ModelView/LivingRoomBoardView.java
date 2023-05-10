@@ -5,13 +5,12 @@ import it.polimi.ingsw.model.CommonGoalCard.CommonGoalCard;
 import it.polimi.ingsw.model.LivingRoomBoard;
 import it.polimi.ingsw.model.Space;
 import it.polimi.ingsw.model.utils.Position;
-import it.polimi.ingsw.observer.Observable;
-import it.polimi.ingsw.observer.Observer;
+
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class LivingRoomBoardView extends Observable implements Observer{
+public class LivingRoomBoardView{
     private final int MAX_WIDTH = 9;
     private final int MAX_HEIGHT = 9;
 

@@ -2,8 +2,13 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.CommonGoalCard.CommonGoalCard;
 import it.polimi.ingsw.model.ModelView.GameView;
+import it.polimi.ingsw.model.ModelView.LivingRoomBoardView;
+import it.polimi.ingsw.model.ModelView.TilePackView;
 import it.polimi.ingsw.model.utils.NumberOfPlayers;
 import it.polimi.ingsw.model.utils.Position;
+import it.polimi.ingsw.network.EventMessage;
+import it.polimi.ingsw.network.eventMessages.*;
+import it.polimi.ingsw.observer_observable.Observable;
 
 import java.util.*;
 
@@ -15,7 +20,7 @@ import java.util.*;
  * @version 1.0
  * @since 4/30/2023
  */
-public class Game extends Observable {
+public class Game extends Observable<EventMessage> {
 
     public enum Phase {
         INIT_GAME,
@@ -29,7 +34,7 @@ public class Game extends Observable {
     private PersonalGoalCardDeck personalGoalCardDeck;
     private List<Player> subscribers = new ArrayList<>();
      private LivingRoomBoard livingRoomBoard;
-     private NumberOfPlayers numberOfPlayers;
+     private NumberOfPlayers numberOfPlayers = NumberOfPlayers.TWO_PLAYERS;
      private int cursor;
      private Phase turnPhase;
      private List<Space> drawableTiles = new ArrayList<>();
@@ -45,36 +50,41 @@ public class Game extends Observable {
      private boolean alongSideRow;
      private boolean alongSideColumn;
 
-    /**
-     * Class constructor
-     * @param numberOfPlayers the number of players on which the game setting depends
-     */
-    public Game(NumberOfPlayers numberOfPlayers){
+    public Game(){
         //initialize id with random string, This should be quiet random...
         this.id = String.valueOf(String.format("%d", System.currentTimeMillis()).hashCode());
-        this.livingRoomBoard = new LivingRoomBoard(numberOfPlayers);
+        //this.livingRoomBoard = new LivingRoomBoard(numberOfPlayers);
         this.numberOfPlayers = numberOfPlayers;
         this.personalGoalCardDeck = new PersonalGoalCardDeck();
         this.tilePack = new TilePack();
-        this.turnPhase = Phase.INIT_TURN;
+        //this.turnPhase = Phase.INIT_TURN;
         this.buffer = new ArrayList<>();
         this.alongSideRow = false;
         this.alongSideColumn = false;
+    }
+
+    public void initLivingRoomBoard(NumberOfPlayers numOfPlayers){
+        this.livingRoomBoard = new LivingRoomBoard((numOfPlayers));
+        this.numberOfPlayers = numOfPlayers;
+        LivingRoomBoardView livingRoomBoardView = new LivingRoomBoardView(this.getLivingRoomBoard());
+        setChanged();
+        notifyObservers(new BoardMessage(getCurrentPlayer().getName(), livingRoomBoardView));
     }
 
 
     public ItemTile drawTile(Position position) throws IllegalArgumentException{
         ItemTile itemTile = getLivingRoomBoard().getSpace(position).drawTile();
         setChanged();
-        notifyObservers(this);
+        notifyObservers(new TilePositionMessage(getCurrentPlayer().getName(), (position)));
         return itemTile;
     }
 
     public void insertTileInTilePack (ItemTile itemTile) {
 
         this.getTilePack().insertTile(itemTile);
+        TilePackView tilePackView = new TilePackView(this.getTilePack());
         setChanged();
-        notifyObservers(this);
+        notifyObservers(new TilePackMessage(getCurrentPlayer().getName(), (tilePackView)));
     }
 
     /**
@@ -83,10 +93,9 @@ public class Game extends Observable {
      */
     public void subscribe(Player player){
         subscribers.add(player);
-        setChanged();
-        notifyObservers(this.getSubscribers().get(0).getName());
-        setChanged();
-        notifyObservers(this);
+        /*setChanged();
+        notifyObservers(new NumOfPlayersRequestMessage(player.getName()));
+         */
     }
 
     public void setDrawableTiles(){
@@ -98,6 +107,7 @@ public class Game extends Observable {
     /**
      * This method chooses the order of play of the game and sets to PICKING_TILES the status of the first player
      */
+    //TODO: create new eventMessage type
     public void startGame(){
         Collections.shuffle(subscribers);
         Player firstPlayer = subscribers.get(0);
@@ -118,6 +128,7 @@ public class Game extends Observable {
      * This method gets the current Player
      * @return Player the player who is currently playing
      */
+    //TODO: create new event message to switch player turn
     public Player getCurrentPlayer(){
         return subscribers.get(cursor);
         // subscribers.stream().filter(x -> x.getStatus() != PlayerStatus.INACTIVE).toList().get(0);
@@ -126,6 +137,7 @@ public class Game extends Observable {
     /**
      * This method switches to the next player to have his turn
      */
+    //TODO: add message event
     public void nextPlayer(){
         this.cursor = cursor < subscribers.size()-1 ? cursor+1 : 0;
     }
@@ -144,6 +156,9 @@ public class Game extends Observable {
      */
     public void refillLivingRoomBoard(){
         getLivingRoomBoard().refill();
+        setChanged();
+        LivingRoomBoardView livingRoomBoardView = new LivingRoomBoardView(getLivingRoomBoard());
+        notifyObservers(new BoardMessage(getCurrentPlayer().getName(), livingRoomBoardView));
     }
 
     /**
@@ -207,7 +222,7 @@ public class Game extends Observable {
         Scanner scanner = new Scanner(System.in);
         System.out.print("How many players are going to play? ");
         int numberOfPlayers = scanner.nextInt();
-        Game game = new Game(Arrays.stream(NumberOfPlayers.values()).filter(x -> x.getValue() == numberOfPlayers).toList().get(0));
+        Game game = new Game();
         for (int i = 0; i<numberOfPlayers; i++){
             System.out.print("Enter your name: ");
             String name = scanner.next();
@@ -266,21 +281,25 @@ public class Game extends Observable {
 
     public TilePack getTilePack () { return tilePack;}
 
-    public void setColumnChoice (int columnChoice) {
+//TODO
+    /**public void setColumnChoice (int columnChoice) {
         this.columnChoice = columnChoice;
         setChanged();
         notifyObservers(this);
     }
+     */
 
     public int getColumnChoice() {
         return columnChoice;
     }
 
-    public void setCurrentPlayerScore (int score) {
+   //TODO
+    /**public void setCurrentPlayerScore (int score) {
         this.currentPlayerScore += score;
         setChanged();
         notifyObservers(this);
     }
+     */
     public int getCurrentPlayerScore () {return this.currentPlayerScore;}
 
     public List<Position> getBuffer(){

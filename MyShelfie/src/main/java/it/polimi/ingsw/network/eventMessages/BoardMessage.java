@@ -1,9 +1,9 @@
-package it.polimi.ingsw.network.message;
+package it.polimi.ingsw.network.eventMessages;
 
-import it.polimi.ingsw.model.LivingRoomBoard;
 import it.polimi.ingsw.model.ModelView.LivingRoomBoardView;
+import it.polimi.ingsw.network.EventMessage;
 
-public class BoardMessage extends Message{
+public class BoardMessage extends EventMessage {
 
     private LivingRoomBoardView board;
     public BoardMessage(String nickName, LivingRoomBoardView board) {

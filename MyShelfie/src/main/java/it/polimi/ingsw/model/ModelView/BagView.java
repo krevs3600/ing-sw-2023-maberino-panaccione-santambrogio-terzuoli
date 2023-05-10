@@ -2,13 +2,12 @@ package it.polimi.ingsw.model.ModelView;
 
 import it.polimi.ingsw.model.Bag;
 import it.polimi.ingsw.model.ItemTile;
-import it.polimi.ingsw.observer.Observable;
-import it.polimi.ingsw.observer.Observer;
+
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class BagView extends Observable implements Observer {
+public class BagView{
 
     private final Bag bag;
 

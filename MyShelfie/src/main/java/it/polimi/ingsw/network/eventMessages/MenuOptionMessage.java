@@ -1,6 +1,8 @@
-package it.polimi.ingsw.network.message;
+package it.polimi.ingsw.network.eventMessages;
 
-public class MenuOptionMessage extends Message {
+import it.polimi.ingsw.network.EventMessage;
+
+public class MenuOptionMessage extends EventMessage {
 
     private final int menuOption;
     public MenuOptionMessage(String nickname, int menuOption) {

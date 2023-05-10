@@ -1,9 +1,9 @@
-package it.polimi.ingsw.network.message;
+package it.polimi.ingsw.network.eventMessages;
 
 import it.polimi.ingsw.model.ModelView.PlayerView;
-import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.network.EventMessage;
 
-public class EndGameMessage extends Message {
+public class EndGameMessage extends EventMessage {
 
     private final PlayerView player;
     public EndGameMessage(PlayerView player) {

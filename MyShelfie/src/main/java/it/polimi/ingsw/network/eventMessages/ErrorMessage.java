@@ -1,6 +1,8 @@
-package it.polimi.ingsw.network.message;
+package it.polimi.ingsw.network.eventMessages;
 
-public class ErrorMessage extends Message {
+import it.polimi.ingsw.network.EventMessage;
+
+public class ErrorMessage extends EventMessage {
 
     private final String errorMessage;
 

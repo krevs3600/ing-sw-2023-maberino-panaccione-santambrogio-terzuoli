@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.observer.Observable;
 
 /**
  * <h1>Class FirstPlayerSeat</h1>

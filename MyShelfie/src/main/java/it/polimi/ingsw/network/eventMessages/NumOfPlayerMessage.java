@@ -1,6 +1,8 @@
-package it.polimi.ingsw.network.message;
+package it.polimi.ingsw.network.eventMessages;
 
-public class NumOfPlayerMessage extends Message {
+import it.polimi.ingsw.network.EventMessage;
+
+public class NumOfPlayerMessage extends EventMessage {
 
     private final int numOfPlayers;
     public NumOfPlayerMessage(String nickName, int numOfPlayers) {

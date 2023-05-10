@@ -2,7 +2,6 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.CommonGoalCard.*;
 import it.polimi.ingsw.model.utils.Drawable;
-import it.polimi.ingsw.observer.Observable;
 
 import java.util.ArrayList;
 import java.util.List;

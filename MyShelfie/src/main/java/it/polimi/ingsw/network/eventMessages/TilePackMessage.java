@@ -1,8 +1,9 @@
-package it.polimi.ingsw.network.message;
+package it.polimi.ingsw.network.eventMessages;
 
 import it.polimi.ingsw.model.ModelView.TilePackView;
+import it.polimi.ingsw.network.EventMessage;
 
-public class TilePackMessage extends Message{
+public class TilePackMessage extends EventMessage {
 
     private TilePackView tilePackView;
     public TilePackMessage(String nickName, TilePackView tilePackView) {

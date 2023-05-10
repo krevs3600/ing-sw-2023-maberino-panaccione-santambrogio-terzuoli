@@ -1,6 +1,8 @@
-package it.polimi.ingsw.network.message;
+package it.polimi.ingsw.network.eventMessages;
 
-public class SwitchPhaseMessage extends Message{
+import it.polimi.ingsw.network.EventMessage;
+
+public class SwitchPhaseMessage extends EventMessage {
     public SwitchPhaseMessage(String nickName) {
         super(nickName, MessageType.SWITCH_PHASE);
     }

@@ -4,12 +4,10 @@ import it.polimi.ingsw.model.ItemTile;
 import it.polimi.ingsw.model.Space;
 import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.model.utils.SpaceType;
-import it.polimi.ingsw.observer.Observable;
-import it.polimi.ingsw.observer.Observer;
 
 import java.io.Serializable;
 
-public class SpaceView extends Observable implements Observer {
+public class SpaceView{
 
     private final Space space;
 

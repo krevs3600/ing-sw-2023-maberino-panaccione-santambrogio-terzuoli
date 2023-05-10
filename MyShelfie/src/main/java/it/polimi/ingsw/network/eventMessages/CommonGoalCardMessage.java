@@ -1,8 +1,9 @@
-package it.polimi.ingsw.network.message;
+package it.polimi.ingsw.network.eventMessages;
 
 import it.polimi.ingsw.model.CommonGoalCard.CommonGoalCard;
+import it.polimi.ingsw.network.EventMessage;
 
-public class CommonGoalCardMessage extends Message {
+public class CommonGoalCardMessage extends EventMessage {
 
     private final CommonGoalCard commonGoalCard;
 

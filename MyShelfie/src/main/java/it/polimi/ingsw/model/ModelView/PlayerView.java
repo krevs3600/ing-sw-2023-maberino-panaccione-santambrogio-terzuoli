@@ -1,12 +1,11 @@
 package it.polimi.ingsw.model.ModelView;
 
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.observer.Observable;
-import it.polimi.ingsw.observer.Observer;
+
 
 import java.util.List;
 
-public class PlayerView extends Observable implements Observer {
+public class PlayerView {
 
     private final Player player;
 

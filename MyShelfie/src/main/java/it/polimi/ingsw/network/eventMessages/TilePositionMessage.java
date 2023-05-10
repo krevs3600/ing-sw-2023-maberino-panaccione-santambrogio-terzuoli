@@ -1,7 +1,8 @@
-package it.polimi.ingsw.network.message;
+package it.polimi.ingsw.network.eventMessages;
 import it.polimi.ingsw.model.utils.Position;
+import it.polimi.ingsw.network.EventMessage;
 
-public class TilePositionMessage extends Message {
+public class TilePositionMessage extends EventMessage {
 
     private final Position position;
     public TilePositionMessage(String nickName, Position position) {

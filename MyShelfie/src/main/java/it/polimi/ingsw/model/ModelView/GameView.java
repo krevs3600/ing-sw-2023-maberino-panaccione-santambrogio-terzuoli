@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-public class GameView extends Observable implements Observer {
+public class GameView {
     private final Game game;
 
     public GameView (Game game) {
@@ -45,8 +45,8 @@ public class GameView extends Observable implements Observer {
 
     public int getCurrentPlayerScore () { return game.getCurrentPlayerScore();}
 
-    @Override
-    public void update(Observable o, Object arg) {
+
+    /**public void update(Observable o, Object arg) {
         if (!(o instanceof Game model)){
             System.err.println("Discarding update from " + o);
         }
@@ -62,4 +62,5 @@ public class GameView extends Observable implements Observer {
         }
 
     }
+     */
 }

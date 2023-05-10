@@ -1,6 +1,8 @@
-package it.polimi.ingsw.network.message;
+package it.polimi.ingsw.network.eventMessages;
 
-public class BookshelfColumnMessage extends Message{
+import it.polimi.ingsw.network.EventMessage;
+
+public class BookshelfColumnMessage extends EventMessage {
     private int column;
     public BookshelfColumnMessage(String nickName, int column) {
         super(nickName, MessageType.BOOKSHELF_COLUMN);

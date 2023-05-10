@@ -6,6 +6,12 @@ import it.polimi.ingsw.model.ModelView.GameView;
 import it.polimi.ingsw.model.utils.NumberOfPlayers;
 import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.model.utils.TileType;
+import it.polimi.ingsw.network.Client;
+import it.polimi.ingsw.network.EventMessage;
+import it.polimi.ingsw.network.eventMessages.NumOfPlayerMessage;
+import it.polimi.ingsw.network.eventMessages.TilePositionMessage;
+import it.polimi.ingsw.observer_observable.Observable;
+import it.polimi.ingsw.observer_observable.Observer;
 import it.polimi.ingsw.view.cli.TextualUI;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -16,47 +22,124 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.*;
 
-public class GameController implements Observer {
-    public enum Event {
-        CREATE_GAME,
-        JOIN_GAME;
-    }
-    private final TextualUI view;
-    private Game game;
+public class GameController {
+    private Game game = null;
 
-    public GameController(TextualUI view){
-        this.view = view;
-    }
+    private Client client;
 
-    public void addNewGame(int numOfPlayers) {
-        Game game = new Game(Arrays.stream(NumberOfPlayers.values()).filter(x -> x.getValue() == numOfPlayers).toList().get(0));
+    public GameController(Game game, Client client){
+        this.game = game;
+        this.client = client;
     }
 
 
 
-
-    @Override
-    public void update(Observable o, Object arg) throws IllegalArgumentException{
-        if (o != this.view) {
-            System.err.println("Discarding event from " + o);
+    public void update(Client client, EventMessage eventMessage) throws IllegalArgumentException {
+        if (client != this.client) {
+            System.err.println("Discarding event from " + client);
+            return;
         }
+
         /**
-        Event event = (Event)arg;
-        switch (event) {
-            case CREATE_GAME -> {
-                Game game = new Game(NumberOfPlayers.TWO_PLAYERS);
-                currentGames.put(game.getId(), game);
-                game.addObserver(this.view);
-                game.subscribe(new Player("iFra&Carlo", game.getPersonalGoalCardDeck()));
-            }
-        }
+         Event event = (Event)arg;
+         switch (event) {
+         case CREATE_GAME -> {
+         Game game = new Game(NumberOfPlayers.TWO_PLAYERS);
+         currentGames.put(game.getId(), game);
+         game.addObserver(this.view);
+         game.subscribe(new Player("iFra&Carlo", game.getPersonalGoalCardDeck()));
+         }
+         }
          */
 
-        if (arg instanceof Event event) {
+
+        switch (eventMessage.getType()) {
+            /**case NICKNAME -> {
+                if (game.getSubscribers().size() == 0) {
+                    game = new Game();
+                }
+                Player player = new Player(eventMessage.getNickName(), game.getPersonalGoalCardDeck());
+                game.subscribe(player);
+
+            }
+             */
+
+            case NUM_OF_PLAYERS -> {
+                NumOfPlayerMessage numOfPlayerMessage = (NumOfPlayerMessage) eventMessage;
+                Player player = new Player(eventMessage.getNickName(), game.getPersonalGoalCardDeck());
+                game.subscribe(player);
+                game.initLivingRoomBoard(Arrays.stream(NumberOfPlayers.values()).filter(x -> x.getValue() == numOfPlayerMessage.getNumOfPlayers()).toList().get(0));
+            }
+
+            case TILE_POSITION -> {
+                TilePositionMessage tilePositionMessage = (TilePositionMessage) eventMessage;
+
+                if (game.getDrawableTiles().contains(game.getLivingRoomBoard().getSpace(tilePositionMessage.getPosition()))) {
+                    if (game.getBuffer().size() == 0) {
+                        ItemTile itemTile = game.drawTile(tilePositionMessage.getPosition());
+                        game.getBuffer().add(tilePositionMessage.getPosition());
+                        game.insertTileInTilePack(itemTile);
+                    } else {
+                        throw new IllegalAccessError("Space forbidden or empty");
+                    }
+
+                    if (game.getBuffer().size() == 1) {
+
+                        boolean fairPosition = false;
+                        for (Position pos : game.getBuffer()) {
+                            if (pos.isAdjacent(tilePositionMessage.getPosition())) {
+                                fairPosition = true;
+                                break;
+                            }
+                        }
+                        if (fairPosition) {
+                            ItemTile itemTile = game.drawTile(tilePositionMessage.getPosition());
+                            game.getBuffer().add(tilePositionMessage.getPosition());
+                            game.insertTileInTilePack(itemTile);
+
+                            if (tilePositionMessage.getPosition().getColumn() == game.getBuffer().get(0).getColumn()) {
+                                game.setAlongSideRow(true);
+                            } else game.setAlongSideColumn(true);
+                        }
+                    }
+                    if (game.getBuffer().size() == 2) {
+                        boolean fairPosition = false;
+                        for (Position pos : game.getBuffer()) {
+                            if (pos.isAdjacent(tilePositionMessage.getPosition())) {
+                                fairPosition = true;
+                                break;
+                            }
+                        }
+                        if (fairPosition) {
+
+                            if (game.isAlongSideRow()) {
+                                if (tilePositionMessage.getPosition().getColumn() != game.getBuffer().get(0).getColumn()) {
+                                    throw new IllegalAccessError("Space forbidden or empty");
+                                }
+                            } else if (game.isAlongSideColumn()) {
+                                if (tilePositionMessage.getPosition().getRow() != game.getBuffer().get(0).getRow()) {
+                                    throw new IllegalAccessError("Space forbidden or empty");
+                                }
+                            }
+                        }
+                        ItemTile itemTile = game.drawTile(tilePositionMessage.getPosition());
+                        game.insertTileInTilePack(itemTile);
+                    } else {
+                        throw new IllegalAccessError("Space forbidden or empty");
+                    }
+                }
+
+
+            }
+        }
+    }
+
+/**
+        if (eventMessage.getType()== instanceof EventMessage event) {
             if (event.equals(Event.CREATE_GAME)) {
                 this.game = new Game(NumberOfPlayers.TWO_PLAYERS);
                 GameView gameView = new GameView(this.game);
-                gameView.addObserver(this.view);
+                gameView.addObserver(this.view, );
                 this.game.addObserver(gameView);
             }
         } else if (arg instanceof String name) {
@@ -146,12 +229,23 @@ public class GameController implements Observer {
             }
         }
     }
+
+ //@TODO iterare sui giocatori, non get(0)
+ public void addNewGame(int numOfPlayers) {
+ Game game = new Game(Arrays.stream(NumberOfPlayers.values()).filter(x -> x.getValue() == numOfPlayers).toList().get(0));
+ }
+
+
+
+
     /**
      * This method is used to keep track of score changes of a player during the game.
      * In particular, the score is updated every time the player receives a scoring token
      * @return int It returns the updated score of the player
      */
+
     //TODO: change getSubscribers().get(0) into getCurrentPlayer()
+    /**
     private void computeScoreMidGame(){
         List<CommonGoalCard> commonGoalCards = game.getLivingRoomBoard().getCommonGoalCards();
         for(CommonGoalCard card : commonGoalCards) {
@@ -176,7 +270,7 @@ public class GameController implements Observer {
      * This method is used to compute the final score of the player at the end of the game
      * @return int It returns the final score of the player
      */
-    public void computeScoreEndGame() {
+    /**public void computeScoreEndGame() {
         //Computation of points from personal goal card
         ItemTile[][] bookshelf = this.game.getSubscribers().get(0).getBookshelf().getGrid();
         int score;
@@ -225,5 +319,7 @@ public class GameController implements Observer {
         }
         game.setCurrentPlayerScore(score);
     }
+     */
+
 
 }
