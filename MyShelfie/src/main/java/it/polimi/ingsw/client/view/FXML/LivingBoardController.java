@@ -37,6 +37,33 @@ public class LivingBoardController {
     @FXML
     GridPane bookshelf;
 
+    @FXML
+    ImageView First_2;
+
+    @FXML
+    ImageView First_4;
+
+    @FXML
+    ImageView First_6;
+
+    @FXML
+    ImageView First_8;
+
+    @FXML
+    ImageView Second_2;
+    @FXML
+    ImageView Second_4;
+
+    @FXML
+    ImageView Second_6;
+
+    @FXML
+    ImageView Second_8;
+
+
+
+
+
     private boolean columnSelected = false;
     private int column;
 
@@ -135,6 +162,9 @@ public class LivingBoardController {
     }
 
 
+    public void scoringTokenClicked(MouseEvent event){
+        First_8.setVisible(false);
+    }
 
 
 
