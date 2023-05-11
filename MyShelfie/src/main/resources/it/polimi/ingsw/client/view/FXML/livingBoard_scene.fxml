@@ -51,7 +51,6 @@
                            <children>
                               <StackPane prefHeight="56.0" prefWidth="68.0" rotate="10.8" GridPane.columnIndex="8" GridPane.rowIndex="7" />
                            </children>
-
                                 </GridPane>
                             </children>
                         </AnchorPane>
