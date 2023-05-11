@@ -25,7 +25,7 @@ public class JavaFxMain extends Application {
 
         FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("livingboard_scene.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
-        stage.setTitle("Hello!");
+        stage.setTitle("myShelfie!");
         stage.setScene(scene);
         stage.show();
         window=stage;
