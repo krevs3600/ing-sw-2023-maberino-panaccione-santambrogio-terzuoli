@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="908.0" prefWidth="1510.0" styleClass="rootPane" stylesheets="@../css/livingBoard_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.FXML.LivingBoardController">
+   <children>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <ImageView fitHeight="520.0" fitWidth="538.0" layoutX="35.0" layoutY="161.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../boards/bookshelf.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="111.0" fitWidth="195.0" layoutX="663.0" layoutY="159.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../common%20goal%20cards/6.jpg" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="112.0" fitWidth="167.0" layoutX="672.0" layoutY="313.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../common%20goal%20cards/8.jpg" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="59.0" fitWidth="50.0" layoutX="574.0" layoutY="179.0">
+               <image>
+                  <Image url="@../misc/checkmark.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="59.0" fitWidth="50.0" layoutX="574.0" layoutY="337.0">
+               <image>
+                  <Image url="@../misc/checkmark.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="80.0" fitWidth="65.0" layoutX="900.0" layoutY="168.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../scoring%20tokens/scoring_4.jpg" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="74.0" fitWidth="65.0" layoutX="998.0" layoutY="168.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../scoring%20tokens/scoring_6.jpg" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="128.0" fitWidth="136.0" layoutX="1219.0" layoutY="176.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fitHeight="74.0" fitWidth="65.0" layoutX="1096.0" layoutY="167.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../scoring%20tokens/scoring_8.jpg" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="74.0" fitWidth="65.0" layoutX="1197.0" layoutY="165.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../scoring%20tokens/scoring_2.jpg" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="74.0" fitWidth="65.0" layoutX="901.0" layoutY="328.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../scoring%20tokens/scoring_4.jpg" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="74.0" fitWidth="65.0" layoutX="1000.0" layoutY="325.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../scoring%20tokens/scoring_6.jpg" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="74.0" fitWidth="65.0" layoutX="1097.0" layoutY="325.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../scoring%20tokens/scoring_8.jpg" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="74.0" fitWidth="65.0" layoutX="1194.0" layoutY="322.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../scoring%20tokens/scoring_2.jpg" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="106.0" fitWidth="98.0" layoutX="742.0" layoutY="457.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../scoring%20tokens/end%20game.jpg" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="59.0" fitWidth="50.0" layoutX="574.0" layoutY="475.0">
+               <image>
+                  <Image url="@../misc/checkmark.png" />
+               </image>
+            </ImageView>
+            <Button layoutX="549.0" layoutY="15.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="456.0" text="Compute score" textFill="#fcfcfc">
+               <font>
+                  <Font name="Libian SC Regular" size="36.0" />
+               </font>
+            </Button>
+            <ImageView fitHeight="113.0" fitWidth="91.0" layoutX="751.0" layoutY="592.0">
+               <image>
+                  <Image url="@../personal%20goal%20cards/Personal_Goals6.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="59.0" fitWidth="50.0" layoutX="574.0" layoutY="606.0">
+               <image>
+                  <Image url="@../misc/checkmark.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="1312.0" layoutY="322.0" text="=X points " textFill="#fffdfd">
+               <font>
+                  <Font name="Libian SC Regular" size="36.0" />
+               </font>
+            </Label>
+            <Label layoutX="1304.0" layoutY="172.0" text="= X points" textFill="#f8f5f5">
+               <font>
+                  <Font name="Libian SC Regular" size="36.0" />
+               </font>
+            </Label>
+            <Label layoutX="918.0" layoutY="497.0" textFill="WHITE">
+               <font>
+                  <Font size="36.0" />
+               </font>
+            </Label>
+            <Label layoutX="1314.0" layoutY="606.0" prefHeight="33.0" prefWidth="203.0" text="=X points " textFill="WHITE">
+               <font>
+                  <Font name="Libian SC Regular" size="36.0" />
+               </font>
+            </Label>
+            <Label layoutX="1321.0" layoutY="476.0" text="=1 points " textFill="#fffdfd">
+               <font>
+                  <Font name="Libian SC Regular" size="36.0" />
+               </font>
+            </Label>
+            <ImageView fitHeight="88.0" fitWidth="151.0" layoutX="698.0" layoutY="739.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../../../../../../../../../../../var/folders/h5/wdlvmgrd6154_x67ppf4w33h0000gn/T/TemporaryItems/NSIRD_screencaptureui_a3FCb5/Screenshot%202023-05-11%20alle%2023.34.15.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="59.0" fitWidth="50.0" layoutX="574.0" layoutY="731.0">
+               <image>
+                  <Image url="@../misc/checkmark.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="1358.0" layoutY="752.0">
+               <font>
+                  <Font size="36.0" />
+               </font>
+            </Label>
+            <Label layoutX="1306.0" layoutY="722.0" prefHeight="33.0" prefWidth="203.0" text="=X points " textFill="WHITE">
+               <font>
+                  <Font name="Libian SC Regular" size="36.0" />
+               </font>
+            </Label>
+            <Line endX="687.0" endY="1.220703125E-4" layoutX="831.0" layoutY="818.0" startX="-258.44573974609375" startY="1.220703125E-4" stroke="#fff9f9" />
+            <Label layoutX="1317.0" layoutY="831.0" prefHeight="33.0" prefWidth="203.0" text="=X points " textFill="WHITE">
+               <font>
+                  <Font name="Libian SC Regular" size="36.0" />
+               </font>
+            </Label>
+            <Label layoutX="775.0" layoutY="832.0" prefHeight="33.0" prefWidth="203.0" text="Total" textFill="WHITE">
+               <font>
+                  <Font name="Libian SC Regular" size="36.0" />
+               </font>
+            </Label>
+            <StackPane layoutX="499.0" layoutY="140.0" prefHeight="150.0" prefWidth="193.0">
+               <children>
+                  <ImageView fitHeight="69.0" fitWidth="80.0">
+                     <image>
+                        <Image url="@../misc/X-Letter-Background-PNG.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </StackPane>
+            <StackPane layoutX="499.0" layoutY="291.0" prefHeight="150.0" prefWidth="200.0">
+               <children>
+                  <ImageView fitHeight="69.0" fitWidth="80.0">
+                     <image>
+                        <Image url="@../misc/X-Letter-Background-PNG.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </StackPane>
+            <StackPane layoutX="496.0" layoutY="431.0" prefHeight="150.0" prefWidth="200.0">
+               <children>
+                  <ImageView fitHeight="69.0" fitWidth="80.0">
+                     <image>
+                        <Image url="@../misc/X-Letter-Background-PNG.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </StackPane>
+            <StackPane layoutX="499.0" layoutY="574.0" prefHeight="150.0" prefWidth="200.0">
+               <children>
+                  <ImageView fitHeight="69.0" fitWidth="80.0">
+                     <image>
+                        <Image url="@../misc/X-Letter-Background-PNG.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </StackPane>
+            <StackPane layoutX="499.0" layoutY="686.0" prefHeight="150.0" prefWidth="200.0">
+               <children>
+                  <ImageView fitHeight="69.0" fitWidth="80.0">
+                     <image>
+                        <Image url="@../misc/X-Letter-Background-PNG.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </StackPane>
+            <Button layoutX="109.0" layoutY="725.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="387.0" text="See other players scores" textFill="#fcfcfc">
+               <font>
+                  <Font name="Libian SC Regular" size="36.0" />
+               </font>
+            </Button>
+         </children>
+      </AnchorPane>
+   </children>
+</StackPane>
