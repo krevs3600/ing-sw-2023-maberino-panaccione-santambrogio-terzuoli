@@ -15,5 +15,7 @@ public enum MessageType {
     PERSONAL_GOAL_CARD,
     COMMON_GOAL_CARD,
     SCORE,
-    END_GAME;
+    END_GAME,
+    INSERTION_REQUEST,
+    ITEM_TILE_INDEX;
 }

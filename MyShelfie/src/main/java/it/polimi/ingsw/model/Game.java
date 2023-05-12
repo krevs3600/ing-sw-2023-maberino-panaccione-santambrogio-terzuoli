@@ -284,11 +284,12 @@ public class Game extends Observable<EventMessage> {
     public TilePack getTilePack () { return tilePack;}
 
     //TODO: change getSubscribers into getCurrentPlayer
-    public void setColumnChoice (int columnChoice) {
-        this.columnChoice = columnChoice;
+    public void setColumnChoice (int columnChoice) throws IndexOutOfBoundsException {
+        if (columnChoice >= 0 && columnChoice < getSubscribers().get(0).getBookshelf().getMaxWidth()) this.columnChoice = columnChoice;
+        else throw new IndexOutOfBoundsException("invalid column, please choose another one;");
         setChanged();
-        BookshelfView bookshelfView = new BookshelfView(getSubscribers().get(0).getBookshelf());
-        notifyObservers(new BookshelfMessage(getCurrentPlayer().getName(), bookshelfView));
+        // BookshelfView bookshelfView = new BookshelfView(getSubscribers().get(0).getBookshelf());
+        notifyObservers(new InsertRequestMessage(getSubscribers().get(0).getName(), columnChoice));
     }
 
     public int getColumnChoice() {

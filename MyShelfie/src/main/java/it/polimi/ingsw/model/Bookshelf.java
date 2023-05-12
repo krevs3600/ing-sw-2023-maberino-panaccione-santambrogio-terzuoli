@@ -108,6 +108,22 @@ public class Bookshelf {
         }
     }
 
+    public void insertTile(TilePack tilePack, int column, int index) throws IndexOutOfBoundsException {
+        if (column >= 0 && column < MAX_WIDTH) {
+            int insertableTiles = getNumberInsertableTilesColumn(column);
+            if (insertableTiles > 0) {
+                    grid[insertableTiles - 1][column] = tilePack.getTiles().get(index);
+                    tilePack.getTiles().remove(index);
+                    this.NumberOfTiles++;
+            } else {
+                throw new IndexOutOfBoundsException("Not enough space in this column, please select another column or remove some tiles from the tile pack");
+            }
+        }
+        else {
+            throw new IndexOutOfBoundsException("Invalid column, please select a column ranging from 0 to " + (MAX_WIDTH-1));
+        }
+    }
+
     /**
      * This method is used to know if and how many groups of adjacent item tiles of the same given type are there in the bookshelf
      * @param type the type of adjacent item tiles

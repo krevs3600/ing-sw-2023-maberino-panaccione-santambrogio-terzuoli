@@ -3,10 +3,7 @@ package it.polimi.ingsw.view.cli;
 import it.polimi.ingsw.model.ModelView.GameView;
 import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.network.EventMessage;
-import it.polimi.ingsw.network.eventMessages.BookshelfColumnMessage;
-import it.polimi.ingsw.network.eventMessages.NicknameMessage;
-import it.polimi.ingsw.network.eventMessages.NumOfPlayerMessage;
-import it.polimi.ingsw.network.eventMessages.TilePositionMessage;
+import it.polimi.ingsw.network.eventMessages.*;
 import it.polimi.ingsw.observer_observable.Observable;
 
 import java.io.PrintStream;
@@ -30,8 +27,11 @@ public class TextualUI extends Observable implements Runnable {
         //setChanged();
         //notifyObservers(new NicknameMessage(nickName));
 
-        out.println("Please insert the number of players: ");
-        int numOfPlayers = in.nextInt();
+        int numOfPlayers = 0;
+        while (numOfPlayers <= 0 || numOfPlayers > 4) {
+            out.println("Please insert the number of players: ");
+            numOfPlayers = in.nextInt();
+        }
         setChanged();
         notifyObservers(new NumOfPlayerMessage(nickName, numOfPlayers));
 
@@ -138,7 +138,8 @@ public class TextualUI extends Observable implements Runnable {
                 out.println(game.getSubscribers().get(0).getName() + "'s score: " + game.getCurrentPlayerScore());
                 out.println("\n-----------------------------------------------------------------------\n");
                 out.println("Please enter a position: ");
-                for (int i = 0; i < 3; i++) {
+                boolean stopPickingTiles = false;
+                for (int i = 0; i < 3 && !stopPickingTiles; i++) {
                     out.print("r: ");
                     int r = in.nextInt();
                     System.out.print("c: ");
@@ -151,19 +152,29 @@ public class TextualUI extends Observable implements Runnable {
                         i--;
 
                     }
-                    System.out.println("If you whish to stop picking tiles type 'stop', otherwise just press enter");
-                    if (in.next().equals("stop")) {
-                        break;
-                    }
+                    String answer = "";
+                    do {
+                        System.out.println("\nIf you whish to stop picking tiles type 'stop', otherwise type 'continue'\n");
+                        answer = in.next();
+                        if (answer.equals("stop")) {
+                            stopPickingTiles = true;
+                        }
+                    } while (!answer.equals("stop")  && !answer.equals("continue"));
                 }
                 out.println("\n-----------------------------------------------------------------------\n" + game.getSubscribers().get(0).getName() + "'s BOOKSHELF:");
                 out.println(game.getSubscribers().get(0).getBookshelf().toString());
                 out.println("\n-----------------------------------------------------------------------\n");
-                out.print("In which column you want to insert your item tiles? ");
+                out.print("In which column you want to insert your item tiles?\n");
                 int column = in.nextInt();
                 setChanged();
                 notifyObservers(new BookshelfColumnMessage(eventMessage.getNickName(), column));
 
+                while (game.getTilePack().getTiles().size()>0) {
+                    out.print("Choose an item tile to insert from the tilepack into the selected column?\n");
+                    int itemTileIndex = in.nextInt();
+                    setChanged();
+                    notifyObservers(new ItemTileIndexMessage(eventMessage.getNickName(), itemTileIndex));
+                }
             }
 
             case TILE_POSITION -> {
@@ -179,6 +190,13 @@ public class TextualUI extends Observable implements Runnable {
             case BOOKSHELF -> {
                 out.println("\n-----------------------------------------------------------------------\n" + game.getSubscribers().get(0).getName() + "'s BOOKSHELF:");
                 out.println(game.getSubscribers().get(0).getBookshelf().toString());
+            }
+
+            case INSERTION_REQUEST -> {
+                out.println("\n-----------------------------------------------------------------------\n" + game.getSubscribers().get(0).getName() + "'s BOOKSHELF:");
+                out.println(game.getSubscribers().get(0).getBookshelf().toString());
+                out.println("\n-----------------------------------------------------------------------\n TILE PACK:");
+                out.println(game.getTilePack().toString());
             }
 
         }

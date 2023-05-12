@@ -73,6 +73,16 @@ public class Player {
 
     }
 
+    public void insertTile(TilePack tilePack, int column, int index) throws IndexOutOfBoundsException{
+        try{
+            bookshelf.insertTile(tilePack, column, index);
+        }
+        catch (IndexOutOfBoundsException e) {
+            System.out.println("Invalid column, please select another one valid");
+        }
+
+    }
+
     /**
      * This method is used to add a scoring token to the player's collection when he wins it
      */

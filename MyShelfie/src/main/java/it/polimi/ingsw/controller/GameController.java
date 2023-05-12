@@ -9,6 +9,7 @@ import it.polimi.ingsw.model.utils.TileType;
 import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.EventMessage;
 import it.polimi.ingsw.network.eventMessages.BookshelfColumnMessage;
+import it.polimi.ingsw.network.eventMessages.ItemTileIndexMessage;
 import it.polimi.ingsw.network.eventMessages.NumOfPlayerMessage;
 import it.polimi.ingsw.network.eventMessages.TilePositionMessage;
 import it.polimi.ingsw.observer_observable.Observable;
@@ -135,8 +136,10 @@ public class GameController {
 
             case BOOKSHELF_COLUMN -> {
                 BookshelfColumnMessage bookshelfColumnMessage = (BookshelfColumnMessage) eventMessage;
-                game.getSubscribers().get(0).insertTile(game.getTilePack(), bookshelfColumnMessage.getColumn());
-                game.setColumnChoice(bookshelfColumnMessage.getColumn());
+                // game.getSubscribers().get(0).insertTile(game.getTilePack(), bookshelfColumnMessage.getColumn());
+                try {
+                    game.setColumnChoice(bookshelfColumnMessage.getColumn());
+                } catch (IndexOutOfBoundsException e) {}
                 /**if (game.getLivingRoomBoard().getAllFree().size()==game.getLivingRoomBoard().getDrawableTiles().size()) game.refillLivingRoomBoard();
                 if (!game.getSubscribers().get(0).getBookshelf().isFull()) {
                     game.setTurnPhase(Game.Phase.INIT_TURN);
@@ -147,6 +150,14 @@ public class GameController {
                     computeScoreEndGame();
                 }
                  */
+            }
+
+            case ITEM_TILE_INDEX -> {
+                ItemTileIndexMessage itemTileIndexMessage = (ItemTileIndexMessage) eventMessage;
+                game.getSubscribers().get(0).insertTile(game.getTilePack(), game.getColumnChoice(), itemTileIndexMessage.getIndex());
+                try {
+                    game.setColumnChoice(game.getColumnChoice());
+                } catch (IndexOutOfBoundsException e) {}
             }
         }
 
