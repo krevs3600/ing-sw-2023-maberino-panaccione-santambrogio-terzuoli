@@ -3,6 +3,7 @@ package it.polimi.ingsw.network.eventMessages;
 import it.polimi.ingsw.network.EventMessage;
 
 public class ScoreMessage extends EventMessage {
+    private final long serialVersionUID = 1L;
     private int score;
     public ScoreMessage(String nickName, int score) {
         super(nickName, MessageType.SCORE);

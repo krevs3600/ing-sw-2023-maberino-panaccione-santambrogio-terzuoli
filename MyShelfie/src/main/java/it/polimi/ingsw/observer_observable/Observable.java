@@ -57,7 +57,8 @@ public class Observable<EventMessage> {
 
 
         for (Observer observer : observers) {
-            observer.update(this, message);
+
+        observer.update(this, message);
         }
     }
 

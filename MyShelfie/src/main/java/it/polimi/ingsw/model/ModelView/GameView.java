@@ -4,46 +4,67 @@ import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.utils.NumberOfPlayers;
 import javafx.scene.effect.Light;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-public class GameView {
-    private final Game game;
+public class GameView implements Serializable {
+    private String id;
+    private PersonalGoalCardDeckView personalGoalCardDeckView;
+    private List<PlayerView> subscribers;
+    private LivingRoomBoardView livingRoomBoardView;
+    private NumberOfPlayers numberOfPlayers;
+    private int cursor;
+    private TilePackView tilePackView;
+    private int currentPlayerScore;
+
+    private static final long serialVersionUID = 1L;
 
     public GameView (Game game) {
-        this.game = game;
+
+        this.cursor = game.getCursor();
+        this.id = game.getId();
+        this.numberOfPlayers = game.getNumberOfPlayers();
+        subscribers = new ArrayList<>();
+        for(Player player : game.getSubscribers()){
+            this.subscribers.add(new PlayerView(player));
+        }
+        this.tilePackView = new TilePackView(game.getTilePack());
+        this.currentPlayerScore = game.getCurrentPlayerScore();
+        this.livingRoomBoardView = new LivingRoomBoardView(game.getLivingRoomBoard());
+        this.personalGoalCardDeckView = new PersonalGoalCardDeckView(game.getPersonalGoalCardDeck());
     }
 
     public String getId () {
-        return game.getId();
+        return this.id;
     }
 
-    public PersonalGoalCardDeck getPersonalGoalCardDeck () {
-        return game.getPersonalGoalCardDeck();
+    public PersonalGoalCardDeckView getPersonalGoalCardDeck () {
+        return this.personalGoalCardDeckView;
     }
 
     public List<PlayerView> getSubscribers () {
 
-        return new ArrayList<>(game.getSubscribers().stream().map(PlayerView::new).toList());
+        return this.subscribers;
     }
 
     public LivingRoomBoardView getLivingRoomBoard () {
-        return new LivingRoomBoardView(game.getLivingRoomBoard());
+        return this.livingRoomBoardView;
     }
 
     public NumberOfPlayers getNumberOfPlayers () {
-        return game.getNumberOfPlayers();
+        return this.numberOfPlayers;
     }
 
     public int getCursor () {
-        return game.getCursor();
+        return this.cursor;
     }
 
-    public TilePackView getTilePack () { return new TilePackView(game.getTilePack());}
+    public TilePackView getTilePack () { return this.tilePackView;}
 
-    public int getCurrentPlayerScore () { return game.getCurrentPlayerScore();}
+    public int getCurrentPlayerScore () { return this.currentPlayerScore;}
 
 
     /**public void update(Observable o, Object arg) {

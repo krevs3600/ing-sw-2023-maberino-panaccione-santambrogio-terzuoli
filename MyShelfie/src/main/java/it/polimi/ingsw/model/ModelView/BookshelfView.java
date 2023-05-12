@@ -3,25 +3,32 @@ package it.polimi.ingsw.model.ModelView;
 import it.polimi.ingsw.model.Bookshelf;
 import it.polimi.ingsw.model.ItemTile;
 
+import java.io.Serializable;
 
-public class BookshelfView{
 
-    private final Bookshelf bookshelf;
+public class BookshelfView implements Serializable {
+
+    private final ItemTile[][] bookshelf;
+    private final int MAX_WIDTH;
+    private final int MAX_HEIGHT;
+    private static final long  serialVersionUID = 1L;
 
     public BookshelfView (Bookshelf bookshelf) {
-        this.bookshelf = bookshelf;
+        this.bookshelf = bookshelf.getGrid();
+        this.MAX_WIDTH= bookshelf.getMaxWidth();
+        this.MAX_HEIGHT = bookshelf.getMaxHeight();
     }
 
-    public int getNumberOfTiles () {
-        return bookshelf.getNumberOfTiles();
-    }
+    //public int getNumberOfTiles () {
+    //    return bookshelf.getNumberOfTiles();
+    //}
 
     public ItemTile[][] getGrid () {
-        return bookshelf.getGrid();
+        return bookshelf;
     }
 
-    public int getMaxWidth () { return bookshelf.getMaxWidth();}
-    public int getMaxHeight () { return bookshelf.getMaxHeight();}
+    public int getMaxWidth () { return this.MAX_WIDTH;}
+    public int getMaxHeight () { return this.MAX_HEIGHT;}
 
     @Override
     public String toString(){

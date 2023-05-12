@@ -3,7 +3,7 @@ package it.polimi.ingsw.network.eventMessages;
 import it.polimi.ingsw.network.EventMessage;
 
 public class InsertRequestMessage extends EventMessage {
-
+    private final long serialVersionUID = 1L;
     private int column;
 
     public InsertRequestMessage (String nickName, int column) {

@@ -4,18 +4,20 @@ import it.polimi.ingsw.model.ItemTile;
 import it.polimi.ingsw.model.TilePack;
 
 
+import java.io.Serializable;
 import java.util.List;
 
-public class TilePackView{
+public class TilePackView implements Serializable {
 
-    private final TilePack tilePack;
+    private final List<ItemTile> tilePack;
+    private static final long serialVersionUID = 1L;
 
     public TilePackView (TilePack tilePack) {
-        this.tilePack = tilePack;
+        this.tilePack = tilePack.getTiles();
     }
 
     public List<ItemTile> getTiles () {
-        return tilePack.getTiles();
+        return this.tilePack;
     }
 
     @Override

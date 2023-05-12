@@ -45,7 +45,8 @@ public class LivingRoomBoard {
         ArrayList<ArrayList<Long>> activeList;
         CommonGoalCardDeck commonGoalCardDeck = new CommonGoalCardDeck();
 
-        String path = "src/main/java/it/polimi/ingsw/model/configs/LivingRoomBoard.json";
+        //String path = "src/main/java/it/polimi/ingsw/model/configs/LivingRoomBoard.json";
+        String path = "C:\\Users\\franc\\IdeaProjects\\ing-sw-2023-maberino-panaccione-santambrogio-terzuoli\\MyShelfie\\src\\main\\java\\it\\polimi\\ingsw\\model\\configs\\LivingRoomBoard.json";
         try {
             Reader file = new FileReader(path);
             JSONParser parser = new JSONParser();
@@ -190,6 +191,14 @@ public class LivingRoomBoard {
 
     public Space[][] getSpaces () {
         return spaces;
+    }
+
+    public int getMaxWidth(){
+        return MAX_WIDTH;
+    }
+
+    public int getMaxHeight() {
+        return MAX_HEIGHT;
     }
 
     public Bag getBag () {

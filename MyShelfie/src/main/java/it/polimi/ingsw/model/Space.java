@@ -77,9 +77,10 @@ public class Space extends Observable {
      * @return ItemTile It returns the tile present on the space
      * @exception IllegalAccessError The exception is thrown if the selected space is free or forbidden, namely not actually part of the living room board
      */
-    public ItemTile getTile() throws IllegalAccessError{
+    public ItemTile getTile() {
         if(this.getType().equals(SpaceType.FORBIDDEN) || this.isFree()){
-            throw new IllegalAccessError("The selected space is not playable or not free");
+            //throw new IllegalAccessError("The selected space is not playable or not free");
+            return null;
         } else {
             return this.tile;
         }

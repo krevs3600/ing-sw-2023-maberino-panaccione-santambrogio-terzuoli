@@ -2,7 +2,9 @@ package it.polimi.ingsw.network;
 
 import it.polimi.ingsw.network.eventMessages.MessageType;
 
-public abstract class EventMessage {
+import java.io.Serializable;
+
+public abstract class EventMessage implements Serializable {
     private String nickName;
     private MessageType type;
 

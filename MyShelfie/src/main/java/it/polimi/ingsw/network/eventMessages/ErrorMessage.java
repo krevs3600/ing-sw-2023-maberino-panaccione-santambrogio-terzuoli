@@ -3,7 +3,7 @@ package it.polimi.ingsw.network.eventMessages;
 import it.polimi.ingsw.network.EventMessage;
 
 public class ErrorMessage extends EventMessage {
-
+    private final long serialVersionUID = 1L;
     private final String errorMessage;
 
     public ErrorMessage(String nickName, String errorMessage) {

@@ -4,22 +4,24 @@ import it.polimi.ingsw.model.Bag;
 import it.polimi.ingsw.model.ItemTile;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BagView{
+public class BagView implements Serializable {
 
-    private final Bag bag;
+    private final List<ItemTile> bag;
+    private static final long serialVersionUID = 1L;
 
     public BagView (Bag bag) {
-        this.bag = bag;
+        this.bag = bag.getBag();
     }
 
     public int getSize () {
-        return bag.getSize();
+        return bag.size();
     }
 
     public List<ItemTile> getBag () {
-        return bag.getBag();
+        return this.bag;
     }
 }

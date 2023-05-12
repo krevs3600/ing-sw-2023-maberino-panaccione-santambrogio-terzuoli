@@ -4,25 +4,36 @@ import it.polimi.ingsw.model.ItemTile;
 import it.polimi.ingsw.model.Space;
 import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.model.utils.SpaceType;
+import javafx.geometry.Pos;
 
-public class SpaceView {
+import java.io.Serializable;
 
-    private final Space space;
+public class SpaceView implements Serializable {
+    private final Position position;
+    private final boolean isFree;
+    private final SpaceType type;
+    private final ItemTile tile;
+
+    private static final long serialVersionUID = 1L;
 
     public SpaceView(Space space){
-        this.space = space;
+        this.position = space.getPosition();
+        this.isFree = space.isFree();
+        this.type = space.getType();
+        this.tile = space.getTile();
+
     }
 
     public SpaceView getSpace() {
-        return new SpaceView(space);
+        return this;
     }
 
-    public SpaceType getType() { return space.getType(); }
-    public boolean isFree() { return space.isFree(); }
+    public SpaceType getType() { return this.type; }
+    public boolean isFree() { return this.isFree; }
     public Position getPosition(){
-        return space.getPosition();
+        return this.position;
     }
-    public ItemTile getTile() { return space.getTile(); }
+    public ItemTile getTile() { return this.tile; }
 
     /**
      * This method overrides the toString method of the Object class

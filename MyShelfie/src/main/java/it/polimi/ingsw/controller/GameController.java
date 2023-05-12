@@ -37,7 +37,7 @@ public class GameController {
 
 
     public void update(Client client, EventMessage eventMessage) throws IllegalArgumentException {
-        if (client != this.client) {
+        if (!client.equals(this.client)) {
             System.err.println("Discarding event from " + client);
             return;
         }

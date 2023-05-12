@@ -3,41 +3,57 @@ package it.polimi.ingsw.model.ModelView;
 import it.polimi.ingsw.model.Bag;
 import it.polimi.ingsw.model.CommonGoalCard.CommonGoalCard;
 import it.polimi.ingsw.model.LivingRoomBoard;
+import it.polimi.ingsw.model.Space;
 import it.polimi.ingsw.model.utils.Position;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LivingRoomBoardView{
-    private final int MAX_WIDTH = 9;
-    private final int MAX_HEIGHT = 9;
+public class LivingRoomBoardView implements Serializable {
+    private int MAX_WIDTH;
+    private int MAX_HEIGHT;
+    private SpaceView[][] spaces;
+    private BagView bagView;
+    private List<CommonGoalCardView> commonGoalCards;
 
-    private final LivingRoomBoard livingRoom;
+    private static final long serialVersionUID = 1L;
 
-    public LivingRoomBoardView (LivingRoomBoard livingRoom) {
-        this.livingRoom = livingRoom;
+    public LivingRoomBoardView (LivingRoomBoard livingRoomBoard) {
+        this.MAX_HEIGHT = livingRoomBoard.getMaxHeight();
+        this.MAX_WIDTH = livingRoomBoard.getMaxWidth();
+        spaces = new SpaceView[MAX_WIDTH][MAX_HEIGHT];
+        //for(CommonGoalCard card : deck.getDeck()){
+        //    this.commonGoalCardDeck.add(new CommonGoalCardView(card));
+        for(int i=0; i<livingRoomBoard.getMaxHeight(); i++){
+            for(int j = 0; j<livingRoomBoard.getMaxWidth(); j++){
+                this.spaces[i][j] = new SpaceView(livingRoomBoard.getSpace(new Position(i,j)));
+            }
+        }
+        this.bagView = new BagView(livingRoomBoard.getBag());
+        //this.commonGoalCards = livingRoomBoard.getCommonGoalCards();
+        commonGoalCards = new ArrayList<>();
+        for(CommonGoalCard card : livingRoomBoard.getCommonGoalCards()) {
+            this.commonGoalCards.add(new CommonGoalCardView(card));
+        }
     }
 
     public SpaceView[][] getSpaces() {
-        SpaceView[][] livingRoomBoard = new SpaceView[MAX_WIDTH][MAX_HEIGHT];
-        for (int i =0; i< MAX_WIDTH; i++){
-            for (int j =0; j< MAX_HEIGHT; i++){
-                livingRoomBoard[i][j] = new SpaceView(livingRoom.getSpace(new Position(i,j)));
-            }
-        }
-        return livingRoomBoard;
+        return this.spaces;
     }
 
-    public List<CommonGoalCard> getCommonGoalCards () {
-        return livingRoom.getCommonGoalCards();
+    public List<CommonGoalCardView> getCommonGoalCards () {
+        return this.commonGoalCards;
     }
 
-    public Bag getBag () {
-        return livingRoom.getBag();
+    public BagView getBag () {
+        return this.bagView;
     }
 
-    public SpaceView getSpace(Position position){return new SpaceView(livingRoom.getSpace(position));}
+    public SpaceView getSpace(Position position){
+        return this.spaces[position.getRow()][position.getColumn()];
+    }
 
     /**
      * This method overrides the toString method of the Object class

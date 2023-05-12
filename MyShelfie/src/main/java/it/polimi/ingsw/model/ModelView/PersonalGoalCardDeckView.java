@@ -4,21 +4,23 @@ import it.polimi.ingsw.model.PersonalGoalCard;
 import it.polimi.ingsw.model.PersonalGoalCardDeck;
 
 
+import java.io.Serializable;
 import java.util.List;
 
-public class PersonalGoalCardDeckView {
+public class PersonalGoalCardDeckView implements Serializable {
 
-    private final PersonalGoalCardDeck personalGoalCardDeck;
+    private final List<PersonalGoalCard> personalGoalCardDeck;
+    private static final long serialVersionUID = 1L;
 
     public PersonalGoalCardDeckView (PersonalGoalCardDeck personalGoalCardDeck) {
-        this.personalGoalCardDeck = personalGoalCardDeck;
+        this.personalGoalCardDeck = personalGoalCardDeck.getDeck();
     }
 
     public int getSize () {
-        return personalGoalCardDeck.getSize();
+        return personalGoalCardDeck.size();
     }
 
     public List<PersonalGoalCard> getDeck () {
-        return personalGoalCardDeck.getDeck();
+        return this.personalGoalCardDeck;
     }
 }

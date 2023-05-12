@@ -5,6 +5,7 @@ import it.polimi.ingsw.network.EventMessage;
 
 public class CommonGoalCardMessage extends EventMessage {
 
+    private final long serialVersionUID = 1L;
     private final CommonGoalCard commonGoalCard;
 
     public CommonGoalCardMessage(String nickName, CommonGoalCard commonGoalCard) {

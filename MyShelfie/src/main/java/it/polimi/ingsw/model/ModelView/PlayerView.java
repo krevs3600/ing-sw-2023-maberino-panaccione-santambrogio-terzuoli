@@ -3,39 +3,51 @@ package it.polimi.ingsw.model.ModelView;
 import it.polimi.ingsw.model.*;
 
 
+import java.io.Serializable;
 import java.util.List;
 
-public class PlayerView {
+public class PlayerView implements Serializable {
 
-    private final Player player;
-
+    private String nickName;
+    private BookshelfView bookshelfView;
+    private PlayerStatus playerStatus;
+    private int score;
+    private PersonalGoalCard personalGoalCard;
+    private List<ScoringToken> scoringTokens;
+    private static final long serialVersionUID = 1L;
     public PlayerView (Player player) {
-        this.player = player;
+
+        this.nickName = player.getName();
+        this.bookshelfView  = new BookshelfView(player.getBookshelf());
+        this.playerStatus = player.getStatus();
+        this.score = player.getScore();
+        this.personalGoalCard = player.getPersonalGoalCard();
+        this.scoringTokens = player.getTokens();
     }
 
     public String getName () {
-        return player.getName();
+        return this.nickName;
     }
 
     public PlayerStatus getStatus () {
-        return player.getStatus();
+
+        return this.playerStatus;
     }
 
     public BookshelfView getBookshelf () {
-        return new BookshelfView(player.getBookshelf());
+
+        return this.bookshelfView;
     }
 
     public int getScore () {
-        return player.getScore();
+        return this.score;
     }
 
     public PersonalGoalCard getPersonalGoalCard () {
-        return player.getPersonalGoalCard();
+        return this.personalGoalCard;
     }
 
     public List<ScoringToken> getTokens () {
-        return player.getTokens();
+        return this.scoringTokens;
     }
-    public boolean isFirstCommonGoalAchieved () { return player.isFirstCommonGoalAchieved();}
-    public boolean isSecondCommonGoalAchieved () { return player.isSecondCommonGoalAchieved();}
 }

@@ -4,7 +4,7 @@ import it.polimi.ingsw.model.ModelView.PlayerView;
 import it.polimi.ingsw.network.EventMessage;
 
 public class EndGameMessage extends EventMessage {
-
+    private final long serialVersionUID = 1L;
     private final PlayerView player;
     public EndGameMessage(PlayerView player) {
         super(player.getName(), MessageType.END_GAME);

@@ -4,22 +4,27 @@ import it.polimi.ingsw.model.CommonGoalCard.CommonGoalCard;
 import it.polimi.ingsw.model.CommonGoalCardDeck;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CommonGoalCardDeckView{
+public class CommonGoalCardDeckView implements Serializable {
 
-    private final CommonGoalCardDeck commonGoalCardDeck;
+    private final List<CommonGoalCardView> commonGoalCardDeck;
+    private static final long serialVersionUID = 1L;
 
-    public CommonGoalCardDeckView (CommonGoalCardDeck commonGoalCardDeck) {
-        this.commonGoalCardDeck = commonGoalCardDeck;
+    public CommonGoalCardDeckView (CommonGoalCardDeck deck) {
+        commonGoalCardDeck = new ArrayList<>();
+        for(CommonGoalCard card : deck.getDeck()){
+            this.commonGoalCardDeck.add(new CommonGoalCardView(card));
+        }
     }
 
     public int getSize() {
-        return commonGoalCardDeck.getSize();
+        return commonGoalCardDeck.size();
     }
 
     public List<CommonGoalCardView> getDeck () {
-        return new ArrayList<>(this.commonGoalCardDeck.getDeck().stream().map(CommonGoalCardView::new).toList());
+        return new ArrayList<>(this.commonGoalCardDeck);
     }
 }
