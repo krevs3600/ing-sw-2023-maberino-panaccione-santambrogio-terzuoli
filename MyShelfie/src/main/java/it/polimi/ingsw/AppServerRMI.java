@@ -10,7 +10,7 @@ import java.rmi.registry.Registry;
 public class AppServerRMI {
     public static void main(String[] args) throws RemoteException{
         Server server = new ServerImplementation();
-        Registry registry = LocateRegistry.getRegistry();
+        Registry registry = LocateRegistry.createRegistry(1234);
         registry.rebind("server", server);
     }
 }

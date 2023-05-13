@@ -6,6 +6,5 @@ module PSP47{
 
 
     opens it.polimi.ingsw.client.view.FXML;
-
-
+    exports it.polimi.ingsw.network;
 }
