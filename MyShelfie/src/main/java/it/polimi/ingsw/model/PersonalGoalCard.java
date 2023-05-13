@@ -15,6 +15,7 @@ import java.util.*;
 public class PersonalGoalCard extends GoalCard{
     private static final int DIMENSION=6;
     private final int[] scores = new int[]{1, 2, 4, 6, 9, 12};
+    private final int path;
 
     private final HashMap<Integer, TileType> scoringItem;
 
@@ -23,9 +24,12 @@ public class PersonalGoalCard extends GoalCard{
      * @param configuration the map containing the specific configuration of item tiles to have in the bookshelf in order to achieve the personal goal
      * the keys are the positions of the item tiles, while the values are the types of item tiles
      */
-    public PersonalGoalCard(HashMap<Integer,TileType> configuration){
+    public PersonalGoalCard(HashMap<Integer,TileType> configuration, int path ){
         this.scoringItem = configuration;
+        this.path = path;
     }
+
+    public int getPath(){return path;}
 
     /**
      * This getter method gets the scoring item

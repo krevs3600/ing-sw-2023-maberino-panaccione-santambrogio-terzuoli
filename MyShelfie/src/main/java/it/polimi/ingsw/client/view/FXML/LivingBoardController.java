@@ -1,7 +1,9 @@
 package it.polimi.ingsw.client.view.FXML;
 import it.polimi.ingsw.controller.GameController;
+import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.LivingRoomBoard;
 import it.polimi.ingsw.model.ModelView.LivingRoomBoardView;
+import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Space;
 import it.polimi.ingsw.model.utils.NumberOfPlayers;
 import it.polimi.ingsw.model.utils.Position;
@@ -11,18 +13,18 @@ import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class LivingBoardController {
     @FXML
@@ -60,12 +62,20 @@ public class LivingBoardController {
     @FXML
     ImageView Second_8;
 
+    @FXML
+    AnchorPane playerBookshelves;
+
+    @FXML
+    ImageView personalCard;
+
+
 
 
 
 
     private boolean columnSelected = false;
     private int column;
+    private String nickname = "carlo";
 
 
     public void initialize() throws FileNotFoundException {
@@ -85,8 +95,23 @@ public class LivingBoardController {
         images.put(TileType.PLANT, plants);
         images.put(TileType.TROPHY, trophey);
 
-        // init livingBoard
-        LivingRoomBoard livingBoard = new LivingRoomBoard(NumberOfPlayers.FOUR_PLAYERS);
+        // INIT_GAME
+        Game game = new Game(); // default 2 players
+        game.initLivingRoomBoard(NumberOfPlayers.FOUR_PLAYERS);
+        LivingRoomBoard livingBoard = game.getLivingRoomBoard();
+        Player carlo = new Player("carlo", game.getPersonalGoalCardDeck());
+        Player fra = new Player("fra", game.getPersonalGoalCardDeck());
+        Player pi = new Player("pi", game.getPersonalGoalCardDeck());
+        Player mabe = new Player("mabe", game.getPersonalGoalCardDeck());
+        game.subscribe(carlo);
+        game.subscribe(fra);
+        game.subscribe(pi);
+        game.subscribe(mabe);
+
+
+
+
+        // INIT LIVING_ROOM_BOARD
         System.out.println(new LivingRoomBoardView(livingBoard).toString());
         for (int r=0; r<9; r++){
             for (int c=0; c<9; c++){
@@ -101,7 +126,8 @@ public class LivingBoardController {
                 }
             }
         }
-        // init tilePack
+
+        // INIT TILEPACK
         for (Node node : tilePack.getChildren()){
             ImageView imageView = (ImageView) node;
             ((ImageView) node).setImage(null);
@@ -109,25 +135,51 @@ public class LivingBoardController {
         }
 
 
-        // init buttons
+        // INIT COLUMN BUTTONS
         for (Node node : columnOptions.getChildren()){
             RadioButton radioButton = (RadioButton) node;
-            radioButton.setOnMouseClicked(this::buttonPressed);
+            radioButton.setOnMouseClicked(this::radioButtonPressed);
         }
 
-        // init bookshelf
+        // INIT BOOKSHELF
         for (int r=0; r<6;r++){
             for (int c=0; c<5; c++){
                 ImageView imageView = new ImageView();
-                imageView.setFitWidth((bookshelf.getPrefWidth() - (int)bookshelf.getPadding().getLeft() -(int)bookshelf.getPadding().getRight() - ((bookshelf.getColumnCount()-1)*bookshelf.getHgap()))/bookshelf.getColumnCount());
+                imageView.setFitWidth((bookshelf.getPrefWidth() - (int)bookshelf.getPadding().getLeft() - (int)bookshelf.getPadding().getRight() - ((bookshelf.getColumnCount()-1)*bookshelf.getHgap()))/bookshelf.getColumnCount());
                 imageView.setFitHeight((bookshelf.getPrefHeight() - (int)bookshelf.getPadding().getTop() - (int)bookshelf.getPadding().getBottom() - ((bookshelf.getRowCount()-1)*bookshelf.getVgap()))/bookshelf.getRowCount());
                 imageView.setImage(null);
                 bookshelf.add(imageView, c,r);
             }
         }
+
+        // INIT BUTTONS
+        // first make buttons invisible, then enable the right ones
+        for(Node node : playerBookshelves.getChildren()){
+            Button button = (Button) node;
+            button.setVisible(false);
+        }
+
+        System.out.println(game.getNumberOfPlayers().getValue());
+        int j = 0;
+        for (int i=0; i<game.getNumberOfPlayers().getValue(); i++){
+            if(!Objects.equals(game.getSubscribers().get(i).getName(), nickname)){
+                Button button = (Button) playerBookshelves.getChildren().get(j);
+                button.setVisible(true);
+                button.setText(game.getSubscribers().get(i).getName() + "'s bookshelf");
+                button.setOnMouseClicked(this::bookshelfButtonPressed);
+                j++;
+            }
+        }
+
+        // init personal Card
+        int num = carlo.getPersonalGoalCard().getPath();
+        personalCard.setImage(new Image(new FileInputStream("src/main/resources/it/polimi/ingsw/client/view/personal goal cards/Personal_Goals" + String.valueOf(num) + ".png")));
+
+
+
     }
 
-    private void buttonPressed(MouseEvent event) {
+    private void radioButtonPressed(MouseEvent event) {
         System.out.println("Button pressed");
         RadioButton buttonEvent = (RadioButton) event.getSource();
         this.column = Integer.parseInt(buttonEvent.getId().replaceAll("Column", ""))-1;
@@ -159,6 +211,11 @@ public class LivingBoardController {
                 sourceImageView.setImage(null);
             }
         }
+    }
+
+    public void bookshelfButtonPressed(MouseEvent event) {
+        Stage stage = new Stage();
+        stage.show();
     }
 
 

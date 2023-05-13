@@ -35,8 +35,8 @@ public class PersonalGoalCardDeck implements Drawable {
     public PersonalGoalCardDeck () {
         this.deck = new ArrayList<PersonalGoalCard>();
         try {
-            //String path = "src/main/java/it/polimi/ingsw/model/configs/PersonalGoalCards.json";
-            String path = "C:\\Users\\franc\\IdeaProjects\\ing-sw-2023-maberino-panaccione-santambrogio-terzuoli\\MyShelfie\\src\\main\\java\\it\\polimi\\ingsw\\model\\configs\\PersonalGoalCards.json";
+            String path = "src/main/java/it/polimi/ingsw/model/configs/PersonalGoalCards.json";
+            //String path = "C:\\Users\\franc\\IdeaProjects\\ing-sw-2023-maberino-panaccione-santambrogio-terzuoli\\MyShelfie\\src\\main\\java\\it\\polimi\\ingsw\\model\\configs\\PersonalGoalCards.json";
             Reader file = new FileReader(path);
             JSONParser parser = new JSONParser();
             Object jsonObj = parser.parse(file);
@@ -46,6 +46,7 @@ public class PersonalGoalCardDeck implements Drawable {
             // read configs from json
             ArrayList<HashMap> configurations = (ArrayList<HashMap>) jsonObject.get("configurations");
             // for each conf create the corresponding card
+            int num = 0;
             for (HashMap conf : configurations) {
                 JSONObject jsonConf = (JSONObject) conf;
                 ArrayList<Long> position = (ArrayList<Long>) jsonConf.get("position");
@@ -57,11 +58,12 @@ public class PersonalGoalCardDeck implements Drawable {
                     for (int i = 0; i < position.size(); i++) {
                         map.put(position.get(i).intValue(), TileType.valueOf(type.get(i)));
                     }
-                    this.deck.add(new PersonalGoalCard(map));
+                    this.deck.add(new PersonalGoalCard(map, num));
                     size++;
                 } else {
                     System.out.println("Please check configuration file.");
                 }
+                num++;
             }
 
         } catch (ParseException | IOException e) {
