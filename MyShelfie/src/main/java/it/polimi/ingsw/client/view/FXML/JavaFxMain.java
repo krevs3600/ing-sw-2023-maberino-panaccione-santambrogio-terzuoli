@@ -23,7 +23,7 @@ public class JavaFxMain extends Application {
 
 
 
-        FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("livingboard_scene.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("win_scene.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("myShelfie!");
         stage.setScene(scene);
@@ -36,6 +36,7 @@ public class JavaFxMain extends Application {
     public static Stage getWindow(){
         return window;
     }
+
 
 }
 
