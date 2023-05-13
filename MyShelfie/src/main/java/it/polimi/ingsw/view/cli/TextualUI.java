@@ -13,27 +13,59 @@ public class TextualUI extends Observable implements Runnable {
 
     private final PrintStream out = System.out;
     private final Scanner in = new Scanner(System.in);
+    private final Object lock = new Object();
     private boolean joined = false;
+
+    private enum State {
+        WAITING_FOR_PLAYER,
+        WAITING_FOR_MODEL_VIEW
+    }
+
+    private State state = State.WAITING_FOR_PLAYER;
+    private State getState() {
+        synchronized (lock) {
+            return state;
+        }
+    }
+
+    private void setState(State state) {
+        synchronized (lock) {
+            this.state = state;
+            lock.notifyAll();
+        }
+    }
 
     @Override
     public void run() {
-        // initial setup
-        printTitle();
-        String nickName = "";
-        while (nickName.length() < 1) {
-            out.println("Please insert your name: ");
-            nickName = in.next();
-        }
-        //setChanged();
-        //notifyObservers(new NicknameMessage(nickName));
+        while (true) {
+            while (getState() == State.WAITING_FOR_MODEL_VIEW) {
+                synchronized (lock) {
+                    try {
+                        lock.wait();
+                    } catch (InterruptedException e) {
+                        System.err.println("Interrupted while waiting for server: " + e.getMessage());
+                    }
+                }
+            }
+            // initial setup
+            printTitle();
+            String nickName = "";
+            while (nickName.length() < 1) {
+                out.println("Please insert your name: ");
+                nickName = in.next();
+            }
+            //setChanged();
+            //notifyObservers(new NicknameMessage(nickName));
 
-        int numOfPlayers = 0;
-        while (numOfPlayers <= 0 || numOfPlayers > 4) {
-            out.println("Please insert the number of players: ");
-            numOfPlayers = in.nextInt();
+            int numOfPlayers = 0;
+            while (numOfPlayers <= 0 || numOfPlayers > 4) {
+                out.println("Please insert the number of players: ");
+                numOfPlayers = in.nextInt();
+            }
+            setChanged();
+            notifyObservers(new NumOfPlayerMessage(nickName, numOfPlayers));
+            this.setState(State.WAITING_FOR_MODEL_VIEW);
         }
-        setChanged();
-        notifyObservers(new NumOfPlayerMessage(nickName, numOfPlayers));
 
 
 
@@ -122,6 +154,7 @@ public class TextualUI extends Observable implements Runnable {
             }
              */
             case BOARD -> {
+                System.out.println("--- NEW TURN ---");
                 out.println("\n-----------------------------------------------------------------------\n LIVING ROOM BOARD:");
                 out.println(game.getLivingRoomBoard().toString());
                 out.println("\n-----------------------------------------------------------------------\n TILE PACK:");
@@ -147,14 +180,14 @@ public class TextualUI extends Observable implements Runnable {
                     try {
                         setChanged();
                         notifyObservers(new TilePositionMessage(eventMessage.getNickName(), new Position(r, c)));
+                        this.setState(State.WAITING_FOR_MODEL_VIEW);
                     } catch (IllegalAccessError e) {
                         out.println(e.getMessage());
                         i--;
-
                     }
                     String answer = "";
                     do {
-                        System.out.println("\nIf you whish to stop picking tiles type 'stop', otherwise type 'continue'\n");
+                        System.out.println("\nIf you whish to stop picking tiles type 'stop', otherwise type 'continue'");
                         answer = in.next();
                         if (answer.equals("stop")) {
                             stopPickingTiles = true;
@@ -168,28 +201,25 @@ public class TextualUI extends Observable implements Runnable {
                 int column = in.nextInt();
                 setChanged();
                 notifyObservers(new BookshelfColumnMessage(eventMessage.getNickName(), column));
-
-                while (game.getTilePack().getTiles().size()>0) {
-                    out.print("Choose an item tile to insert from the tilepack into the selected column?\n");
-                    int itemTileIndex = in.nextInt();
-                    setChanged();
-                    notifyObservers(new ItemTileIndexMessage(eventMessage.getNickName(), itemTileIndex));
-                }
+                this.setState(State.WAITING_FOR_MODEL_VIEW);
             }
 
             case TILE_POSITION -> {
                 out.println("\n-----------------------------------------------------------------------\n LIVING ROOM BOARD:");
                 out.println(game.getLivingRoomBoard().toString());
+                this.setState(State.WAITING_FOR_PLAYER);
             }
 
             case TILE_PACK -> {
                 out.println("\n-----------------------------------------------------------------------\n TILE PACK:");
                 out.println(game.getTilePack().toString());
+                this.setState(State.WAITING_FOR_PLAYER);
             }
 
             case BOOKSHELF -> {
                 out.println("\n-----------------------------------------------------------------------\n" + game.getSubscribers().get(0).getName() + "'s BOOKSHELF:");
                 out.println(game.getSubscribers().get(0).getBookshelf().toString());
+                this.setState(State.WAITING_FOR_PLAYER);
             }
 
             case INSERTION_REQUEST -> {
@@ -197,6 +227,13 @@ public class TextualUI extends Observable implements Runnable {
                 out.println(game.getSubscribers().get(0).getBookshelf().toString());
                 out.println("\n-----------------------------------------------------------------------\n TILE PACK:");
                 out.println(game.getTilePack().toString());
+                while (game.getTilePack().getTiles().size()>0) {
+                    out.print("Choose an item tile to insert from the tilepack into the selected column\n");
+                    int itemTileIndex = in.nextInt();
+                    setChanged();
+                    notifyObservers(new ItemTileIndexMessage(eventMessage.getNickName(), itemTileIndex));
+                    this.setState(State.WAITING_FOR_MODEL_VIEW);
+                }
             }
 
         }

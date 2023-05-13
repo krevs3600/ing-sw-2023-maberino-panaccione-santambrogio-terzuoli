@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model.utils;
 
+import java.io.Serializable;
+
 /**
  * <h1>Class Position</h1>
  * The class Position represents the coordinates of a space in the living room board
@@ -9,7 +11,8 @@ package it.polimi.ingsw.model.utils;
  * @since 3/21/2023
  */
 
-public class Position {
+public class Position implements Serializable {
+    private static final long serialVersionUID = 1L;
     private static final int MAX_WIDTH = 9;
     private static final int MAX_HEIGHT = 9;
     private final int row;

@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model;
 
 
+import java.io.Serializable;
+
 /**
  * <h1>Class FirstPlayerSeat</h1>
  * The class FirstPlayerSeat represents the seat of the first player of a game
@@ -10,8 +12,9 @@ package it.polimi.ingsw.model;
  * @since 4/8/2023
  */
 
-public class FirstPlayerSeat {
+public class FirstPlayerSeat implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     /**
      * Class constructor
      */

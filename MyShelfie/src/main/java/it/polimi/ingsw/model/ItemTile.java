@@ -2,13 +2,17 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.utils.TileType;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 /**
  * <h1>Class ItemTile</h1>
  * The class ItemTile represents the pivotal objects of the game occupying spaces in the living room board
  * and in the bookshelves of the players giving them scores according to their disposition
  * */
-public class ItemTile {
+public class ItemTile implements Serializable {
     private final TileType type;
+    @Serial private static final long serialVersionUID = 1L;
 
     /**
      * Class constructor

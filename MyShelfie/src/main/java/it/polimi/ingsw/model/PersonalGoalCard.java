@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.utils.TileType;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -12,10 +13,11 @@ import java.util.*;
  * @version 1.0
  * @since 4/8/2023
  */
-public class PersonalGoalCard extends GoalCard{
+public class PersonalGoalCard extends GoalCard implements Serializable {
     private static final int DIMENSION=6;
     private final int[] scores = new int[]{1, 2, 4, 6, 9, 12};
     private final int path;
+    private static final long serialVersionUID = 1L;
 
     private final HashMap<Integer, TileType> scoringItem;
 

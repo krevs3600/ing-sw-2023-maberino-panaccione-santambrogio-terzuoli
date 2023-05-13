@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model;
 
 
+import java.io.Serializable;
+
 /**
  * <h1>Class EndGameToken</h1>
  * The class EndGameToken represents the token taken by the first player who fills all the spaces of his bookshelf
@@ -9,8 +11,9 @@ package it.polimi.ingsw.model;
  * @version 1.0
  * @since 4/8/2023
  */
-public class EndGameToken {
+public class EndGameToken implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     /**
      * Class constructor
      */

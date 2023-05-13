@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import java.io.Serializable;
+
 /**
  * <h1>Class ScoringToken</h1>
  * The class ScoringToken represents the score obtained by the player that achieves a common goal card
@@ -9,10 +11,11 @@ package it.polimi.ingsw.model;
  * @version 1.0
  * @since 3/28/2023
  */
-public class ScoringToken {
+public class ScoringToken implements Serializable {
 
     private final RomanNumber romanNumber;
     private final int value;
+    private static final long serialVersionUID = 1L;
 
     /**
      * Class constructor
