@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="523.0" prefWidth="600.0" styleClass="rootPane" stylesheets="@../css/server_scene.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.FXML.ServerSettingsController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="523.0" prefWidth="600.0" styleClass="rootPane" stylesheets="@../css/server_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.FXML.ServerSettingsController">
     <children>
         <Group scaleX="2.45" scaleY="1.9">
             <children>
@@ -55,7 +59,7 @@
                                 <Font name="Libian SC Regular" size="36.0" />
                             </font>
                         </Label>
-                        <Button fx:id="tryToConnectButton" layoutX="265.0" layoutY="316.0" mnemonicParsing="false" onAction="#connect" prefHeight="34.0" prefWidth="99.0" styleClass="button" stylesheets="@../css/server_scene.css" text="Try to connect " textFill="WHITE">
+                        <Button fx:id="tryToConnectButton" layoutX="265.0" layoutY="316.0" mnemonicParsing="false" onMouseClicked="#connect" prefHeight="34.0" prefWidth="99.0" styleClass="button" stylesheets="@../css/server_scene.css" text="Try to connect " textFill="WHITE">
                             <font>
                                 <Font name="Libian SC Regular" size="11.0" />
                             </font>

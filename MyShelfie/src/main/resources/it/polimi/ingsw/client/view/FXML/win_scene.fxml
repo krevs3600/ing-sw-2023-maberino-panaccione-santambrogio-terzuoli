@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="908.0" prefWidth="1510.0" styleClass="rootPane" stylesheets="@../css/livingBoard_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="908.0" prefWidth="1510.0" styleClass="rootPane" stylesheets="@../css/livingBoard_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.FXML.WinController">
     <children>
         <AnchorPane prefHeight="200.0" prefWidth="200.0">
             <children>
@@ -38,22 +38,22 @@
                     </font>
                 </Label>
                 <Separator layoutX="88.0" layoutY="328.0" prefHeight="8.0" prefWidth="1233.0" />
-                <ImageView fx:id="GoBackToYourScore" fitHeight="66.0" fitWidth="63.0" layoutY="8.0">
+                <ImageView fx:id="GoBackToYourScore" fitHeight="66.0" fitWidth="63.0" layoutY="8.0" onMouseClicked="#goBackonMyscore">
                     <image>
                         <Image url="@../misc/freccia.png" />
                     </image>
                 </ImageView>
-                <Button fx:id="viewD_1" layoutX="553.0" layoutY="110.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="319.0" text="view detail" textFill="WHITE">
+                <Button fx:id="viewD_1" layoutX="553.0" layoutY="109.0" mnemonicParsing="false" onMouseClicked="#second_p_score" prefHeight="60.0" prefWidth="319.0" text="view detail" textFill="WHITE">
                     <font>
                         <Font name="Libian SC Regular" size="26.0" />
                     </font>
                 </Button>
-                <Button fx:id="viewD_2" layoutX="554.0" layoutY="185.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="319.0" text="view detail" textFill="WHITE">
+                <Button fx:id="viewD_2" layoutX="554.0" layoutY="185.0" mnemonicParsing="false" onMouseClicked="#second_p_score" prefHeight="60.0" prefWidth="319.0" text="view detail" textFill="WHITE">
                     <font>
                         <Font name="Libian SC Regular" size="26.0" />
                     </font>
                 </Button>
-                <Button fx:id="viewD_3" layoutX="554.0" layoutY="268.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="319.0" text="view detail" textFill="WHITE">
+                <Button fx:id="viewD_3" layoutX="554.0" layoutY="268.0" mnemonicParsing="false" onMouseClicked="#third_p_score" prefHeight="60.0" prefWidth="319.0" text="view detail" textFill="WHITE">
                     <font>
                         <Font name="Libian SC Regular" size="26.0" />
                     </font>
@@ -96,7 +96,7 @@
                         <Font name="Libian SC Regular" size="72.0" />
                     </font>
                 </Label>
-                <Label fx:id="sorry" layoutX="600.0" layoutY="583.0" prefHeight="107.0" prefWidth="680.0" text="Sorry...you lost! ">
+                <Label fx:id="lost" layoutX="600.0" layoutY="583.0" prefHeight="107.0" prefWidth="680.0" text="Sorry...you lost! ">
                     <font>
                         <Font name="Libian SC Regular" size="48.0" />
                     </font>
@@ -111,22 +111,22 @@
                         <Font name="Libian SC Regular" size="72.0" />
                     </font>
                 </Label>
-            <ImageView fitHeight="128.0" fitWidth="200.0" layoutX="1083.0" layoutY="513.0">
+            <ImageView fx:id="fail_4" fitHeight="128.0" fitWidth="200.0" layoutX="1083.0" layoutY="513.0">
                <image>
                   <Image url="@../misc/575fcbe20f3561554e346b0e.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="128.0" fitWidth="200.0" layoutX="784.0" layoutY="408.0">
+            <ImageView fx:id="fail_3" fitHeight="128.0" fitWidth="200.0" layoutX="784.0" layoutY="408.0">
                <image>
                   <Image url="@../misc/575fcbe20f3561554e346b0e.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="128.0" fitWidth="200.0" layoutX="467.0" layoutY="408.0">
+            <ImageView fx:id="fail_2" fitHeight="128.0" fitWidth="200.0" layoutX="467.0" layoutY="408.0">
                <image>
                   <Image url="@../misc/575fcbe20f3561554e346b0e.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="128.0" fitWidth="200.0" layoutX="157.0" layoutY="502.0">
+            <ImageView fx:id="fail_1" fitHeight="128.0" fitWidth="200.0" layoutX="157.0" layoutY="502.0">
                <image>
                   <Image url="@../misc/575fcbe20f3561554e346b0e.png" />
                </image>

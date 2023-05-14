@@ -107,12 +107,12 @@
                   <Image url="@../misc/checkmark.png" />
                </image>
             </ImageView>
-            <Label layoutX="1312.0" layoutY="322.0" text="=X points " textFill="#fffdfd">
+            <Label fx:id="secondcg_points" layoutX="1312.0" layoutY="322.0" text="=X points " textFill="#fffdfd">
                <font>
                   <Font name="Libian SC Regular" size="36.0" />
                </font>
             </Label>
-            <Label layoutX="1304.0" layoutY="172.0" text="= X points" textFill="#f8f5f5">
+            <Label fx:id="Onecg_points" layoutX="1304.0" layoutY="172.0" text="= X points" textFill="#f8f5f5">
                <font>
                   <Font name="Libian SC Regular" size="36.0" />
                </font>
@@ -122,12 +122,12 @@
                   <Font size="36.0" />
                </font>
             </Label>
-            <Label layoutX="1314.0" layoutY="606.0" prefHeight="33.0" prefWidth="203.0" text="=X points " textFill="WHITE">
+            <Label fx:id="personagc_points" layoutX="1314.0" layoutY="606.0" prefHeight="33.0" prefWidth="203.0" text="=X points " textFill="WHITE">
                <font>
                   <Font name="Libian SC Regular" size="36.0" />
                </font>
             </Label>
-            <Label layoutX="1321.0" layoutY="476.0" text="=1 points " textFill="#fffdfd">
+            <Label fx:id="endgame_point" layoutX="1321.0" layoutY="476.0" text="=1 point " textFill="#fffdfd">
                <font>
                   <Font name="Libian SC Regular" size="36.0" />
                </font>
@@ -147,13 +147,13 @@
                   <Font size="36.0" />
                </font>
             </Label>
-            <Label layoutX="1306.0" layoutY="722.0" prefHeight="33.0" prefWidth="203.0" text="=X points " textFill="WHITE">
+            <Label fx:id="general_points" layoutX="1306.0" layoutY="722.0" prefHeight="33.0" prefWidth="203.0" text="=X points " textFill="WHITE">
                <font>
                   <Font name="Libian SC Regular" size="36.0" />
                </font>
             </Label>
             <Line endX="687.0" endY="1.220703125E-4" layoutX="831.0" layoutY="818.0" startX="-258.44573974609375" startY="1.220703125E-4" stroke="#fff9f9" />
-            <Label layoutX="1317.0" layoutY="831.0" prefHeight="33.0" prefWidth="203.0" text="=X points " textFill="WHITE">
+            <Label fx:id="totalscore" layoutX="1317.0" layoutY="831.0" prefHeight="33.0" prefWidth="203.0" text="=X points " textFill="WHITE">
                <font>
                   <Font name="Libian SC Regular" size="36.0" />
                </font>

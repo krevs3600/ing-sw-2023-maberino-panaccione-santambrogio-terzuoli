@@ -1,6 +1,5 @@
 package it.polimi.ingsw.client.view.FXML;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -29,7 +28,7 @@ public class ServerSettingsController {
     private int serverPort;
     private String ip;
 
-    public void connect(ActionEvent event) throws IOException {
+    public void connect(MouseEvent event) throws IOException {
         this.ip = ipAddress.getCharacters().toString();
         this.serverPort = Integer.parseInt(port.getCharacters().toString());
 
