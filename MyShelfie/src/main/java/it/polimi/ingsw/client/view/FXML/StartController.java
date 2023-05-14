@@ -1,9 +1,12 @@
 package it.polimi.ingsw.client.view.FXML;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 import java.io.File;
@@ -12,7 +15,16 @@ import java.net.URL;
 
 
 public class StartController {
+    @FXML
+    public AnchorPane rootPane;
 
+    @FXML
+    public Button playBtn;
+
+    @FXML
+    public Button quitBtn;
+    @FXML
+    public Button quitBtn1;
 
     private Stage stage;
     private Scene scene;
