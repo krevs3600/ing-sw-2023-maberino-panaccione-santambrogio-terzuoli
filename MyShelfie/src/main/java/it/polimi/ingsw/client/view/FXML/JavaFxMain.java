@@ -16,6 +16,9 @@ import javafx.scene.paint.Color;
 
 public class JavaFxMain extends Application {
     private static Stage window;
+    private static Scene activeScene;
+    private static double width;
+    private static double height;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -24,7 +27,12 @@ public class JavaFxMain extends Application {
         stage.setTitle("myShelfie!");
         stage.setScene(scene);
         stage.show();
+        stage.setHeight(scene.getHeight());
+        stage.setWidth(scene.getWidth());
         window=stage;
+        stage.setResizable(true);
+        width = stage.getWidth();
+        height = stage.getHeight();
     }
     public static void main(String[] args) {
         launch();
@@ -32,6 +40,9 @@ public class JavaFxMain extends Application {
     public static Stage getWindow(){
         return window;
     }
+    public static Scene getActiveScene() {return activeScene;}
+    public static double getWidth() {return width;}
+    public static double getHeight() {return height;}
 
 }
 

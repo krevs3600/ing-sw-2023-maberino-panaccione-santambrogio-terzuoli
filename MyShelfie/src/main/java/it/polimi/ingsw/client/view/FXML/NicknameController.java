@@ -28,7 +28,7 @@ public class NicknameController {
         this.nickname = nicknameTextFiled.getCharacters().toString();
 
         Stage stage = JavaFxMain.getWindow();
-        URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/livingBoard_scene.fxml/").toURI().toURL();
+        URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/livingBoard_scene.fxml").toURI().toURL();
         FXMLLoader fxmlLoader = new FXMLLoader(url);
         Scene scene = new Scene(fxmlLoader.load());
         stage.setScene(scene);

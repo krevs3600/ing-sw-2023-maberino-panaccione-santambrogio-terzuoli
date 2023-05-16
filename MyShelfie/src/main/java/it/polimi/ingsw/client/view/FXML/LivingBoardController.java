@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.view.FXML;
 import it.polimi.ingsw.controller.GameController;
+import it.polimi.ingsw.model.CommonGoalCard.*;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.LivingRoomBoard;
 import it.polimi.ingsw.model.ModelView.LivingRoomBoardView;
@@ -68,6 +69,12 @@ public class LivingBoardController {
     @FXML
     ImageView personalCard;
 
+    @FXML
+    ImageView commonGoalCardView1;
+
+    @FXML
+    ImageView commonGoalCardView2;
+
 
 
 
@@ -77,6 +84,48 @@ public class LivingBoardController {
     private int column;
     private String nickname = "carlo";
 
+    public static String getCommonGoalCardPic(Object o){
+        String path = "src/main/resources/it/polimi/ingsw/client/view/common goal cards/";
+        if (o instanceof TwoSquaresCommonGoalCard){
+            return path + "1.jpg";
+        }
+        else if (o instanceof TwoColumnsCommonGoalCard){
+            return path + "2.jpg";
+        }
+        else if (o instanceof FourGroupsCommonGoalCard){
+            return path + "3.jpg";
+        }
+        else if (o instanceof SixGroupsCommonGoalCard){
+            return path + "4.jpg";
+        }
+        else if (o instanceof ThreeColumnsCommonGoalCard){
+            return path + "5.jpg";
+        }
+        else if (o instanceof TwoLinesCommonGoalCard){
+            return path + "6.jpg";
+        }
+        else if (o instanceof FourLinesCommonGoalCard){
+            return path + "7.jpg";
+        }
+        else if (o instanceof CornersCommonGoalCard){
+            return path + "8.jpg";
+        }
+        else if (o instanceof EightTilesCommonGoalCard){
+            return path + "9.jpg";
+        }
+        else if (o instanceof CrossCommonGoalCard){
+            return path + "10.jpg";
+        }
+        else if (o instanceof DiagonalCommonGoalCard){
+            return path + "11.jpg";
+        }
+        else if (o instanceof IncreasingColumnsCommonGoalCard){
+            return path + "12.jpg";
+        }
+        else {
+            return "back.jpg";
+        }
+    }
 
     public void initialize() throws FileNotFoundException {
         // loading itemTiles paths and creating support structures
@@ -100,9 +149,9 @@ public class LivingBoardController {
         game.initLivingRoomBoard(NumberOfPlayers.FOUR_PLAYERS);
         LivingRoomBoard livingBoard = game.getLivingRoomBoard();
         Player carlo = new Player("carlo", game.getPersonalGoalCardDeck());
-        Player fra = new Player("fra", game.getPersonalGoalCardDeck());
-        Player pi = new Player("pi", game.getPersonalGoalCardDeck());
-        Player mabe = new Player("mabe", game.getPersonalGoalCardDeck());
+        Player fra = new Player("fraaaa", game.getPersonalGoalCardDeck());
+        Player pi = new Player("piiii111", game.getPersonalGoalCardDeck());
+        Player mabe = new Player("mab3", game.getPersonalGoalCardDeck());
         game.subscribe(carlo);
         game.subscribe(fra);
         game.subscribe(pi);
@@ -126,6 +175,12 @@ public class LivingBoardController {
                 }
             }
         }
+
+        // INIT COMMON_GOAL_CARD
+        CommonGoalCard commonGoalCard1 = game.getLivingRoomBoard().getCommonGoalCards().get(0);
+        CommonGoalCard commonGoalCard2 = game.getLivingRoomBoard().getCommonGoalCards().get(1);
+        commonGoalCardView1.setImage(new Image(new FileInputStream(getCommonGoalCardPic(commonGoalCard1))));
+        commonGoalCardView2.setImage(new Image(new FileInputStream(getCommonGoalCardPic(commonGoalCard2))));
 
         // INIT TILEPACK
         for (Node node : tilePack.getChildren()){

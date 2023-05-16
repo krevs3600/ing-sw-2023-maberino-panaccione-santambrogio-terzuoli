@@ -1,66 +1,95 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="523.0" prefWidth="600.0" styleClass="rootPane" stylesheets="@../css/server_scene.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.FXML.NicknameController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="908.0" prefWidth="1510.0" styleClass="rootPane" stylesheets="@../css/server_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.FXML.NicknameController">
     <children>
-        <Group scaleX="2.45" scaleY="1.9">
-            <children>
-                <AnchorPane fx:id="PaneforParquet" layoutX="-1.0" layoutY="-1.0" prefHeight="524.0" prefWidth="573.0" styleClass="rootPane" stylesheets="@../css/server_scene.css">
-                    <children>
-                        <ImageView fitHeight="158.0" fitWidth="158.0" layoutX="-1.0" layoutY="366.0" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@../itemtiles/Piante1.2.png" />
-                            </image>
-                        </ImageView>
-                        <ImageView fitHeight="184.0" fitWidth="158.0" layoutX="156.0" layoutY="366.0" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@../itemtiles/Gatti1.1.png" />
-                            </image>
-                        </ImageView>
-                        <ImageView fitHeight="158.0" fitWidth="286.0" layoutX="313.0" layoutY="366.0">
-                            <image>
-                                <Image url="@../itemtiles/Libri1.2.png" />
-                            </image>
-                        </ImageView>
-                        <ImageView fitHeight="146.0" fitWidth="173.0" layoutX="207.0" pickOnBounds="true" preserveRatio="true" />
-                        <ImageView fitHeight="183.0" fitWidth="197.0" layoutX="237.0" layoutY="-4.0" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@../itemtiles/Giochi1.1.png" />
-                            </image>
-                        </ImageView>
-                        <ImageView fitHeight="184.0" fitWidth="183.0" layoutX="416.0" layoutY="-4.0" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@../itemtiles/Cornici1.3.png" />
-                            </image>
-                        </ImageView>
-                        <ImageView fitHeight="183.0" fitWidth="266.0" layoutX="-1.0" layoutY="-4.0">
-                            <image>
-                                <Image url="@../itemtiles/Trofei1.1.png" />
-                            </image>
-                        </ImageView>
-                        <TextField fx:id="nicknameTextFiled" layoutX="125.0" layoutY="243.0" prefHeight="38.0" prefWidth="357.0" styleClass="rounded-input" stylesheets="@../css/server_scene.css">
-                            <rotationAxis>
-                                <Point3D x="34.0" y="32.0" z="323.0" />
-                            </rotationAxis></TextField>
-                        <Label layoutX="184.0" layoutY="176.0" prefHeight="54.0" prefWidth="281.0" text="Choose a Nickname" textFill="WHITE">
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+         <children>
+            <VBox prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="221.0" prefWidth="1510.0">
+                     <children>
+                              <ImageView fitHeight="250.0" fitWidth="500.0" pickOnBounds="true" preserveRatio="true">
+                                  <image>
+                                      <Image url="@../itemtiles/Giochi1.1.png" />
+                                  </image>
+                              </ImageView>
+                              <ImageView fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
+                                  <image>
+                                      <Image url="@../itemtiles/Cornici1.3.png" />
+                                  </image>
+                              </ImageView>
+                              <ImageView fitHeight="250.0" fitWidth="250.0" preserveRatio="true">
+                                  <image>
+                                      <Image url="@../itemtiles/Trofei1.1.png" />
+                                  </image>
+                              </ImageView>
+                     </children>
+                  </HBox>
+               </children>
+               <VBox.margin>
+                  <Insets bottom="60.0" />
+               </VBox.margin>
+            </VBox>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+               <children>
+                        <Label prefHeight="54.0" prefWidth="330.0" text="Choose a Nickname" textFill="WHITE">
                             <font>
                                 <Font name="Libian SC Regular" size="36.0" />
                             </font>
+                     <VBox.margin>
+                        <Insets bottom="20.0" />
+                     </VBox.margin>
                         </Label>
-                        <Button fx:id="TryToConnectButton" layoutX="242.0" layoutY="304.0" mnemonicParsing="false" onAction="#connect" prefHeight="34.0" prefWidth="99.0" styleClass="button" stylesheets="@../css/server_scene.css" text="OK" textFill="WHITE">
+                        <TextField fx:id="nicknameTextFiled" alignment="CENTER" maxHeight="500.0" maxWidth="500.0" prefHeight="49.0" prefWidth="500.0" promptText="insert your nickname..." styleClass="rounded-input" stylesheets="@../css/server_scene.css">
+                     <VBox.margin>
+                        <Insets bottom="20.0" />
+                     </VBox.margin>
+                     <font>
+                        <Font size="21.0" />
+                     </font>
+                  </TextField>
+                        <Button fx:id="TryToConnectButton" mnemonicParsing="false" onAction="#connect" prefHeight="59.0" prefWidth="156.0" styleClass="button" stylesheets="@../css/server_scene.css" text="OK" textFill="WHITE">
                             <font>
-                                <Font name="Libian SC Regular" size="11.0" />
+                                <Font size="28.0" />
                             </font>
                         </Button>
-                    </children>
-                </AnchorPane>
-            </children>
-        </Group>
+               </children>
+            </VBox>
+            <VBox alignment="BOTTOM_CENTER" prefHeight="301.0" prefWidth="1510.0">
+               <children>
+                  <HBox alignment="BOTTOM_CENTER" prefHeight="273.0" prefWidth="1513.0">
+                     <children>
+                              <ImageView fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
+                                  <image>
+                                      <Image url="@../itemtiles/Piante1.2.png" />
+                                  </image>
+                              </ImageView>
+                              <ImageView fitHeight="334.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
+                                  <image>
+                                      <Image url="@../itemtiles/Gatti1.1.png" />
+                                  </image>
+                              </ImageView>
+                              <ImageView fitHeight="250.0" fitWidth="485.0" preserveRatio="true">
+                                  <image>
+                                      <Image url="@../itemtiles/Libri1.2.png" />
+                                  </image>
+                              </ImageView>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </VBox>
     </children>
 </StackPane>

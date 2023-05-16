@@ -38,7 +38,6 @@ public class StartController {
     }
 
     public void switchToConnection(ActionEvent event) throws IOException {
-        System.out.println("ciao");
         URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/server_scene.fxml/").toURI().toURL();
 
         root = FXMLLoader.load(url);
@@ -46,6 +45,5 @@ public class StartController {
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
-
     }
 }
