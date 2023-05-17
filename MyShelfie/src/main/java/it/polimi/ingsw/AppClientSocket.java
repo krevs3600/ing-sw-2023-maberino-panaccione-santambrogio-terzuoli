@@ -1,4 +1,4 @@
-package it.polimi.ingsw;
+/*package it.polimi.ingsw;
 
 import it.polimi.ingsw.network.ClientImplementation;
 import it.polimi.ingsw.network.Socket.ServerStub;
@@ -30,6 +30,8 @@ public class AppClientSocket
             }
         }.start();
 
-        client.run();
+        //client.run();
     }
 }
+
+ */

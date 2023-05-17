@@ -1,28 +1,32 @@
 package it.polimi.ingsw.network;
 
 import it.polimi.ingsw.model.ModelView.GameView;
-import it.polimi.ingsw.view.cli.TextualUI;
+import it.polimi.ingsw.network.eventMessages.RequestMessage.RequestMessage;
+import it.polimi.ingsw.view.cli.CLI;
 
 import java.rmi.RemoteException;
 import java.rmi.server.RMIClientSocketFactory;
 import java.rmi.server.RMIServerSocketFactory;
 import java.rmi.server.UnicastRemoteObject;
 
-public class ClientImplementation extends UnicastRemoteObject implements Client, Runnable {
+public class ClientImplementation extends UnicastRemoteObject implements Client {
 
-    TextualUI view = new TextualUI();
-    public ClientImplementation(Server server) throws RemoteException{
+    CLI view;
+    public ClientImplementation(CLI view, Server server) throws RemoteException{
         super();
+        this.view = view;
         initialize(server);
     }
 
-    public ClientImplementation (Server server, int port) throws RemoteException{
+    public ClientImplementation (CLI view, Server server,  int port) throws RemoteException{
         super(port);
+        this.view = view;
         initialize(server);
     }
 
-    public ClientImplementation (Server server, int port, RMIClientSocketFactory csf, RMIServerSocketFactory ssf) throws RemoteException{
+    public ClientImplementation (CLI view, Server server, int port, RMIClientSocketFactory csf, RMIServerSocketFactory ssf) throws RemoteException{
         super(port, csf, ssf);
+        this.view = view;
         initialize(server);
     }
 
@@ -31,14 +35,13 @@ public class ClientImplementation extends UnicastRemoteObject implements Client,
     public void update(GameView gameView, EventMessage eventMessage) {
         view.update(gameView, eventMessage);
     }
-
-    @Override
-    public void run() {
-        view.run();
+    public void onMessage (RequestMessage message) throws RemoteException {
+        view.showMessage(message);
     }
 
+
     private void initialize(Server server) throws RemoteException{
-        server.register(this);
+        //server.register(this);
         view.addObserver((observable, eventMessage)-> {
             try{
                 server.update(this, (EventMessage) eventMessage);

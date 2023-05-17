@@ -1,4 +1,4 @@
-package it.polimi.ingsw;
+/*package it.polimi.ingsw;
 
 import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.ClientImplementation;
@@ -15,6 +15,8 @@ public class AppClientRMI {
         Registry registry = LocateRegistry.getRegistry(1234);
         Server server = (Server) registry.lookup("server");
         ClientImplementation client = new ClientImplementation(server);
-        client.run();
+        //client.run();
     }
 }
+
+ */

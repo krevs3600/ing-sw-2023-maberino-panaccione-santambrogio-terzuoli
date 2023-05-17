@@ -1,27 +1,15 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.model.CommonGoalCard.CommonGoalCard;
-import it.polimi.ingsw.model.ModelView.GameView;
 import it.polimi.ingsw.model.utils.NumberOfPlayers;
 import it.polimi.ingsw.model.utils.Position;
-import it.polimi.ingsw.model.utils.TileType;
 import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.EventMessage;
 import it.polimi.ingsw.network.eventMessages.BookshelfColumnMessage;
 import it.polimi.ingsw.network.eventMessages.ItemTileIndexMessage;
 import it.polimi.ingsw.network.eventMessages.NumOfPlayerMessage;
 import it.polimi.ingsw.network.eventMessages.TilePositionMessage;
-import it.polimi.ingsw.observer_observable.Observable;
-import it.polimi.ingsw.observer_observable.Observer;
-import it.polimi.ingsw.view.cli.TextualUI;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
 import java.util.*;
 
 public class GameController {

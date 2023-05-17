@@ -3,17 +3,23 @@ package it.polimi.ingsw.network;
 import it.polimi.ingsw.controller.GameController;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.ModelView.GameView;
-import it.polimi.ingsw.network.EventMessage;
-import it.polimi.ingsw.model.utils.NumberOfPlayers;
-import it.polimi.ingsw.view.cli.TextualUI;
+import it.polimi.ingsw.network.eventMessages.RequestMessage.LoginResponseMessage;
 
 import java.rmi.RemoteException;
 import java.rmi.server.RMIClientSocketFactory;
 import java.rmi.server.RMIServerSocketFactory;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class ServerImplementation extends UnicastRemoteObject implements Server {
 
+    private Map<GameController, Game> currentGames = new HashMap<>();
+    private Set<String> currentPlayersNicknames = new HashSet<>();
+    private Map<String, Client> connectedClients = new HashMap<>();
+    private Map<Client, GameController> player_game = new HashMap<>();
     private Game game;
     private GameController gameController;
 
@@ -43,8 +49,19 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
     }
 
     @Override
-    public void update(Client client, EventMessage eventMessage) {
-        this.gameController.update(client, eventMessage);
+    public void update(Client client, EventMessage eventMessage) throws RemoteException {
+
+        switch (eventMessage.getType()) {
+            case NICKNAME -> {
+                boolean validNickname = false;
+                if (!currentPlayersNicknames.contains(eventMessage.getNickName())) {
+                    validNickname = true;
+                    currentPlayersNicknames.add(eventMessage.getNickName());
+                }
+                client.onMessage(new LoginResponseMessage(validNickname));
+            }
+        }
+        //this.gameController.update(client, eventMessage);
     }
 
 

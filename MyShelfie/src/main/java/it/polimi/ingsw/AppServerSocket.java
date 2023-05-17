@@ -1,4 +1,4 @@
-package it.polimi.ingsw;
+/*package it.polimi.ingsw;
 
 import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.network.ServerImplementation;
@@ -31,3 +31,5 @@ public class AppServerSocket
         }
     }
 }
+
+ */

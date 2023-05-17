@@ -1,4 +1,4 @@
-package it.polimi.ingsw;
+/*package it.polimi.ingsw;
 
 import it.polimi.ingsw.network.ClientImplementation;
 import it.polimi.ingsw.network.Server;
@@ -10,6 +10,8 @@ public class App {
     public static void main(String[] args) throws RemoteException {
         Server server = new ServerImplementation();
         ClientImplementation client = new ClientImplementation(server);
-        client.run();
+        //client.run();
     }
 }
+
+ */

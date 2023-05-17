@@ -1,15 +1,26 @@
 package it.polimi.ingsw.view.cli;
 
+import it.polimi.ingsw.AppServer;
 import it.polimi.ingsw.model.ModelView.GameView;
 import it.polimi.ingsw.model.utils.Position;
+import it.polimi.ingsw.network.Client;
+import it.polimi.ingsw.network.ClientImplementation;
 import it.polimi.ingsw.network.EventMessage;
+import it.polimi.ingsw.network.Server;
+import it.polimi.ingsw.network.Socket.ServerStub;
 import it.polimi.ingsw.network.eventMessages.*;
+import it.polimi.ingsw.network.eventMessages.RequestMessage.LoginResponseMessage;
+import it.polimi.ingsw.network.eventMessages.RequestMessage.RequestMessage;
 import it.polimi.ingsw.observer_observable.Observable;
 
 import java.io.PrintStream;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.util.Scanner;
 
-public class TextualUI extends Observable implements Runnable {
+public class CLI extends Observable {
 
     private final PrintStream out = System.out;
     private final Scanner in = new Scanner(System.in);
@@ -34,8 +45,115 @@ public class TextualUI extends Observable implements Runnable {
             lock.notifyAll();
         }
     }
+    public void run() {
+        printLogo();
+        try {
+            createConnection();
+        } catch (RemoteException e) {
+            out.println("bro dinne una giusta");
+        } catch (NotBoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-    @Override
+    private void printLogo() {
+        out.println("Hello MyShelfie is here");
+    }
+
+    private void createConnection() throws RemoteException, NotBoundException {
+        String connectionType = askConnectionType();
+        String address = askServerAddress();
+        int port = askServerPort();
+
+        switch (connectionType) {
+            case "r" -> {
+                try {
+                    Registry registry = LocateRegistry.getRegistry(port);
+                    AppServer server = (AppServer) registry.lookup("MyShelfieServer");
+
+                    ClientImplementation client = new ClientImplementation(this, server.connect());
+                    gameMenu();
+                } catch (NotBoundException e) {
+                    System.err.println("not bound exception registry");
+                }
+            }
+            case "s" -> {
+                ServerStub serverStub = new ServerStub(address, port);
+                ClientImplementation client = new ClientImplementation(this, serverStub);
+                new Thread() {
+                    @Override
+                    public void run() {
+                        while(true) {
+                            try {
+                                serverStub.receive(client);
+                            } catch (RemoteException e) {
+                                System.err.println("Cannot receive from server. Stopping...");
+                                try {
+                                    serverStub.close();
+                                } catch (RemoteException ex) {
+                                    System.err.println("Cannot close connection with server. Halting...");
+                                }
+                                System.exit(1);
+                            }
+                        }
+                    }
+                }.start();
+
+                gameMenu();
+            }
+        }
+    }
+
+    private String askConnectionType() {
+        String connectionType = "";
+        do {
+            out.print("Please insert a connection type: socket (s) or RMI (r) ");
+            connectionType = in.next();
+            if (!connectionType.equals("s") && !connectionType.equals("r")) System.err.println("invalid choice");
+        } while (!connectionType.equals("s") && !connectionType.equals("r"));
+        return connectionType;
+    }
+
+    public String askServerAddress(){
+        String address;
+        do  {
+            out.print("Please insert the address of the server you want to connect to, otherwise press ENTER if you want the local host one (127.0.0.1): ");
+            address = in.next();
+        } while (!isValidIPAddress(address) || address.equals("\n"));
+        if(address.equals("\n")){
+            address = "127.0.0.1";
+        }
+        return address;
+    }
+
+    private int askServerPort(){
+        int serverPort;
+        do {
+            out.print("Please insert the IP of the server you want to connect to. If you type an invalid port, the default one will be used (1234): ");
+            try {
+                serverPort = Integer.parseInt(in.next());
+            } catch (NumberFormatException e){
+                out.print("Using default port");
+                serverPort = 1234;
+            }
+        } while (!isValidPort(serverPort));
+
+        return serverPort;
+    }
+
+    private boolean isValidPort(int port) {
+        return port >= 1024 && port < 65535;
+    }
+
+    private boolean isValidIPAddress(String address) {
+        String regExp = "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
+                "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
+                "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
+                "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
+        return address.matches(regExp);
+    }
+
+ /*   @Override
     public void run() {
         while (true) {
             while (getState() == State.WAITING_FOR_MODEL_VIEW) {
@@ -67,6 +185,8 @@ public class TextualUI extends Observable implements Runnable {
             this.setState(State.WAITING_FOR_MODEL_VIEW);
         }
 
+
+  */
 
 
         /**while (true) {
@@ -102,9 +222,8 @@ public class TextualUI extends Observable implements Runnable {
             setChanged();
             notifyObservers(column);
         }
-
-         */
     }
+         */
 
 
     public void gameMenu() {
@@ -113,20 +232,10 @@ public class TextualUI extends Observable implements Runnable {
 
         switch (menuOption) {
             case 1 -> {
-                setChanged();
-                // --------------------------
-                out.print("Insert your name: ");
-                String name = in.next();
-                this.joined = true;
-                setChanged();
-                notifyObservers(name);
+                createGame();
             }
             case 2 -> {
-                out.print("Insert your name: ");
-                String name = in.next();
-                this.joined = true;
-                setChanged();
-                notifyObservers(name);
+
             }
             default -> {
                 out.println("Invalid option, please try again");
@@ -135,12 +244,52 @@ public class TextualUI extends Observable implements Runnable {
 
     }
 
+    private void createGame() {
+        askNickname();
+        askGameName();
+        askNumberOfPlayers();
+    }
+
+    private void askNumberOfPlayers() {
+    }
+
+    private void askGameName() {
+
+    }
+
+    private void askNickname() {
+        String nickName = "";
+        while (nickName.length() < 1) {
+            out.println("Please insert your name: ");
+            nickName = in.next();
+        }
+        setChanged();
+        notifyObservers(new NicknameMessage(nickName));
+    }
+
     public void printTitle() {
         out.println(MessageCLI.TITLE);
     }
 
     public void printMenu() {
         out.println(MessageCLI.MENU);
+    }
+
+
+    public void showMessage(RequestMessage message) {
+
+        switch (message.getType()) {
+            case LOGIN_RESPONSE -> {
+                LoginResponseMessage loginResponseMessage = (LoginResponseMessage) message;
+                if (loginResponseMessage.isValidNickname()) {
+                    System.out.println("Available nickname :)");
+                }
+                else {
+                    System.err.println("Invalid nickname, please choose another one");
+                    askNickname();
+                }
+            }
+        }
     }
 
     public void update(GameView game, EventMessage eventMessage) {

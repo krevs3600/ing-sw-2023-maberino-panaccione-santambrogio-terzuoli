@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.ModelView.GameView;
 import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.EventMessage;
 import it.polimi.ingsw.network.Server;
+import it.polimi.ingsw.network.eventMessages.RequestMessage.RequestMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -53,5 +54,9 @@ public class ClientSkeleton implements Client {
             throw new RemoteException("Cannot deserialize choice from client", e);
         }
         server.update(this, eventMessage);
+    }
+
+    public void onMessage (RequestMessage message) throws RemoteException {
+
     }
 }

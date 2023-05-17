@@ -1,4 +1,4 @@
-package it.polimi.ingsw;
+/*package it.polimi.ingsw;
 
 import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.network.ServerImplementation;
@@ -11,6 +11,8 @@ public class AppServerRMI {
     public static void main(String[] args) throws RemoteException{
         Server server = new ServerImplementation();
         Registry registry = LocateRegistry.createRegistry(1234);
-        registry.rebind("server", server);
+        registry.rebind("MyShelfieServer", server);
     }
 }
+
+ */
