@@ -7,7 +7,7 @@ import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.EventMessage;
 import it.polimi.ingsw.network.eventMessages.BookshelfColumnMessage;
 import it.polimi.ingsw.network.eventMessages.ItemTileIndexMessage;
-import it.polimi.ingsw.network.eventMessages.NumOfPlayerMessage;
+import it.polimi.ingsw.network.eventMessages.GameCreationMessage;
 import it.polimi.ingsw.network.eventMessages.TilePositionMessage;
 
 import java.util.*;
@@ -55,10 +55,10 @@ public class GameController {
              */
 
             case NUM_OF_PLAYERS -> {
-                NumOfPlayerMessage numOfPlayerMessage = (NumOfPlayerMessage) eventMessage;
+                GameCreationMessage numOfPlayerMessage = (GameCreationMessage) eventMessage;
                 Player player = new Player(eventMessage.getNickName(), game.getPersonalGoalCardDeck());
                 game.subscribe(player);
-                game.initLivingRoomBoard(Arrays.stream(NumberOfPlayers.values()).filter(x -> x.getValue() == numOfPlayerMessage.getNumOfPlayers()).toList().get(0));
+                //game.initLivingRoomBoard(Arrays.stream(NumberOfPlayers.values()).filter(x -> x.getValue() == numOfPlayerMessage.getNumOfPlayers()).toList().get(0));
                 game.setDrawableTiles();
             }
 

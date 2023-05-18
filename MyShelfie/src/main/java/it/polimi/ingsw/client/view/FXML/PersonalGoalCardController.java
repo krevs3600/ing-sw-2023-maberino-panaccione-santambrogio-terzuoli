@@ -41,9 +41,10 @@ public class PersonalGoalCardController {
     public ImageView PersonalGoalCard;
 
 
+    //TODO: change the initialization
     public void initialize() throws FileNotFoundException {
-        Game game = new Game();
-        game.initLivingRoomBoard(NumberOfPlayers.FOUR_PLAYERS);
+        Game game = new Game(NumberOfPlayers.FOUR_PLAYERS, "game");
+        //game.initLivingRoomBoard(NumberOfPlayers.FOUR_PLAYERS);
         Player prova = new Player("prova", game.getPersonalGoalCardDeck());
         CommonGoalCard commonGoalCard1 = game.getLivingRoomBoard().getCommonGoalCards().get(0);
         CommonGoalCard commonGoalCard2 = game.getLivingRoomBoard().getCommonGoalCards().get(1);

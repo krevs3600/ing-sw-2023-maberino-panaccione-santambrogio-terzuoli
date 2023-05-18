@@ -2,13 +2,10 @@ package it.polimi.ingsw.model.ModelView;
 
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.utils.NumberOfPlayers;
-import javafx.scene.effect.Light;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 
 public class GameView implements Serializable {
     private String id;
@@ -25,7 +22,7 @@ public class GameView implements Serializable {
     public GameView (Game game) {
 
         this.cursor = game.getCursor();
-        this.id = game.getId();
+        this.id = game.getGameName();
         this.numberOfPlayers = game.getNumberOfPlayers();
         subscribers = new ArrayList<>();
         for(Player player : game.getSubscribers()){

@@ -2,17 +2,20 @@ package it.polimi.ingsw.network.eventMessages;
 
 import it.polimi.ingsw.network.EventMessage;
 
-public class NumOfPlayerMessage extends EventMessage {
+public class GameCreationMessage extends EventMessage {
     private final long serialVersionUID = 1L;
     private final int numOfPlayers;
-    public NumOfPlayerMessage(String nickName, int numOfPlayers) {
+    private final String gameName;
+    public GameCreationMessage(String nickName, int numOfPlayers, String gameName) {
         super(nickName, MessageType.NUM_OF_PLAYERS);
         this.numOfPlayers = numOfPlayers;
+        this.gameName = gameName;
     }
 
     public int getNumOfPlayers() {
         return numOfPlayers;
     }
+    public String getGameName () { return gameName;}
 
     @Override
     public String toString(){

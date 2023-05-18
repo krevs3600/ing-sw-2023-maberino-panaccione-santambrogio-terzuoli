@@ -2,19 +2,18 @@ package it.polimi.ingsw.network;
 
 import it.polimi.ingsw.controller.GameController;
 import it.polimi.ingsw.model.Game;
-import it.polimi.ingsw.model.ModelView.GameView;
+import it.polimi.ingsw.model.utils.NumberOfPlayers;
 import it.polimi.ingsw.network.eventMessages.GameNameMessage;
-import it.polimi.ingsw.network.eventMessages.RequestMessage.GameNameResponseMessage;
-import it.polimi.ingsw.network.eventMessages.RequestMessage.LoginResponseMessage;
+import it.polimi.ingsw.network.eventMessages.GameCreationMessage;
+import it.polimi.ingsw.network.requestMessage.GameCreationResponseMessage;
+import it.polimi.ingsw.network.requestMessage.GameNameResponseMessage;
+import it.polimi.ingsw.network.requestMessage.LoginResponseMessage;
 
 import java.rmi.RemoteException;
 import java.rmi.server.RMIClientSocketFactory;
 import java.rmi.server.RMIServerSocketFactory;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class ServerImplementation extends UnicastRemoteObject implements Server {
 
@@ -23,8 +22,6 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
     private Set<String> currentGameNames = new HashSet<>();
     private Map<String, Client> connectedClients = new HashMap<>();
     private Map<Client, GameController> player_game = new HashMap<>();
-    private Game game;
-    private GameController gameController;
 
     public ServerImplementation() throws RemoteException {
         super();
@@ -41,7 +38,7 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
     @Override
     //TODO gestione di più client
     public void register(Client client) {
-        this.game = new Game();
+        /*this.game = new Game();
         this.game.addObserver((observer, eventMessage) -> {
             try {
                 client.update(new GameView(game), (EventMessage) eventMessage);
@@ -49,7 +46,9 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                 System.err.println("Unable to update the client: " + e.getMessage() + ". Skipping the update");
             }
         });
-        this.gameController = new GameController(game, client);
+
+         */
+        //this.gameController = new GameController(game, client);
     }
 
     @Override
@@ -61,6 +60,7 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                 if (!currentPlayersNicknames.contains(eventMessage.getNickName())) {
                     validNickname = true;
                     currentPlayersNicknames.add(eventMessage.getNickName());
+                    connectedClients.put(eventMessage.getNickName(), client);
                 }
                 if (validNickname) {
                     client.onMessage(new LoginResponseMessage(eventMessage.getNickName(), validNickname));
@@ -73,15 +73,25 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                 GameNameMessage gameNameMessage = (GameNameMessage) eventMessage;
                 if (!currentGameNames.contains(gameNameMessage.getGameName())) {
                     validGameName = true;
-                    currentGameNames.add(((GameNameMessage) eventMessage).getGameName());
+                    currentGameNames.add(gameNameMessage.getGameName());
+                    client.onMessage(new GameNameResponseMessage(gameNameMessage.getGameName(), validGameName));
                 }
-                if (validGameName) {
-                    client.onMessage(new GameNameResponseMessage(((GameNameMessage) eventMessage).getGameName(), validGameName));
-
-                } else client.onMessage(new GameNameResponseMessage(validGameName));
+                else {
+                    client.onMessage(new GameNameResponseMessage(validGameName));
+                }
             }
-
-
+            case NUM_OF_PLAYERS -> {
+                GameCreationMessage gameCreationMessage = (GameCreationMessage) eventMessage;
+                boolean isValid = false;
+                if (gameCreationMessage.getNumOfPlayers() > 0 && gameCreationMessage.getNumOfPlayers() < 5) {
+                    Game game = new Game(Arrays.stream(NumberOfPlayers.values()).filter(x -> x.getValue() == gameCreationMessage.getNumOfPlayers()).toList().get(0), gameCreationMessage.getGameName());
+                    GameController gameController = new GameController(game, client);
+                    player_game.put(client, gameController);
+                    currentGames.put(gameController, game);
+                    isValid = true;
+                }
+                client.onMessage(new GameCreationResponseMessage(isValid));
+            }
         }
     }
 }

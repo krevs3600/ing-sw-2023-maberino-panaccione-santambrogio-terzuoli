@@ -3,15 +3,14 @@ package it.polimi.ingsw.view.cli;
 import it.polimi.ingsw.AppServer;
 import it.polimi.ingsw.model.ModelView.GameView;
 import it.polimi.ingsw.model.utils.Position;
-import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.ClientImplementation;
 import it.polimi.ingsw.network.EventMessage;
-import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.network.Socket.ServerStub;
 import it.polimi.ingsw.network.eventMessages.*;
-import it.polimi.ingsw.network.eventMessages.RequestMessage.GameNameResponseMessage;
-import it.polimi.ingsw.network.eventMessages.RequestMessage.LoginResponseMessage;
-import it.polimi.ingsw.network.eventMessages.RequestMessage.RequestMessage;
+import it.polimi.ingsw.network.requestMessage.GameCreationResponseMessage;
+import it.polimi.ingsw.network.requestMessage.GameNameResponseMessage;
+import it.polimi.ingsw.network.requestMessage.LoginResponseMessage;
+import it.polimi.ingsw.network.requestMessage.RequestMessage;
 import it.polimi.ingsw.observer_observable.Observable;
 
 import java.io.PrintStream;
@@ -254,18 +253,23 @@ public class CLI extends Observable {
 
     private void createGame() {
         askNickname();
-        askGameName();
-        askNumberOfPlayers();
     }
 
-    private void askNumberOfPlayers() {
+    private void askNumberOfPlayers(String gameName) {
+            int numOfPlayers = 0;
+            while (numOfPlayers <= 0) {
+                out.println("Please insert the number of players: ");
+                numOfPlayers = in.nextInt();
+            }
+            setChanged();
+            notifyObservers(new GameCreationMessage(this.client.getNickname(), numOfPlayers, gameName));
     }
 
     private void askGameName() {
 
         String GameName = "";
         while (GameName.length() < 1) {
-            out.println("Please insert the name for your game : ");
+            out.println("Please " + this.client.getNickname() + " insert the name for your game : ");
             GameName = in.next();
         }
         setChanged();
@@ -299,10 +303,11 @@ public class CLI extends Observable {
             case LOGIN_RESPONSE -> {
                 LoginResponseMessage loginResponseMessage = (LoginResponseMessage) message;
                 if (loginResponseMessage.isValidNickname()) {
-                    System.out.println("Available nickname :)");
+                    System.out.println("Available nickname "+ this.client.getNickname()+" :)\n");
+                    askGameName();
                 }
                 else {
-                    System.err.println("Invalid nickname, please choose another one");
+                    System.err.println("Invalid nickname, please choose another one\n");
                     askNickname();
                 }
 
@@ -311,11 +316,23 @@ public class CLI extends Observable {
             case GAMENAME_RESPONSE -> {
                 GameNameResponseMessage gameNameResponseMessage=(GameNameResponseMessage) message;
                 if(gameNameResponseMessage.isValidGameName()){
-                    System.out.println("Available GameName " );
+                    System.out.println("Available game name :) " );
+                    askNumberOfPlayers(gameNameResponseMessage.getGameName());
                 }
                 else {
-                    System.out.println("There is alredy a gameName with that Name, plese choose another GameName");
+                    System.err.println("The game name is already taken, please choose another game name");
                     askGameName();
+                }
+            }
+            case GAME_CREATION -> {
+                GameCreationResponseMessage gameCreationResponseMessage = (GameCreationResponseMessage) message;
+                if(gameCreationResponseMessage.isValidGameCreation()) {
+                    System.out.println("Valid number of players :) " );
+                    System.out.println("Waiting for other players... " );
+                }
+                else {
+                    System.err.println("Invalid number of players, please choose a number within the available range");
+                    askNumberOfPlayers(this.client.getGameName());
                 }
             }
         }

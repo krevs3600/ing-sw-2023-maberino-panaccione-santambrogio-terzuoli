@@ -17,7 +17,7 @@ import java.util.concurrent.Executors;
 public class AppServerImpl extends UnicastRemoteObject implements AppServer
 {
 
-    private static Server server =  null;
+    private static Server server = null;
     private static AppServerImpl instance;
 
     private final ExecutorService executorService = Executors.newCachedThreadPool();

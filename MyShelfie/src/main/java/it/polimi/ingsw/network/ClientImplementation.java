@@ -1,9 +1,9 @@
 package it.polimi.ingsw.network;
 
 import it.polimi.ingsw.model.ModelView.GameView;
-import it.polimi.ingsw.network.eventMessages.RequestMessage.GameNameResponseMessage;
-import it.polimi.ingsw.network.eventMessages.RequestMessage.LoginResponseMessage;
-import it.polimi.ingsw.network.eventMessages.RequestMessage.RequestMessage;
+import it.polimi.ingsw.network.requestMessage.GameNameResponseMessage;
+import it.polimi.ingsw.network.requestMessage.LoginResponseMessage;
+import it.polimi.ingsw.network.requestMessage.RequestMessage;
 import it.polimi.ingsw.view.cli.CLI;
 
 import java.rmi.RemoteException;
@@ -51,13 +51,14 @@ public class ClientImplementation extends UnicastRemoteObject implements Client 
     }
 
     public void onMessage(RequestMessage message) throws RemoteException {
-        view.showMessage(message);
+
         //just to set the parametres, maybe it will be a problem with concurrency (?)
         switch (message.getType()) {
             case LOGIN_RESPONSE -> {
                 LoginResponseMessage loginResponseMessage = (LoginResponseMessage) message;
                 if (loginResponseMessage.isValidNickname())
                     this.nickname = loginResponseMessage.getNickname();
+
             }
             case GAMENAME_RESPONSE -> {
                GameNameResponseMessage gameNameResponseMessage = (GameNameResponseMessage) message;
@@ -66,6 +67,7 @@ public class ClientImplementation extends UnicastRemoteObject implements Client 
             }
 
         }
+        view.showMessage(message);
     }
 
 

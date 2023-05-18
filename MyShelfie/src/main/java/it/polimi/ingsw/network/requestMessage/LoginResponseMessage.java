@@ -1,7 +1,4 @@
-package it.polimi.ingsw.network.eventMessages.RequestMessage;
-
-import it.polimi.ingsw.network.EventMessage;
-import it.polimi.ingsw.network.eventMessages.MessageType;
+package it.polimi.ingsw.network.requestMessage;
 
 public class LoginResponseMessage extends RequestMessage {
     private final long serialVersionUID = 1L;

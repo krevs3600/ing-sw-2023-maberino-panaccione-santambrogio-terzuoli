@@ -1,8 +1,6 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.CommonGoalCard.CommonGoalCard;
-import it.polimi.ingsw.model.ModelView.BookshelfView;
-import it.polimi.ingsw.model.ModelView.GameView;
 import it.polimi.ingsw.model.ModelView.LivingRoomBoardView;
 import it.polimi.ingsw.model.ModelView.TilePackView;
 import it.polimi.ingsw.model.utils.NumberOfPlayers;
@@ -31,7 +29,7 @@ public class Game extends Observable<EventMessage> {
         END_TURN,
         END_GAME;
     }
-    private String id;
+    private String gameName;
     private PersonalGoalCardDeck personalGoalCardDeck;
     private List<Player> subscribers = new ArrayList<>();
      private LivingRoomBoard livingRoomBoard;
@@ -51,10 +49,10 @@ public class Game extends Observable<EventMessage> {
      private boolean alongSideRow;
      private boolean alongSideColumn;
 
-    public Game(){
+    public Game(NumberOfPlayers numberOfPlayers, String gameName){
         //initialize id with random string, This should be quiet random...
-        this.id = String.valueOf(String.format("%d", System.currentTimeMillis()).hashCode());
-        //this.livingRoomBoard = new LivingRoomBoard(numberOfPlayers);
+        this.gameName = gameName;
+        this.livingRoomBoard = new LivingRoomBoard(numberOfPlayers);
         this.numberOfPlayers = numberOfPlayers;
         this.personalGoalCardDeck = new PersonalGoalCardDeck();
         this.tilePack = new TilePack();
@@ -64,11 +62,13 @@ public class Game extends Observable<EventMessage> {
         this.alongSideColumn = false;
     }
 
+    /*
     public void initLivingRoomBoard(NumberOfPlayers numOfPlayers){
         this.livingRoomBoard = new LivingRoomBoard((numOfPlayers));
         this.numberOfPlayers = numOfPlayers;
     }
 
+     */
 
     public ItemTile drawTile(Position position) throws IllegalArgumentException{
         ItemTile itemTile = getLivingRoomBoard().getSpace(position).drawTile();
@@ -167,8 +167,8 @@ public class Game extends Observable<EventMessage> {
      * This getter method gets the player's id
      * @return String It returns the string representing the identification of the player
      */
-    public String getId(){
-        return this.id;
+    public String getGameName(){
+        return this.gameName;
     }
 
     /**
@@ -224,13 +224,13 @@ public class Game extends Observable<EventMessage> {
         Scanner scanner = new Scanner(System.in);
         System.out.print("How many players are going to play? ");
         int numberOfPlayers = scanner.nextInt();
-        Game game = new Game();
+        Game game = new Game(NumberOfPlayers.TWO_PLAYERS, "game");
         for (int i = 0; i<numberOfPlayers; i++){
             System.out.print("Enter your name: ");
             String name = scanner.next();
             game.subscribe(new Player(name, personalGoalCardDeck));
         }
-        System.out.println("Game " + game.getId());
+        System.out.println("Game " + game.getGameName());
         TilePack tilePack = new TilePack();
         game.startGame();
         LivingRoomBoard livingRoomBoard = game.getLivingRoomBoard();

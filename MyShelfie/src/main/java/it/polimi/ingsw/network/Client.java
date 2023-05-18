@@ -1,7 +1,7 @@
 package it.polimi.ingsw.network;
 
 import it.polimi.ingsw.model.ModelView.GameView;
-import it.polimi.ingsw.network.eventMessages.RequestMessage.RequestMessage;
+import it.polimi.ingsw.network.requestMessage.RequestMessage;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;

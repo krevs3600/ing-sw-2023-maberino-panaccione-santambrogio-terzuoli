@@ -144,9 +144,11 @@ public class LivingBoardController {
         images.put(TileType.PLANT, plants);
         images.put(TileType.TROPHY, trophey);
 
+
         // INIT_GAME
-        Game game = new Game(); // default 2 players
-        game.initLivingRoomBoard(NumberOfPlayers.FOUR_PLAYERS);
+        // TODO: correct the game creation
+        Game game = new Game(NumberOfPlayers.FOUR_PLAYERS, "game"); // default 2 players
+        //game.initLivingRoomBoard(NumberOfPlayers.FOUR_PLAYERS);
         LivingRoomBoard livingBoard = game.getLivingRoomBoard();
         Player carlo = new Player("carlo", game.getPersonalGoalCardDeck());
         Player fra = new Player("fraaaa", game.getPersonalGoalCardDeck());

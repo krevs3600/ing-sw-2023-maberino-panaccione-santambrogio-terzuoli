@@ -1,6 +1,4 @@
-package it.polimi.ingsw.network.eventMessages.RequestMessage;
-
-import it.polimi.ingsw.network.eventMessages.MessageType;
+package it.polimi.ingsw.network.requestMessage;
 
 import java.io.Serializable;
 
