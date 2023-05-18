@@ -1,9 +1,7 @@
 package it.polimi.ingsw.network.eventMessages;
 
 import it.polimi.ingsw.model.ModelView.LivingRoomBoardView;
-import it.polimi.ingsw.network.EventMessage;
-
-import java.io.Serializable;
+import it.polimi.ingsw.network.MessageType;
 
 public class BoardMessage extends EventMessage{
     private final long serialVersionUID = 1L;

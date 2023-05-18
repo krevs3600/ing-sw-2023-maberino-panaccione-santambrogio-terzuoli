@@ -3,11 +3,15 @@ package it.polimi.ingsw.network;
 import it.polimi.ingsw.controller.GameController;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.utils.NumberOfPlayers;
+import it.polimi.ingsw.network.MessagesToServer.requestMessage.GameCreationResponseMessage;
+import it.polimi.ingsw.network.MessagesToServer.requestMessage.GameNameResponseMessage;
+import it.polimi.ingsw.network.MessagesToServer.requestMessage.JoinGameResponseMessage;
+import it.polimi.ingsw.network.MessagesToServer.requestMessage.LoginResponseMessage;
+import it.polimi.ingsw.network.eventMessages.EventMessage;
 import it.polimi.ingsw.network.eventMessages.GameNameMessage;
 import it.polimi.ingsw.network.eventMessages.GameCreationMessage;
-import it.polimi.ingsw.network.requestMessage.GameCreationResponseMessage;
-import it.polimi.ingsw.network.requestMessage.GameNameResponseMessage;
-import it.polimi.ingsw.network.requestMessage.LoginResponseMessage;
+import it.polimi.ingsw.network.eventMessages.JoinGameMessage;
+import it.polimi.ingsw.network.requestMessage.*;
 
 import java.rmi.RemoteException;
 import java.rmi.server.RMIClientSocketFactory;
@@ -19,7 +23,7 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
 
     private Map<GameController, Game> currentGames = new HashMap<>();
     private Set<String> currentPlayersNicknames = new HashSet<>();
-    private Set<String> currentGameNames = new HashSet<>();
+    private Set<String> currentLobbyGameNames = new HashSet<>();
     private Map<String, Client> connectedClients = new HashMap<>();
     private Map<Client, GameController> player_game = new HashMap<>();
 
@@ -56,34 +60,32 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
 
         switch (eventMessage.getType()) {
             case NICKNAME -> {
-                boolean validNickname = false;
-                if (!currentPlayersNicknames.contains(eventMessage.getNickName())) {
-                    validNickname = true;
-                    currentPlayersNicknames.add(eventMessage.getNickName());
-                    connectedClients.put(eventMessage.getNickName(), client);
-                }
-                if (validNickname) {
-                    client.onMessage(new LoginResponseMessage(eventMessage.getNickName(), validNickname));
-                } else
-                    client.onMessage(new LoginResponseMessage(validNickname));
-            }
+                if (!currentPlayersNicknames.contains(eventMessage.getNickName())) {                                                              //case CREATOR_NICKNAME -> {
+                    currentPlayersNicknames.add(eventMessage.getNickName());                                                                      //    boolean validNickname = false;
+                    connectedClients.put(eventMessage.getNickName(), client);                                                                     //    if (!currentPlayersNicknames.contains(eventMessage.getNickName())) {
+                    //  Set<String> availableGames = new HashSet<>(currentLobbyGameNames);                                                            //        validNickname = true;
+                    //  if(currentLobbyGameNames.size()==0){                                                                                          //        currentPlayersNicknames.add(eventMessage.getNickName());
+                    //      client.onMessage(new LoginResponseMessage(true,false, eventMessage.getNickName()));                                       //        connectedClients.put(eventMessage.getNickName(), client);
+                    //  }                                                                                                                             //    }
+                    client.onMessage(new LoginResponseMessage(true, eventMessage.getNickName()));                       //    if (validNickname) {
+                }                                                                                                                                 //        client.onMessage(new CreatorLoginResponseMessage(eventMessage.getNickName(), validNickname));
+                else                                                                                                                              //    } else
+                    client.onMessage(new LoginResponseMessage(false));                                                                            //        client.onMessage(new CreatorLoginResponseMessage(validNickname));
+            }                                                                                                                                     //}
             //this.gameController.update(client, eventMessage);
             case GAMENAME -> {
-                boolean validGameName = false;
                 GameNameMessage gameNameMessage = (GameNameMessage) eventMessage;
-                if (!currentGameNames.contains(gameNameMessage.getGameName())) {
-                    validGameName = true;
-                    currentGameNames.add(gameNameMessage.getGameName());
-                    client.onMessage(new GameNameResponseMessage(gameNameMessage.getGameName(), validGameName));
-                }
-                else {
-                    client.onMessage(new GameNameResponseMessage(validGameName));
+                if (!currentLobbyGameNames.contains(gameNameMessage.getGameName())) {
+                    currentLobbyGameNames.add(gameNameMessage.getGameName());
+                    client.onMessage(new GameNameResponseMessage(gameNameMessage.getGameName(), true));
+                } else {
+                    client.onMessage(new GameNameResponseMessage(false));
                 }
             }
             case NUM_OF_PLAYERS -> {
                 GameCreationMessage gameCreationMessage = (GameCreationMessage) eventMessage;
                 boolean isValid = false;
-                if (gameCreationMessage.getNumOfPlayers() > 0 && gameCreationMessage.getNumOfPlayers() < 5) {
+                if (gameCreationMessage.getNumOfPlayers() > 1 && gameCreationMessage.getNumOfPlayers() < 5) {
                     Game game = new Game(Arrays.stream(NumberOfPlayers.values()).filter(x -> x.getValue() == gameCreationMessage.getNumOfPlayers()).toList().get(0), gameCreationMessage.getGameName());
                     GameController gameController = new GameController(game, client);
                     player_game.put(client, gameController);
@@ -92,6 +94,33 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                 }
                 client.onMessage(new GameCreationResponseMessage(isValid));
             }
+
+            case JOIN_GAME_REQUEST -> {
+                JoinGameMessage joinGameMessage = (JoinGameMessage) eventMessage;
+                Set<String> availableGames = new HashSet<>(currentLobbyGameNames);
+                if (currentLobbyGameNames.size() == 0) {
+                    //errorMessage
+                } else {
+                    client.onMessage(new JoinGameResponseMessage(true, availableGames));
+
+                }
+            }
         }
     }
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        }
+
+

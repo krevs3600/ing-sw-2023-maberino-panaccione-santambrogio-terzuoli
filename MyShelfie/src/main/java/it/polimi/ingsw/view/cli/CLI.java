@@ -4,13 +4,11 @@ import it.polimi.ingsw.AppServer;
 import it.polimi.ingsw.model.ModelView.GameView;
 import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.network.ClientImplementation;
-import it.polimi.ingsw.network.EventMessage;
+import it.polimi.ingsw.network.MessagesToServer.requestMessage.*;
+import it.polimi.ingsw.network.eventMessages.EventMessage;
 import it.polimi.ingsw.network.Socket.ServerStub;
 import it.polimi.ingsw.network.eventMessages.*;
-import it.polimi.ingsw.network.requestMessage.GameCreationResponseMessage;
-import it.polimi.ingsw.network.requestMessage.GameNameResponseMessage;
-import it.polimi.ingsw.network.requestMessage.LoginResponseMessage;
-import it.polimi.ingsw.network.requestMessage.RequestMessage;
+import it.polimi.ingsw.network.requestMessage.*;
 import it.polimi.ingsw.observer_observable.Observable;
 
 import java.io.PrintStream;
@@ -19,6 +17,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Scanner;
+import java.util.Set;
 
 public class CLI extends Observable {
 
@@ -79,7 +78,7 @@ public class CLI extends Observable {
 
                     ClientImplementation client = new ClientImplementation(this, server.connect());
                     this.client=client;
-                    gameMenu();
+                   askNickname();
                 } catch (NotBoundException e) {
                     System.err.println("not bound exception registry");
                 }
@@ -106,7 +105,7 @@ public class CLI extends Observable {
                     }
                 }.start();
 
-                gameMenu();
+                askNickname();
             }
         }
     }
@@ -242,6 +241,7 @@ public class CLI extends Observable {
                 createGame();
             }
             case 2 -> {
+                joinGame();
 
             }
             default -> {
@@ -252,7 +252,15 @@ public class CLI extends Observable {
     }
 
     private void createGame() {
-        askNickname();
+        askGameName();
+
+
+    }
+
+    private void joinGame(){
+        setChanged();
+        notifyObservers(new JoinGameMessage(this.client.getNickname()));
+
     }
 
     private void askNumberOfPlayers(String gameName) {
@@ -283,8 +291,29 @@ public class CLI extends Observable {
             out.println("Please insert your name: ");
             nickName = in.next();
         }
+      //  return nickName;
         setChanged();
         notifyObservers(new NicknameMessage(nickName));
+
+    }
+
+    public void showGameNamesList(Set<String> availableGameNames) {
+
+        for (String game : availableGameNames) {
+           out.println(game);
+        }
+        String gameChoice = null;
+        do {
+            out.println("\n choose the name of the game you want to join in ");
+            gameChoice = in.next();
+            
+            if(!availableGameNames.contains(gameChoice)) {
+                System.err.println("\n invalid game choise, please insert new one");
+            }
+
+
+        }while(!availableGameNames.contains(gameChoice));
+
 
     }
 
@@ -300,40 +329,59 @@ public class CLI extends Observable {
     public void showMessage(RequestMessage message) {
 
         switch (message.getType()) {
-            case LOGIN_RESPONSE -> {
-                LoginResponseMessage loginResponseMessage = (LoginResponseMessage) message;
-                if (loginResponseMessage.isValidNickname()) {
-                    System.out.println("Available nickname "+ this.client.getNickname()+" :)\n");
-                    askGameName();
-                }
-                else {
-                    System.err.println("Invalid nickname, please choose another one\n");
-                    askNickname();
-                }
+           // case CREATOR_LOGIN_RESPONSE -> {
+           //     CreatorLoginResponseMessage creatorLoginResponseMessage = (CreatorLoginResponseMessage) message;
+           //     if (creatorLoginResponseMessage.isValidNickname()) {
+           //         System.out.println("Available nickname " + this.client.getNickname() + " :)\n");
+           //         askGameName();
+           //     } else {
+           //         System.err.println("Invalid nickname, please choose another one\n");
+           //         askNickname();
+           //     }
 
 
-            }
+
             case GAMENAME_RESPONSE -> {
-                GameNameResponseMessage gameNameResponseMessage=(GameNameResponseMessage) message;
-                if(gameNameResponseMessage.isValidGameName()){
-                    System.out.println("Available game name :) " );
+                GameNameResponseMessage gameNameResponseMessage = (GameNameResponseMessage) message;
+                if (gameNameResponseMessage.isValidGameName()) {
+                    System.out.println("Available game name :) ");
                     askNumberOfPlayers(gameNameResponseMessage.getGameName());
-                }
-                else {
+                } else {
                     System.err.println("The game name is already taken, please choose another game name");
                     askGameName();
                 }
             }
+            //this case is related to the insertion of the number of players
             case GAME_CREATION -> {
                 GameCreationResponseMessage gameCreationResponseMessage = (GameCreationResponseMessage) message;
-                if(gameCreationResponseMessage.isValidGameCreation()) {
-                    System.out.println("Valid number of players :) " );
-                    System.out.println("Waiting for other players... " );
-                }
-                else {
+                if (gameCreationResponseMessage.isValidGameCreation()) {
+                    System.out.println("Valid number of players :) ");
+                    System.out.println("Waiting for other players... ");
+                } else {
                     System.err.println("Invalid number of players, please choose a number within the available range");
                     askNumberOfPlayers(this.client.getGameName());
                 }
+            }
+            case LOGIN_RESPONSE -> {
+                LoginResponseMessage loginResponseMessage = (LoginResponseMessage) message;
+                if (loginResponseMessage.isValidNickname()) {
+                    System.out.println("Available nickname " + this.client.getNickname() + " :)\n");
+                    gameMenu();
+                    showGameNamesList(loginResponseMessage.getAvailableGames());
+
+                } else {
+                   // if (loginResponseMessage.getNickname().equals(this.client.getNickname())) {
+                   //     System.err.println("No games available, returning to the main menu ");
+                   //     printMenu();
+                        System.err.println("Invalid nickname, please choose another one\n");
+                        askNickname();
+                    }
+
+                }
+
+            case JOINGAME_RESPONSE -> {
+                JoinGameResponseMessage joinGameResponseMessage= (JoinGameResponseMessage) message;
+                showGameNamesList(joinGameResponseMessage.getAvailableGamesInLobby());
             }
         }
     }

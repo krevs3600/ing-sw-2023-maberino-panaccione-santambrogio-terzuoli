@@ -1,10 +1,7 @@
 package it.polimi.ingsw.observer_observable;
 
-import it.polimi.ingsw.network.EventMessage;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 public class Observable<EventMessage> {
 

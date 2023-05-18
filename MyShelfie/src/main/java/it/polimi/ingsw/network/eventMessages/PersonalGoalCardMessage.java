@@ -1,7 +1,7 @@
 package it.polimi.ingsw.network.eventMessages;
 
 import it.polimi.ingsw.model.PersonalGoalCard;
-import it.polimi.ingsw.network.EventMessage;
+import it.polimi.ingsw.network.MessageType;
 
 public class PersonalGoalCardMessage extends EventMessage {
     private final long serialVersionUID = 1L;

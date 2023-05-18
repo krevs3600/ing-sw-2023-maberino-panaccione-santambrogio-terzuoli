@@ -1,6 +1,6 @@
 package it.polimi.ingsw.network.eventMessages;
 import it.polimi.ingsw.model.utils.Position;
-import it.polimi.ingsw.network.EventMessage;
+import it.polimi.ingsw.network.MessageType;
 
 public class TilePositionMessage extends EventMessage {
     private final long serialVersionUID = 1L;

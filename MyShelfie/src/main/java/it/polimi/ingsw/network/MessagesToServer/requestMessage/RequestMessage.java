@@ -1,15 +1,15 @@
-package it.polimi.ingsw.network.requestMessage;
+package it.polimi.ingsw.network.MessagesToServer.requestMessage;
 
 import java.io.Serializable;
 
 public abstract class RequestMessage implements Serializable {
-    private RequestMessageType type;
+    private MessageToServerType type;
 
-    public RequestMessage(RequestMessageType messageType){
+    public RequestMessage(MessageToServerType messageType){
         this.type = messageType;
     }
 
-    public RequestMessageType getType() {
+    public MessageToServerType getType() {
         return type;
     }
 

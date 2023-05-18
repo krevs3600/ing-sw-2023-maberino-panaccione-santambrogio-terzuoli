@@ -1,16 +1,13 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.model.utils.NumberOfPlayers;
 import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.network.Client;
-import it.polimi.ingsw.network.EventMessage;
+import it.polimi.ingsw.network.eventMessages.EventMessage;
 import it.polimi.ingsw.network.eventMessages.BookshelfColumnMessage;
 import it.polimi.ingsw.network.eventMessages.ItemTileIndexMessage;
 import it.polimi.ingsw.network.eventMessages.GameCreationMessage;
 import it.polimi.ingsw.network.eventMessages.TilePositionMessage;
-
-import java.util.*;
 
 public class GameController {
     private Game game = null;

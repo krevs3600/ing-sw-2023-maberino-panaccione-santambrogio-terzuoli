@@ -1,4 +1,6 @@
 package it.polimi.ingsw.network;
+import it.polimi.ingsw.network.eventMessages.EventMessage;
+
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 

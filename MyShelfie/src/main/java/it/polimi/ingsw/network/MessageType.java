@@ -1,4 +1,4 @@
-package it.polimi.ingsw.network.eventMessages;
+package it.polimi.ingsw.network;
 
 public enum MessageType {
     ERROR,
@@ -13,11 +13,17 @@ public enum MessageType {
     SWITCH_PHASE,
     BOARD,
     BOOKSHELF,
+    JOIN_GAME_REQUEST,
     TILE_PACK,
     PERSONAL_GOAL_CARD,
     COMMON_GOAL_CARD,
     SCORE,
     END_GAME,
     INSERTION_REQUEST,
-    ITEM_TILE_INDEX;
+    ITEM_TILE_INDEX, CREATOR_NICKNAME,
+
+
+    // error
+
+
 }

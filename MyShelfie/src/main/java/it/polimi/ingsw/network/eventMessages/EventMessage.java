@@ -1,10 +1,11 @@
-package it.polimi.ingsw.network;
+package it.polimi.ingsw.network.eventMessages;
 
-import it.polimi.ingsw.network.eventMessages.MessageType;
+import it.polimi.ingsw.network.Message;
+import it.polimi.ingsw.network.MessageType;
 
 import java.io.Serializable;
 
-public abstract class EventMessage implements Serializable {
+public abstract class EventMessage implements Serializable, Message {
     private String nickName;
     private MessageType type;
 
@@ -15,7 +16,7 @@ public abstract class EventMessage implements Serializable {
     public String getNickName(){
         return this.nickName;
     }
-
+    @Override
     public MessageType getType() {
         return type;
     }

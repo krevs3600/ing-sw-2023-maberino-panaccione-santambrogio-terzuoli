@@ -1,12 +1,12 @@
 package it.polimi.ingsw.network.eventMessages;
 
-import it.polimi.ingsw.network.EventMessage;
+import it.polimi.ingsw.network.MessageType;
 
 public class GameNameMessage extends EventMessage {
     private String GameName;
     private final long serialVersionUID = 1L;
     public GameNameMessage(String nickName,String GameName) {
-        super(nickName,MessageType.GAMENAME);
+        super(nickName, MessageType.GAMENAME);
         this.GameName=GameName;
 
 
