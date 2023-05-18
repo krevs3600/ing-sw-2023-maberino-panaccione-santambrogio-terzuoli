@@ -9,6 +9,7 @@ import it.polimi.ingsw.network.EventMessage;
 import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.network.Socket.ServerStub;
 import it.polimi.ingsw.network.eventMessages.*;
+import it.polimi.ingsw.network.eventMessages.RequestMessage.GameNameResponseMessage;
 import it.polimi.ingsw.network.eventMessages.RequestMessage.LoginResponseMessage;
 import it.polimi.ingsw.network.eventMessages.RequestMessage.RequestMessage;
 import it.polimi.ingsw.observer_observable.Observable;
@@ -26,6 +27,11 @@ public class CLI extends Observable {
     private final Scanner in = new Scanner(System.in);
     private final Object lock = new Object();
     private boolean joined = false;
+
+    private ClientImplementation client;
+
+
+
 
     private enum State {
         WAITING_FOR_PLAYER,
@@ -71,7 +77,9 @@ public class CLI extends Observable {
                     Registry registry = LocateRegistry.getRegistry(port);
                     AppServer server = (AppServer) registry.lookup("MyShelfieServer");
 
+
                     ClientImplementation client = new ClientImplementation(this, server.connect());
+                    this.client=client;
                     gameMenu();
                 } catch (NotBoundException e) {
                     System.err.println("not bound exception registry");
@@ -255,6 +263,14 @@ public class CLI extends Observable {
 
     private void askGameName() {
 
+        String GameName = "";
+        while (GameName.length() < 1) {
+            out.println("Please insert the name for your game : ");
+            GameName = in.next();
+        }
+        setChanged();
+        notifyObservers(new GameNameMessage(this.client.getNickname(),GameName));
+
     }
 
     private void askNickname() {
@@ -265,6 +281,7 @@ public class CLI extends Observable {
         }
         setChanged();
         notifyObservers(new NicknameMessage(nickName));
+
     }
 
     public void printTitle() {
@@ -287,6 +304,18 @@ public class CLI extends Observable {
                 else {
                     System.err.println("Invalid nickname, please choose another one");
                     askNickname();
+                }
+
+
+            }
+            case GAMENAME_RESPONSE -> {
+                GameNameResponseMessage gameNameResponseMessage=(GameNameResponseMessage) message;
+                if(gameNameResponseMessage.isValidGameName()){
+                    System.out.println("Available GameName " );
+                }
+                else {
+                    System.out.println("There is alredy a gameName with that Name, plese choose another GameName");
+                    askGameName();
                 }
             }
         }

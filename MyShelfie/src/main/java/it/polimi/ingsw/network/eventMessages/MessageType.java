@@ -3,6 +3,8 @@ package it.polimi.ingsw.network.eventMessages;
 public enum MessageType {
     ERROR,
     NICKNAME,
+
+    GAMENAME,
     MENU_OPTION,
     NUM_OF_PLAYERS,
     NUM_OF_PLAYERS_REQUEST,

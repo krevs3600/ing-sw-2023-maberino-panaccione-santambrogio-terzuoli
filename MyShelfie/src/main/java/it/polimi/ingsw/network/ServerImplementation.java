@@ -3,6 +3,8 @@ package it.polimi.ingsw.network;
 import it.polimi.ingsw.controller.GameController;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.ModelView.GameView;
+import it.polimi.ingsw.network.eventMessages.GameNameMessage;
+import it.polimi.ingsw.network.eventMessages.RequestMessage.GameNameResponseMessage;
 import it.polimi.ingsw.network.eventMessages.RequestMessage.LoginResponseMessage;
 
 import java.rmi.RemoteException;
@@ -18,6 +20,7 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
 
     private Map<GameController, Game> currentGames = new HashMap<>();
     private Set<String> currentPlayersNicknames = new HashSet<>();
+    private Set<String> currentGameNames = new HashSet<>();
     private Map<String, Client> connectedClients = new HashMap<>();
     private Map<Client, GameController> player_game = new HashMap<>();
     private Game game;
@@ -31,7 +34,7 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
         super(port);
     }
 
-    public ServerImplementation(int port, RMIClientSocketFactory csf, RMIServerSocketFactory ssf) throws RemoteException{
+    public ServerImplementation(int port, RMIClientSocketFactory csf, RMIServerSocketFactory ssf) throws RemoteException {
         super(port, csf, ssf);
     }
 
@@ -39,10 +42,11 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
     //TODO gestione di più client
     public void register(Client client) {
         this.game = new Game();
-        this.game.addObserver((observer, eventMessage)-> {
-            try{client.update(new GameView(game), (EventMessage) eventMessage);
-        } catch(RemoteException e){
-            System.err.println("Unable to update the client: " + e.getMessage() + ". Skipping the update");
+        this.game.addObserver((observer, eventMessage) -> {
+            try {
+                client.update(new GameView(game), (EventMessage) eventMessage);
+            } catch (RemoteException e) {
+                System.err.println("Unable to update the client: " + e.getMessage() + ". Skipping the update");
             }
         });
         this.gameController = new GameController(game, client);
@@ -58,11 +62,26 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                     validNickname = true;
                     currentPlayersNicknames.add(eventMessage.getNickName());
                 }
-                client.onMessage(new LoginResponseMessage(validNickname));
+                if (validNickname) {
+                    client.onMessage(new LoginResponseMessage(eventMessage.getNickName(), validNickname));
+                } else
+                    client.onMessage(new LoginResponseMessage(validNickname));
             }
+            //this.gameController.update(client, eventMessage);
+            case GAMENAME -> {
+                boolean validGameName = false;
+                GameNameMessage gameNameMessage = (GameNameMessage) eventMessage;
+                if (!currentGameNames.contains(gameNameMessage.getGameName())) {
+                    validGameName = true;
+                    currentGameNames.add(((GameNameMessage) eventMessage).getGameName());
+                }
+                if (validGameName) {
+                    client.onMessage(new GameNameResponseMessage(((GameNameMessage) eventMessage).getGameName(), validGameName));
+
+                } else client.onMessage(new GameNameResponseMessage(validGameName));
+            }
+
+
         }
-        //this.gameController.update(client, eventMessage);
     }
-
-
 }
