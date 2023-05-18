@@ -1,5 +1,7 @@
 package it.polimi.ingsw.network.MessagesToServer.requestMessage;
 
+import it.polimi.ingsw.network.MessagesToServer.MessageToServerType;
+
 public class GameNameResponseMessage extends RequestMessage {
     private final long serialVersionUID = 1L;
     private final boolean validGameName;

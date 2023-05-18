@@ -11,7 +11,6 @@ import it.polimi.ingsw.network.eventMessages.EventMessage;
 import it.polimi.ingsw.network.eventMessages.GameNameMessage;
 import it.polimi.ingsw.network.eventMessages.GameCreationMessage;
 import it.polimi.ingsw.network.eventMessages.JoinGameMessage;
-import it.polimi.ingsw.network.requestMessage.*;
 
 import java.rmi.RemoteException;
 import java.rmi.server.RMIClientSocketFactory;
@@ -107,20 +106,6 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
             }
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        }
+}
 
 

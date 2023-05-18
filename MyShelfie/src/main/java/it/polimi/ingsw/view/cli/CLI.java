@@ -4,11 +4,11 @@ import it.polimi.ingsw.AppServer;
 import it.polimi.ingsw.model.ModelView.GameView;
 import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.network.ClientImplementation;
+import it.polimi.ingsw.network.MessagesToServer.MessageToServer;
 import it.polimi.ingsw.network.MessagesToServer.requestMessage.*;
 import it.polimi.ingsw.network.eventMessages.EventMessage;
 import it.polimi.ingsw.network.Socket.ServerStub;
 import it.polimi.ingsw.network.eventMessages.*;
-import it.polimi.ingsw.network.requestMessage.*;
 import it.polimi.ingsw.observer_observable.Observable;
 
 import java.io.PrintStream;
@@ -326,7 +326,7 @@ public class CLI extends Observable {
     }
 
 
-    public void showMessage(RequestMessage message) {
+    public void showMessage(MessageToServer message) {
 
         switch (message.getType()) {
            // case CREATOR_LOGIN_RESPONSE -> {

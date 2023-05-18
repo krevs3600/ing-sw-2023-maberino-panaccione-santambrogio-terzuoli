@@ -1,8 +1,10 @@
 package it.polimi.ingsw.network.MessagesToServer.requestMessage;
 
+import it.polimi.ingsw.network.MessagesToServer.MessageToServerType;
+
 import java.util.Set;
 
-public class LoginResponseMessage extends RequestMessage{
+public class LoginResponseMessage extends RequestMessage {
     private final long serialVersionUID = 1L;
     private final boolean validNickname;
 

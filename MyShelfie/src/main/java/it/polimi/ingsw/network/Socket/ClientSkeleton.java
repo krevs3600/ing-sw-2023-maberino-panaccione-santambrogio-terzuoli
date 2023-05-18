@@ -2,6 +2,8 @@ package it.polimi.ingsw.network.Socket;
 
 import it.polimi.ingsw.model.ModelView.GameView;
 import it.polimi.ingsw.network.Client;
+import it.polimi.ingsw.network.MessagesToServer.MessageToServer;
+import it.polimi.ingsw.network.MessagesToServer.MessageToServerType;
 import it.polimi.ingsw.network.eventMessages.EventMessage;
 import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.network.MessagesToServer.requestMessage.RequestMessage;
@@ -56,7 +58,7 @@ public class ClientSkeleton implements Client {
         server.update(this, eventMessage);
     }
 
-    public void onMessage (RequestMessage message) throws RemoteException {
+    public void onMessage (MessageToServer message) throws RemoteException {
 
     }
 }
