@@ -7,7 +7,7 @@ public class GameCreationMessage extends EventMessage {
     private final int numOfPlayers;
     private final String gameName;
     public GameCreationMessage(String nickName, int numOfPlayers, String gameName) {
-        super(nickName, MessageType.NUM_OF_PLAYERS);
+        super(nickName, MessageType.GAME_CREATION);
         this.numOfPlayers = numOfPlayers;
         this.gameName = gameName;
     }

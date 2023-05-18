@@ -3,26 +3,36 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.network.Client;
-import it.polimi.ingsw.network.eventMessages.EventMessage;
-import it.polimi.ingsw.network.eventMessages.BookshelfColumnMessage;
-import it.polimi.ingsw.network.eventMessages.ItemTileIndexMessage;
-import it.polimi.ingsw.network.eventMessages.GameCreationMessage;
-import it.polimi.ingsw.network.eventMessages.TilePositionMessage;
+import it.polimi.ingsw.network.MessagesToServer.requestMessage.WaitingResponseMessage;
+import it.polimi.ingsw.network.Server;
+import it.polimi.ingsw.network.eventMessages.*;
+
+import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameController {
-    private Game game = null;
 
-    private Client client;
+    private Server server;
+    private Game game;
 
-    public GameController(Game game, Client client){
+    private List<Client> clients = new ArrayList<>();
+
+    public GameController(Server server, Game game){
+        this.server = server;
         this.game = game;
-        this.client = client;
+    }
+
+    public Game getGame () {
+        return game;
+    }
+    public List<Client> getClients () {
+        return this.clients;
     }
 
 
-
-    public void update(Client client, EventMessage eventMessage) throws IllegalArgumentException {
-        if (!client.equals(this.client)) {
+    public void update(Client client, EventMessage eventMessage) throws IllegalArgumentException, RemoteException {
+        if (!clients.contains(client)) {
             System.err.println("Discarding event from " + client);
             return;
         }
@@ -41,22 +51,44 @@ public class GameController {
 
 
         switch (eventMessage.getType()) {
-            /**case NICKNAME -> {
-             if (game.getSubscribers().size() == 0) {
+
+             /*case NICKNAME -> {
+             if (game.getSubscribers().size() < game.getNumberOfPlayers().getValue()) {
              game = new Game();
              }
              Player player = new Player(eventMessage.getNickName(), game.getPersonalGoalCardDeck());
              game.subscribe(player);
 
              }
-             */
 
-            case NUM_OF_PLAYERS -> {
-                GameCreationMessage numOfPlayerMessage = (GameCreationMessage) eventMessage;
+              */
+            case GAME_CHOICE -> {
+                GameNameChoiceMessage gameNameChoiceMessage = (GameNameChoiceMessage) eventMessage;
+                clients.add(client);
+                Player newPlayer = new Player(eventMessage.getNickName());
+                game.subscribe(newPlayer);
+                if (game.getSubscribers().size() < game.getNumberOfPlayers().getValue()) {
+                    client.onMessage(new WaitingResponseMessage());
+                }
+                if (game.getSubscribers().size() == game.getNumberOfPlayers().getValue()) {
+                    server.removeGameFromLobby(gameNameChoiceMessage.getGameChoice());
+                    game.initLivingRoomBoard();
+                }
+            }
+
+            case GAME_CREATION -> {
+                GameCreationMessage gameCreationMessage = (GameCreationMessage) eventMessage;
+                game.setGameName(gameCreationMessage.getGameName());
+                clients.add(client);
+                Player newPlayer = new Player(eventMessage.getNickName());
+                game.subscribe(newPlayer);
+                /*GameCreationMessage numOfPlayerMessage = (GameCreationMessage) eventMessage;
                 Player player = new Player(eventMessage.getNickName(), game.getPersonalGoalCardDeck());
                 game.subscribe(player);
                 //game.initLivingRoomBoard(Arrays.stream(NumberOfPlayers.values()).filter(x -> x.getValue() == numOfPlayerMessage.getNumOfPlayers()).toList().get(0));
                 game.setDrawableTiles();
+
+                 */
             }
 
             case TILE_POSITION -> {

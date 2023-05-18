@@ -1,6 +1,6 @@
 package it.polimi.ingsw.network.MessagesToServer.requestMessage;
 
-import it.polimi.ingsw.network.MessagesToServer.MessageToServerType;
+import it.polimi.ingsw.network.MessagesToServer.MessageToClientType;
 
 public class GameCreationResponseMessage extends RequestMessage {
     private final long serialVersionUID = 1L;
@@ -9,7 +9,7 @@ public class GameCreationResponseMessage extends RequestMessage {
 
 
     public GameCreationResponseMessage(boolean validGameCreation) {
-        super(MessageToServerType.GAME_CREATION);
+        super(MessageToClientType.GAME_CREATION);
         this.validGameCreation = validGameCreation;
 
     }

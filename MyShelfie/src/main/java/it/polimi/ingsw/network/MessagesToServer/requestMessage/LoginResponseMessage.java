@@ -1,6 +1,6 @@
 package it.polimi.ingsw.network.MessagesToServer.requestMessage;
 
-import it.polimi.ingsw.network.MessagesToServer.MessageToServerType;
+import it.polimi.ingsw.network.MessagesToServer.MessageToClientType;
 
 import java.util.Set;
 
@@ -14,12 +14,12 @@ public class LoginResponseMessage extends RequestMessage {
     private String Nickname;
 
     public LoginResponseMessage(boolean validNickname) {
-        super(MessageToServerType.LOGIN_RESPONSE);
+        super(MessageToClientType.LOGIN_RESPONSE);
         this.validNickname = validNickname;
     }
 
     public LoginResponseMessage(boolean validNickname,String nickname) {
-        super(MessageToServerType.LOGIN_RESPONSE);
+        super(MessageToClientType.LOGIN_RESPONSE);
         this.validNickname = validNickname;
         this.Nickname=nickname;
 
@@ -28,7 +28,7 @@ public class LoginResponseMessage extends RequestMessage {
     }
 
     public LoginResponseMessage(String Nickname, boolean validNickname,boolean GamesOk,Set<String> availableGames) {
-        super(MessageToServerType.LOGIN_RESPONSE);
+        super(MessageToClientType.LOGIN_RESPONSE);
         this.validNickname = validNickname;
         this.Nickname=Nickname;
         this.availableGames=availableGames;

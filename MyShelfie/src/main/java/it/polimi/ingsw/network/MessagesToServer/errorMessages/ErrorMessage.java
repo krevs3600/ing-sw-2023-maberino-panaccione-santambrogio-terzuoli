@@ -1,19 +1,18 @@
 package it.polimi.ingsw.network.MessagesToServer.errorMessages;
 
-import it.polimi.ingsw.network.MessagesToServer.MessageToServer;
-import it.polimi.ingsw.network.MessageType;
-import it.polimi.ingsw.network.MessagesToServer.MessageToServerType;
+import it.polimi.ingsw.network.MessagesToServer.MessageToClient;
+import it.polimi.ingsw.network.MessagesToServer.MessageToClientType;
 
 import java.io.Serializable;
 
-public abstract class ErrorMessage implements Serializable, MessageToServer {
+public abstract class ErrorMessage implements Serializable, MessageToClient {
     private final long serialVersionUID = 1L;
     private final String nickName;
 
-    private MessageToServerType type;
+    private MessageToClientType type;
     private final String errorMessage;
 
-    public ErrorMessage(String nickName, String errorMessage,MessageToServerType messageType) {
+    public ErrorMessage(String nickName, String errorMessage, MessageToClientType messageType) {
         this.nickName=nickName;
         this.errorMessage = errorMessage;
         this.type=messageType;
@@ -27,7 +26,7 @@ public abstract class ErrorMessage implements Serializable, MessageToServer {
         return this.nickName;
     }
 
-    public MessageToServerType getType() {
+    public MessageToClientType getType() {
         return type;
     }
 

@@ -1,6 +1,5 @@
 package it.polimi.ingsw.network.eventMessages;
 
-import it.polimi.ingsw.network.MessagesToServer.MessageToServer;
 import it.polimi.ingsw.network.MessageType;
 
 import java.io.Serializable;

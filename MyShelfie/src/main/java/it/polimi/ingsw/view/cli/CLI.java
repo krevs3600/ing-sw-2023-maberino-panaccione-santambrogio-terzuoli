@@ -4,7 +4,8 @@ import it.polimi.ingsw.AppServer;
 import it.polimi.ingsw.model.ModelView.GameView;
 import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.network.ClientImplementation;
-import it.polimi.ingsw.network.MessagesToServer.MessageToServer;
+import it.polimi.ingsw.network.MessagesToServer.MessageToClient;
+import it.polimi.ingsw.network.MessagesToServer.errorMessages.JoinErrorMessage;
 import it.polimi.ingsw.network.MessagesToServer.requestMessage.*;
 import it.polimi.ingsw.network.eventMessages.EventMessage;
 import it.polimi.ingsw.network.Socket.ServerStub;
@@ -253,8 +254,6 @@ public class CLI extends Observable {
 
     private void createGame() {
         askGameName();
-
-
     }
 
     private void joinGame(){
@@ -306,15 +305,19 @@ public class CLI extends Observable {
         do {
             out.println("\n choose the name of the game you want to join in ");
             gameChoice = in.next();
+
             
             if(!availableGameNames.contains(gameChoice)) {
-                System.err.println("\n invalid game choise, please insert new one");
+                System.err.println("\n invalid game choice, please insert another one");
             }
 
 
         }while(!availableGameNames.contains(gameChoice));
 
+        setChanged();
+        notifyObservers(new GameNameChoiceMessage(this.client.getNickname(),gameChoice));
 
+        //System.out.println("Waiting for other players... ");
     }
 
     public void printTitle() {
@@ -326,7 +329,7 @@ public class CLI extends Observable {
     }
 
 
-    public void showMessage(MessageToServer message) {
+    public void showMessage(MessageToClient message) {
 
         switch (message.getType()) {
            // case CREATOR_LOGIN_RESPONSE -> {
@@ -367,7 +370,7 @@ public class CLI extends Observable {
                 if (loginResponseMessage.isValidNickname()) {
                     System.out.println("Available nickname " + this.client.getNickname() + " :)\n");
                     gameMenu();
-                    showGameNamesList(loginResponseMessage.getAvailableGames());
+                    //showGameNamesList(loginResponseMessage.getAvailableGames());
 
                 } else {
                    // if (loginResponseMessage.getNickname().equals(this.client.getNickname())) {
@@ -382,6 +385,14 @@ public class CLI extends Observable {
             case JOINGAME_RESPONSE -> {
                 JoinGameResponseMessage joinGameResponseMessage= (JoinGameResponseMessage) message;
                 showGameNamesList(joinGameResponseMessage.getAvailableGamesInLobby());
+            }
+            case JOIN_GAME_ERROR -> {
+                JoinErrorMessage joinErrorMessage = (JoinErrorMessage) message;
+                System.err.println(joinErrorMessage.getErrorMessage());
+            }
+            case WAIT_PLAYERS -> {
+                out.println("Waiting for other players");
+
             }
         }
     }
@@ -400,7 +411,7 @@ public class CLI extends Observable {
                 System.out.println("--- NEW TURN ---");
                 out.println("\n-----------------------------------------------------------------------\n LIVING ROOM BOARD:");
                 out.println(game.getLivingRoomBoard().toString());
-                out.println("\n-----------------------------------------------------------------------\n TILE PACK:");
+                /*out.println("\n-----------------------------------------------------------------------\n TILE PACK:");
                 out.println(game.getTilePack().toString());
                 out.println("\n-----------------------------------------------------------------------\n" + game.getSubscribers().get(0).getName() + "'s BOOKSHELF:");
                 out.println(game.getSubscribers().get(0).getBookshelf().toString());
@@ -445,6 +456,8 @@ public class CLI extends Observable {
                 setChanged();
                 notifyObservers(new BookshelfColumnMessage(eventMessage.getNickName(), column));
                 this.setState(State.WAITING_FOR_MODEL_VIEW);
+
+                 */
             }
 
             case TILE_POSITION -> {

@@ -36,13 +36,13 @@ public class Player {
     /**
      * Class constructor
      * @param name the name of the player
-     * @param personalGoalCardDeck the goal card deck from which the player takes his own personal goal card
      */
-    public Player(String name, PersonalGoalCardDeck personalGoalCardDeck){
+    //TODO: change the moment when player draws personal goal card
+    public Player(String name){
         this.name = name;
         this.bookshelf = new Bookshelf();
         this.score = 0;
-        this.personalGoalCard = (PersonalGoalCard) personalGoalCardDeck.draw();
+        //this.personalGoalCard = (PersonalGoalCard) personalGoalCardDeck.draw();
         this.tokens = new ArrayList<>();
         this.firstCommonGoalAchieved = false;
         this.secondCommonGoalAchieved = false;

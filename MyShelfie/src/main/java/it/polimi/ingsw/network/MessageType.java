@@ -6,7 +6,8 @@ public enum MessageType {
 
     GAMENAME,
     MENU_OPTION,
-    NUM_OF_PLAYERS,
+    GAME_CREATION,
+    GAME_CHOICE,
     NUM_OF_PLAYERS_REQUEST,
     TILE_POSITION,
     BOOKSHELF_COLUMN,
@@ -21,6 +22,7 @@ public enum MessageType {
     END_GAME,
     INSERTION_REQUEST,
     ITEM_TILE_INDEX, CREATOR_NICKNAME,
+
 
 
     // error

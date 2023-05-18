@@ -1,11 +1,12 @@
 package it.polimi.ingsw.network;
 
 import it.polimi.ingsw.model.ModelView.GameView;
-import it.polimi.ingsw.network.MessagesToServer.MessageToServer;
+import it.polimi.ingsw.network.MessagesToServer.MessageToClient;
 import it.polimi.ingsw.network.MessagesToServer.errorMessages.ErrorMessage;
 import it.polimi.ingsw.network.MessagesToServer.requestMessage.CreatorLoginResponseMessage;
 import it.polimi.ingsw.network.MessagesToServer.requestMessage.GameNameResponseMessage;
 import it.polimi.ingsw.network.MessagesToServer.requestMessage.LoginResponseMessage;
+import it.polimi.ingsw.network.MessagesToServer.requestMessage.RequestMessage;
 import it.polimi.ingsw.network.eventMessages.EventMessage;
 import it.polimi.ingsw.view.cli.CLI;
 
@@ -53,10 +54,10 @@ public class ClientImplementation extends UnicastRemoteObject implements Client 
         view.update(gameView, eventMessage);
     }
 
-    public void onMessage(MessageToServer message) throws RemoteException {
+    public void onMessage(MessageToClient message) throws RemoteException {
 
         //just to set the parametres, maybe it will be a problem with concurrency (?)
-        if(message instanceof EventMessage ) {
+        if(message instanceof RequestMessage) {
             switch (message.getType()) {
                 case CREATOR_LOGIN_RESPONSE -> {
                     CreatorLoginResponseMessage creatorLoginResponseMessage = (CreatorLoginResponseMessage) message;
@@ -75,7 +76,6 @@ public class ClientImplementation extends UnicastRemoteObject implements Client 
                         this.nickname = loginResponseMessage.getNickname();
 
                 }
-                // il caso join è inutile vero?
 
 
             }

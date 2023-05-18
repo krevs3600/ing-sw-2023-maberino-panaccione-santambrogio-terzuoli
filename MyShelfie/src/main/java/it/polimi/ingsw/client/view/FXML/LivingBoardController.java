@@ -1,4 +1,4 @@
-package it.polimi.ingsw.client.view.FXML;
+/*package it.polimi.ingsw.client.view.FXML;
 import it.polimi.ingsw.controller.GameController;
 import it.polimi.ingsw.model.CommonGoalCard.*;
 import it.polimi.ingsw.model.Game;
@@ -280,6 +280,6 @@ public class LivingBoardController {
         First_8.setVisible(false);
     }
 
-
-
 }
+
+ */

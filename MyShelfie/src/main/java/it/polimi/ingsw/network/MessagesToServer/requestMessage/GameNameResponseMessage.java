@@ -1,6 +1,6 @@
 package it.polimi.ingsw.network.MessagesToServer.requestMessage;
 
-import it.polimi.ingsw.network.MessagesToServer.MessageToServerType;
+import it.polimi.ingsw.network.MessagesToServer.MessageToClientType;
 
 public class GameNameResponseMessage extends RequestMessage {
     private final long serialVersionUID = 1L;
@@ -10,13 +10,13 @@ public class GameNameResponseMessage extends RequestMessage {
 
 
     public GameNameResponseMessage(String GameName,boolean validGameName) {
-        super(MessageToServerType.GAMENAME_RESPONSE);
+        super(MessageToClientType.GAMENAME_RESPONSE);
         this.validGameName = validGameName;
         this.GameName=GameName;
     }
 
     public GameNameResponseMessage(boolean validGameName) {
-        super(MessageToServerType.GAMENAME_RESPONSE);
+        super(MessageToClientType.GAMENAME_RESPONSE);
         this.validGameName = validGameName;
     }
 

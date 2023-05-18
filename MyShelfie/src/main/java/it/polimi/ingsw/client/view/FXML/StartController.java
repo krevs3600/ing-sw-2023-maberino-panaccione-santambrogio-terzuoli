@@ -1,4 +1,4 @@
-package it.polimi.ingsw.client.view.FXML;
+/*package it.polimi.ingsw.client.view.FXML;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -47,3 +47,5 @@ public class StartController {
         stage.show();
     }
 }
+
+ */

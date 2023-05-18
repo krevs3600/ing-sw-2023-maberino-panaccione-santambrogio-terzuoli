@@ -53,6 +53,11 @@ public class ServerStub implements Server {
         }
     }
 
+    @Override
+    public void removeGameFromLobby(String gameName) throws RemoteException {
+
+    }
+
     public void receive(Client client) throws RemoteException {
         GameView gameView;
         try {

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.client.view.FXML;
+/*package it.polimi.ingsw.client.view.FXML;
 
 
 import it.polimi.ingsw.model.CommonGoalCard.CommonGoalCard;
@@ -54,3 +54,5 @@ public class PersonalGoalCardController {
         PersonalGoalCard.setImage(new Image(new FileInputStream("src/main/resources/it/polimi/ingsw/client/view/personal goal cards/Personal_Goals" + String.valueOf(prova.getPersonalGoalCard().getPath() + ".png"))));
     }
 }
+
+ */

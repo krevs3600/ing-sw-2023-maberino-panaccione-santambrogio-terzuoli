@@ -33,7 +33,7 @@ public class Game extends Observable<EventMessage> {
     private PersonalGoalCardDeck personalGoalCardDeck;
     private List<Player> subscribers = new ArrayList<>();
      private LivingRoomBoard livingRoomBoard;
-     private NumberOfPlayers numberOfPlayers = NumberOfPlayers.TWO_PLAYERS;
+     private NumberOfPlayers numberOfPlayers;
      private int cursor;
      private Phase turnPhase;
      private List<Space> drawableTiles = new ArrayList<>();
@@ -52,7 +52,7 @@ public class Game extends Observable<EventMessage> {
     public Game(NumberOfPlayers numberOfPlayers, String gameName){
         //initialize id with random string, This should be quiet random...
         this.gameName = gameName;
-        this.livingRoomBoard = new LivingRoomBoard(numberOfPlayers);
+        //this.livingRoomBoard = new LivingRoomBoard(numberOfPlayers);
         this.numberOfPlayers = numberOfPlayers;
         this.personalGoalCardDeck = new PersonalGoalCardDeck();
         this.tilePack = new TilePack();
@@ -62,13 +62,18 @@ public class Game extends Observable<EventMessage> {
         this.alongSideColumn = false;
     }
 
-    /*
-    public void initLivingRoomBoard(NumberOfPlayers numOfPlayers){
-        this.livingRoomBoard = new LivingRoomBoard((numOfPlayers));
-        this.numberOfPlayers = numOfPlayers;
+    public void initLivingRoomBoard(){
+        this.livingRoomBoard = new LivingRoomBoard(numberOfPlayers);
+        LivingRoomBoardView livingRoomBoardView = new LivingRoomBoardView(this.livingRoomBoard);
+        //TODO: da cambiare i messaggi di inizializzazione
+        setChanged();
+        notifyObservers(new BoardMessage("tutti", livingRoomBoardView));
     }
 
-     */
+    public void setGameName (String gameName) {
+        this.gameName = gameName;
+    }
+
 
     public ItemTile drawTile(Position position) throws IllegalArgumentException{
         ItemTile itemTile = getLivingRoomBoard().getSpace(position).drawTile();
@@ -228,7 +233,7 @@ public class Game extends Observable<EventMessage> {
         for (int i = 0; i<numberOfPlayers; i++){
             System.out.print("Enter your name: ");
             String name = scanner.next();
-            game.subscribe(new Player(name, personalGoalCardDeck));
+            game.subscribe(new Player(name));
         }
         System.out.println("Game " + game.getGameName());
         TilePack tilePack = new TilePack();

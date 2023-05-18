@@ -1,4 +1,4 @@
-package it.polimi.ingsw.client.view.FXML;
+/*package it.polimi.ingsw.client.view.FXML;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -42,3 +42,5 @@ public class ServerSettingsController {
     }
 
 }
+
+ */
