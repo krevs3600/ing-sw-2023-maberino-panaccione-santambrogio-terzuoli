@@ -105,7 +105,6 @@ public class GameController {
             case GAME_CREATION -> {
                 GameCreationMessage gameCreationMessage = (GameCreationMessage) eventMessage;
                 game.setGameName(gameCreationMessage.getGameName());
-                clients.add(client);
                 Player newPlayer = new Player(eventMessage.getNickName());
                 game.subscribe(newPlayer);
                 /*GameCreationMessage numOfPlayerMessage = (GameCreationMessage) eventMessage;
