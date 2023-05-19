@@ -89,7 +89,7 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                     playerGame.put(client, gameController);
                     register(client);
                     currentGames.put(gameCreationMessage.getGameName(), gameController);
-                  //  currentGames.put(gameController, game);
+                    // first player is directly added
                     gameController.getClients().add(client);
                     gameController.update(client, gameCreationMessage);
                     isValid = true;

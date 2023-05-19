@@ -90,12 +90,24 @@ public class GameController {
             * */
             case GAME_CHOICE -> {
                 GameNameChoiceMessage gameNameChoiceMessage = (GameNameChoiceMessage) eventMessage;
-                clients.add(client);
+                // clients.add(client);
                 Player newPlayer = new Player(eventMessage.getNickName());
                 game.subscribe(newPlayer);
-                if (game.getSubscribers().size() < game.getNumberOfPlayers().getValue()) {
-                    client.onMessage(new WaitingResponseMessage());
+                // if players are still missing a wait message is sent to the new player
+                if (game.getSubscribers().size() < game.getNumberOfPlayers().getValue()-1){
+                    client.onMessage(new WaitingResponseMessage(game.getNumberOfPlayers().getValue()-game.getSubscribers().size()));
                 }
+                for (Client player : this.getClients()){
+                    // notify other clients that a new player has joined the game
+                    if (!player.equals(client)){
+                        player.onMessage(new PlayerJoinedLobbyMessage(eventMessage.getNickName()));
+                    }
+
+                    if (game.getSubscribers().size() < game.getNumberOfPlayers().getValue()){
+                        player.onMessage(new WaitingResponseMessage(game.getNumberOfPlayers().getValue()-game.getSubscribers().size()));
+                    }
+                }
+
                 if (game.getSubscribers().size() == game.getNumberOfPlayers().getValue()) {
                     server.removeGameFromLobby(gameNameChoiceMessage.getGameChoice());
                     game.initLivingRoomBoard();

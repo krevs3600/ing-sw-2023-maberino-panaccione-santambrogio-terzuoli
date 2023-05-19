@@ -372,7 +372,7 @@ public class CLI extends Observable {
             case LOGIN_RESPONSE -> {
                 LoginResponseMessage loginResponseMessage = (LoginResponseMessage) message;
                 if (loginResponseMessage.isValidNickname()) {
-                    System.out.println("Available nickname " + this.client.getNickname() + " :)\n");
+                    System.out.println("Available nickname " + this.client.getNickname() + " :)");
                     gameMenu();
                     //showGameNamesList(loginResponseMessage.getAvailableGames());
 
@@ -396,7 +396,12 @@ public class CLI extends Observable {
                 gameMenu();
             }
             case WAIT_PLAYERS -> {
-                out.println("Waiting for other players");
+                WaitingResponseMessage waitingResponseMessage = (WaitingResponseMessage) message;
+                if (waitingResponseMessage.getMissingPlayers() == 1) {
+                    out.println("Waiting for 1 player... ");
+                } else {
+                    out.println("Waiting for " + waitingResponseMessage.getMissingPlayers() + "players... ");
+                }
             }
             case PLAYER_JOINED_LOBBY_RESPONSE -> {
                 PlayerJoinedLobbyMessage player = (PlayerJoinedLobbyMessage) message;
@@ -420,7 +425,8 @@ public class CLI extends Observable {
                 out.println("\n-----------------------------------------------------------------------\n LIVING ROOM BOARD:");
                 out.println(game.getLivingRoomBoard().toString());
                 /*out.println("\n-----------------------------------------------------------------------\n TILE PACK:");
-                out.println(game.getTilePack().toString());
+                out.pri
+                ntln(game.getTilePack().toString());
                 out.println("\n-----------------------------------------------------------------------\n" + game.getSubscribers().get(0).getName() + "'s BOOKSHELF:");
                 out.println(game.getSubscribers().get(0).getBookshelf().toString());
                 out.println("\n-----------------------------------------------------------------------\n");
