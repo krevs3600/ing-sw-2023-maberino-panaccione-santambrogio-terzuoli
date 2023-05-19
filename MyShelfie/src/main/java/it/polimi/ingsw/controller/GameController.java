@@ -117,10 +117,6 @@ public class GameController {
                     game.initLivingRoomBoard();
                     game.setDrawableTiles();
                     game.startGame();
-
-
-
-
                 }
             }
 
@@ -142,7 +138,7 @@ public class GameController {
                 TilePositionMessage tilePositionMessage = (TilePositionMessage) eventMessage;
 
                 if (game.getDrawableTiles().contains(game.getLivingRoomBoard().getSpace(tilePositionMessage.getPosition()))) {
-                    if (game.getBuffer().size() == 0) {
+                    if (game.getBuffer().isEmpty()) {
                         ItemTile itemTile = game.drawTile(tilePositionMessage.getPosition());
                         game.getBuffer().add(tilePositionMessage.getPosition());
                         game.insertTileInTilePack(itemTile);
@@ -150,14 +146,7 @@ public class GameController {
 
                     else if (game.getBuffer().size() == 1) {
 
-                        boolean fairPosition = false;
-                        for (Position pos : game.getBuffer()) {
-                            if (pos.isAdjacent(tilePositionMessage.getPosition())) {
-                                fairPosition = true;
-                                break;
-                            }
-                        }
-                        if (fairPosition) {
+                        if (game.getBuffer().get(0).isAdjacent(tilePositionMessage.getPosition())) {
                             ItemTile itemTile = game.drawTile(tilePositionMessage.getPosition());
                             game.getBuffer().add(tilePositionMessage.getPosition());
                             game.insertTileInTilePack(itemTile);
@@ -165,6 +154,9 @@ public class GameController {
                             if (tilePositionMessage.getPosition().getColumn() == game.getBuffer().get(0).getColumn()) {
                                 game.setAlongSideRow(true);
                             } else game.setAlongSideColumn(true);
+                        }
+                        else {
+                            client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickName(), new LivingRoomBoardView(game.getLivingRoomBoard())));
                         }
                     }
                     else if (game.getBuffer().size() == 2) {
@@ -209,7 +201,8 @@ public class GameController {
                     game.setColumnChoice(bookshelfColumnMessage.getColumn());
                 } catch (IndexOutOfBoundsException e) {}
 
-                /**if (game.getLivingRoomBoard().getAllFree().size()==game.getLivingRoomBoard().getDrawableTiles().size()) game.refillLivingRoomBoard();
+                /*
+                if (game.getLivingRoomBoard().getAllFree().size()==game.getLivingRoomBoard().getDrawableTiles().size()) game.refillLivingRoomBoard();
                 if (!game.getSubscribers().get(0).getBookshelf().isFull()) {
                     game.setTurnPhase(Game.Phase.INIT_TURN);
                     computeScoreMidGame();
@@ -218,6 +211,7 @@ public class GameController {
                     game.setTurnPhase(Game.Phase.END_GAME);
                     computeScoreEndGame();
                 }
+
                  */
             }
 
@@ -230,7 +224,17 @@ public class GameController {
             }
 
             case END_TURN -> {
+
+                if (game.getCurrentPlayer().getBookshelf().isFull()) {
+                    game.setFinalTurn();
+                }
+                if(game.isFinalTurn()) {
+                    game.getCurrentPlayer().equals(game.getSubscribers().get(game.getSubscribers().size() - 1));
+                    //TODO: compute score end game
+                }
+
                 game.changeTurn();
+
             }
         }
 

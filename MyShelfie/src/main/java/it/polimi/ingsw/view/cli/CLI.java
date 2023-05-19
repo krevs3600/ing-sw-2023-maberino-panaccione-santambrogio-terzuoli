@@ -458,8 +458,7 @@ public class CLI extends Observable {
                 out.println("\n-----------------------------------------------------------------------\n LIVING ROOM BOARD:");
                 out.println(game.getLivingRoomBoard().toString());
                 /*out.println("\n-----------------------------------------------------------------------\n TILE PACK:");
-                out.pri
-                ntln(game.getTilePack().toString());
+                out.println(game.getTilePack().toString());
                 out.println("\n-----------------------------------------------------------------------\n" + game.getSubscribers().get(0).getName() + "'s BOOKSHELF:");
                 out.println(game.getSubscribers().get(0).getBookshelf().toString());
                 out.println("\n-----------------------------------------------------------------------\n");
@@ -556,7 +555,7 @@ public class CLI extends Observable {
             case INSERTION_REQUEST -> {
                 if (activeTurn){
                     out.println("\n-----------------------------------------------------------------------\n" + game.getSubscribers().get(0).getName() + "'s BOOKSHELF:");
-                    out.println(game.getSubscribers().get(0).getBookshelf().toString());
+                    out.println(game.getCurrentPlayer().getBookshelf().toString());
                     out.println("\n-----------------------------------------------------------------------\n TILE PACK:");
                     out.println(game.getTilePack().toString());
                     if (game.getTilePack().getTiles().size()>0) {

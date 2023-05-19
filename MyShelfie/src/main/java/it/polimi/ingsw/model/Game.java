@@ -46,6 +46,7 @@ public class Game extends Observable<EventMessage> {
      private int currentPlayerScore;
 
      private List<Position> buffer;
+     private boolean isFinalTurn;
 
      private boolean alongSideRow;
      private boolean alongSideColumn;
@@ -59,22 +60,25 @@ public class Game extends Observable<EventMessage> {
         this.tilePack = new TilePack();
         //this.turnPhase = Phase.INIT_TURN;
         this.buffer = new ArrayList<>();
+        this.isFinalTurn = false;
         this.alongSideRow = false;
         this.alongSideColumn = false;
     }
 
     public void initLivingRoomBoard(){
         this.livingRoomBoard = new LivingRoomBoard(numberOfPlayers);
-        LivingRoomBoardView livingRoomBoardView = new LivingRoomBoardView(this.livingRoomBoard);
+        //LivingRoomBoardView livingRoomBoardView = new LivingRoomBoardView(this.livingRoomBoard);
         //TODO: da cambiare i messaggi di inizializzazione
-        setChanged();
-        notifyObservers(new BoardMessage("tutti", livingRoomBoardView));
+        //setChanged();
+        //notifyObservers(new BoardMessage("tutti", livingRoomBoardView));
     }
 
     public void setGameName (String gameName) {
         this.gameName = gameName;
     }
 
+    public boolean isFinalTurn () { return isFinalTurn;}
+    public void setFinalTurn() {isFinalTurn = true;}
 
     public ItemTile drawTile(Position position) throws IllegalArgumentException{
         ItemTile itemTile = getLivingRoomBoard().getSpace(position).drawTile();
