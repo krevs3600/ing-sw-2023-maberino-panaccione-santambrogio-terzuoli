@@ -8,14 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameView implements Serializable {
-    private String id;
-    private PersonalGoalCardDeckView personalGoalCardDeckView;
-    private List<PlayerView> subscribers;
-    private LivingRoomBoardView livingRoomBoardView;
-    private NumberOfPlayers numberOfPlayers;
-    private int cursor;
-    private TilePackView tilePackView;
-    private int currentPlayerScore;
+    private final String id;
+    private final PersonalGoalCardDeckView personalGoalCardDeckView;
+    private final List<PlayerView> subscribers;
+    private final LivingRoomBoardView livingRoomBoardView;
+    private final NumberOfPlayers numberOfPlayers;
+    private final int cursor;
+    private final TilePackView tilePackView;
+    private final int currentPlayerScore;
+    private final PlayerView currentPlayer;
 
     private static final long serialVersionUID = 1L;
 
@@ -32,6 +33,7 @@ public class GameView implements Serializable {
         this.currentPlayerScore = game.getCurrentPlayerScore();
         this.livingRoomBoardView = new LivingRoomBoardView(game.getLivingRoomBoard());
         this.personalGoalCardDeckView = new PersonalGoalCardDeckView(game.getPersonalGoalCardDeck());
+        this.currentPlayer = new PlayerView(game.getCurrentPlayer());
     }
 
     public String getId () {
@@ -62,6 +64,10 @@ public class GameView implements Serializable {
     public TilePackView getTilePack () { return this.tilePackView;}
 
     public int getCurrentPlayerScore () { return this.currentPlayerScore;}
+    public PlayerView getCurrentPlayer(){
+        return this.currentPlayer;
+    }
+
 
 
     /**public void update(Observable o, Object arg) {

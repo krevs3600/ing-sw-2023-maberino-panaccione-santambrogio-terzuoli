@@ -14,6 +14,7 @@ public enum MessageToClientType {
     // error messages types
     JOIN_GAME_ERROR,
 
-    WAIT_PLAYERS;
+    WAIT_PLAYERS,
+    ILLEGAL_POSITION;
 
 }

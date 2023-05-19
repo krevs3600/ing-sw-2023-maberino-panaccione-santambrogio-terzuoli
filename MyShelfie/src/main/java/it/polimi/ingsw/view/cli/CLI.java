@@ -21,6 +21,7 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class CLI extends Observable {
+    private boolean activeTurn = false;
 
     private final PrintStream out = System.out;
     private final Scanner in = new Scanner(System.in);
@@ -407,6 +408,19 @@ public class CLI extends Observable {
                 PlayerJoinedLobbyMessage player = (PlayerJoinedLobbyMessage) message;
                 out.println(player.getNickname() + " joined lobby");
             }
+            case ILLEGAL_POSITION -> {
+                if (activeTurn) {
+                    out.println("IllegalAccessError, position is not valid. Please try again...");
+                    out.print("r: ");
+                    int r = in.nextInt();
+                    in.nextLine();
+                    System.out.print("c: ");
+                    int c = in.nextInt();
+                    in.nextLine();
+                    setChanged();
+                    notifyObservers(new TilePositionMessage(((IllegalTilePositionErrorMessage)message).getNickname(), new Position(r, c)));
+                }
+            }
         }
     }
 
@@ -420,6 +434,25 @@ public class CLI extends Observable {
                 notifyObservers(new NumOfPlayerMessage(eventMessage.getNickName(), numOfPlayers));
             }
              */
+            case PLAYER_TURN -> {
+                if (this.client.getNickname().equals(eventMessage.getNickName())){
+                    activeTurn = true;
+                    out.println(this.client.getNickname() + " is your turn!");
+
+                    boolean stopPickingTiles = false;
+                    out.println("Please enter a position: ");
+                    out.print("r: ");
+                    int r = in.nextInt();
+                    in.nextLine();
+                    System.out.print("c: ");
+                    int c = in.nextInt();
+                    in.nextLine();
+                    setChanged();
+                    notifyObservers(new TilePositionMessage(eventMessage.getNickName(), new Position(r, c)));
+                } else {
+                    activeTurn = false;
+                }
+            }
             case BOARD -> {
                 System.out.println("--- NEW TURN ---");
                 out.println("\n-----------------------------------------------------------------------\n LIVING ROOM BOARD:");
@@ -477,13 +510,41 @@ public class CLI extends Observable {
             case TILE_POSITION -> {
                 out.println("\n-----------------------------------------------------------------------\n LIVING ROOM BOARD:");
                 out.println(game.getLivingRoomBoard().toString());
-                this.setState(State.WAITING_FOR_PLAYER);
             }
 
             case TILE_PACK -> {
-                out.println("\n-----------------------------------------------------------------------\n TILE PACK:");
-                out.println(game.getTilePack().toString());
-                this.setState(State.WAITING_FOR_PLAYER);
+                if (activeTurn){
+                    out.println("\n-----------------------------------------------------------------------\n TILE PACK:");
+                    out.println(game.getTilePack().toString());
+                    String answer = "";
+                    do {
+                        out.println("\nIf you wish to stop picking tiles type 'stop', otherwise press ENTER");
+                        out.print(">>> ");
+                        answer = in.nextLine();
+                        if (answer.equals("stop")) {
+                            out.println("\n-----------------------------------------------------------------------\n" + game.getCurrentPlayer().getName() + "'s BOOKSHELF:");
+                            out.println(game.getCurrentPlayer().getBookshelf().toString());
+                            out.println("\n-----------------------------------------------------------------------\n");
+                            out.print("In which column you want to insert your item tiles?\n");
+                            int column = in.nextInt();
+                            in.nextLine();
+                            setChanged();
+                            notifyObservers(new BookshelfColumnMessage(eventMessage.getNickName(), column));
+                        }
+                        else if (answer.equals("")){
+                            out.println("Please enter a position: ");
+                            out.print("r: ");
+                            int r = in.nextInt();
+                            in.nextLine();
+                            System.out.print("c: ");
+                            int c = in.nextInt();
+                            in.nextLine();
+                            setChanged();
+                            notifyObservers(new TilePositionMessage(eventMessage.getNickName(), new Position(r, c)));
+                        }
+                    } while (!answer.equals("stop") && !answer.equals("continue"));
+                }
+
             }
 
             case BOOKSHELF -> {
@@ -493,17 +554,23 @@ public class CLI extends Observable {
             }
 
             case INSERTION_REQUEST -> {
-                out.println("\n-----------------------------------------------------------------------\n" + game.getSubscribers().get(0).getName() + "'s BOOKSHELF:");
-                out.println(game.getSubscribers().get(0).getBookshelf().toString());
-                out.println("\n-----------------------------------------------------------------------\n TILE PACK:");
-                out.println(game.getTilePack().toString());
-                while (game.getTilePack().getTiles().size()>0) {
-                    out.print("Choose an item tile to insert from the tilepack into the selected column\n");
-                    int itemTileIndex = in.nextInt();
-                    setChanged();
-                    notifyObservers(new ItemTileIndexMessage(eventMessage.getNickName(), itemTileIndex));
-                    this.setState(State.WAITING_FOR_MODEL_VIEW);
+                if (activeTurn){
+                    out.println("\n-----------------------------------------------------------------------\n" + game.getSubscribers().get(0).getName() + "'s BOOKSHELF:");
+                    out.println(game.getSubscribers().get(0).getBookshelf().toString());
+                    out.println("\n-----------------------------------------------------------------------\n TILE PACK:");
+                    out.println(game.getTilePack().toString());
+                    if (game.getTilePack().getTiles().size()>0) {
+                        out.print("Choose an item tile to insert from the tilepack into the selected column\n");
+                        int itemTileIndex = in.nextInt();
+                        setChanged();
+                        notifyObservers(new ItemTileIndexMessage(eventMessage.getNickName(), itemTileIndex));
+                    } else {
+                        activeTurn = false;
+                        setChanged();
+                        notifyObservers(new EndTurnMessage(eventMessage.getNickName()));
+                    }
                 }
+
             }
 
         }

@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.ModelView.LivingRoomBoardView;
 import it.polimi.ingsw.model.ModelView.TilePackView;
 import it.polimi.ingsw.model.utils.NumberOfPlayers;
 import it.polimi.ingsw.model.utils.Position;
+import it.polimi.ingsw.model.utils.TileType;
 import it.polimi.ingsw.network.eventMessages.EventMessage;
 import it.polimi.ingsw.network.eventMessages.*;
 import it.polimi.ingsw.observer_observable.Observable;
@@ -102,7 +103,6 @@ public class Game extends Observable<EventMessage> {
     }
 
     public void setDrawableTiles(){
-
         this.drawableTiles = getLivingRoomBoard().getDrawableTiles();
         LivingRoomBoardView livingRoomBoardView = new LivingRoomBoardView(this.getLivingRoomBoard());
         setChanged();
@@ -120,6 +120,8 @@ public class Game extends Observable<EventMessage> {
         Player firstPlayer = subscribers.get(0);
         firstPlayer.setStatus(PlayerStatus.PICKING_TILES);
         this.cursor = 0;
+        setChanged();
+        notifyObservers(new PlayerTurnMessage(firstPlayer.getName()));
     }
     /**
      * This method stops the game by setting to INACTIVE the status of all the players
@@ -138,25 +140,21 @@ public class Game extends Observable<EventMessage> {
     //TODO: create new event message to switch player turn
     public Player getCurrentPlayer(){
         return subscribers.get(cursor);
-        // subscribers.stream().filter(x -> x.getStatus() != PlayerStatus.INACTIVE).toList().get(0);
     }
 
     /**
      * This method switches to the next player to have his turn
      */
     //TODO: add message event
-    public void nextPlayer(){
+    public void changeTurn(){
+        getBuffer().clear();
+        setDrawableTiles();
         this.cursor = cursor < subscribers.size()-1 ? cursor+1 : 0;
+        setChanged();
+        notifyObservers(new PlayerTurnMessage(getCurrentPlayer().getName()));
     }
 
-    /**
-     * This method gets the next Player
-     * @return Player the player whose turn is the next one
-     */
-    public Player getNextPlayer(){
-        return cursor < subscribers.size()-1 ? subscribers.get(cursor+1) : subscribers.get(0);
-        // cursor < subscribers.size()-1 ? subscribers.get(cursor+1) : subscribers.get(0);
-    }
+
 
     /**
      * This method refills the LivingRoomBoard by calling its proper method
@@ -223,6 +221,7 @@ public class Game extends Observable<EventMessage> {
 
     public int getCursor () {return cursor;}
 
+    /*
     public static void main(String[] args){
         PersonalGoalCardDeck personalGoalCardDeck = new PersonalGoalCardDeck();
 
@@ -282,6 +281,7 @@ public class Game extends Observable<EventMessage> {
 
 
     }
+    */
     
     public Phase getTurnPhase() {return this.turnPhase;};
     public void setTurnPhase(Phase turnPhase) {this.turnPhase = turnPhase;}

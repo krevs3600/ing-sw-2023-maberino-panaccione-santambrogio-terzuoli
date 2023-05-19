@@ -1,9 +1,13 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.ModelView.BookshelfView;
+import it.polimi.ingsw.model.ModelView.LivingRoomBoardView;
+import it.polimi.ingsw.model.ModelView.TilePackView;
 import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.ClientImplementation;
+import it.polimi.ingsw.network.MessagesToServer.requestMessage.IllegalTilePositionErrorMessage;
 import it.polimi.ingsw.network.MessagesToServer.requestMessage.PlayerJoinedLobbyMessage;
 import it.polimi.ingsw.network.MessagesToServer.requestMessage.WaitingResponseMessage;
 import it.polimi.ingsw.network.Server;
@@ -111,6 +115,12 @@ public class GameController {
                 if (game.getSubscribers().size() == game.getNumberOfPlayers().getValue()) {
                     server.removeGameFromLobby(gameNameChoiceMessage.getGameChoice());
                     game.initLivingRoomBoard();
+                    game.setDrawableTiles();
+                    game.startGame();
+
+
+
+
                 }
             }
 
@@ -169,22 +179,26 @@ public class GameController {
 
                             if (game.isAlongSideRow()) {
                                 if (tilePositionMessage.getPosition().getColumn() != game.getBuffer().get(0).getColumn()) {
-                                    throw new IllegalAccessError("Space forbidden or empty");
+                                    // throw new IllegalAccessError("Space forbidden or empty");
+                                    client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickName(), new LivingRoomBoardView(game.getLivingRoomBoard())));
                                 }
                             } else if (game.isAlongSideColumn()) {
                                 if (tilePositionMessage.getPosition().getRow() != game.getBuffer().get(0).getRow()) {
-                                    throw new IllegalAccessError("Space forbidden or empty");
+                                    // throw new IllegalAccessError("Space forbidden or empty");
+                                    client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickName(), new LivingRoomBoardView(game.getLivingRoomBoard())));
                                 }
                             }
                         }
                         ItemTile itemTile = game.drawTile(tilePositionMessage.getPosition());
                         game.insertTileInTilePack(itemTile);
                     } else {
-                        throw new IllegalAccessError("Space forbidden or empty");
+                        client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickName(), new LivingRoomBoardView(game.getLivingRoomBoard())));
+                        //throw new IllegalAccessError("Space forbidden or empty");
                     }
                 }
                 else {
-                    throw new IllegalAccessError("Space forbidden or empty");
+                    client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickName(), new LivingRoomBoardView(game.getLivingRoomBoard())));
+                    //throw new IllegalAccessError("Space forbidden or empty");
                 }
             }
 
@@ -194,6 +208,7 @@ public class GameController {
                 try {
                     game.setColumnChoice(bookshelfColumnMessage.getColumn());
                 } catch (IndexOutOfBoundsException e) {}
+
                 /**if (game.getLivingRoomBoard().getAllFree().size()==game.getLivingRoomBoard().getDrawableTiles().size()) game.refillLivingRoomBoard();
                 if (!game.getSubscribers().get(0).getBookshelf().isFull()) {
                     game.setTurnPhase(Game.Phase.INIT_TURN);
@@ -208,10 +223,14 @@ public class GameController {
 
             case ITEM_TILE_INDEX -> {
                 ItemTileIndexMessage itemTileIndexMessage = (ItemTileIndexMessage) eventMessage;
-                game.getSubscribers().get(0).insertTile(game.getTilePack(), game.getColumnChoice(), itemTileIndexMessage.getIndex());
+                game.getCurrentPlayer().insertTile(game.getTilePack(), game.getColumnChoice(), itemTileIndexMessage.getIndex());
                 try {
                     game.setColumnChoice(game.getColumnChoice());
                 } catch (IndexOutOfBoundsException e) {}
+            }
+
+            case END_TURN -> {
+                game.changeTurn();
             }
         }
 

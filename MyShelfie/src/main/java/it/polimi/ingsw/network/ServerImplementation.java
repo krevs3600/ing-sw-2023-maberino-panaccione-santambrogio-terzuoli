@@ -21,6 +21,7 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
 
    // private Map<GameController, Game> currentGames = new HashMap<>();
 
+
     private Map<String,GameController> currentGames = new HashMap<>();
     private Set<String> currentPlayersNicknames = new HashSet<>();
     private Set<String> currentLobbyGameNames = new HashSet<>();
@@ -107,12 +108,17 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
 
                 }
             }
+            // TODO check if game has been created
             case GAME_CHOICE -> {
                 GameNameChoiceMessage gameNameChoiceMessage=(GameNameChoiceMessage) eventMessage;
                 playerGame.put(client, currentGames.get(gameNameChoiceMessage.getGameChoice()));
                 register(client);
                 currentGames.get(gameNameChoiceMessage.getGameChoice()).getClients().add(client);
                 currentGames.get(gameNameChoiceMessage.getGameChoice()).update(client,gameNameChoiceMessage);
+            }
+
+            case TILE_POSITION, BOOKSHELF_COLUMN, ITEM_TILE_INDEX, END_TURN -> {
+                playerGame.get(client).update(client, eventMessage);
             }
         }
     }

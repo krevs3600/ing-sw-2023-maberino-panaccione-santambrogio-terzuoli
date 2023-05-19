@@ -75,9 +75,7 @@ public class ClientImplementation extends UnicastRemoteObject implements Client 
                     if (loginResponseMessage.isValidNickname())
                         this.nickname = loginResponseMessage.getNickname();
 
-                } /*case PLAYER_JOINED_LOBBY_RESPONSE -> {
-                    PlayerJoinedLobbyMessage playerJoinedLobbyMessage = (PlayerJoinedLobbyMessage) message;
-                }*/
+                }
 
 
             }

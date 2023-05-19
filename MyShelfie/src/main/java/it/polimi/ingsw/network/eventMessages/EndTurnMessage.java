@@ -2,10 +2,10 @@ package it.polimi.ingsw.network.eventMessages;
 
 import it.polimi.ingsw.network.MessageType;
 
-public class SwitchPhaseMessage extends EventMessage {
+public class EndTurnMessage extends EventMessage {
     private final long serialVersionUID = 1L;
-    public SwitchPhaseMessage(String nickName) {
-        super(nickName, MessageType.SWITCH_PHASE);
+    public EndTurnMessage(String nickName) {
+        super(nickName, MessageType.END_TURN);
     }
 
     public String toString(){
