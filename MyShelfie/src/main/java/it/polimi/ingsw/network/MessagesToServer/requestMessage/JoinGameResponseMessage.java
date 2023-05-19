@@ -7,7 +7,7 @@ import java.util.Set;
 public class JoinGameResponseMessage extends RequestMessage {
     private Set<String> AvailableGamesInLobby;
     public JoinGameResponseMessage(boolean validJoin,Set<String> availableGamesInLobby) {
-        super(MessageToClientType.JOINGAME_RESPONSE);
+        super(MessageToClientType.JOIN_GAME_RESPONSE);
         this.AvailableGamesInLobby=availableGamesInLobby;
     }
 

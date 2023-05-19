@@ -65,7 +65,7 @@ public class ClientImplementation extends UnicastRemoteObject implements Client 
                         this.nickname = creatorLoginResponseMessage.getNickname();
 
                 }
-                case GAMENAME_RESPONSE -> {
+                case GAME_NAME_RESPONSE -> {
                     GameNameResponseMessage gameNameResponseMessage = (GameNameResponseMessage) message;
                     if (gameNameResponseMessage.isValidGameName())
                         this.gameName = gameNameResponseMessage.getGameName();
@@ -75,13 +75,14 @@ public class ClientImplementation extends UnicastRemoteObject implements Client 
                     if (loginResponseMessage.isValidNickname())
                         this.nickname = loginResponseMessage.getNickname();
 
-                }
+                } /*case PLAYER_JOINED_LOBBY_RESPONSE -> {
+                    PlayerJoinedLobbyMessage playerJoinedLobbyMessage = (PlayerJoinedLobbyMessage) message;
+                }*/
 
 
             }
         }
         else if (message instanceof ErrorMessage) {
-
         }
         view.showMessage(message);
     }

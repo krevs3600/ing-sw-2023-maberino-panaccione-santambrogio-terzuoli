@@ -3,8 +3,11 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.network.Client;
+import it.polimi.ingsw.network.ClientImplementation;
+import it.polimi.ingsw.network.MessagesToServer.requestMessage.PlayerJoinedLobbyMessage;
 import it.polimi.ingsw.network.MessagesToServer.requestMessage.WaitingResponseMessage;
 import it.polimi.ingsw.network.Server;
+import it.polimi.ingsw.network.ServerImplementation;
 import it.polimi.ingsw.network.eventMessages.*;
 
 import java.rmi.RemoteException;
@@ -62,6 +65,29 @@ public class GameController {
              }
 
               */
+
+
+            /* to notify other players
+            GameNameChoiceMessage gameNameChoiceMessage = (GameNameChoiceMessage) eventMessage;
+
+                if (game.getSubscribers().size() <= game.getNumberOfPlayers().getValue() && !game.getSubscribers().isEmpty()) {
+                    System.out.println(this.getClients().size());
+                    for (Client player : this.getClients()) {
+                        player.onMessage(new PlayerJoinedLobbyMessage(eventMessage.getNickName()));
+                    }
+                }
+                clients.add(client);
+                Player newPlayer = new Player(eventMessage.getNickName());
+                game.subscribe(newPlayer);
+
+                if (game.getSubscribers().size() < game.getNumberOfPlayers().getValue()){
+                    client.onMessage(new WaitingResponseMessage());
+                }
+                if (game.getSubscribers().size() == game.getNumberOfPlayers().getValue()) {
+                    server.removeGameFromLobby(gameNameChoiceMessage.getGameChoice());
+                    game.initLivingRoomBoard();
+                }
+            * */
             case GAME_CHOICE -> {
                 GameNameChoiceMessage gameNameChoiceMessage = (GameNameChoiceMessage) eventMessage;
                 clients.add(client);

@@ -21,11 +21,11 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
 
    // private Map<GameController, Game> currentGames = new HashMap<>();
 
-    private Map<String,GameController> currentGames=new HashMap<>();
+    private Map<String,GameController> currentGames = new HashMap<>();
     private Set<String> currentPlayersNicknames = new HashSet<>();
     private Set<String> currentLobbyGameNames = new HashSet<>();
     private Map<String, Client> connectedClients = new HashMap<>();
-    private Map<Client, GameController> player_game = new HashMap<>();
+    private Map<Client, GameController> playerGame = new HashMap<>();
 
     public ServerImplementation() throws RemoteException {
         super();
@@ -42,7 +42,7 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
     @Override
     //TODO gestione di più client
     public void register(Client client) {
-        Game game = player_game.get(client).getGame();
+        Game game = playerGame.get(client).getGame();
         game.addObserver((observer, eventMessage) -> {
             try {
                 client.update(new GameView(game), (EventMessage) eventMessage);
@@ -70,7 +70,7 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                     client.onMessage(new LoginResponseMessage(false));                                                                            //        client.onMessage(new CreatorLoginResponseMessage(validNickname));
             }                                                                                                                                     //}
             //this.gameController.update(client, eventMessage);
-            case GAMENAME -> {
+            case GAME_NAME -> {
                 GameNameMessage gameNameMessage = (GameNameMessage) eventMessage;
                 // da capire cosa modificare
                 if (!currentLobbyGameNames.contains(gameNameMessage.getGameName()) && !currentGames.containsKey(gameNameMessage.getGameName())) {
@@ -86,7 +86,7 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                 if (gameCreationMessage.getNumOfPlayers() > 1 && gameCreationMessage.getNumOfPlayers() < 5) {
                     Game game = new Game(Arrays.stream(NumberOfPlayers.values()).filter(x -> x.getValue() == gameCreationMessage.getNumOfPlayers()).toList().get(0), gameCreationMessage.getGameName());
                     GameController gameController = new GameController(this, game);
-                    player_game.put(client, gameController);
+                    playerGame.put(client, gameController);
                     register(client);
                     currentGames.put(gameCreationMessage.getGameName(), gameController);
                   //  currentGames.put(gameController, game);
@@ -100,7 +100,7 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
             case JOIN_GAME_REQUEST -> {
                 JoinGameMessage joinGameMessage = (JoinGameMessage) eventMessage;
                 Set<String> availableGames = new HashSet<>(currentLobbyGameNames);
-                if (currentLobbyGameNames.size() == 0) {
+                if (currentLobbyGameNames.isEmpty()) {
                     client.onMessage(new JoinErrorMessage(joinGameMessage.getNickName(), "no available games in lobby"));
                 } else {
                     client.onMessage(new JoinGameResponseMessage(true, availableGames));
@@ -109,7 +109,7 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
             }
             case GAME_CHOICE -> {
                 GameNameChoiceMessage gameNameChoiceMessage=(GameNameChoiceMessage) eventMessage;
-                player_game.put(client, currentGames.get(gameNameChoiceMessage.getGameChoice()));
+                playerGame.put(client, currentGames.get(gameNameChoiceMessage.getGameChoice()));
                 register(client);
                 currentGames.get(gameNameChoiceMessage.getGameChoice()).getClients().add(client);
                 currentGames.get(gameNameChoiceMessage.getGameChoice()).update(client,gameNameChoiceMessage);
@@ -119,6 +119,10 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
 
     public void removeGameFromLobby(String gameName) {
         this.currentLobbyGameNames.remove(gameName);
+    }
+
+    public Map<String, Client> getConnectedClients() {
+        return connectedClients;
     }
 }
 

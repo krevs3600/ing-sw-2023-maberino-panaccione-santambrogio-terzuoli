@@ -10,13 +10,13 @@ public class GameNameResponseMessage extends RequestMessage {
 
 
     public GameNameResponseMessage(String GameName,boolean validGameName) {
-        super(MessageToClientType.GAMENAME_RESPONSE);
+        super(MessageToClientType.GAME_NAME_RESPONSE);
         this.validGameName = validGameName;
         this.GameName=GameName;
     }
 
     public GameNameResponseMessage(boolean validGameName) {
-        super(MessageToClientType.GAMENAME_RESPONSE);
+        super(MessageToClientType.GAME_NAME_RESPONSE);
         this.validGameName = validGameName;
     }
 

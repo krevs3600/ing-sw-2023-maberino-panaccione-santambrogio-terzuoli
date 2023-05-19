@@ -55,14 +55,14 @@ public class CLI extends Observable {
         try {
             createConnection();
         } catch (RemoteException e) {
-            out.println("bro dinne una giusta");
+
         } catch (NotBoundException e) {
             throw new RuntimeException(e);
         }
     }
 
     private void printLogo() {
-        out.println("Hello MyShelfie is here");
+        out.println("myShelfie");
     }
 
     private void createConnection() throws RemoteException, NotBoundException {
@@ -73,18 +73,17 @@ public class CLI extends Observable {
         switch (connectionType) {
             case "r" -> {
                 try {
-                    Registry registry = LocateRegistry.getRegistry(port);
+                    Registry registry = LocateRegistry.getRegistry(address, port);
                     AppServer server = (AppServer) registry.lookup("MyShelfieServer");
 
-
-                    ClientImplementation client = new ClientImplementation(this, server.connect());
-                    this.client=client;
+                    this.client = new ClientImplementation(this, server.connect());
                    askNickname();
                 } catch (NotBoundException e) {
                     System.err.println("not bound exception registry");
                 }
             }
             case "s" -> {
+                port = (port == 1243) ? 1244 : port;
                 ServerStub serverStub = new ServerStub(address, port);
                 ClientImplementation client = new ClientImplementation(this, serverStub);
                 new Thread() {
@@ -114,8 +113,8 @@ public class CLI extends Observable {
     private String askConnectionType() {
         String connectionType = "";
         do {
-            out.print("Please insert a connection type: socket (s) or RMI (r) ");
-            connectionType = in.next();
+            out.print("Please insert a connection type: socket (s) or RMI (r): ");
+            connectionType = in.nextLine();
             if (!connectionType.equals("s") && !connectionType.equals("r")) System.err.println("invalid choice");
         } while (!connectionType.equals("s") && !connectionType.equals("r"));
         return connectionType;
@@ -124,32 +123,38 @@ public class CLI extends Observable {
     public String askServerAddress(){
         String address;
         do  {
-            out.print("Please insert the address of the server you want to connect to, otherwise press ENTER if you want the local host one (127.0.0.1): ");
-            address = in.next();
-        } while (!isValidIPAddress(address) || address.equals("\n"));
-        if(address.equals("\n")){
+            out.print("Please insert the server address (press ENTER for localhost): ");
+            address = in.nextLine();
+        } while (!isValidIPAddress(address) && !address.equals(""));
+        if(address.equals("")){
+            out.println("Using default address...");
             address = "127.0.0.1";
         }
         return address;
     }
 
     private int askServerPort(){
-        int serverPort;
+        String serverPort;
         do {
-            out.print("Please insert the IP of the server you want to connect to. If you type an invalid port, the default one will be used (1234): ");
-            try {
-                serverPort = Integer.parseInt(in.next());
-            } catch (NumberFormatException e){
-                out.print("Using default port");
-                serverPort = 1234;
+            out.print("Please insert the ip port (press ENTER for default): ");
+            serverPort = in.nextLine();
+            if (serverPort.equals("")){
+                out.println("Using default port...");
+                return 1243;
             }
         } while (!isValidPort(serverPort));
 
-        return serverPort;
+        return Integer.parseInt(serverPort);
     }
 
-    private boolean isValidPort(int port) {
-        return port >= 1024 && port < 65535;
+    private boolean isValidPort(String serverPort) {
+        try {
+            int port = Integer.parseInt(serverPort);
+            return port >= 1 && port <= 65535;
+        } catch (NumberFormatException e){
+            System.out.println("Input is not a number!");
+            return false;
+        }
     }
 
     private boolean isValidIPAddress(String address) {
@@ -235,7 +240,9 @@ public class CLI extends Observable {
 
     public void gameMenu() {
         printMenu();
+        out.print(">>> ");
         int menuOption = in.nextInt();
+        in.nextLine();
 
         switch (menuOption) {
             case 1 -> {
@@ -265,8 +272,9 @@ public class CLI extends Observable {
     private void askNumberOfPlayers(String gameName) {
             int numOfPlayers = 0;
             while (numOfPlayers <= 0) {
-                out.println("Please insert the number of players: ");
+                out.print("Please insert the number of players: ");
                 numOfPlayers = in.nextInt();
+                in.nextLine();
             }
             setChanged();
             notifyObservers(new GameCreationMessage(this.client.getNickname(), numOfPlayers, gameName));
@@ -274,50 +282,47 @@ public class CLI extends Observable {
 
     private void askGameName() {
 
-        String GameName = "";
-        while (GameName.length() < 1) {
-            out.println("Please " + this.client.getNickname() + " insert the name for your game : ");
-            GameName = in.next();
+        String gameName = "";
+        while (gameName.length() < 1) {
+            out.print(this.client.getNickname() + " choose your game's name : ");
+            gameName = in.nextLine();
         }
         setChanged();
-        notifyObservers(new GameNameMessage(this.client.getNickname(),GameName));
+        notifyObservers(new GameNameMessage(this.client.getNickname(),gameName));
 
     }
 
     private void askNickname() {
         String nickName = "";
         while (nickName.length() < 1) {
-            out.println("Please insert your name: ");
-            nickName = in.next();
+            out.print("Please insert your name: ");
+            nickName = in.nextLine();
         }
       //  return nickName;
         setChanged();
         notifyObservers(new NicknameMessage(nickName));
-
     }
 
     public void showGameNamesList(Set<String> availableGameNames) {
-
-        for (String game : availableGameNames) {
-           out.println(game);
+        if (availableGameNames.isEmpty()){
+            out.println("No games available, please create a new one!");
+        } else {
+            for (String game : availableGameNames) {
+                out.println("> " + game);
+            }
         }
         String gameChoice = null;
         do {
-            out.println("\n choose the name of the game you want to join in ");
-            gameChoice = in.next();
+            out.print("Enter the game's name to join: ");
+            gameChoice = in.nextLine();
 
-            
             if(!availableGameNames.contains(gameChoice)) {
-                System.err.println("\n invalid game choice, please insert another one");
+                System.err.println("Invalid game choice, spell it right!");
             }
-
-
         }while(!availableGameNames.contains(gameChoice));
 
         setChanged();
-        notifyObservers(new GameNameChoiceMessage(this.client.getNickname(),gameChoice));
-
-        //System.out.println("Waiting for other players... ");
+        notifyObservers(new GameNameChoiceMessage(this.client.getNickname(), gameChoice));
     }
 
     public void printTitle() {
@@ -327,7 +332,6 @@ public class CLI extends Observable {
     public void printMenu() {
         out.println(MessageCLI.MENU);
     }
-
 
     public void showMessage(MessageToClient message) {
 
@@ -344,7 +348,7 @@ public class CLI extends Observable {
 
 
 
-            case GAMENAME_RESPONSE -> {
+            case GAME_NAME_RESPONSE -> {
                 GameNameResponseMessage gameNameResponseMessage = (GameNameResponseMessage) message;
                 if (gameNameResponseMessage.isValidGameName()) {
                     System.out.println("Available game name :) ");
@@ -382,17 +386,21 @@ public class CLI extends Observable {
 
                 }
 
-            case JOINGAME_RESPONSE -> {
+            case JOIN_GAME_RESPONSE -> {
                 JoinGameResponseMessage joinGameResponseMessage= (JoinGameResponseMessage) message;
                 showGameNamesList(joinGameResponseMessage.getAvailableGamesInLobby());
             }
             case JOIN_GAME_ERROR -> {
                 JoinErrorMessage joinErrorMessage = (JoinErrorMessage) message;
                 System.err.println(joinErrorMessage.getErrorMessage());
+                gameMenu();
             }
             case WAIT_PLAYERS -> {
                 out.println("Waiting for other players");
-
+            }
+            case PLAYER_JOINED_LOBBY_RESPONSE -> {
+                PlayerJoinedLobbyMessage player = (PlayerJoinedLobbyMessage) message;
+                out.println(player.getNickname() + " joined lobby");
             }
         }
     }

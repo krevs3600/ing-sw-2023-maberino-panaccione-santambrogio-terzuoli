@@ -3,8 +3,7 @@ package it.polimi.ingsw.network;
 public enum MessageType {
     ERROR,
     NICKNAME,
-
-    GAMENAME,
+    GAME_NAME,
     MENU_OPTION,
     GAME_CREATION,
     GAME_CHOICE,
@@ -22,9 +21,6 @@ public enum MessageType {
     END_GAME,
     INSERTION_REQUEST,
     ITEM_TILE_INDEX, CREATOR_NICKNAME,
-
-
-
     // error
 
 

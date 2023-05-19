@@ -5,9 +5,10 @@ public enum MessageToClientType {
     // request messages type
     LOGIN_RESPONSE,
     GAME_CREATION,
-    JOINGAME_RESPONSE,
+    JOIN_GAME_RESPONSE,
+    PLAYER_JOINED_LOBBY_RESPONSE,
 
-    GAMENAME_RESPONSE,
+    GAME_NAME_RESPONSE,
     CREATOR_LOGIN_RESPONSE,
 
     // error messages types
