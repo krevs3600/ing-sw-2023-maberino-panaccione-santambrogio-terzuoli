@@ -1,7 +1,9 @@
 package it.polimi.ingsw.view.cli;
 
 import it.polimi.ingsw.AppServer;
+import it.polimi.ingsw.model.ModelView.CommonGoalCardView;
 import it.polimi.ingsw.model.ModelView.GameView;
+import it.polimi.ingsw.model.ModelView.PlayerView;
 import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.network.ClientImplementation;
 import it.polimi.ingsw.network.MessagesToServer.MessageToClient;
@@ -55,7 +57,7 @@ public class CLI extends Observable {
         printLogo();
         try {
             createConnection();
-        } catch (RemoteException e) {
+        } catch (RemoteException ignored) {
 
         } catch (NotBoundException e) {
             throw new RuntimeException(e);
@@ -63,7 +65,7 @@ public class CLI extends Observable {
     }
 
     private void printLogo() {
-        out.println("myShelfie");
+        out.println("myShelfie\n");
     }
 
     private void createConnection() throws RemoteException, NotBoundException {
@@ -116,7 +118,7 @@ public class CLI extends Observable {
         do {
             out.print("Please insert a connection type: socket (s) or RMI (r): ");
             connectionType = in.nextLine();
-            if (!connectionType.equals("s") && !connectionType.equals("r")) System.err.println("invalid choice");
+            if (!connectionType.equals("s") && !connectionType.equals("r")) System.err.println("\ninvalid choice");
         } while (!connectionType.equals("s") && !connectionType.equals("r"));
         return connectionType;
     }
@@ -124,11 +126,11 @@ public class CLI extends Observable {
     public String askServerAddress(){
         String address;
         do  {
-            out.print("Please insert the server address (press ENTER for localhost): ");
+            out.print("\nPlease insert the server address (press ENTER for localhost): ");
             address = in.nextLine();
         } while (!isValidIPAddress(address) && !address.equals(""));
         if(address.equals("")){
-            out.println("Using default address...");
+            out.println("\nUsing default address...");
             address = "127.0.0.1";
         }
         return address;
@@ -137,10 +139,10 @@ public class CLI extends Observable {
     private int askServerPort(){
         String serverPort;
         do {
-            out.print("Please insert the ip port (press ENTER for default): ");
+            out.print("\nPlease insert the ip port (press ENTER for default): ");
             serverPort = in.nextLine();
             if (serverPort.equals("")){
-                out.println("Using default port...");
+                out.println("\nUsing default port...");
                 return 1243;
             }
         } while (!isValidPort(serverPort));
@@ -153,7 +155,7 @@ public class CLI extends Observable {
             int port = Integer.parseInt(serverPort);
             return port >= 1 && port <= 65535;
         } catch (NumberFormatException e){
-            System.out.println("Input is not a number!");
+            System.out.println("\nInput is not a number!");
             return false;
         }
     }
@@ -254,7 +256,7 @@ public class CLI extends Observable {
 
             }
             default -> {
-                out.println("Invalid option, please try again");
+                out.println("\nInvalid option, please try again");
             }
         }
 
@@ -273,7 +275,7 @@ public class CLI extends Observable {
     private void askNumberOfPlayers(String gameName) {
             int numOfPlayers = 0;
             while (numOfPlayers <= 0) {
-                out.print("Please insert the number of players: ");
+                out.print("\nPlease insert the number of players: ");
                 numOfPlayers = in.nextInt();
                 in.nextLine();
             }
@@ -285,7 +287,7 @@ public class CLI extends Observable {
 
         String gameName = "";
         while (gameName.length() < 1) {
-            out.print(this.client.getNickname() + " choose your game's name : ");
+            out.print("\n" + this.client.getNickname() + " choose your game's name : ");
             gameName = in.nextLine();
         }
         setChanged();
@@ -296,7 +298,7 @@ public class CLI extends Observable {
     private void askNickname() {
         String nickName = "";
         while (nickName.length() < 1) {
-            out.print("Please insert your name: ");
+            out.print("\nPlease insert your name: ");
             nickName = in.nextLine();
         }
       //  return nickName;
@@ -306,19 +308,20 @@ public class CLI extends Observable {
 
     public void showGameNamesList(Set<String> availableGameNames) {
         if (availableGameNames.isEmpty()){
-            out.println("No games available, please create a new one!");
+            out.println("\nNo games available, please create a new one!");
         } else {
+            out.println("\nAvailable games in lobby:\n");
             for (String game : availableGameNames) {
                 out.println("> " + game);
             }
         }
         String gameChoice = null;
         do {
-            out.print("Enter the game's name to join: ");
+            out.print("\nEnter the game's name to join: ");
             gameChoice = in.nextLine();
 
             if(!availableGameNames.contains(gameChoice)) {
-                System.err.println("Invalid game choice, spell it right!");
+                System.err.println("\nInvalid game choice");
             }
         }while(!availableGameNames.contains(gameChoice));
 
@@ -352,10 +355,10 @@ public class CLI extends Observable {
             case GAME_NAME_RESPONSE -> {
                 GameNameResponseMessage gameNameResponseMessage = (GameNameResponseMessage) message;
                 if (gameNameResponseMessage.isValidGameName()) {
-                    System.out.println("Available game name :) ");
+                    System.out.println("\nAvailable game name :) ");
                     askNumberOfPlayers(gameNameResponseMessage.getGameName());
                 } else {
-                    System.err.println("The game name is already taken, please choose another game name");
+                    System.err.println("\nThe game name is already taken, please choose another game name");
                     askGameName();
                 }
             }
@@ -363,17 +366,17 @@ public class CLI extends Observable {
             case GAME_CREATION -> {
                 GameCreationResponseMessage gameCreationResponseMessage = (GameCreationResponseMessage) message;
                 if (gameCreationResponseMessage.isValidGameCreation()) {
-                    System.out.println("Valid number of players :) ");
-                    System.out.println("Waiting for other players... ");
+                    System.out.println("\nValid number of players :) ");
+                    System.out.println("\nWaiting for other players... ");
                 } else {
-                    System.err.println("Invalid number of players, please choose a number within the available range");
+                    System.err.println("\nInvalid number of players, please choose a number within the available range");
                     askNumberOfPlayers(this.client.getGameName());
                 }
             }
             case LOGIN_RESPONSE -> {
                 LoginResponseMessage loginResponseMessage = (LoginResponseMessage) message;
                 if (loginResponseMessage.isValidNickname()) {
-                    System.out.println("Available nickname " + this.client.getNickname() + " :)");
+                    System.out.println("\nAvailable nickname " + this.client.getNickname() + " :)");
                     gameMenu();
                     //showGameNamesList(loginResponseMessage.getAvailableGames());
 
@@ -381,7 +384,7 @@ public class CLI extends Observable {
                    // if (loginResponseMessage.getNickname().equals(this.client.getNickname())) {
                    //     System.err.println("No games available, returning to the main menu ");
                    //     printMenu();
-                        System.err.println("Invalid nickname, please choose another one\n");
+                        System.err.println("\nInvalid nickname, please choose another one\n");
                         askNickname();
                     }
 
@@ -399,18 +402,18 @@ public class CLI extends Observable {
             case WAIT_PLAYERS -> {
                 WaitingResponseMessage waitingResponseMessage = (WaitingResponseMessage) message;
                 if (waitingResponseMessage.getMissingPlayers() == 1) {
-                    out.println("Waiting for 1 player... ");
+                    out.println("\nWaiting for 1 player... ");
                 } else {
-                    out.println("Waiting for " + waitingResponseMessage.getMissingPlayers() + "players... ");
+                    out.println("\nWaiting for " + waitingResponseMessage.getMissingPlayers() + "players... ");
                 }
             }
             case PLAYER_JOINED_LOBBY_RESPONSE -> {
                 PlayerJoinedLobbyMessage player = (PlayerJoinedLobbyMessage) message;
-                out.println(player.getNickname() + " joined lobby");
+                out.println("\n" + player.getNickname() + " joined lobby");
             }
             case ILLEGAL_POSITION -> {
                 if (activeTurn) {
-                    out.println("IllegalAccessError, position is not valid. Please try again...");
+                    out.println("\nIllegalAccessError, position is not valid. Please try again...");
                     out.print("r: ");
                     int r = in.nextInt();
                     in.nextLine();
@@ -438,18 +441,22 @@ public class CLI extends Observable {
                 notifyObservers(new NumOfPlayerMessage(eventMessage.getNickName(), numOfPlayers));
             }
              */
-            case PERSONAL_GOAL_CARD -> {
+            /*case PERSONAL_GOAL_CARD -> {
                 if (eventMessage.getNickname().equals(client.getNickname())){
                     out.println(((PersonalGoalCardMessage)eventMessage).getPersonalGoalCard().toString());
                 }
             }
+
+             */
             case PLAYER_TURN -> {
                 if (this.client.getNickname().equals(eventMessage.getNickname())){
                     activeTurn = true;
+                    out.println("\n-----------------------------------------------------------------------\n YOUR PERSONAL GOAL CARD:");
+                    out.println(game.getCurrentPlayer().getPersonalGoalCard().toString());
+                    out.println("\n-----------------------------------------------------------------------\n");
                     out.println(this.client.getNickname() + " is your turn!");
-
                     boolean stopPickingTiles = false;
-                    out.println("Please enter a position: ");
+                    out.println("\nPlease enter a position: ");
                     out.print("r: ");
                     int r = in.nextInt();
                     in.nextLine();
@@ -460,21 +467,25 @@ public class CLI extends Observable {
                     notifyObservers(new TilePositionMessage(eventMessage.getNickname(), new Position(r, c)));
                 } else {
                     activeTurn = false;
+                    out.println("\nIt's " + eventMessage.getNickname() + "'s turn\n" );
                 }
             }
             case BOARD -> {
+                out.println("\n-----------------------------------------------------------------------\n");
                 System.out.println("--- NEW TURN ---");
-                out.println("\n-----------------------------------------------------------------------\n LIVING ROOM BOARD:");
+                out.println("\nLIVING ROOM BOARD:");
                 out.println(game.getLivingRoomBoard().toString());
-                /*out.println("\n-----------------------------------------------------------------------\n TILE PACK:");
-                out.println(game.getTilePack().toString());
-                out.println("\n-----------------------------------------------------------------------\n" + game.getSubscribers().get(0).getName() + "'s BOOKSHELF:");
-                out.println(game.getSubscribers().get(0).getBookshelf().toString());
-                out.println("\n-----------------------------------------------------------------------\n");
-                out.println("First common goal card: " + game.getLivingRoomBoard().getCommonGoalCards().get(0).toString());
-                out.println("\n-----------------------------------------------------------------------\n");
-                out.println("Second common goal card: " + game.getLivingRoomBoard().getCommonGoalCards().get(1).toString());
-                out.println("\n-----------------------------------------------------------------------\n");
+                for (PlayerView playerView: game.getSubscribers()) {
+                    out.println("\n-----------------------------------------------------------------------\n" + playerView.getName() + "'s BOOKSHELF:");
+                    out.println(playerView.getBookshelf().toString());
+                }
+                int i=0;
+                for (CommonGoalCardView commonGoalCardView: game.getLivingRoomBoard().getCommonGoalCards()) {
+                    i++;
+                    out.println("\n-----------------------------------------------------------------------\n");
+                    out.println("Common goal card " + i + ":\n" + commonGoalCardView.toString());
+                }
+                /*
                 out.println(game.getSubscribers().get(0).getName() + "'s personal goal card: \n" + game.getSubscribers().get(0).getPersonalGoalCard().toString());
                 out.println("\n-----------------------------------------------------------------------\n");
                 out.println(game.getSubscribers().get(0).getName() + "'s score: " + game.getCurrentPlayerScore());
@@ -529,29 +540,32 @@ public class CLI extends Observable {
                         out.println("\nIf you wish to stop picking tiles type 'stop', otherwise press ENTER");
                         out.print(">>> ");
                         answer = in.nextLine();
-                        if (answer.equals("stop")) {
-                            out.println("\n-----------------------------------------------------------------------\n" + game.getCurrentPlayer().getName() + "'s BOOKSHELF:");
-                            out.println(game.getCurrentPlayer().getBookshelf().toString());
-                            out.println("\n-----------------------------------------------------------------------\n");
-                            out.print("In which column you want to insert your item tiles?\n");
-                            int column = in.nextInt();
-                            in.nextLine();
-                            setChanged();
-                            notifyObservers(new BookshelfColumnMessage(eventMessage.getNickname(), column));
-                        }
-                        else if (answer.equals("")){
-                            out.println("Please enter a position: ");
-                            out.print("r: ");
-                            int r = in.nextInt();
-                            in.nextLine();
-                            System.out.print("c: ");
-                            int c = in.nextInt();
-                            in.nextLine();
-                            setChanged();
-                            notifyObservers(new TilePositionMessage(eventMessage.getNickname(), new Position(r, c)));
-                        } else if (answer.equals("penepiccolo")){
-                            setChanged();
-                            notifyObservers(new FillBookshelfMessage(eventMessage.getNickname()));
+                        switch (answer) {
+                            case "stop" -> {
+                                out.println("\n-----------------------------------------------------------------------\n" + game.getCurrentPlayer().getName() + "'s BOOKSHELF:");
+                                out.println(game.getCurrentPlayer().getBookshelf().toString());
+                                out.println("\n-----------------------------------------------------------------------\n");
+                                out.print("In which column you want to insert your item tiles?\n");
+                                int column = in.nextInt();
+                                in.nextLine();
+                                setChanged();
+                                notifyObservers(new BookshelfColumnMessage(eventMessage.getNickname(), column));
+                            }
+                            case "" -> {
+                                out.println("\nPlease enter a position: ");
+                                out.print("r: ");
+                                int r = in.nextInt();
+                                in.nextLine();
+                                System.out.print("c: ");
+                                int c = in.nextInt();
+                                in.nextLine();
+                                setChanged();
+                                notifyObservers(new TilePositionMessage(eventMessage.getNickname(), new Position(r, c)));
+                            }
+                            case "penepiccolo" -> {
+                                setChanged();
+                                notifyObservers(new FillBookshelfMessage(eventMessage.getNickname()));
+                            }
                         }
                     } while (!answer.equals("stop") && !answer.equals("") && !answer.equals("penepiccolo"));
                 }
@@ -576,7 +590,7 @@ public class CLI extends Observable {
                         setChanged();
                         notifyObservers(new ItemTileIndexMessage(eventMessage.getNickname(), itemTileIndex));
                     } else {
-                        activeTurn = false;
+                        //activeTurn = false;
                         setChanged();
                         notifyObservers(new EndTurnMessage(eventMessage.getNickname()));
                     }

@@ -23,10 +23,6 @@ import java.util.*;
 public class Game extends Observable<EventMessage> {
 
 
-    public boolean isEnded() {
-        return isEnded;
-    }
-
     public enum Phase {
         INIT_GAME,
         INIT_TURN,
@@ -83,6 +79,10 @@ public class Game extends Observable<EventMessage> {
     public void setGameName (String gameName) {
         this.gameName = gameName;
     }
+    public boolean isEnded() {
+        return isEnded;
+    }
+    public void setIsEnded () { this.isEnded = true;}
 
     public boolean isFinalTurn () { return isFinalTurn;}
     public void setFinalTurn() {
@@ -145,7 +145,7 @@ public class Game extends Observable<EventMessage> {
         for(Player player : subscribers){
             player.setStatus(PlayerStatus.INACTIVE);
         }
-        this.isEnded = true;
+        setIsEnded();
         setChanged();
         notifyObservers(new EndGameMessage(new PlayerView(getCurrentPlayer())));
         // maybe call to a method to show results
@@ -170,13 +170,16 @@ public class Game extends Observable<EventMessage> {
     //TODO: add message event
     public void changeTurn(){
         getBuffer().clear();
+        setAlongSideColumn(false);
+        setAlongSideRow(false);
         setDrawableTiles();
-        this.cursor = cursor < subscribers.size()-1 ? cursor+1 : 0;
+        //this.cursor = cursor < subscribers.size()-1 ? cursor+1 : 0;
+        setCursor();
         setChanged();
         notifyObservers(new PlayerTurnMessage(getCurrentPlayer().getName()));
     }
 
-
+    public void setCursor () { this.cursor = cursor < subscribers.size()-1 ? cursor+1 : 0; }
 
     /**
      * This method refills the LivingRoomBoard by calling its proper method
@@ -241,8 +244,8 @@ public class Game extends Observable<EventMessage> {
 
     public void setPersonalGoalCard(Player player, GoalCard personalGoalCard){
         player.setPersonalGoalCard(personalGoalCard);
-        setChanged();
-        notifyObservers(new PersonalGoalCardMessage(player.getName(), player.getPersonalGoalCard()));
+        //setChanged();
+        //notifyObservers(new PersonalGoalCardMessage(player.getName(), player.getPersonalGoalCard()));
     }
     public PersonalGoalCardDeck getPersonalGoalCardDeck(){
         return personalGoalCardDeck;}
@@ -339,9 +342,10 @@ public class Game extends Observable<EventMessage> {
         return this.buffer;
     }
 
-    public boolean isAlongSideRow () {return this.alongSideRow; }
-    public void setAlongSideRow (boolean alongSideRow) {this.alongSideRow = alongSideRow; }
+    public boolean isAlongSideRow() {return this.alongSideRow; }
+    public void setAlongSideRow(boolean alongSideRow) {this.alongSideRow = alongSideRow; }
+    public void setAlongSideColumn(boolean alongSideColumn) {this.alongSideColumn = alongSideColumn; }
 
-    public boolean isAlongSideColumn () {return this.alongSideColumn; }
-    public void setAlongSideColumn (boolean alongSideColumn) {this.alongSideColumn = alongSideColumn; }
+    public boolean isAlongSideColumn() {return this.alongSideColumn; }
+
 }

@@ -157,13 +157,14 @@ public class GameController {
                     else if (game.getBuffer().size() == 1) {
 
                         if (game.getBuffer().get(0).isAdjacent(tilePositionMessage.getPosition())) {
+                            if (tilePositionMessage.getPosition().getColumn() == game.getBuffer().get(0).getColumn()) {
+                                game.setAlongSideColumn(true);
+                            } else {
+                                game.setAlongSideRow(true);
+                            }
                             ItemTile itemTile = game.drawTile(tilePositionMessage.getPosition());
                             game.getBuffer().add(tilePositionMessage.getPosition());
                             game.insertTileInTilePack(itemTile);
-
-                            if (tilePositionMessage.getPosition().getColumn() == game.getBuffer().get(0).getColumn()) {
-                                game.setAlongSideRow(true);
-                            } else game.setAlongSideColumn(true);
                         }
                         else {
                             client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), new LivingRoomBoardView(game.getLivingRoomBoard())));
@@ -179,20 +180,22 @@ public class GameController {
                         }
                         if (fairPosition) {
 
-                            if (game.isAlongSideRow()) {
+                            if (game.isAlongSideColumn()) {
                                 if (tilePositionMessage.getPosition().getColumn() != game.getBuffer().get(0).getColumn()) {
                                     // throw new IllegalAccessError("Space forbidden or empty");
                                     client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), new LivingRoomBoardView(game.getLivingRoomBoard())));
                                 }
-                            } else if (game.isAlongSideColumn()) {
+                            } else if (game.isAlongSideRow()) {
                                 if (tilePositionMessage.getPosition().getRow() != game.getBuffer().get(0).getRow()) {
                                     // throw new IllegalAccessError("Space forbidden or empty");
                                     client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), new LivingRoomBoardView(game.getLivingRoomBoard())));
                                 }
                             }
+                            ItemTile itemTile = game.drawTile(tilePositionMessage.getPosition());
+                            game.getBuffer().add(tilePositionMessage.getPosition());
+                            game.insertTileInTilePack(itemTile);
                         }
-                        ItemTile itemTile = game.drawTile(tilePositionMessage.getPosition());
-                        game.insertTileInTilePack(itemTile);
+                        client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), new LivingRoomBoardView(game.getLivingRoomBoard())));
                     } else {
                         client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), new LivingRoomBoardView(game.getLivingRoomBoard())));
                         //throw new IllegalAccessError("Space forbidden or empty");
@@ -244,11 +247,13 @@ public class GameController {
                     // game is ended
                     if (game.getCurrentPlayer().equals(game.getLastPlayer())){
                         setPlayersScoreEndGame();
-                        for (Client c : getClients()){
+                        /*for (Client c : getClients()){
                             // todo controllare messaggi e conto punteggi e capire come mandarli
                             Player p = game.getSubscribers().stream().filter(x -> x.getName().equals(eventMessage.getNickname())).toList().get(0);
                             c.onMessage(new ScoreMessage(eventMessage.getNickname(), p.getScore()));
                         }
+
+                         */
                         game.endGame();
                     }
                 }
