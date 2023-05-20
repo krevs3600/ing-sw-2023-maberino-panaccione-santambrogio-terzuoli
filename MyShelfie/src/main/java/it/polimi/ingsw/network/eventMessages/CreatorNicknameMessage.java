@@ -11,7 +11,7 @@ public class CreatorNicknameMessage extends EventMessage {
 
         @Override
         public String toString () {
-            return "the creator " +getNickName() + " asks to be subscribed";
+            return "the creator " + getNickname() + " asks to be subscribed";
         }
     }
 

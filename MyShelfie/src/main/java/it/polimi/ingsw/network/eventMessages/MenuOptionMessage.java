@@ -16,6 +16,6 @@ public class MenuOptionMessage extends EventMessage {
 
     @Override
     public String toString() {
-        return getNickName() + " choose menu option " + getMenuOption();
+        return getNickname() + " choose menu option " + getMenuOption();
     }
 }

@@ -58,14 +58,14 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
 
         switch (eventMessage.getType()) {
             case NICKNAME -> {
-                if (!currentPlayersNicknames.contains(eventMessage.getNickName())) {                                                              //case CREATOR_NICKNAME -> {
-                    currentPlayersNicknames.add(eventMessage.getNickName());                                                                      //    boolean validNickname = false;
-                    connectedClients.put(eventMessage.getNickName(), client);                                                                     //    if (!currentPlayersNicknames.contains(eventMessage.getNickName())) {
+                if (!currentPlayersNicknames.contains(eventMessage.getNickname())) {                                                              //case CREATOR_NICKNAME -> {
+                    currentPlayersNicknames.add(eventMessage.getNickname());                                                                      //    boolean validNickname = false;
+                    connectedClients.put(eventMessage.getNickname(), client);                                                                     //    if (!currentPlayersNicknames.contains(eventMessage.getNickName())) {
                     //  Set<String> availableGames = new HashSet<>(currentLobbyGameNames);                                                            //        validNickname = true;
                     //  if(currentLobbyGameNames.size()==0){                                                                                          //        currentPlayersNicknames.add(eventMessage.getNickName());
                     //      client.onMessage(new LoginResponseMessage(true,false, eventMessage.getNickName()));                                       //        connectedClients.put(eventMessage.getNickName(), client);
                     //  }                                                                                                                             //    }
-                    client.onMessage(new LoginResponseMessage(true, eventMessage.getNickName()));                       //    if (validNickname) {
+                    client.onMessage(new LoginResponseMessage(true, eventMessage.getNickname()));                       //    if (validNickname) {
                 }                                                                                                                                 //        client.onMessage(new CreatorLoginResponseMessage(eventMessage.getNickName(), validNickname));
                 else                                                                                                                              //    } else
                     client.onMessage(new LoginResponseMessage(false));                                                                            //        client.onMessage(new CreatorLoginResponseMessage(validNickname));
@@ -102,7 +102,7 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                 JoinGameMessage joinGameMessage = (JoinGameMessage) eventMessage;
                 Set<String> availableGames = new HashSet<>(currentLobbyGameNames);
                 if (currentLobbyGameNames.isEmpty()) {
-                    client.onMessage(new JoinErrorMessage(joinGameMessage.getNickName(), "no available games in lobby"));
+                    client.onMessage(new JoinErrorMessage(joinGameMessage.getNickname(), "no available games in lobby"));
                 } else {
                     client.onMessage(new JoinGameResponseMessage(true, availableGames));
 
@@ -117,7 +117,7 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                 currentGames.get(gameNameChoiceMessage.getGameChoice()).update(client,gameNameChoiceMessage);
             }
 
-            case TILE_POSITION, BOOKSHELF_COLUMN, ITEM_TILE_INDEX, END_TURN -> {
+            case TILE_POSITION, BOOKSHELF_COLUMN, ITEM_TILE_INDEX, END_TURN, FILL_BOOSHELF -> {
                 playerGame.get(client).update(client, eventMessage);
             }
         }

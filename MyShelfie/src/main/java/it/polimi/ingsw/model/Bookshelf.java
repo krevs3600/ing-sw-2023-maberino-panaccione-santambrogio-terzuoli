@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.utils.TileType;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * <h1>Class Bookshelf</h1>
@@ -259,5 +260,16 @@ public class Bookshelf {
      * This method overrides the toString method of the Object class
      * @return String It returns the textual representation of an object of the class
      */
+
+
+    public void insertTileTest() {
+        for (int r=0; r<6; r++){
+            for(int c=0; c<5;c++){
+                grid[r][c] = new ItemTile(TileType.values()[new Random().nextInt(0,5)]);
+            }
+        }
+        grid[0][0] = null;
+        grid[1][0] = null;
+    }
 
 }

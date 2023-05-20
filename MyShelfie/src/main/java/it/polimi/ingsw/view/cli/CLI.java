@@ -421,6 +421,10 @@ public class CLI extends Observable {
                     notifyObservers(new TilePositionMessage(((IllegalTilePositionErrorMessage)message).getNickname(), new Position(r, c)));
                 }
             }
+            case SCORE -> {
+                // todo da spostare nel game nel metodo setscore dei giocatori
+                out.println(((ScoreMessage)message).getNickname() + "'score is: " + ((ScoreMessage)message).getScore());
+            }
         }
     }
 
@@ -434,8 +438,13 @@ public class CLI extends Observable {
                 notifyObservers(new NumOfPlayerMessage(eventMessage.getNickName(), numOfPlayers));
             }
              */
+            case PERSONAL_GOAL_CARD -> {
+                if (eventMessage.getNickname().equals(client.getNickname())){
+                    out.println(((PersonalGoalCardMessage)eventMessage).getPersonalGoalCard().toString());
+                }
+            }
             case PLAYER_TURN -> {
-                if (this.client.getNickname().equals(eventMessage.getNickName())){
+                if (this.client.getNickname().equals(eventMessage.getNickname())){
                     activeTurn = true;
                     out.println(this.client.getNickname() + " is your turn!");
 
@@ -448,7 +457,7 @@ public class CLI extends Observable {
                     int c = in.nextInt();
                     in.nextLine();
                     setChanged();
-                    notifyObservers(new TilePositionMessage(eventMessage.getNickName(), new Position(r, c)));
+                    notifyObservers(new TilePositionMessage(eventMessage.getNickname(), new Position(r, c)));
                 } else {
                     activeTurn = false;
                 }
@@ -528,7 +537,7 @@ public class CLI extends Observable {
                             int column = in.nextInt();
                             in.nextLine();
                             setChanged();
-                            notifyObservers(new BookshelfColumnMessage(eventMessage.getNickName(), column));
+                            notifyObservers(new BookshelfColumnMessage(eventMessage.getNickname(), column));
                         }
                         else if (answer.equals("")){
                             out.println("Please enter a position: ");
@@ -539,9 +548,12 @@ public class CLI extends Observable {
                             int c = in.nextInt();
                             in.nextLine();
                             setChanged();
-                            notifyObservers(new TilePositionMessage(eventMessage.getNickName(), new Position(r, c)));
+                            notifyObservers(new TilePositionMessage(eventMessage.getNickname(), new Position(r, c)));
+                        } else if (answer.equals("penepiccolo")){
+                            setChanged();
+                            notifyObservers(new FillBookshelfMessage(eventMessage.getNickname()));
                         }
-                    } while (!answer.equals("stop") && !answer.equals("continue"));
+                    } while (!answer.equals("stop") && !answer.equals("") && !answer.equals("penepiccolo"));
                 }
 
             }
@@ -562,15 +574,28 @@ public class CLI extends Observable {
                         out.print("Choose an item tile to insert from the tilepack into the selected column\n");
                         int itemTileIndex = in.nextInt();
                         setChanged();
-                        notifyObservers(new ItemTileIndexMessage(eventMessage.getNickName(), itemTileIndex));
+                        notifyObservers(new ItemTileIndexMessage(eventMessage.getNickname(), itemTileIndex));
                     } else {
                         activeTurn = false;
                         setChanged();
-                        notifyObservers(new EndTurnMessage(eventMessage.getNickName()));
+                        notifyObservers(new EndTurnMessage(eventMessage.getNickname()));
                     }
                 }
 
             }
+
+            case LAST_TURN -> {
+                if (activeTurn){
+                    out.println("Congrats, you filled your bookshelf! You have an extra point!");
+                } else {
+                    out.println(eventMessage.getNickname() + " filled his bookshelf...");
+                }
+            }
+
+            case END_GAME -> {
+                out.println("Game has ended... Hope you had fun!");
+            }
+
 
         }
 

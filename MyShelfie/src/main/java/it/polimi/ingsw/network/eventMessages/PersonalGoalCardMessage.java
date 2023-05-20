@@ -16,6 +16,6 @@ public class PersonalGoalCardMessage extends EventMessage {
     }
 
     public String toString(){
-        return "" + getNickName() + "'s personal goal card is : \n" + getPersonalGoalCard().toString();
+        return "" + getNickname() + "'s personal goal card is : \n" + getPersonalGoalCard().toString();
     }
 }

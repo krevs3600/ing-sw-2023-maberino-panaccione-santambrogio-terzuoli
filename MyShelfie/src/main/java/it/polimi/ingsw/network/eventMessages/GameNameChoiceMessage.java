@@ -1,6 +1,5 @@
 package it.polimi.ingsw.network.eventMessages;
 
-import it.polimi.ingsw.model.ModelView.BookshelfView;
 import it.polimi.ingsw.network.MessageType;
 
 public class GameNameChoiceMessage extends EventMessage {
@@ -15,6 +14,6 @@ public class GameNameChoiceMessage extends EventMessage {
     public String getGameChoice () { return  gameChoice;}
 
     public String toString(){
-        return "" + getNickName() + " has chosen the " + getGameChoice() + " game";
+        return "" + getNickname() + " has chosen the " + getGameChoice() + " game";
     }
 }

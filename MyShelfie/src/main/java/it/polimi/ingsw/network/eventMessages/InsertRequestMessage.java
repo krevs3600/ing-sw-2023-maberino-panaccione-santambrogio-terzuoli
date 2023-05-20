@@ -16,7 +16,7 @@ public class InsertRequestMessage extends EventMessage {
     }
     @Override
     public String toString() {
-        return getNickName() + " is inserting in column: " + column;
+        return getNickname() + " is inserting in column: " + column;
     }
 
 }

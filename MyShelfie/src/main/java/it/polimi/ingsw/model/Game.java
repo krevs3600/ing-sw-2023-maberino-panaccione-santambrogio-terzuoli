@@ -2,10 +2,10 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.CommonGoalCard.CommonGoalCard;
 import it.polimi.ingsw.model.ModelView.LivingRoomBoardView;
+import it.polimi.ingsw.model.ModelView.PlayerView;
 import it.polimi.ingsw.model.ModelView.TilePackView;
 import it.polimi.ingsw.model.utils.NumberOfPlayers;
 import it.polimi.ingsw.model.utils.Position;
-import it.polimi.ingsw.model.utils.TileType;
 import it.polimi.ingsw.network.eventMessages.EventMessage;
 import it.polimi.ingsw.network.eventMessages.*;
 import it.polimi.ingsw.observer_observable.Observable;
@@ -22,6 +22,11 @@ import java.util.*;
  */
 public class Game extends Observable<EventMessage> {
 
+
+    public boolean isEnded() {
+        return isEnded;
+    }
+
     public enum Phase {
         INIT_GAME,
         INIT_TURN,
@@ -33,23 +38,24 @@ public class Game extends Observable<EventMessage> {
     private String gameName;
     private PersonalGoalCardDeck personalGoalCardDeck;
     private List<Player> subscribers = new ArrayList<>();
-     private LivingRoomBoard livingRoomBoard;
-     private NumberOfPlayers numberOfPlayers;
-     private int cursor;
-     private Phase turnPhase;
-     private List<Space> drawableTiles = new ArrayList<>();
+    private LivingRoomBoard livingRoomBoard;
+    private NumberOfPlayers numberOfPlayers;
+    private int cursor;
+    private Phase turnPhase;
+    private List<Space> drawableTiles = new ArrayList<>();
 
-     private TilePack tilePack;
+    private TilePack tilePack;
 
-     private int columnChoice;
+    private int columnChoice;
 
-     private int currentPlayerScore;
+    private int currentPlayerScore;
 
-     private List<Position> buffer;
-     private boolean isFinalTurn;
+    private List<Position> buffer;
+    private boolean isFinalTurn;
+    private boolean isEnded = false;
 
-     private boolean alongSideRow;
-     private boolean alongSideColumn;
+    private boolean alongSideRow;
+    private boolean alongSideColumn;
 
     public Game(NumberOfPlayers numberOfPlayers, String gameName){
         //initialize id with random string, This should be quiet random...
@@ -67,10 +73,11 @@ public class Game extends Observable<EventMessage> {
 
     public void initLivingRoomBoard(){
         this.livingRoomBoard = new LivingRoomBoard(numberOfPlayers);
-        //LivingRoomBoardView livingRoomBoardView = new LivingRoomBoardView(this.livingRoomBoard);
-        //TODO: da cambiare i messaggi di inizializzazione
-        //setChanged();
-        //notifyObservers(new BoardMessage("tutti", livingRoomBoardView));
+        // LivingRoomBoardView livingRoomBoardView = new LivingRoomBoardView(this.livingRoomBoard);
+        // TODO: da cambiare i messaggi di inizializzazione
+        // ok, this is now done in set drawable tiles.
+        // setChanged();
+        // notifyObservers(new BoardMessage("tutti", livingRoomBoardView));
     }
 
     public void setGameName (String gameName) {
@@ -78,7 +85,11 @@ public class Game extends Observable<EventMessage> {
     }
 
     public boolean isFinalTurn () { return isFinalTurn;}
-    public void setFinalTurn() {isFinalTurn = true;}
+    public void setFinalTurn() {
+        isFinalTurn = true;
+        setChanged();
+        notifyObservers(new LastTurnMessage(getCurrentPlayer().getName()));
+    }
 
     public ItemTile drawTile(Position position) throws IllegalArgumentException{
         ItemTile itemTile = getLivingRoomBoard().getSpace(position).drawTile();
@@ -134,6 +145,9 @@ public class Game extends Observable<EventMessage> {
         for(Player player : subscribers){
             player.setStatus(PlayerStatus.INACTIVE);
         }
+        this.isEnded = true;
+        setChanged();
+        notifyObservers(new EndGameMessage(new PlayerView(getCurrentPlayer())));
         // maybe call to a method to show results
     }
 
@@ -144,6 +158,10 @@ public class Game extends Observable<EventMessage> {
     //TODO: create new event message to switch player turn
     public Player getCurrentPlayer(){
         return subscribers.get(cursor);
+    }
+
+    public Player getLastPlayer() {
+        return subscribers.get(subscribers.size()-1);
     }
 
     /**
@@ -221,7 +239,13 @@ public class Game extends Observable<EventMessage> {
         return livingRoomBoard;
     }
 
-    public PersonalGoalCardDeck getPersonalGoalCardDeck(){ return personalGoalCardDeck;}
+    public void setPersonalGoalCard(Player player, GoalCard personalGoalCard){
+        player.setPersonalGoalCard(personalGoalCard);
+        setChanged();
+        notifyObservers(new PersonalGoalCardMessage(player.getName(), player.getPersonalGoalCard()));
+    }
+    public PersonalGoalCardDeck getPersonalGoalCardDeck(){
+        return personalGoalCardDeck;}
 
     public int getCursor () {return cursor;}
 
@@ -306,12 +330,9 @@ public class Game extends Observable<EventMessage> {
     }
 
    //TODO
-    /**public void setCurrentPlayerScore (int score) {
-        this.currentPlayerScore += score;
-        setChanged();
-        notifyObservers(this);
+    public void setPlayerScore(int score, Player player) {
+        player.setScore(score);
     }
-     */
     public int getCurrentPlayerScore () {return this.currentPlayerScore;}
 
     public List<Position> getBuffer(){

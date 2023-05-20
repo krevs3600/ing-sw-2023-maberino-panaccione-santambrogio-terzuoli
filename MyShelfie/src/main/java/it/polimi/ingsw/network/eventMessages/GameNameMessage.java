@@ -18,6 +18,6 @@ public class GameNameMessage extends EventMessage {
 
     @Override
     public String toString(){
-        return getNickName() + " asks to choose a specific Game Name";
+        return getNickname() + " asks to choose a specific Game Name";
     }
 }

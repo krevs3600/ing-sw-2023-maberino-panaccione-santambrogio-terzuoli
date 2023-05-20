@@ -1,22 +1,29 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.model.ModelView.BookshelfView;
+import it.polimi.ingsw.model.CommonGoalCard.CommonGoalCard;
 import it.polimi.ingsw.model.ModelView.LivingRoomBoardView;
-import it.polimi.ingsw.model.ModelView.TilePackView;
 import it.polimi.ingsw.model.utils.Position;
+import it.polimi.ingsw.model.utils.TileType;
 import it.polimi.ingsw.network.Client;
-import it.polimi.ingsw.network.ClientImplementation;
 import it.polimi.ingsw.network.MessagesToServer.requestMessage.IllegalTilePositionErrorMessage;
 import it.polimi.ingsw.network.MessagesToServer.requestMessage.PlayerJoinedLobbyMessage;
+import it.polimi.ingsw.network.MessagesToServer.requestMessage.ScoreMessage;
 import it.polimi.ingsw.network.MessagesToServer.requestMessage.WaitingResponseMessage;
 import it.polimi.ingsw.network.Server;
-import it.polimi.ingsw.network.ServerImplementation;
 import it.polimi.ingsw.network.eventMessages.*;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class GameController {
 
@@ -95,7 +102,7 @@ public class GameController {
             case GAME_CHOICE -> {
                 GameNameChoiceMessage gameNameChoiceMessage = (GameNameChoiceMessage) eventMessage;
                 // clients.add(client);
-                Player newPlayer = new Player(eventMessage.getNickName());
+                Player newPlayer = new Player(eventMessage.getNickname());
                 game.subscribe(newPlayer);
                 // if players are still missing a wait message is sent to the new player
                 if (game.getSubscribers().size() < game.getNumberOfPlayers().getValue()-1){
@@ -104,7 +111,7 @@ public class GameController {
                 for (Client player : this.getClients()){
                     // notify other clients that a new player has joined the game
                     if (!player.equals(client)){
-                        player.onMessage(new PlayerJoinedLobbyMessage(eventMessage.getNickName()));
+                        player.onMessage(new PlayerJoinedLobbyMessage(eventMessage.getNickname()));
                     }
 
                     if (game.getSubscribers().size() < game.getNumberOfPlayers().getValue()){
@@ -115,6 +122,9 @@ public class GameController {
                 if (game.getSubscribers().size() == game.getNumberOfPlayers().getValue()) {
                     server.removeGameFromLobby(gameNameChoiceMessage.getGameChoice());
                     game.initLivingRoomBoard();
+                    for (Player player : game.getSubscribers()){
+                        game.setPersonalGoalCard(player, game.getPersonalGoalCardDeck().draw());
+                    }
                     game.setDrawableTiles();
                     game.startGame();
                 }
@@ -123,7 +133,7 @@ public class GameController {
             case GAME_CREATION -> {
                 GameCreationMessage gameCreationMessage = (GameCreationMessage) eventMessage;
                 game.setGameName(gameCreationMessage.getGameName());
-                Player newPlayer = new Player(eventMessage.getNickName());
+                Player newPlayer = new Player(eventMessage.getNickname());
                 game.subscribe(newPlayer);
                 /*GameCreationMessage numOfPlayerMessage = (GameCreationMessage) eventMessage;
                 Player player = new Player(eventMessage.getNickName(), game.getPersonalGoalCardDeck());
@@ -156,7 +166,7 @@ public class GameController {
                             } else game.setAlongSideColumn(true);
                         }
                         else {
-                            client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickName(), new LivingRoomBoardView(game.getLivingRoomBoard())));
+                            client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), new LivingRoomBoardView(game.getLivingRoomBoard())));
                         }
                     }
                     else if (game.getBuffer().size() == 2) {
@@ -172,24 +182,24 @@ public class GameController {
                             if (game.isAlongSideRow()) {
                                 if (tilePositionMessage.getPosition().getColumn() != game.getBuffer().get(0).getColumn()) {
                                     // throw new IllegalAccessError("Space forbidden or empty");
-                                    client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickName(), new LivingRoomBoardView(game.getLivingRoomBoard())));
+                                    client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), new LivingRoomBoardView(game.getLivingRoomBoard())));
                                 }
                             } else if (game.isAlongSideColumn()) {
                                 if (tilePositionMessage.getPosition().getRow() != game.getBuffer().get(0).getRow()) {
                                     // throw new IllegalAccessError("Space forbidden or empty");
-                                    client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickName(), new LivingRoomBoardView(game.getLivingRoomBoard())));
+                                    client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), new LivingRoomBoardView(game.getLivingRoomBoard())));
                                 }
                             }
                         }
                         ItemTile itemTile = game.drawTile(tilePositionMessage.getPosition());
                         game.insertTileInTilePack(itemTile);
                     } else {
-                        client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickName(), new LivingRoomBoardView(game.getLivingRoomBoard())));
+                        client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), new LivingRoomBoardView(game.getLivingRoomBoard())));
                         //throw new IllegalAccessError("Space forbidden or empty");
                     }
                 }
                 else {
-                    client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickName(), new LivingRoomBoardView(game.getLivingRoomBoard())));
+                    client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), new LivingRoomBoardView(game.getLivingRoomBoard())));
                     //throw new IllegalAccessError("Space forbidden or empty");
                 }
             }
@@ -224,22 +234,104 @@ public class GameController {
             }
 
             case END_TURN -> {
+                computeScoreMidGame();
 
                 if (game.getCurrentPlayer().getBookshelf().isFull()) {
                     game.setFinalTurn();
                 }
+
                 if(game.isFinalTurn()) {
-                    game.getCurrentPlayer().equals(game.getSubscribers().get(game.getSubscribers().size() - 1));
-                    //TODO: compute score end game
+                    // game is ended
+                    if (game.getCurrentPlayer().equals(game.getLastPlayer())){
+                        setPlayersScoreEndGame();
+                        for (Client c : getClients()){
+                            // todo controllare messaggi e conto punteggi e capire come mandarli
+                            Player p = game.getSubscribers().stream().filter(x -> x.getName().equals(eventMessage.getNickname())).toList().get(0);
+                            c.onMessage(new ScoreMessage(eventMessage.getNickname(), p.getScore()));
+                        }
+                        game.endGame();
+                    }
                 }
-
-                game.changeTurn();
-
+                if (!game.isEnded()){
+                    game.changeTurn();
+                }
+            }
+            case FILL_BOOSHELF -> {
+                game.getCurrentPlayer().getBookshelf().insertTileTest();
+                game.insertTileInTilePack(new ItemTile(TileType.CAT));
             }
         }
 
     }
-}
+
+    /**
+     * This method is used to compute the final score of the player at the end of the game
+     * @return int It returns the final score of the player
+     */
+    public void setPlayersScoreEndGame() {
+        for (Player player : game.getSubscribers()){
+            int score = computePlayerScoreEndGame(player);
+            game.setPlayerScore(score, player);
+        }
+
+    }
+
+    public int computePlayerScoreEndGame(Player player){
+        //Computation of points from personal goal card
+        ItemTile[][] bookshelf = player.getBookshelf().getGrid();
+        int score;
+        //personalGoalCard.getScoringItem().forEach((key, value) -> );
+        int count = 0;
+        for (Map.Entry<Integer, TileType> element :
+                player.getPersonalGoalCard().getScoringItem().entrySet()) {
+            try{
+                if (bookshelf[(element.getKey())/5][(element.getKey())%5].getType().equals(element.getValue())) {
+                    count++;
+                }
+            } catch (NullPointerException ignored){
+            }
+
+        }
+
+        ArrayList<Integer> points;
+        try {
+            Reader file = new FileReader("src/main/java/it/polimi/ingsw/model/configs/PersonalGoalCards.json");
+            JSONParser parser = new JSONParser();
+            Object jsonObj = parser.parse(file);
+            JSONObject jsonObject = (JSONObject) jsonObj;
+            // read points from json
+            points = new ArrayList<>(((ArrayList<Long>)jsonObject.get("points")).stream().map(Long::intValue).toList());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        score=points.get(count);
+
+        //Computation of points from adjacent tiles groups at end of game
+        ArrayList<List<Integer>> pointsAdj = new ArrayList<>();
+        pointsAdj.add(Arrays.asList(3, 4, 5, 6));
+        pointsAdj.add(Arrays.asList(2, 3, 5, 8));
+
+        for (TileType type : TileType.values()) {
+            Map<Integer, Integer> adjacentTiles = player.getBookshelf().getNumberAdjacentTiles(type);
+            for (Integer key : adjacentTiles.keySet()) {
+                for (int i = 0; i < pointsAdj.get(0).size(); i++) {
+                    if (key.equals(pointsAdj.get(0).get(i))) {
+                        score = score + (pointsAdj.get(1).get(i)) * adjacentTiles.get(key);
+                    } else if (key > pointsAdj.get(0).get(3)) {
+                        score = score + (pointsAdj.get(1).get(3)) * adjacentTiles.get(key);
+                    }
+                }
+            }
+
+        }
+
+        return score;
+    }
+
+
 
 /**
         if (eventMessage.getType()== instanceof EventMessage event) {
@@ -343,88 +435,33 @@ public class GameController {
  }
 
 
-
+*/
 
     /**
      * This method is used to keep track of score changes of a player during the game.
      * In particular, the score is updated every time the player receives a scoring token
      * @return int It returns the updated score of the player
      */
-
-    //TODO: change getSubscribers().get(0) into getCurrentPlayer()
-    /**
     private void computeScoreMidGame(){
         List<CommonGoalCard> commonGoalCards = game.getLivingRoomBoard().getCommonGoalCards();
         for(CommonGoalCard card : commonGoalCards) {
-            if (card.toBeChecked(game.getSubscribers().get(0).getBookshelf())) {
-                if(card.CheckPattern(game.getSubscribers().get(0).getBookshelf())){
+            Player currentPlayer = game.getCurrentPlayer();
+            if (card.toBeChecked(currentPlayer.getBookshelf())) {
+                if(card.CheckPattern(currentPlayer.getBookshelf())){
                     //ScoringToken tempToken = card.getStack().pop();
                     //score+=tempToken.getValue();
-                    if(card.equals(commonGoalCards.get(0)) && !game.getSubscribers().get(0).isFirstCommonGoalAchieved()) {
-                        game.setCurrentPlayerScore(card.getStack().pop().getValue());
-                        game.getSubscribers().get(0).hasAchievedFirstGoal();
+                    if(card.equals(commonGoalCards.get(0)) && !currentPlayer.isFirstCommonGoalAchieved()) {
+                        game.setPlayerScore(card.getStack().pop().getValue(), currentPlayer);
+                        currentPlayer.hasAchievedFirstGoal();
                     }
-                    if(card.equals(commonGoalCards.get(1)) && !game.getSubscribers().get(0).isSecondCommonGoalAchieved()) {
-                        game.setCurrentPlayerScore(card.getStack().pop().getValue());
-                        game.getSubscribers().get(0).hasAchievedSecondGoal();
+                    if(card.equals(commonGoalCards.get(1)) && !currentPlayer.isSecondCommonGoalAchieved()) {
+                        game.setPlayerScore(card.getStack().pop().getValue(), currentPlayer);
+                        currentPlayer.hasAchievedSecondGoal();
                     }
                 }
             }
         }
     }
+}
 
-    /**
-     * This method is used to compute the final score of the player at the end of the game
-     * @return int It returns the final score of the player
-     */
-    /**public void computeScoreEndGame() {
-        //Computation of points from personal goal card
-        ItemTile[][] bookshelf = this.game.getSubscribers().get(0).getBookshelf().getGrid();
-        int score;
-        //personalGoalCard.getScoringItem().forEach((key, value) -> );
-        int count = 0;
-        for (Map.Entry<Integer, TileType> element :
-                game.getSubscribers().get(0).getPersonalGoalCard().getScoringItem().entrySet()) {
-            if (bookshelf[(element.getKey())/5][(element.getKey())%5].getType().equals(element.getValue())) {
-                count++;
-            }
-        }
-
-        ArrayList<Integer> points;
-        try {
-            Reader file = new FileReader("src/main/java/it/polimi/ingsw/model/configs/PersonalGoalCards.json");
-            JSONParser parser = new JSONParser();
-            Object jsonObj = parser.parse(file);
-            JSONObject jsonObject = (JSONObject) jsonObj;
-            // read points from json
-            points = (ArrayList<Integer>) jsonObject.get("points");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-
-        score=points.get(count);
-
-        //Computation of points from adjacent tiles groups at end of game
-        ArrayList<List<Integer>> pointsAdj = new ArrayList<>();
-        pointsAdj.add(Arrays.asList(3, 4, 5, 6));
-        pointsAdj.add(Arrays.asList(2, 3, 5, 8));
-
-        for (TileType type : TileType.values()) {
-            Map<Integer, Integer> adjacentTiles = this.game.getSubscribers().get(0).getBookshelf().getNumberAdjacentTiles(type);
-            for (Integer key : adjacentTiles.keySet()) {
-                for (int i = 0; i < pointsAdj.get(0).size(); i++) {
-                    if (key.equals(pointsAdj.get(0).get(i))) {
-                        score = score + (pointsAdj.get(1).get(i)) * adjacentTiles.get(key);
-                    } else if (key > pointsAdj.get(0).get(3)) {
-                        score = score + (pointsAdj.get(1).get(3)) * adjacentTiles.get(key);
-                    }
-                }
-            }
-
-        }
-        game.setCurrentPlayerScore(score);
-    }
-     */
 

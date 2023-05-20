@@ -12,7 +12,7 @@ public abstract class EventMessage implements Serializable {
         this.nickName = nickName;
         this.type = messageType;
     }
-    public String getNickName(){
+    public String getNickname(){
         return this.nickName;
     }
 

@@ -10,6 +10,6 @@ public class PlayerTurnMessage extends EventMessage {
 
     @Override
     public String toString() {
-        return getNickName() + " is your turn!";
+        return getNickname() + " is your turn!";
     }
 }

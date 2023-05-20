@@ -9,6 +9,6 @@ public class EndTurnMessage extends EventMessage {
     }
 
     public String toString(){
-        return "" + getNickName() + " decided to start placing tiles";
+        return "" + getNickname() + " decided to start placing tiles";
     }
 }

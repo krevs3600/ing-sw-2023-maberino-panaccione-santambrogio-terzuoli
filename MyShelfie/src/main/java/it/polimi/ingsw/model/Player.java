@@ -141,4 +141,8 @@ public class Player {
     public void hasAchievedFirstGoal () { this.firstCommonGoalAchieved=true;}
     public void hasAchievedSecondGoal () { this.secondCommonGoalAchieved=true;}
 
+    public void setPersonalGoalCard(GoalCard personalGoalCard) {
+        this.personalGoalCard = (PersonalGoalCard) personalGoalCard;
+    }
+
 }

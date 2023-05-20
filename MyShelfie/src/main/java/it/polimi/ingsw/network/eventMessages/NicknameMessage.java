@@ -10,6 +10,6 @@ public class NicknameMessage extends EventMessage {
 
     @Override
     public String toString(){
-        return getNickName() + " asks to be subscribed";
+        return getNickname() + " asks to be subscribed";
     }
 }

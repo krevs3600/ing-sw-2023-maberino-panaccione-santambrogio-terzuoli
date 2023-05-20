@@ -16,7 +16,7 @@ public class BookshelfColumnMessage extends EventMessage {
 
     @Override
     public String toString(){
-        return "" + getNickName() + " selected column number " + getColumn();
+        return "" + getNickname() + " selected column number " + getColumn();
     }
 
 

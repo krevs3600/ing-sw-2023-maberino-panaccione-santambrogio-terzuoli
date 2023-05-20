@@ -16,7 +16,7 @@ public class ItemTileIndexMessage extends EventMessage {
     }
     @Override
     public String toString() {
-        return getNickName() + " is inserting the item tile from position " + index + " of the tilepack";
+        return getNickname() + " is inserting the item tile from position " + index + " of the tilepack";
     }
 
 }

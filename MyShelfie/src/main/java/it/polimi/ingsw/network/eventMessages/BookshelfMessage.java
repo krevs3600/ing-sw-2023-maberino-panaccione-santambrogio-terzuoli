@@ -17,6 +17,6 @@ public class BookshelfMessage extends EventMessage {
     }
 
     public String toString(){
-        return "" + getNickName() + "'s bookshelf: " + "\n" + bookshelfView.toString();
+        return "" + getNickname() + "'s bookshelf: " + "\n" + bookshelfView.toString();
     }
 }

@@ -10,7 +10,7 @@ public class JoinGameMessage extends EventMessage{
         super(nickName, MessageType.JOIN_GAME_REQUEST);
     }
     public String toString(){
-        return getNickName() + " asks to Join a Game";
+        return getNickname() + " asks to Join a Game";
     }
 
 
