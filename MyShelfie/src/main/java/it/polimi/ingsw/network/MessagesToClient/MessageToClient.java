@@ -1,4 +1,4 @@
-package it.polimi.ingsw.network.MessagesToServer;
+package it.polimi.ingsw.network.MessagesToClient;
 
 public interface MessageToClient {
     MessageToClientType getType();

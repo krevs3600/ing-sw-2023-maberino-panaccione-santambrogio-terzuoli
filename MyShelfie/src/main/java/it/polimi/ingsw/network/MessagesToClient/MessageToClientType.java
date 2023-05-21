@@ -1,4 +1,4 @@
-package it.polimi.ingsw.network.MessagesToServer;
+package it.polimi.ingsw.network.MessagesToClient;
 
 public enum MessageToClientType {
 
@@ -15,6 +15,8 @@ public enum MessageToClientType {
     JOIN_GAME_ERROR,
 
     WAIT_PLAYERS,
-    ILLEGAL_POSITION;
+    ILLEGAL_POSITION, SCORE,
+    PLAYER_OFFLINE,
+    KILL_GAME;
 
 }

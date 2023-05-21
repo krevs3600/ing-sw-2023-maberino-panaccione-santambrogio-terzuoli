@@ -1,7 +1,6 @@
 package it.polimi.ingsw.network.eventMessages;
 
 import it.polimi.ingsw.model.CommonGoalCard.CommonGoalCard;
-import it.polimi.ingsw.network.MessageType;
 
 public class CommonGoalCardMessage extends EventMessage {
 
@@ -9,7 +8,7 @@ public class CommonGoalCardMessage extends EventMessage {
     private final CommonGoalCard commonGoalCard;
 
     public CommonGoalCardMessage(String nickName, CommonGoalCard commonGoalCard) {
-        super(nickName, MessageType.COMMON_GOAL_CARD);
+        super(nickName, EventMessageType.COMMON_GOAL_CARD);
         this.commonGoalCard = commonGoalCard;
     }
 

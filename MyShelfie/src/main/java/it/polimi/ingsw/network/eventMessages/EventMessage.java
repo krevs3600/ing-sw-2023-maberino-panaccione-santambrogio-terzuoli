@@ -1,28 +1,26 @@
 package it.polimi.ingsw.network.eventMessages;
 
-import it.polimi.ingsw.network.MessageType;
-
 import java.io.Serializable;
 
 public abstract class EventMessage implements Serializable {
-    private String nickName;
-    private MessageType type;
+    private String nickname;
+    private EventMessageType type;
 
-    public EventMessage(String nickName, MessageType messageType){
-        this.nickName = nickName;
+    public EventMessage(String nickName, EventMessageType messageType){
+        this.nickname = nickName;
         this.type = messageType;
     }
     public String getNickname(){
-        return this.nickName;
+        return this.nickname;
     }
 
-    public MessageType getType() {
+    public EventMessageType getType() {
         return type;
     }
 
     @Override
     public String toString(){
-        return this.nickName + " sends message of type " + type.name();
+        return this.nickname + " sends message of type " + type.name();
     }
 
 }

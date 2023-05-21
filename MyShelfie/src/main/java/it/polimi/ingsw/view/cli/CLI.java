@@ -1,14 +1,16 @@
 package it.polimi.ingsw.view.cli;
 
 import it.polimi.ingsw.AppServer;
+import it.polimi.ingsw.client.view.FXML.View;
 import it.polimi.ingsw.model.ModelView.CommonGoalCardView;
 import it.polimi.ingsw.model.ModelView.GameView;
 import it.polimi.ingsw.model.ModelView.PlayerView;
 import it.polimi.ingsw.model.utils.Position;
+import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.ClientImplementation;
-import it.polimi.ingsw.network.MessagesToServer.MessageToClient;
-import it.polimi.ingsw.network.MessagesToServer.errorMessages.JoinErrorMessage;
-import it.polimi.ingsw.network.MessagesToServer.requestMessage.*;
+import it.polimi.ingsw.network.MessagesToClient.MessageToClient;
+import it.polimi.ingsw.network.MessagesToClient.errorMessages.JoinErrorMessage;
+import it.polimi.ingsw.network.MessagesToClient.requestMessage.*;
 import it.polimi.ingsw.network.eventMessages.EventMessage;
 import it.polimi.ingsw.network.Socket.ServerStub;
 import it.polimi.ingsw.network.eventMessages.*;
@@ -22,7 +24,7 @@ import java.rmi.registry.Registry;
 import java.util.Scanner;
 import java.util.Set;
 
-public class CLI extends Observable {
+public class CLI extends Observable implements View {
     private boolean activeTurn = false;
 
     private final PrintStream out = System.out;
@@ -30,9 +32,13 @@ public class CLI extends Observable {
     private final Object lock = new Object();
     private boolean joined = false;
 
-    private ClientImplementation client;
+    private ClientImplementation client = null;
 
+    public Client getClient() {
+        return this.client;
+    }
 
+    public void resetClient(){this.client=null;}
 
 
     private enum State {
@@ -68,7 +74,7 @@ public class CLI extends Observable {
         out.println("myShelfie\n");
     }
 
-    private void createConnection() throws RemoteException, NotBoundException {
+    public void createConnection() throws RemoteException, NotBoundException {
         String connectionType = askConnectionType();
         String address = askServerAddress();
         int port = askServerPort();
@@ -113,7 +119,7 @@ public class CLI extends Observable {
         }
     }
 
-    private String askConnectionType() {
+    public String askConnectionType() {
         String connectionType = "";
         do {
             out.print("Please insert a connection type: socket (s) or RMI (r): ");
@@ -136,7 +142,7 @@ public class CLI extends Observable {
         return address;
     }
 
-    private int askServerPort(){
+    public int askServerPort(){
         String serverPort;
         do {
             out.print("\nPlease insert the ip port (press ENTER for default): ");
@@ -150,7 +156,7 @@ public class CLI extends Observable {
         return Integer.parseInt(serverPort);
     }
 
-    private boolean isValidPort(String serverPort) {
+    public boolean isValidPort(String serverPort) {
         try {
             int port = Integer.parseInt(serverPort);
             return port >= 1 && port <= 65535;
@@ -160,7 +166,7 @@ public class CLI extends Observable {
         }
     }
 
-    private boolean isValidIPAddress(String address) {
+    public boolean isValidIPAddress(String address) {
         String regExp = "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
                 "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
                 "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
@@ -253,6 +259,15 @@ public class CLI extends Observable {
             }
             case 2 -> {
                 joinGame();
+            }
+            case 3 -> {
+                try {
+                    client.disconnect();
+                    out.println("Closing game...");
+                    System.exit(0);
+                } catch (RemoteException e) {
+                    out.println("Couldn't disconnect from server, " + e);
+                }
 
             }
             default -> {
@@ -272,7 +287,7 @@ public class CLI extends Observable {
 
     }
 
-    private void askNumberOfPlayers(String gameName) {
+    public void askNumberOfPlayers(String gameName) {
             int numOfPlayers = 0;
             while (numOfPlayers <= 0) {
                 out.print("\nPlease insert the number of players: ");
@@ -283,7 +298,7 @@ public class CLI extends Observable {
             notifyObservers(new GameCreationMessage(this.client.getNickname(), numOfPlayers, gameName));
     }
 
-    private void askGameName() {
+    public void askGameName() {
 
         String gameName = "";
         while (gameName.length() < 1) {
@@ -295,7 +310,7 @@ public class CLI extends Observable {
 
     }
 
-    private void askNickname() {
+    public void askNickname() {
         String nickName = "";
         while (nickName.length() < 1) {
             out.print("\nPlease insert your name: ");
@@ -404,7 +419,7 @@ public class CLI extends Observable {
                 if (waitingResponseMessage.getMissingPlayers() == 1) {
                     out.println("\nWaiting for 1 player... ");
                 } else {
-                    out.println("\nWaiting for " + waitingResponseMessage.getMissingPlayers() + "players... ");
+                    out.println("\nWaiting for " + waitingResponseMessage.getMissingPlayers() + " players... ");
                 }
             }
             case PLAYER_JOINED_LOBBY_RESPONSE -> {
@@ -428,6 +443,21 @@ public class CLI extends Observable {
             case SCORE -> {
                 // todo da spostare nel game nel metodo setscore dei giocatori
                 out.println(((ScoreMessage)message).getNickname() + "'score is: " + ((ScoreMessage)message).getScore());
+            }
+            */
+            case PLAYER_OFFLINE -> {
+                PlayerOfflineMessage offlineMessage = (PlayerOfflineMessage) message;
+                out.println(offlineMessage.getNickname() + " got disconnected");
+            }
+            case KILL_GAME -> {
+                out.println("Game down");
+                try {
+                    createConnection();
+                } catch (RemoteException ignored) {
+
+                } catch (NotBoundException e) {
+                    throw new RuntimeException(e);
+                }
             }
 
              */

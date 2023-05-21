@@ -6,9 +6,9 @@ import it.polimi.ingsw.model.ModelView.LivingRoomBoardView;
 import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.model.utils.TileType;
 import it.polimi.ingsw.network.Client;
-import it.polimi.ingsw.network.MessagesToServer.requestMessage.IllegalTilePositionErrorMessage;
-import it.polimi.ingsw.network.MessagesToServer.requestMessage.PlayerJoinedLobbyMessage;
-import it.polimi.ingsw.network.MessagesToServer.requestMessage.WaitingResponseMessage;
+import it.polimi.ingsw.network.MessagesToClient.requestMessage.IllegalTilePositionErrorMessage;
+import it.polimi.ingsw.network.MessagesToClient.requestMessage.PlayerJoinedLobbyMessage;
+import it.polimi.ingsw.network.MessagesToClient.requestMessage.WaitingResponseMessage;
 import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.network.eventMessages.*;
 import org.json.simple.JSONObject;
@@ -257,7 +257,7 @@ public class GameController {
                     game.changeTurn();
                 }
             }
-            case FILL_BOOSHELF -> {
+            case FILL_BOOKSHELF -> {
                 game.getCurrentPlayer().getBookshelf().insertTileTest();
                 game.insertTileInTilePack(new ItemTile(TileType.CAT));
             }

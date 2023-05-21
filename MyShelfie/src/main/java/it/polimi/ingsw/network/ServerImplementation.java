@@ -3,12 +3,10 @@ package it.polimi.ingsw.network;
 import it.polimi.ingsw.controller.GameController;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.ModelView.GameView;
+import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.utils.NumberOfPlayers;
-import it.polimi.ingsw.network.MessagesToServer.errorMessages.JoinErrorMessage;
-import it.polimi.ingsw.network.MessagesToServer.requestMessage.GameCreationResponseMessage;
-import it.polimi.ingsw.network.MessagesToServer.requestMessage.GameNameResponseMessage;
-import it.polimi.ingsw.network.MessagesToServer.requestMessage.JoinGameResponseMessage;
-import it.polimi.ingsw.network.MessagesToServer.requestMessage.LoginResponseMessage;
+import it.polimi.ingsw.network.MessagesToClient.errorMessages.JoinErrorMessage;
+import it.polimi.ingsw.network.MessagesToClient.requestMessage.*;
 import it.polimi.ingsw.network.eventMessages.*;
 
 import java.rmi.RemoteException;
@@ -41,7 +39,6 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
     }
 
     @Override
-    //TODO gestione di più client
     public void register(Client client) {
         Game game = playerGame.get(client).getGame();
         game.addObserver((observer, eventMessage) -> {
@@ -117,19 +114,100 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                 currentGames.get(gameNameChoiceMessage.getGameChoice()).update(client,gameNameChoiceMessage);
             }
 
-            case TILE_POSITION, BOOKSHELF_COLUMN, ITEM_TILE_INDEX, END_TURN, FILL_BOOSHELF -> {
+            case TILE_POSITION, BOOKSHELF_COLUMN, ITEM_TILE_INDEX, END_TURN, FILL_BOOKSHELF -> {
                 playerGame.get(client).update(client, eventMessage);
+            }
+
+            case DISCONNECT_CLIENT -> {
+                DisconnectClientMessage disconnectMessage = (DisconnectClientMessage) eventMessage;
+                // if client is not in any game
+                if (!playerGame.containsKey(client)){
+                    currentPlayersNicknames.remove(eventMessage.getNickname());
+                    connectedClients.remove(eventMessage.getNickname());
+                } else {
+
+                    String gameName = playerGame.get(client).getGame().getGameName();
+                    GameController controller = currentGames.get(gameName);
+                    Game game = controller.getGame();
+                    playerGame.remove(client);
+
+
+                    // if game has not started yet
+                    if (currentLobbyGameNames.contains(gameName)){
+                        currentPlayersNicknames.remove(eventMessage.getNickname());
+                        connectedClients.remove(eventMessage.getNickname());
+                        Player unsubscribed = game.getSubscribers().stream().filter(x->x.getName().equals(eventMessage.getNickname())).toList().get(0);
+                        game.getSubscribers().remove(unsubscribed);
+
+                        for (Map.Entry<Client, GameController> entry : playerGame.entrySet()){
+                            if (entry.getValue().equals(controller)){
+                                // todo: maybe add game.unsubscribe(String nickname)
+                                entry.getKey().onMessage(new PlayerOfflineMessage(eventMessage.getNickname()));
+                                int missingPlayers = game.getNumberOfPlayers().getValue()-game.getSubscribers().size();
+                                entry.getKey().onMessage(new WaitingResponseMessage(missingPlayers));
+                                }
+                            }
+
+                    } else {
+                        // kill game
+                        currentGames.remove(game.getGameName());
+
+                            for (Map.Entry<Client, GameController> entry : playerGame.entrySet()){
+                                if (entry.getValue().equals(controller)){
+                                    // todo: maybe add game.unsubscribe(String nickname)
+                                    Client c = entry.getKey();
+                                    if (!entry.getKey().equals(client)) {
+
+                                        c.onMessage(new PlayerOfflineMessage(eventMessage.getNickname()));
+                                        c.onMessage(new KillGameMessage(eventMessage.getNickname()));
+                                    }
+                                    playerGame.remove(c);
+                                }
+
+                        }
+                        for (Player player : game.getSubscribers()){
+                            connectedClients.remove(player.getName());
+                        }
+                    }
+                }
             }
         }
     }
-
+    @Override
     public void removeGameFromLobby(String gameName) {
         this.currentLobbyGameNames.remove(gameName);
     }
 
+    @Override
+    public void removeClient(Client client){
+
+    }
     public Map<String, Client> getConnectedClients() {
         return connectedClients;
     }
 }
 
 
+/* todo disconnessioni durante la partita da rivedere assolutamente
+// ancora in lobby, in match
+if (playerGame != null) {
+    if (playerGame.get(client) != null) {
+        GameController controller = playerGame.get(client);
+        // remove game name from set
+        currentGames.remove(controller.getGame().getGameName());
+        // let's notify the players
+        for (Client player : connectedClients.values()) {
+            player.onMessage(new PlayerOfflineMessage(eventMessage.getNickname()));
+            player.onMessage(new KillGameMessage(eventMessage.getNickname()));
+        }
+        // remove <client, controller> in the game of the disconnected player and clients from map
+        for (Player player : controller.getGame().getSubscribers()) {
+            playerGame.remove(connectedClients.get(player.getName()));
+            connectedClients.remove(player.getName());
+        }
+
+    } else {
+        currentPlayersNicknames.remove(eventMessage.getNickname());
+    }
+}
+ */

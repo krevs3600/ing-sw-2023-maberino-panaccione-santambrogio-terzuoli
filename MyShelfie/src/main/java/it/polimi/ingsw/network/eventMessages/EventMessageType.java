@@ -1,6 +1,6 @@
-package it.polimi.ingsw.network;
+package it.polimi.ingsw.network.eventMessages;
 
-public enum MessageType {
+public enum EventMessageType {
     ERROR,
     NICKNAME,
     GAME_NAME,
@@ -21,8 +21,11 @@ public enum MessageType {
     LAST_TURN,
     END_GAME,
     INSERTION_REQUEST,
-    SCORE,
-    ITEM_TILE_INDEX, CREATOR_NICKNAME, FILL_BOOSHELF,
+    ITEM_TILE_INDEX,
+    CREATOR_NICKNAME,
+    SCORE
+    FILL_BOOKSHELF,
+    DISCONNECT_CLIENT;
     // error
 
 
