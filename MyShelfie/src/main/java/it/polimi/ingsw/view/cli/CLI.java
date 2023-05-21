@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.cli;
 
 import it.polimi.ingsw.AppServer;
+import it.polimi.ingsw.client.view.FXML.View;
 import it.polimi.ingsw.model.ModelView.CommonGoalCardView;
 import it.polimi.ingsw.model.ModelView.GameView;
 import it.polimi.ingsw.model.ModelView.PlayerView;
@@ -23,7 +24,7 @@ import java.rmi.registry.Registry;
 import java.util.Scanner;
 import java.util.Set;
 
-public class CLI extends Observable {
+public class CLI extends Observable implements View {
     private boolean activeTurn = false;
 
     private final PrintStream out = System.out;
@@ -71,7 +72,7 @@ public class CLI extends Observable {
         out.println("myShelfie\n");
     }
 
-    private void createConnection() throws RemoteException, NotBoundException {
+    public void createConnection() throws RemoteException, NotBoundException {
         String connectionType = askConnectionType();
         String address = askServerAddress();
         int port = askServerPort();
@@ -116,7 +117,7 @@ public class CLI extends Observable {
         }
     }
 
-    private String askConnectionType() {
+    public String askConnectionType() {
         String connectionType = "";
         do {
             out.print("Please insert a connection type: socket (s) or RMI (r): ");
@@ -139,7 +140,7 @@ public class CLI extends Observable {
         return address;
     }
 
-    private int askServerPort(){
+    public int askServerPort(){
         String serverPort;
         do {
             out.print("\nPlease insert the ip port (press ENTER for default): ");
@@ -153,7 +154,7 @@ public class CLI extends Observable {
         return Integer.parseInt(serverPort);
     }
 
-    private boolean isValidPort(String serverPort) {
+    public boolean isValidPort(String serverPort) {
         try {
             int port = Integer.parseInt(serverPort);
             return port >= 1 && port <= 65535;
@@ -163,7 +164,7 @@ public class CLI extends Observable {
         }
     }
 
-    private boolean isValidIPAddress(String address) {
+    public boolean isValidIPAddress(String address) {
         String regExp = "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
                 "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
                 "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
@@ -283,7 +284,7 @@ public class CLI extends Observable {
 
     }
 
-    private void askNumberOfPlayers(String gameName) {
+    public void askNumberOfPlayers(String gameName) {
             int numOfPlayers = 0;
             while (numOfPlayers <= 0) {
                 out.print("\nPlease insert the number of players: ");
@@ -294,7 +295,7 @@ public class CLI extends Observable {
             notifyObservers(new GameCreationMessage(this.client.getNickname(), numOfPlayers, gameName));
     }
 
-    private void askGameName() {
+    public void askGameName() {
 
         String gameName = "";
         while (gameName.length() < 1) {
@@ -306,7 +307,7 @@ public class CLI extends Observable {
 
     }
 
-    private void askNickname() {
+    public void askNickname() {
         String nickName = "";
         while (nickName.length() < 1) {
             out.print("\nPlease insert your name: ");
