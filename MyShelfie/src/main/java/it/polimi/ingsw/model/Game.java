@@ -147,7 +147,7 @@ public class Game extends Observable<EventMessage> {
         }
         setIsEnded();
         setChanged();
-        notifyObservers(new EndGameMessage(new PlayerView(getCurrentPlayer())));
+        notifyObservers(new WinGameMessage(new PlayerView(getCurrentPlayer())));
         // maybe call to a method to show results
     }
 

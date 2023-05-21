@@ -5,10 +5,11 @@ import it.polimi.ingsw.model.ModelView.CommonGoalCardView;
 import it.polimi.ingsw.model.ModelView.GameView;
 import it.polimi.ingsw.model.ModelView.PlayerView;
 import it.polimi.ingsw.model.utils.Position;
+import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.ClientImplementation;
-import it.polimi.ingsw.network.MessagesToServer.MessageToClient;
-import it.polimi.ingsw.network.MessagesToServer.errorMessages.JoinErrorMessage;
-import it.polimi.ingsw.network.MessagesToServer.requestMessage.*;
+import it.polimi.ingsw.network.MessagesToClient.MessageToClient;
+import it.polimi.ingsw.network.MessagesToClient.errorMessages.JoinErrorMessage;
+import it.polimi.ingsw.network.MessagesToClient.requestMessage.*;
 import it.polimi.ingsw.network.eventMessages.EventMessage;
 import it.polimi.ingsw.network.Socket.ServerStub;
 import it.polimi.ingsw.network.eventMessages.*;
@@ -30,9 +31,11 @@ public class CLI extends Observable {
     private final Object lock = new Object();
     private boolean joined = false;
 
-    private ClientImplementation client;
+    private ClientImplementation client = null;
 
-
+    public Client getClient() {
+        return this.client;
+    }
 
 
     private enum State {
@@ -253,6 +256,14 @@ public class CLI extends Observable {
             }
             case 2 -> {
                 joinGame();
+            }
+            case 3 -> {
+                try {
+                    client.disconnect();
+                    System.exit(0);
+                } catch (RemoteException e) {
+                    out.println("Couldn't disconnect from server, " + e);
+                }
 
             }
             default -> {
@@ -427,6 +438,13 @@ public class CLI extends Observable {
             case SCORE -> {
                 // todo da spostare nel game nel metodo setscore dei giocatori
                 out.println(((ScoreMessage)message).getNickname() + "'score is: " + ((ScoreMessage)message).getScore());
+            }
+            case PLAYER_OFFLINE -> {
+                PlayerOfflineMessage offlineMessage = (PlayerOfflineMessage) message;
+                out.println(offlineMessage.getNickname() + " got disconnected");
+            }
+            case KILL_GAME -> {
+                out.println("Game down");
             }
         }
     }

@@ -1,11 +1,7 @@
-package it.polimi.ingsw.network.MessagesToServer.requestMessage;
+package it.polimi.ingsw.network.MessagesToClient.requestMessage;
 
-import it.polimi.ingsw.model.ModelView.BookshelfView;
 import it.polimi.ingsw.model.ModelView.LivingRoomBoardView;
-import it.polimi.ingsw.model.ModelView.TilePackView;
-import it.polimi.ingsw.model.TilePack;
-import it.polimi.ingsw.network.MessagesToServer.MessageToClientType;
-import it.polimi.ingsw.network.MessagesToServer.errorMessages.ErrorMessage;
+import it.polimi.ingsw.network.MessagesToClient.MessageToClientType;
 
 public class IllegalTilePositionErrorMessage extends RequestMessage {
     private final LivingRoomBoardView board;

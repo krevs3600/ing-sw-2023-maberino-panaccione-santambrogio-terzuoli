@@ -1,12 +1,13 @@
 package it.polimi.ingsw.network;
 
 import it.polimi.ingsw.model.ModelView.GameView;
-import it.polimi.ingsw.network.MessagesToServer.MessageToClient;
-import it.polimi.ingsw.network.MessagesToServer.errorMessages.ErrorMessage;
-import it.polimi.ingsw.network.MessagesToServer.requestMessage.CreatorLoginResponseMessage;
-import it.polimi.ingsw.network.MessagesToServer.requestMessage.GameNameResponseMessage;
-import it.polimi.ingsw.network.MessagesToServer.requestMessage.LoginResponseMessage;
-import it.polimi.ingsw.network.MessagesToServer.requestMessage.RequestMessage;
+import it.polimi.ingsw.network.MessagesToClient.MessageToClient;
+import it.polimi.ingsw.network.MessagesToClient.errorMessages.ErrorMessage;
+import it.polimi.ingsw.network.MessagesToClient.requestMessage.CreatorLoginResponseMessage;
+import it.polimi.ingsw.network.MessagesToClient.requestMessage.GameNameResponseMessage;
+import it.polimi.ingsw.network.MessagesToClient.requestMessage.LoginResponseMessage;
+import it.polimi.ingsw.network.MessagesToClient.requestMessage.RequestMessage;
+import it.polimi.ingsw.network.eventMessages.DisconnectClientMessage;
 import it.polimi.ingsw.network.eventMessages.EventMessage;
 import it.polimi.ingsw.view.cli.CLI;
 
@@ -19,7 +20,7 @@ public class ClientImplementation extends UnicastRemoteObject implements Client 
     CLI view;
 
     private String nickname;
-
+    private Server server;
     private String gameName; // in realtà è un optional
 
     public String getNickname() {
@@ -32,6 +33,7 @@ public class ClientImplementation extends UnicastRemoteObject implements Client 
     public ClientImplementation(CLI view, Server server) throws RemoteException {
         super();
         this.view = view;
+        this.server = server;
         initialize(server);
     }
 
@@ -84,9 +86,15 @@ public class ClientImplementation extends UnicastRemoteObject implements Client 
         view.showMessage(message);
     }
 
+    public void disconnect() throws RemoteException{
+        // UnicastRemoteObject.unexportObject(this, true);
+        server.update(this, new DisconnectClientMessage(this, this.getNickname()));
+        server = null;
+    }
+
 
     private void initialize(Server server) throws RemoteException {
-//server.register(this);
+        this.server = server;
         view.addObserver((observable, eventMessage) -> {
             try {
                 server.update(this, (EventMessage) eventMessage);

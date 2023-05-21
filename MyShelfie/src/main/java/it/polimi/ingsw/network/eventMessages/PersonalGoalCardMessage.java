@@ -1,13 +1,12 @@
 package it.polimi.ingsw.network.eventMessages;
 
 import it.polimi.ingsw.model.PersonalGoalCard;
-import it.polimi.ingsw.network.MessageType;
 
 public class PersonalGoalCardMessage extends EventMessage {
     private final long serialVersionUID = 1L;
     private PersonalGoalCard personalGoalCard;
     public PersonalGoalCardMessage(String nickName, PersonalGoalCard personalGoalCard) {
-        super(nickName, MessageType.PERSONAL_GOAL_CARD);
+        super(nickName, EventMessageType.PERSONAL_GOAL_CARD);
         this.personalGoalCard = personalGoalCard;
     }
 

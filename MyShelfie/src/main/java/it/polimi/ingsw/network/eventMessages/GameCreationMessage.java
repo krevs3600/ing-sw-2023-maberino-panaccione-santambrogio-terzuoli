@@ -1,13 +1,11 @@
 package it.polimi.ingsw.network.eventMessages;
 
-import it.polimi.ingsw.network.MessageType;
-
 public class GameCreationMessage extends EventMessage {
     private final long serialVersionUID = 1L;
     private final int numOfPlayers;
     private final String gameName;
     public GameCreationMessage(String nickName, int numOfPlayers, String gameName) {
-        super(nickName, MessageType.GAME_CREATION);
+        super(nickName, EventMessageType.GAME_CREATION);
         this.numOfPlayers = numOfPlayers;
         this.gameName = gameName;
     }

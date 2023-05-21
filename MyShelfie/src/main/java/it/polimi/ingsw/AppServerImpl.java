@@ -33,6 +33,7 @@ public class AppServerImpl extends UnicastRemoteObject implements AppServer
     }
 
     public static void main(String[] args) {
+
         Thread rmiThread = new Thread(() -> {
             try {
                 startRMI();
@@ -52,13 +53,18 @@ public class AppServerImpl extends UnicastRemoteObject implements AppServer
         });
 
         socketThread.start();
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            public void run() {
+                try {
+                    rmiThread.join();
+                    socketThread.join();
+                    System.out.println("Closing existing connections...");
+                } catch (InterruptedException e) {
+                    System.err.println("No connection protocol available. Exiting...");
+                }
+            }
+        });
 
-        try {
-            rmiThread.join();
-            socketThread.join();
-        } catch (InterruptedException e) {
-            System.err.println("No connection protocol available. Exiting...");
-        }
     }
 
     private static void startRMI() throws RemoteException {

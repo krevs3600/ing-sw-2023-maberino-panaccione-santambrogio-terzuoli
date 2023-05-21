@@ -11,4 +11,5 @@ public interface Server extends Remote{
     void update(Client client, EventMessage eventMessage)throws RemoteException;
 
     void removeGameFromLobby (String gameName) throws RemoteException;
+    void removeClient(Client client) throws RemoteException;
 }

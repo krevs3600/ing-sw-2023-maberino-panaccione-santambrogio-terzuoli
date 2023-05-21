@@ -1,7 +1,7 @@
-package it.polimi.ingsw.network.MessagesToServer.requestMessage;
+package it.polimi.ingsw.network.MessagesToClient.requestMessage;
 
-import it.polimi.ingsw.network.MessagesToServer.MessageToClient;
-import it.polimi.ingsw.network.MessagesToServer.MessageToClientType;
+import it.polimi.ingsw.network.MessagesToClient.MessageToClient;
+import it.polimi.ingsw.network.MessagesToClient.MessageToClientType;
 
 import java.io.Serializable;
 

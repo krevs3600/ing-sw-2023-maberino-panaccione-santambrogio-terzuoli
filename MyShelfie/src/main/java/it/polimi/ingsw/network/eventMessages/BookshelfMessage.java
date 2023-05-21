@@ -1,14 +1,13 @@
 package it.polimi.ingsw.network.eventMessages;
 
 import it.polimi.ingsw.model.ModelView.BookshelfView;
-import it.polimi.ingsw.network.MessageType;
 
 public class BookshelfMessage extends EventMessage {
 
     private final long serialVersionUID = 1L;
     private BookshelfView bookshelfView;
     public BookshelfMessage(String nickName, BookshelfView bookshelfView) {
-        super(nickName, MessageType.BOOKSHELF);
+        super(nickName, EventMessageType.BOOKSHELF);
         this.bookshelfView = bookshelfView;
     }
 

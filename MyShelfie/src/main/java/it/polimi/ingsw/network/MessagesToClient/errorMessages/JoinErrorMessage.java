@@ -1,6 +1,6 @@
-package it.polimi.ingsw.network.MessagesToServer.errorMessages;
+package it.polimi.ingsw.network.MessagesToClient.errorMessages;
 
-import it.polimi.ingsw.network.MessagesToServer.MessageToClientType;
+import it.polimi.ingsw.network.MessagesToClient.MessageToClientType;
 
 public class JoinErrorMessage extends ErrorMessage {
     public JoinErrorMessage(String nickName, String errorMessage) {

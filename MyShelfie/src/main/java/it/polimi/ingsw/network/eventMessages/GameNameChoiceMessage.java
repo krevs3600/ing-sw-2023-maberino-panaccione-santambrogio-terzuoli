@@ -1,13 +1,11 @@
 package it.polimi.ingsw.network.eventMessages;
 
-import it.polimi.ingsw.network.MessageType;
-
 public class GameNameChoiceMessage extends EventMessage {
 
     private final long serialVersionUID = 1L;
     String gameChoice;
     public GameNameChoiceMessage(String nickName, String gameChoice) {
-        super(nickName, MessageType.GAME_CHOICE);
+        super(nickName, EventMessageType.GAME_CHOICE);
         this.gameChoice = gameChoice;
     }
 
