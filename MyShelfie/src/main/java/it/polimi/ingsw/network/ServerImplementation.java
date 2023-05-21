@@ -117,20 +117,54 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
             case TILE_POSITION, BOOKSHELF_COLUMN, ITEM_TILE_INDEX, END_TURN, FILL_BOOKSHELF -> {
                 playerGame.get(client).update(client, eventMessage);
             }
+
             case DISCONNECT_CLIENT -> {
                 DisconnectClientMessage disconnectMessage = (DisconnectClientMessage) eventMessage;
-                GameController controller = playerGame.get(client);
-                // remove game name from set
-                currentGames.remove(controller.getGame().getGameName());
-                // remove <client, controller> in the game of the disconnected player and clients from map
-                for (Player player : controller.getGame().getSubscribers()) {
-                    playerGame.remove(connectedClients.get(player.getName()));
-                    connectedClients.remove(player.getName());
-                }
-                // let's notify the players
-                for (Client player : connectedClients.values()){
-                    player.onMessage(new PlayerOfflineMessage(eventMessage.getNickname()));
-                    player.onMessage(new KillGameMessage(eventMessage.getNickname()));
+                // if client is not in any game
+                if (!playerGame.containsKey(client)){
+                    currentPlayersNicknames.remove(eventMessage.getNickname());
+                    connectedClients.remove(client);
+                } else {
+
+                    String gameName = playerGame.get(client).getGame().getGameName();
+                    GameController controller = currentGames.get(gameName);
+                    Game game = controller.getGame();
+                    // if game has not started yet
+                    if (currentLobbyGameNames.contains(gameName)){
+                        for (Player player : game.getSubscribers()) {
+                            for (Map.Entry<Client, GameController> entry : playerGame.entrySet()){
+                                if (entry.getValue().equals(controller)){
+                                    // todo: maybe add game.unsubscribe(String nickname)
+                                    entry.getKey().onMessage(new PlayerOfflineMessage(eventMessage.getNickname()));
+                                    String nickname = connectedClients.entrySet().stream().filter(x->x.getValue().equals(client)).toList().get(0).getKey();
+                                    Player unsubscribed = game.getSubscribers().stream().filter(x->x.getName().equals(nickname)).toList().get(0);
+                                    game.getSubscribers().remove(unsubscribed);
+                                    int missingPlayers = game.getNumberOfPlayers().getValue()-game.getSubscribers().size();
+                                    entry.getKey().onMessage(new WaitingResponseMessage(missingPlayers));
+                                }
+                            }
+                        }
+                    } else {
+                        // kill game
+                        currentGames.remove(game.getGameName());
+                        for (Player player : game.getSubscribers()) {
+                            for (Map.Entry<Client, GameController> entry : playerGame.entrySet()){
+                                if (entry.getValue().equals(controller)){
+                                    // todo: maybe add game.unsubscribe(String nickname)
+                                    Client c = entry.getKey();
+                                    if (!entry.getKey().equals(client)) {
+
+                                        c.onMessage(new PlayerOfflineMessage(eventMessage.getNickname()));
+                                        c.onMessage(new KillGameMessage(eventMessage.getNickname()));
+                                    }
+                                    playerGame.remove(c);
+                                }
+                            }
+                        }
+                        for (Player player : game.getSubscribers()){
+                            connectedClients.remove(player.getName());
+                        }
+                    }
                 }
             }
         }
@@ -150,3 +184,26 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
 }
 
 
+/* todo disconnessioni durante la partita da rivedere assolutamente
+// ancora in lobby, in match
+if (playerGame != null) {
+    if (playerGame.get(client) != null) {
+        GameController controller = playerGame.get(client);
+        // remove game name from set
+        currentGames.remove(controller.getGame().getGameName());
+        // let's notify the players
+        for (Client player : connectedClients.values()) {
+            player.onMessage(new PlayerOfflineMessage(eventMessage.getNickname()));
+            player.onMessage(new KillGameMessage(eventMessage.getNickname()));
+        }
+        // remove <client, controller> in the game of the disconnected player and clients from map
+        for (Player player : controller.getGame().getSubscribers()) {
+            playerGame.remove(connectedClients.get(player.getName()));
+            connectedClients.remove(player.getName());
+        }
+
+    } else {
+        currentPlayersNicknames.remove(eventMessage.getNickname());
+    }
+}
+ */

@@ -11,7 +11,7 @@ import it.polimi.ingsw.model.Bookshelf;
 import it.polimi.ingsw.model.CommonGoalCard.CommonGoalCard;
 import it.polimi.ingsw.model.ModelView.SpaceView;
 import it.polimi.ingsw.model.Space;
-import it.polimi.ingsw.network.MessagesToServer.MessageToClient;
+import it.polimi.ingsw.network.MessagesToClient.MessageToClient;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -51,13 +51,14 @@ public interface View {
 
 
 
+
     /**
      * Asks the user how many players he wants to play with.
      */
     void askNumberOfPlayers(String gameName);
 
 
-  boolean isValidPort(String serverPort);
+    boolean isValidPort(String serverPort);
 
  boolean isValidIPAddress(String address);
 

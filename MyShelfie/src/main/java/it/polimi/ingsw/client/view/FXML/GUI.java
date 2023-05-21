@@ -1,14 +1,11 @@
 package it.polimi.ingsw.client.view.FXML;
 
-import it.polimi.ingsw.model.Bookshelf;
-import it.polimi.ingsw.model.CommonGoalCard.CommonGoalCard;
-import it.polimi.ingsw.model.ModelView.SpaceView;
-import it.polimi.ingsw.network.MessagesToServer.MessageToClient;
+
+import it.polimi.ingsw.network.MessagesToClient.MessageToClient;
 import it.polimi.ingsw.observer_observable.Observable;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.util.List;
 import java.util.Set;
 
 public class GUI extends Observable implements View {

@@ -261,6 +261,7 @@ public class CLI extends Observable implements View {
             case 3 -> {
                 try {
                     client.disconnect();
+                    out.println("Closing game...");
                     System.exit(0);
                 } catch (RemoteException e) {
                     out.println("Couldn't disconnect from server, " + e);
@@ -416,7 +417,7 @@ public class CLI extends Observable implements View {
                 if (waitingResponseMessage.getMissingPlayers() == 1) {
                     out.println("\nWaiting for 1 player... ");
                 } else {
-                    out.println("\nWaiting for " + waitingResponseMessage.getMissingPlayers() + "players... ");
+                    out.println("\nWaiting for " + waitingResponseMessage.getMissingPlayers() + " players... ");
                 }
             }
             case PLAYER_JOINED_LOBBY_RESPONSE -> {
@@ -446,6 +447,13 @@ public class CLI extends Observable implements View {
             }
             case KILL_GAME -> {
                 out.println("Game down");
+                try {
+                    createConnection();
+                } catch (RemoteException ignored) {
+
+                } catch (NotBoundException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }

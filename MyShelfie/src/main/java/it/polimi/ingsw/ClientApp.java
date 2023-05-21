@@ -11,7 +11,7 @@ public class ClientApp {
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
                 try {
-                    if (cli.getClient() != null) {
+                    if (cli.getClient()!= null) {
                         cli.getClient().disconnect();
                         System.out.println("Dropping connection and quitting...");
                     } else {

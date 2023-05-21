@@ -90,6 +90,7 @@ public class ClientImplementation extends UnicastRemoteObject implements Client 
         // UnicastRemoteObject.unexportObject(this, true);
         server.update(this, new DisconnectClientMessage(this, this.getNickname()));
         server = null;
+        view = null;
     }
 
 
