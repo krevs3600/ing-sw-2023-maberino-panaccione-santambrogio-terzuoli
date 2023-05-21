@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.view.FXML;
 
 
+import it.polimi.ingsw.network.ClientImplementation;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -22,6 +23,8 @@ public class JavaFxMain extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
+        // ADD
+        GUI view=new GUI();
         FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("start_scene.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("myShelfie!");
@@ -33,6 +36,13 @@ public class JavaFxMain extends Application {
         stage.setResizable(true);
         width = stage.getWidth();
         height = stage.getHeight();
+
+        StartController startController=fxmlLoader.getController();// controller iniziale non so se servirà
+
+
+
+
+
     }
     public static void main(String[] args) {
         launch();

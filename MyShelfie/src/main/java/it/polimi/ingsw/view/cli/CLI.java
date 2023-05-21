@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.cli;
 
 import it.polimi.ingsw.AppServer;
+import it.polimi.ingsw.client.view.FXML.View;
 import it.polimi.ingsw.model.ModelView.GameView;
 import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.network.ClientImplementation;
@@ -20,7 +21,7 @@ import java.rmi.registry.Registry;
 import java.util.Scanner;
 import java.util.Set;
 
-public class CLI extends Observable {
+public class CLI extends Observable implements View {
     private boolean activeTurn = false;
 
     private final PrintStream out = System.out;

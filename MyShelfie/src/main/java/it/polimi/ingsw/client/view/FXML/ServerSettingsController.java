@@ -1,5 +1,7 @@
-/*package it.polimi.ingsw.client.view.FXML;
+package it.polimi.ingsw.client.view.FXML;
 
+import it.polimi.ingsw.AppServer;
+import it.polimi.ingsw.network.ClientImplementation;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -12,6 +14,9 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.rmi.NotBoundException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 
 public class ServerSettingsController {
     @FXML
@@ -25,14 +30,29 @@ public class ServerSettingsController {
     @FXML
     Button tryToConnectButton;
 
+    private ClientImplementation client=null;
+
+    private GUI gui=null;
 
 
-    private int serverPort;
-    private String ip;
+
+    private String address;
+    private int chosenport;
 
     public void connect(MouseEvent event) throws IOException {
-        this.ip = ipAddress.getCharacters().toString();
-        this.serverPort = Integer.parseInt(port.getCharacters().toString());
+        this.chosenport=Integer.parseInt(port.getText());
+        this.address = (ipAddress.getText());
+
+        try {
+            Registry registry = LocateRegistry.getRegistry(address, chosenport);
+            AppServer server = (AppServer) registry.lookup("MyShelfieServer");
+
+         //   this.client = new ClientImplementation(gui, server.connect());
+           // askNickname();
+        } catch (NotBoundException e) {
+            System.err.println("not bound exception registry");
+        }
+
 
         Stage stage = JavaFxMain.getWindow();
         URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/login_scene.fxml/").toURI().toURL();
@@ -43,4 +63,4 @@ public class ServerSettingsController {
 
 }
 
- */
+

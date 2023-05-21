@@ -45,7 +45,7 @@ public class PersonalGoalCardController {
     public void initialize() throws FileNotFoundException {
         Game game = new Game(NumberOfPlayers.FOUR_PLAYERS, "game");
         //game.initLivingRoomBoard(NumberOfPlayers.FOUR_PLAYERS);
-        Player prova = new Player("prova", game.getPersonalGoalCardDeck());
+        Player prova = new Player("prova");
         CommonGoalCard commonGoalCard1 = game.getLivingRoomBoard().getCommonGoalCards().get(0);
         CommonGoalCard commonGoalCard2 = game.getLivingRoomBoard().getCommonGoalCards().get(1);
         First_CommonGoalCard.setImage(new Image(new FileInputStream(getCommonGoalCardPic(commonGoalCard1))));
@@ -54,5 +54,5 @@ public class PersonalGoalCardController {
         PersonalGoalCard.setImage(new Image(new FileInputStream("src/main/resources/it/polimi/ingsw/client/view/personal goal cards/Personal_Goals" + String.valueOf(prova.getPersonalGoalCard().getPath() + ".png"))));
     }
 }
+*/
 
- */
