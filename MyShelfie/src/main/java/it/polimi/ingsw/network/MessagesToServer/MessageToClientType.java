@@ -15,6 +15,6 @@ public enum MessageToClientType {
     JOIN_GAME_ERROR,
 
     WAIT_PLAYERS,
-    ILLEGAL_POSITION, SCORE;
+    ILLEGAL_POSITION;
 
 }

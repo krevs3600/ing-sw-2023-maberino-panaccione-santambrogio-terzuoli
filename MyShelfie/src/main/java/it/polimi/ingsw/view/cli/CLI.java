@@ -424,10 +424,13 @@ public class CLI extends Observable {
                     notifyObservers(new TilePositionMessage(((IllegalTilePositionErrorMessage)message).getNickname(), new Position(r, c)));
                 }
             }
+            /*
             case SCORE -> {
                 // todo da spostare nel game nel metodo setscore dei giocatori
                 out.println(((ScoreMessage)message).getNickname() + "'score is: " + ((ScoreMessage)message).getScore());
             }
+
+             */
         }
     }
 
@@ -600,14 +603,25 @@ public class CLI extends Observable {
 
             case LAST_TURN -> {
                 if (activeTurn){
-                    out.println("Congrats, you filled your bookshelf! You have an extra point!");
+                    out.println("\nCongrats, you filled your bookshelf! You have an extra point!");
                 } else {
-                    out.println(eventMessage.getNickname() + " filled his bookshelf...");
+                    out.println("\n" + eventMessage.getNickname() + " filled his bookshelf...");
+                }
+            }
+
+            case SCORE -> {
+                ScoreMessage scoreMessage = (ScoreMessage) eventMessage;
+                if (scoreMessage.getNickname().equals(this.client.getNickname())) {
+                    out.println("Your final score is " + scoreMessage.getScore() + " points");
                 }
             }
 
             case END_GAME -> {
-                out.println("Game has ended... Hope you had fun!");
+                if(eventMessage.getNickname().equals(this.client.getNickname())) {
+                    out.println("\nCongratulations, you won!");
+                }
+                out.println("\nGame has ended... Hope you had fun!");
+                gameMenu();
             }
 
 

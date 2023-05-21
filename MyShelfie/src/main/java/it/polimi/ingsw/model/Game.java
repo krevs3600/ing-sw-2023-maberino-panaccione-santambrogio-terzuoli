@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.ModelView.PlayerView;
 import it.polimi.ingsw.model.ModelView.TilePackView;
 import it.polimi.ingsw.model.utils.NumberOfPlayers;
 import it.polimi.ingsw.model.utils.Position;
+import it.polimi.ingsw.network.eventMessages.ScoreMessage;
 import it.polimi.ingsw.network.eventMessages.EventMessage;
 import it.polimi.ingsw.network.eventMessages.*;
 import it.polimi.ingsw.observer_observable.Observable;
@@ -141,13 +142,14 @@ public class Game extends Observable<EventMessage> {
     /**
      * This method stops the game by setting to INACTIVE the status of all the players
      */
-    public void endGame(){
+    public void endGame(Player winner){
+        setIsEnded();
         for(Player player : subscribers){
             player.setStatus(PlayerStatus.INACTIVE);
         }
-        setIsEnded();
+        PlayerView playerView = new PlayerView(winner);
         setChanged();
-        notifyObservers(new EndGameMessage(new PlayerView(getCurrentPlayer())));
+        notifyObservers(new EndGameMessage(new PlayerView(winner)));
         // maybe call to a method to show results
     }
 
@@ -334,7 +336,11 @@ public class Game extends Observable<EventMessage> {
 
    //TODO
     public void setPlayerScore(int score, Player player) {
+
         player.setScore(score);
+        setChanged();
+        PlayerView playerView = new PlayerView(player);
+        notifyObservers(new ScoreMessage(playerView.getName(), playerView.getScore()));
     }
     public int getCurrentPlayerScore () {return this.currentPlayerScore;}
 

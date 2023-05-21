@@ -1,25 +1,20 @@
-package it.polimi.ingsw.network.MessagesToServer.requestMessage;
+package it.polimi.ingsw.network.eventMessages;
 
 import it.polimi.ingsw.network.MessageType;
 import it.polimi.ingsw.network.MessagesToServer.MessageToClient;
 import it.polimi.ingsw.network.MessagesToServer.MessageToClientType;
+import it.polimi.ingsw.network.MessagesToServer.requestMessage.RequestMessage;
 
-public class ScoreMessage extends RequestMessage {
+public class ScoreMessage extends EventMessage {
     private final long serialVersionUID = 1L;
     private int score;
-    private String nickname;
     public ScoreMessage(String nickname, int score) {
-        super(MessageToClientType.SCORE);
+        super(nickname, MessageType.SCORE);
         this.score = score;
-        this.nickname = nickname;
     }
 
     public int getScore(){
         return this.score;
-    }
-
-    public String getNickname() {
-        return nickname;
     }
 
     @Override

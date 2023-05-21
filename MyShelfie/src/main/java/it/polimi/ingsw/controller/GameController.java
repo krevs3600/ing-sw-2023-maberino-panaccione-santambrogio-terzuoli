@@ -8,7 +8,6 @@ import it.polimi.ingsw.model.utils.TileType;
 import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.MessagesToServer.requestMessage.IllegalTilePositionErrorMessage;
 import it.polimi.ingsw.network.MessagesToServer.requestMessage.PlayerJoinedLobbyMessage;
-import it.polimi.ingsw.network.MessagesToServer.requestMessage.ScoreMessage;
 import it.polimi.ingsw.network.MessagesToServer.requestMessage.WaitingResponseMessage;
 import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.network.eventMessages.*;
@@ -20,10 +19,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class GameController {
 
@@ -246,7 +242,7 @@ public class GameController {
                 if(game.isFinalTurn()) {
                     // game is ended
                     if (game.getCurrentPlayer().equals(game.getLastPlayer())){
-                        setPlayersScoreEndGame();
+                        Player winner = setPlayersScoreEndGame();
                         /*for (Client c : getClients()){
                             // todo controllare messaggi e conto punteggi e capire come mandarli
                             Player p = game.getSubscribers().stream().filter(x -> x.getName().equals(eventMessage.getNickname())).toList().get(0);
@@ -254,7 +250,7 @@ public class GameController {
                         }
 
                          */
-                        game.endGame();
+                        game.endGame(winner);
                     }
                 }
                 if (!game.isEnded()){
@@ -273,11 +269,18 @@ public class GameController {
      * This method is used to compute the final score of the player at the end of the game
      * @return int It returns the final score of the player
      */
-    public void setPlayersScoreEndGame() {
+    public Player setPlayersScoreEndGame() {
+        Player winner = null;
+        int max_score = 0;
         for (Player player : game.getSubscribers()){
             int score = computePlayerScoreEndGame(player);
+            if(score > max_score) {
+                max_score = score;
+                winner = player;
+            }
             game.setPlayerScore(score, player);
         }
+        return winner;
 
     }
 

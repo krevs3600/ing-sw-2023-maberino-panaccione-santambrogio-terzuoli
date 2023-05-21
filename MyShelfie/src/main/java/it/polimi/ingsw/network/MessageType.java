@@ -21,6 +21,7 @@ public enum MessageType {
     LAST_TURN,
     END_GAME,
     INSERTION_REQUEST,
+    SCORE,
     ITEM_TILE_INDEX, CREATOR_NICKNAME, FILL_BOOSHELF,
     // error
 
