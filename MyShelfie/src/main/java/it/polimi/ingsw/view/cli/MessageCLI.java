@@ -37,17 +37,21 @@ public enum MessageCLI {
 
             case GAME_MODE -> {
                 return
-                        "Please select the game mode, cli or gui"
-                        + "\n - A) Retro mode from textual user interface"
-                        + "\n - B) Graphical User Interface";
+                        """
+                                Please select the game mode, cli or gui
+                                 - A) Retro mode from textual user interface
+                                 - B) Graphical User Interface""";
             }
 
             case MENU -> {
                 return
-                        "Please choose what you'd like to do"
-                        + "\n - 1) create game"
-                        + "\n - 2) join game"
-                        + "\n - 3) exit";
+                        """
+
+                                 Please choose what you'd like to do
+                                 - 1) create game
+                                 - 2) join game
+                                 - 3) exit\
+                                """;
             }
             default -> {
                 return "";
