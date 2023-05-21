@@ -38,6 +38,8 @@ public class CLI extends Observable implements View {
         return this.client;
     }
 
+    public void resetClient(){this.client=null;}
+
 
     private enum State {
         WAITING_FOR_PLAYER,

@@ -123,31 +123,35 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                 // if client is not in any game
                 if (!playerGame.containsKey(client)){
                     currentPlayersNicknames.remove(eventMessage.getNickname());
-                    connectedClients.remove(client);
+                    connectedClients.remove(eventMessage.getNickname());
                 } else {
 
                     String gameName = playerGame.get(client).getGame().getGameName();
                     GameController controller = currentGames.get(gameName);
                     Game game = controller.getGame();
+                    playerGame.remove(client);
+
+
                     // if game has not started yet
                     if (currentLobbyGameNames.contains(gameName)){
-                        for (Player player : game.getSubscribers()) {
-                            for (Map.Entry<Client, GameController> entry : playerGame.entrySet()){
-                                if (entry.getValue().equals(controller)){
-                                    // todo: maybe add game.unsubscribe(String nickname)
-                                    entry.getKey().onMessage(new PlayerOfflineMessage(eventMessage.getNickname()));
-                                    String nickname = connectedClients.entrySet().stream().filter(x->x.getValue().equals(client)).toList().get(0).getKey();
-                                    Player unsubscribed = game.getSubscribers().stream().filter(x->x.getName().equals(nickname)).toList().get(0);
-                                    game.getSubscribers().remove(unsubscribed);
-                                    int missingPlayers = game.getNumberOfPlayers().getValue()-game.getSubscribers().size();
-                                    entry.getKey().onMessage(new WaitingResponseMessage(missingPlayers));
+                        currentPlayersNicknames.remove(eventMessage.getNickname());
+                        connectedClients.remove(eventMessage.getNickname());
+                        Player unsubscribed = game.getSubscribers().stream().filter(x->x.getName().equals(eventMessage.getNickname())).toList().get(0);
+                        game.getSubscribers().remove(unsubscribed);
+
+                        for (Map.Entry<Client, GameController> entry : playerGame.entrySet()){
+                            if (entry.getValue().equals(controller)){
+                                // todo: maybe add game.unsubscribe(String nickname)
+                                entry.getKey().onMessage(new PlayerOfflineMessage(eventMessage.getNickname()));
+                                int missingPlayers = game.getNumberOfPlayers().getValue()-game.getSubscribers().size();
+                                entry.getKey().onMessage(new WaitingResponseMessage(missingPlayers));
                                 }
                             }
-                        }
+
                     } else {
                         // kill game
                         currentGames.remove(game.getGameName());
-                        for (Player player : game.getSubscribers()) {
+
                             for (Map.Entry<Client, GameController> entry : playerGame.entrySet()){
                                 if (entry.getValue().equals(controller)){
                                     // todo: maybe add game.unsubscribe(String nickname)
@@ -159,7 +163,7 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                                     }
                                     playerGame.remove(c);
                                 }
-                            }
+
                         }
                         for (Player player : game.getSubscribers()){
                             connectedClients.remove(player.getName());

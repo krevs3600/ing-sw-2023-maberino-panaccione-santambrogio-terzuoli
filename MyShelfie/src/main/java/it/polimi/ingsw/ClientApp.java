@@ -13,6 +13,7 @@ public class ClientApp {
                 try {
                     if (cli.getClient()!= null) {
                         cli.getClient().disconnect();
+                        cli.resetClient();
                         System.out.println("Dropping connection and quitting...");
                     } else {
                         System.out.println("Quitting...");
