@@ -70,13 +70,13 @@ public class AppServerImpl extends UnicastRemoteObject implements AppServer
     private static void startRMI() throws RemoteException {
         AppServerImpl server = getInstance();
 
-        Registry registry = LocateRegistry.createRegistry(1245);
+        Registry registry = LocateRegistry.createRegistry(1243);
         registry.rebind("MyShelfieServer", server);
     }
 
     public static void startSocket() throws RemoteException {
         AppServerImpl instance = getInstance();
-        try (ServerSocket serverSocket = new ServerSocket(1246)) {
+        try (ServerSocket serverSocket = new ServerSocket(1244)) {
             while (true) {
                 Socket socket = serverSocket.accept();
                 instance.executorService.submit(() -> {
@@ -106,7 +106,7 @@ public class AppServerImpl extends UnicastRemoteObject implements AppServer
     @Override
     public Server connect() throws RemoteException {
         if (server == null) {
-            server = new ServerImplementation(1245);
+            server = new ServerImplementation(1243);
         }
         return server;
     }

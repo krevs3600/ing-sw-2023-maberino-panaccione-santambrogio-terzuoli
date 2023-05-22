@@ -125,7 +125,7 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                     currentPlayersNicknames.remove(eventMessage.getNickname());
                     connectedClients.remove(eventMessage.getNickname());
                 } else {
-
+                    playerGame.get(client).getClients().remove(client);
                     String gameName = playerGame.get(client).getGame().getGameName();
                     GameController controller = currentGames.get(gameName);
                     Game game = controller.getGame();

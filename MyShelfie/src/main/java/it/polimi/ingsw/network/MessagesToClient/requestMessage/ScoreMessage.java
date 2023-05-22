@@ -1,4 +1,4 @@
-<<<<<<<< HEAD:MyShelfie/src/main/java/it/polimi/ingsw/network/eventMessages/ScoreMessage.java
+/*<<<<<<<< HEAD:MyShelfie/src/main/java/it/polimi/ingsw/network/eventMessages/ScoreMessage.java
 package it.polimi.ingsw.network.eventMessages;
 
 import it.polimi.ingsw.network.MessageType;
@@ -28,3 +28,5 @@ public class ScoreMessage extends EventMessage {
     }
 
 }
+
+ */

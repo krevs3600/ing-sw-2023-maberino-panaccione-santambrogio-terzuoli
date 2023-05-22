@@ -459,8 +459,6 @@ public class CLI extends Observable implements View {
                     throw new RuntimeException(e);
                 }
             }
-
-             */
         }
     }
 

@@ -97,7 +97,7 @@ public class GameController {
             * */
             case GAME_CHOICE -> {
                 GameNameChoiceMessage gameNameChoiceMessage = (GameNameChoiceMessage) eventMessage;
-                // clients.add(client);
+                //clients.add(client);
                 Player newPlayer = new Player(eventMessage.getNickname());
                 game.subscribe(newPlayer);
                 // if players are still missing a wait message is sent to the new player

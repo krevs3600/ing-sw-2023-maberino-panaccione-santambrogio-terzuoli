@@ -149,7 +149,7 @@ public class Game extends Observable<EventMessage> {
         }
         PlayerView playerView = new PlayerView(winner);
         setChanged();
-        notifyObservers(new EndGameMessage(new PlayerView(winner)));
+        notifyObservers(new WinGameMessage(new PlayerView(winner)));
         // maybe call to a method to show results
     }
 

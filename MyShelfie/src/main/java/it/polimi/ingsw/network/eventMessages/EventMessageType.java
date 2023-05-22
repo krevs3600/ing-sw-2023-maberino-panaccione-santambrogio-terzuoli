@@ -23,7 +23,7 @@ public enum EventMessageType {
     INSERTION_REQUEST,
     ITEM_TILE_INDEX,
     CREATOR_NICKNAME,
-    SCORE
+    SCORE,
     FILL_BOOKSHELF,
     DISCONNECT_CLIENT;
     // error

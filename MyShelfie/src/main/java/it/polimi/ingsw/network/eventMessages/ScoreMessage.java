@@ -1,20 +1,18 @@
-<<<<<<<< HEAD:MyShelfie/src/main/java/it/polimi/ingsw/network/eventMessages/ScoreMessage.java
+
 package it.polimi.ingsw.network.eventMessages;
 
-import it.polimi.ingsw.network.MessageType;
-import it.polimi.ingsw.network.MessagesToServer.MessageToClient;
-import it.polimi.ingsw.network.MessagesToServer.MessageToClientType;
-import it.polimi.ingsw.network.MessagesToServer.requestMessage.RequestMessage;
-package it.polimi.ingsw.network.MessagesToClient.requestMessage;
+import it.polimi.ingsw.network.eventMessages.EventMessageType;
+import it.polimi.ingsw.network.MessagesToClient.MessageToClient;
+import it.polimi.ingsw.network.MessagesToClient.MessageToClientType;
+import it.polimi.ingsw.network.MessagesToClient.requestMessage.RequestMessage;
 
 import it.polimi.ingsw.network.MessagesToClient.MessageToClientType;
->>>>>>>> origin/main:MyShelfie/src/main/java/it/polimi/ingsw/network/MessagesToClient/requestMessage/ScoreMessage.java
 
 public class ScoreMessage extends EventMessage {
     private final long serialVersionUID = 1L;
     private int score;
     public ScoreMessage(String nickname, int score) {
-        super(nickname, MessageType.SCORE);
+        super(nickname, EventMessageType.SCORE);
         this.score = score;
     }
 
