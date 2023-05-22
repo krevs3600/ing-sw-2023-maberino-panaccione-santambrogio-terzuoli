@@ -9,7 +9,6 @@ import it.polimi.ingsw.network.MessagesToClient.requestMessage.CreatorLoginRespo
 import it.polimi.ingsw.network.MessagesToClient.requestMessage.GameNameResponseMessage;
 import it.polimi.ingsw.network.MessagesToClient.requestMessage.LoginResponseMessage;
 import it.polimi.ingsw.network.MessagesToClient.requestMessage.RequestMessage;
-import it.polimi.ingsw.network.eventMessages.DisconnectClientMessage;
 import it.polimi.ingsw.network.eventMessages.EventMessage;
 import it.polimi.ingsw.view.cli.CLI;
 

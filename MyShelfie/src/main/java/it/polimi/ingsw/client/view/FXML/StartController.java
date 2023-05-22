@@ -28,24 +28,28 @@ public class StartController extends Observable {
     @FXML
     public Button quitBtn1;
 
+    public ServerSettingsController serverSettingsController;
+
     private Stage stage;
     private Scene scene;
     private Parent root;
 
+    private GUI gui;
 
+
+    public void setGui(GUI gui){
+        this.gui=gui;
+    }
     public void closeJavaFxMain(){
-       JavaFxMain.getWindow().close();
+       GuiApp.getWindow().close();
     }
 
 //TODO: refactor del metodo (createGame)
     public void switchToConnection(ActionEvent event) throws IOException {
-        URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/RMIorSocket_scene.fxml/").toURI().toURL();
+        gui.askTypeofConnection(gui.getStage());
 
-        root = FXMLLoader.load(url);
-        stage = JavaFxMain.getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+
+
     }
 
 

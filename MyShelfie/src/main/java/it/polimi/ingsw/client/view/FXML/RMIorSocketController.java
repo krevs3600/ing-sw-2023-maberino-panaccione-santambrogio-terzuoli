@@ -26,18 +26,19 @@ public class RMIorSocketController extends Observable {
     private Stage stage;
     private Scene scene;
     private Parent root;
+    private GUI gui;
 
     public void createRMIconnection(MouseEvent mouseEvent) throws IOException {
-            URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/AddressIp_scene.fxml/").toURI().toURL();
+        gui.createConnection();
 
-            root = FXMLLoader.load(url);
-            stage = JavaFxMain.getWindow();
-            scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
     }
 
     public void createsocketconnection(MouseEvent mouseEvent) {
 
     }
+
+    public void setGui(GUI gui) {
+        this.gui=gui;
+    }
+
 }

@@ -34,33 +34,27 @@ public class ServerSettingsController {
 
     private ClientImplementation client=null;
 
-    private GUI gui;
+    private GUI gui=null;
+
+    private ClientImplementation clientImplementation=null;
 
 
+public void setGui(GUI gui) {
+    this.gui=gui;
+}
 
     private String address;
     private int chosenport;
 
-    public void connect(MouseEvent event) throws IOException {
+    public void connect(MouseEvent event) throws IOException, NotBoundException {
         this.address = (ipAddress.getText());
         this.chosenport=Integer.parseInt(port.getText());
+
+
         //TODO: check for empty value and for string instead of integer value
       if(isValidIPAddress(address) && isValidPort(chosenport)) {
-          try {
-              Registry registry = LocateRegistry.getRegistry(address, chosenport);
-              AppServer server = (AppServer) registry.lookup("MyShelfieServer");
-                this.client = new ClientImplementation(gui, server.connect());
-              // askNickname();
-          } catch (NotBoundException e) {
-              System.err.println("not bound exception registry");
-          }
+          gui.createConnection(address,chosenport);
 
-
-          Stage stage = JavaFxMain.getWindow();
-          URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/login_scene.fxml/").toURI().toURL();
-          FXMLLoader fxmlLoader = new FXMLLoader(url);
-          Scene scene = new Scene(fxmlLoader.load());
-          stage.setScene(scene);
 
       }
       else if (!isValidIPAddress(address) || !isValidPort(chosenport) || isValidIPAddress("")|| isValidIPAddress(" ")){

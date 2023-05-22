@@ -14,7 +14,7 @@ import it.polimi.ingsw.model.ModelView.SpaceView;
 import it.polimi.ingsw.model.Space;
 import it.polimi.ingsw.network.MessagesToClient.MessageToClient;
 import it.polimi.ingsw.network.eventMessages.EventMessage;
-import it.polimi.ingsw.observer_observable.Observable;
+import javafx.beans.Observable;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -68,7 +68,8 @@ public interface View {
  void gameMenu();
 
 
-    void update(GameView gameView, EventMessage eventMessage);
+ void update(GameView gameView, EventMessage eventMessage);
+
 
 
 }

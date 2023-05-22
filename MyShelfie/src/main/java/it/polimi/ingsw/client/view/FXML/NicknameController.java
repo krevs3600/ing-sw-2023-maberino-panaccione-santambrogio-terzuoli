@@ -1,6 +1,5 @@
 package it.polimi.ingsw.client.view.FXML;
 
-import it.polimi.ingsw.network.ClientImplementation;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -22,9 +21,10 @@ public class NicknameController  {
     @FXML
     TextField nicknameTextFiled;
 
-    private GUI gui=null;
+
 
     private String nickname;
+    private GUI gui;
 
 
     public void connect(MouseEvent event) throws IOException {
@@ -35,11 +35,14 @@ public class NicknameController  {
 
 
 
-        Stage stage = JavaFxMain.getWindow();
+        Stage stage = GuiApp.getWindow();
         URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/livingBoard_scene.fxml").toURI().toURL();
         FXMLLoader fxmlLoader = new FXMLLoader(url);
         Scene scene = new Scene(fxmlLoader.load());
         stage.setScene(scene);
     }
 
+    public void setGui(GUI gui) {
+        this.gui=gui;
+    }
 }
