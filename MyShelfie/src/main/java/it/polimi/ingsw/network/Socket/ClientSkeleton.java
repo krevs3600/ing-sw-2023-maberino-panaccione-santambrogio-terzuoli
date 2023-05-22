@@ -10,15 +10,17 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 import java.rmi.RemoteException;
 
 public class ClientSkeleton implements Client {
 
     private final ObjectOutputStream oos;
     private final ObjectInputStream ois;
-    private String nickname = "";
+    private final Socket socket;
 
-    public ClientSkeleton(Socket socket) throws RemoteException {
+    public ClientSkeleton(Socket socket) throws RemoteException{
+        this.socket = socket;
         try {
             this.oos = new ObjectOutputStream(socket.getOutputStream());
         } catch (IOException e) {
@@ -57,11 +59,26 @@ public class ClientSkeleton implements Client {
         server.update(this, eventMessage);
     }
 
-    public void onMessage (MessageToClient message) throws RemoteException {
-
+    public void onMessage (MessageToClient message) throws RemoteException{
+        try {
+            oos.writeObject(message);
+        } catch (IOException e) {
+            throw new RemoteException("Cannot send message " + message.getType());
+        }
     }
+    public void disconnect () throws RemoteException{}
 
-    public void disconnect(){
+    /*
+    public void disconnect () throws RemoteException {
+        this.ois = null;
+        this.oos = null;
+        try {
+            if (!socket.isClosed()){
+                socket.close();
+            }
+        } catch (IOException e){
+            throw (new RemoteException("Could not disconnect"));
+        }
 
-    }
+    }*/
 }

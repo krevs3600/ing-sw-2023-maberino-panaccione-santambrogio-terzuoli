@@ -2,6 +2,9 @@ package it.polimi.ingsw.network.Socket;
 
 import it.polimi.ingsw.model.ModelView.GameView;
 import it.polimi.ingsw.network.Client;
+import it.polimi.ingsw.network.MessagesToClient.MessageToClient;
+import it.polimi.ingsw.network.MessagesToClient.errorMessages.ErrorMessage;
+import it.polimi.ingsw.network.MessagesToClient.requestMessage.RequestMessage;
 import it.polimi.ingsw.network.eventMessages.EventMessage;
 import it.polimi.ingsw.network.Server;
 
@@ -23,6 +26,7 @@ public class ServerStub implements Server {
     public ServerStub(String ip, int port) {
         this.ip = ip;
         this.port = port;
+
     }
 
     @Override
@@ -65,24 +69,22 @@ public class ServerStub implements Server {
 
     public void receive(Client client) throws RemoteException {
         GameView gameView;
-        try {
-            gameView = (GameView) ois.readObject();
-        } catch (IOException e) {
-            throw new RemoteException("Cannot receive model view from client", e);
-        } catch (ClassNotFoundException e) {
-            throw new RemoteException("Cannot deserialize model view from client", e);
-        }
-
         EventMessage eventMessage;
         try {
-            eventMessage = (EventMessage) ois.readObject();
-        } catch (IOException e) {
-            throw new RemoteException("Cannot receive event from client", e);
-        } catch (ClassNotFoundException e) {
-            throw new RemoteException("Cannot deserialize event from client", e);
+            Object received = ois.readObject();
+            if (received instanceof RequestMessage message){
+                client.onMessage(message);
+            } else if (received instanceof ErrorMessage message) {
+                client.onMessage(message);
+            }
+            else if (received instanceof GameView) {
+                gameView = (GameView) received;
+                eventMessage = (EventMessage) ois.readObject();
+                client.update(gameView, eventMessage);
+            }
+        }catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
-
-        client.update(gameView, eventMessage);
     }
 
     public void close() throws RemoteException {

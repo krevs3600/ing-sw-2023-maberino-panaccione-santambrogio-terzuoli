@@ -85,7 +85,7 @@ public class CLI extends Observable implements View {
                     Registry registry = LocateRegistry.getRegistry(address, port);
                     AppServer server = (AppServer) registry.lookup("MyShelfieServer");
 
-                    this.client = new ClientImplementation(this, server.connect());
+                    client = new ClientImplementation(this, server.connect());
                    askNickname();
                 } catch (NotBoundException e) {
                     System.err.println("not bound exception registry");
@@ -94,25 +94,24 @@ public class CLI extends Observable implements View {
             case "s" -> {
                 port = (port == 1243) ? 1244 : port;
                 ServerStub serverStub = new ServerStub(address, port);
-                ClientImplementation client = new ClientImplementation(this, serverStub);
-                new Thread() {
-                    @Override
-                    public void run() {
-                        while(true) {
+                client = new ClientImplementation(this, serverStub);
+                serverStub.register(client);
+                new Thread(() -> {
+                    while(true) {
+                        try {
+                            serverStub.receive(client);
+                        } catch (RemoteException e) {
+                            System.err.println("Cannot receive from server. Stopping...");
+
                             try {
-                                serverStub.receive(client);
-                            } catch (RemoteException e) {
-                                System.err.println("Cannot receive from server. Stopping...");
-                                try {
-                                    serverStub.close();
-                                } catch (RemoteException ex) {
-                                    System.err.println("Cannot close connection with server. Halting...");
-                                }
-                                System.exit(1);
+                                serverStub.close();
+                            } catch (RemoteException ex) {
+                                System.err.println("Cannot close connection with server. Halting...");
                             }
+                            System.exit(1);
                         }
                     }
-                }.start();
+                }).start();
 
                 askNickname();
             }

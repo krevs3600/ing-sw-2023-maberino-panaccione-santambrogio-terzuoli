@@ -51,19 +51,16 @@ public class AppServerImpl extends UnicastRemoteObject implements AppServer
                 System.err.println("Cannot start socket. This protocol will be disabled.");
             }
         });
-
         socketThread.start();
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            public void run() {
-                try {
-                    rmiThread.join();
-                    socketThread.join();
-                    System.out.println("Closing existing connections...");
-                } catch (InterruptedException e) {
-                    System.err.println("No connection protocol available. Exiting...");
-                }
-            }
-        });
+        /*
+        try {
+            rmiThread.join();
+            socketThread.join();
+            System.out.println("Closing existing connections...");
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+         */
 
     }
 
@@ -82,8 +79,8 @@ public class AppServerImpl extends UnicastRemoteObject implements AppServer
                 instance.executorService.submit(() -> {
                     try {
                         ClientSkeleton clientSkeleton = new ClientSkeleton(socket);
-                        Server server = new ServerImplementation();
-                        server.register(clientSkeleton);
+                        Server server = getInstance().connect();
+                        // server.register(clientSkeleton); questo però è il register di serverimplementation che prende game
                         while (true) {
                             clientSkeleton.receive(server);
                         }
