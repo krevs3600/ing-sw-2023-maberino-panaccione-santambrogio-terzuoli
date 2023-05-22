@@ -25,6 +25,7 @@ public enum EventMessageType {
     CREATOR_NICKNAME,
     SCORE,
     FILL_BOOKSHELF,
+    SWITCH_PHASE,
     DISCONNECT_CLIENT;
     // error
 

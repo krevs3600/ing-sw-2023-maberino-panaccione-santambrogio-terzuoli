@@ -3,6 +3,7 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.CommonGoalCard.CommonGoalCard;
 import it.polimi.ingsw.model.ModelView.LivingRoomBoardView;
+import it.polimi.ingsw.model.utils.GamePhase;
 import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.model.utils.TileType;
 import it.polimi.ingsw.network.Client;
@@ -232,6 +233,11 @@ public class GameController {
                 } catch (IndexOutOfBoundsException e) {}
             }
 
+            case SWITCH_PHASE -> {
+                SwitchPhaseMessage switchPhaseMessage = (SwitchPhaseMessage) eventMessage;
+                game.setTurnPhase(switchPhaseMessage.getGamePhase());
+            }
+
             case END_TURN -> {
                 computeScoreMidGame();
 
@@ -254,6 +260,7 @@ public class GameController {
                     }
                 }
                 if (!game.isEnded()){
+                    game.setTurnPhase(GamePhase.PICKING_TILES);
                     game.changeTurn();
                 }
             }
