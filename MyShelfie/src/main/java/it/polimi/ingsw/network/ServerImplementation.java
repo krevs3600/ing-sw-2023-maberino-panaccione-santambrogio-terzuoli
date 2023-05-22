@@ -114,7 +114,7 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                 currentGames.get(gameNameChoiceMessage.getGameChoice()).update(client,gameNameChoiceMessage);
             }
 
-            case TILE_POSITION, BOOKSHELF_COLUMN, ITEM_TILE_INDEX, END_TURN, FILL_BOOKSHELF -> {
+            case TILE_POSITION, BOOKSHELF_COLUMN, ITEM_TILE_INDEX, END_TURN, FILL_BOOKSHELF, SWITCH_PHASE -> {
                 playerGame.get(client).update(client, eventMessage);
             }
 

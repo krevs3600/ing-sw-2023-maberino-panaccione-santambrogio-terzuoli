@@ -5,6 +5,7 @@ import it.polimi.ingsw.client.view.FXML.View;
 import it.polimi.ingsw.model.ModelView.CommonGoalCardView;
 import it.polimi.ingsw.model.ModelView.GameView;
 import it.polimi.ingsw.model.ModelView.PlayerView;
+import it.polimi.ingsw.model.utils.GamePhase;
 import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.ClientImplementation;
@@ -86,7 +87,7 @@ public class CLI extends Observable implements View {
                     AppServer server = (AppServer) registry.lookup("MyShelfieServer");
 
                     client = new ClientImplementation(this, server.connect());
-                   askNickname();
+                    askNickname();
                 } catch (NotBoundException e) {
                     System.err.println("not bound exception registry");
                 }
@@ -425,14 +426,28 @@ public class CLI extends Observable implements View {
             case ILLEGAL_POSITION -> {
                 if (activeTurn) {
                     out.println("\nIllegalAccessError, position is not valid. Please try again...");
-                    out.print("r: ");
-                    int r = in.nextInt();
-                    in.nextLine();
-                    System.out.print("c: ");
-                    int c = in.nextInt();
-                    in.nextLine();
-                    setChanged();
-                    notifyObservers(new TilePositionMessage(((IllegalTilePositionErrorMessage)message).getNickname(), new Position(r, c)));
+                    String answer = "";
+                    do {
+                        out.println("\nIf you wish to stop picking tiles type 'stop', otherwise press ENTER");
+                        out.print(">>> ");
+                        answer = in.nextLine();
+                        switch (answer) {
+                            case "stop" -> {
+                                setChanged();
+                                notifyObservers(new SwitchPhaseMessage(client.getNickname(), GamePhase.PLACING_TILES));
+                            }
+                            case "" -> {
+                                out.print("r: ");
+                                int r = in.nextInt();
+                                in.nextLine();
+                                System.out.print("c: ");
+                                int c = in.nextInt();
+                                in.nextLine();
+                                setChanged();
+                                notifyObservers(new TilePositionMessage(((IllegalTilePositionErrorMessage) message).getNickname(), new Position(r, c)));
+                            }
+                        }
+                    }while (!answer.equals("stop") && !answer.equals(""));
                 }
             }
             /*
@@ -569,14 +584,8 @@ public class CLI extends Observable implements View {
                         answer = in.nextLine();
                         switch (answer) {
                             case "stop" -> {
-                                out.println("\n-----------------------------------------------------------------------\n" + game.getCurrentPlayer().getName() + "'s BOOKSHELF:");
-                                out.println(game.getCurrentPlayer().getBookshelf().toString());
-                                out.println("\n-----------------------------------------------------------------------\n");
-                                out.print("In which column you want to insert your item tiles?\n");
-                                int column = in.nextInt();
-                                in.nextLine();
                                 setChanged();
-                                notifyObservers(new BookshelfColumnMessage(eventMessage.getNickname(), column));
+                                notifyObservers(new SwitchPhaseMessage(client.getNickname(), GamePhase.PLACING_TILES));
                             }
                             case "" -> {
                                 out.println("\nPlease enter a position: ");
@@ -589,20 +598,25 @@ public class CLI extends Observable implements View {
                                 setChanged();
                                 notifyObservers(new TilePositionMessage(eventMessage.getNickname(), new Position(r, c)));
                             }
-                            case "penepiccolo" -> {
+                            case "easteregg" -> {
                                 setChanged();
                                 notifyObservers(new FillBookshelfMessage(eventMessage.getNickname()));
                             }
                         }
-                    } while (!answer.equals("stop") && !answer.equals("") && !answer.equals("penepiccolo"));
+                    } while (!answer.equals("stop") && !answer.equals("") && !answer.equals("easteregg"));
                 }
 
             }
 
             case BOOKSHELF -> {
-                out.println("\n-----------------------------------------------------------------------\n" + game.getSubscribers().get(0).getName() + "'s BOOKSHELF:");
-                out.println(game.getSubscribers().get(0).getBookshelf().toString());
-                this.setState(State.WAITING_FOR_PLAYER);
+                out.println("\n-----------------------------------------------------------------------\n Your BOOKSHELF:");
+                out.println(game.getCurrentPlayer().getBookshelf().toString());
+                out.println("\n-----------------------------------------------------------------------\n");
+                out.print("In which column you want to insert your item tiles?\n");
+                int column = in.nextInt();
+                in.nextLine();
+                setChanged();
+                notifyObservers(new BookshelfColumnMessage(eventMessage.getNickname(), column));
             }
 
             case INSERTION_REQUEST -> {

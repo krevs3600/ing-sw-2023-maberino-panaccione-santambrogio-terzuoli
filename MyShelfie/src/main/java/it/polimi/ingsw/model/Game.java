@@ -1,9 +1,11 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.CommonGoalCard.CommonGoalCard;
+import it.polimi.ingsw.model.ModelView.BookshelfView;
 import it.polimi.ingsw.model.ModelView.LivingRoomBoardView;
 import it.polimi.ingsw.model.ModelView.PlayerView;
 import it.polimi.ingsw.model.ModelView.TilePackView;
+import it.polimi.ingsw.model.utils.GamePhase;
 import it.polimi.ingsw.model.utils.NumberOfPlayers;
 import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.network.eventMessages.ScoreMessage;
@@ -23,22 +25,13 @@ import java.util.*;
  */
 public class Game extends Observable<EventMessage> {
 
-
-    public enum Phase {
-        INIT_GAME,
-        INIT_TURN,
-        PICKING_TILES,
-        PLACING_TILES,
-        END_TURN,
-        END_GAME;
-    }
     private String gameName;
     private PersonalGoalCardDeck personalGoalCardDeck;
     private List<Player> subscribers = new ArrayList<>();
     private LivingRoomBoard livingRoomBoard;
     private NumberOfPlayers numberOfPlayers;
     private int cursor;
-    private Phase turnPhase;
+    private GamePhase turnPhase;
     private List<Space> drawableTiles = new ArrayList<>();
 
     private TilePack tilePack;
@@ -61,7 +54,7 @@ public class Game extends Observable<EventMessage> {
         this.numberOfPlayers = numberOfPlayers;
         this.personalGoalCardDeck = new PersonalGoalCardDeck();
         this.tilePack = new TilePack();
-        //this.turnPhase = Phase.INIT_TURN;
+        this.turnPhase = GamePhase.INIT_GAME;
         this.buffer = new ArrayList<>();
         this.isFinalTurn = false;
         this.alongSideRow = false;
@@ -136,6 +129,7 @@ public class Game extends Observable<EventMessage> {
         Player firstPlayer = subscribers.get(0);
         firstPlayer.setStatus(PlayerStatus.PICKING_TILES);
         this.cursor = 0;
+        setTurnPhase(GamePhase.PICKING_TILES);
         setChanged();
         notifyObservers(new PlayerTurnMessage(firstPlayer.getName()));
     }
@@ -316,8 +310,15 @@ public class Game extends Observable<EventMessage> {
     }
     */
     
-    public Phase getTurnPhase() {return this.turnPhase;};
-    public void setTurnPhase(Phase turnPhase) {this.turnPhase = turnPhase;}
+    public GamePhase getTurnPhase() {return this.turnPhase;};
+    public void setTurnPhase(GamePhase turnPhase) {
+        if (turnPhase.equals(GamePhase.PLACING_TILES)) {
+            BookshelfView bookshelfView = new BookshelfView(getCurrentPlayer().getBookshelf());
+            setChanged();
+            notifyObservers(new BookshelfMessage(getCurrentPlayer().getName(), bookshelfView));
+        }
+        this.turnPhase = turnPhase;
+    }
 
     public TilePack getTilePack () { return tilePack;}
 
