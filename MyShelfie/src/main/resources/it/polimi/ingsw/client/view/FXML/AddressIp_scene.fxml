@@ -9,6 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="523.0" prefWidth="600.0" styleClass="rootPane" stylesheets="@../css/server_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.FXML.ServerSettingsController">
     <children>
@@ -47,23 +48,28 @@
                                 <Image url="@../itemtiles/Trofei1.1.png" />
                             </image>
                         </ImageView>
-                        <TextField fx:id="ipAddress" layoutX="235.0" layoutY="213.0" styleClass="rounded-input" stylesheets="@../css/server_scene.css" />
-                        <TextField fx:id="port" layoutX="235.0" layoutY="275.0" styleClass="rounded-input" stylesheets="@../css/server_scene.css" />
-                        <Label layoutX="301.0" layoutY="172.0" text="IP" textFill="WHITE">
+                        <TextField fx:id="ipAddress" layoutX="233.0" layoutY="207.0" styleClass="rounded-input" stylesheets="@../css/server_scene.css" />
+                        <TextField fx:id="port" layoutX="235.0" layoutY="255.0" styleClass="rounded-input" stylesheets="@../css/server_scene.css" />
+                        <Label layoutX="301.0" layoutY="165.0" text="IP" textFill="WHITE">
                             <font>
                                 <Font name="Libian SC Regular" size="36.0" />
                             </font>
                         </Label>
-                        <Label layoutX="288.0" layoutY="232.0" text="port" textFill="WHITE">
+                        <Label layoutX="288.0" layoutY="212.0" text="port" textFill="WHITE">
                             <font>
                                 <Font name="Libian SC Regular" size="36.0" />
                             </font>
                         </Label>
-                        <Button fx:id="tryToConnectButton" layoutX="265.0" layoutY="316.0" mnemonicParsing="false" onMouseClicked="#connect" prefHeight="34.0" prefWidth="99.0" styleClass="button" stylesheets="@../css/server_scene.css" text="Try to connect " textFill="WHITE">
+                        <Button fx:id="tryToConnectButton" layoutX="265.0" layoutY="287.0" mnemonicParsing="false" onMouseClicked="#connect" prefHeight="31.0" prefWidth="97.0" styleClass="button" stylesheets="@../css/server_scene.css" text="Try to connect " textFill="WHITE">
                             <font>
                                 <Font name="Libian SC Regular" size="11.0" />
                             </font>
                         </Button>
+                  <Text fx:id="WrongValueInputs" fill="#c31a1a" layoutX="213.0" layoutY="341.0" strokeType="OUTSIDE" strokeWidth="0.0" text="WRONG INPUTS, PLEASE REINSERT THEM" visible="false">
+                     <font>
+                        <Font name="Libian SC Regular" size="13.0" />
+                     </font>
+                  </Text>
                     </children>
                 </AnchorPane>
             </children>

@@ -3,7 +3,7 @@ package it.polimi.ingsw.observer_observable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Observable<EventMessage> {
+public abstract class Observable<EventMessage> {
 
 
     private boolean changed = false;
@@ -62,7 +62,7 @@ public class Observable<EventMessage> {
     public synchronized void deleteAllObservers() {
         observers.clear();
     }
-    protected synchronized void setChanged() {
+    public synchronized void setChanged() {
         changed = true;
     }
     protected synchronized void clearChanged() {

@@ -32,8 +32,6 @@ public class StartController extends Observable {
     private Scene scene;
     private Parent root;
 
-    public void StartGame(ActionEvent actionEvent) {
-    }
 
     public void closeJavaFxMain(){
        JavaFxMain.getWindow().close();

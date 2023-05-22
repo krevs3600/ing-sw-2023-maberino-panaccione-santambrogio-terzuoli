@@ -1,5 +1,7 @@
 package it.polimi.ingsw.network;
 
+import it.polimi.ingsw.client.view.FXML.GUI;
+import it.polimi.ingsw.client.view.FXML.View;
 import it.polimi.ingsw.model.ModelView.GameView;
 import it.polimi.ingsw.network.MessagesToClient.MessageToClient;
 import it.polimi.ingsw.network.MessagesToClient.errorMessages.ErrorMessage;
@@ -17,33 +19,26 @@ import java.rmi.server.RMIServerSocketFactory;
 import java.rmi.server.UnicastRemoteObject;
 public class ClientImplementation extends UnicastRemoteObject implements Client {
 
-    CLI view;
+    View view;
+
 
     private String nickname;
-    private Server server;
     private String gameName; // in realtà è un optional
 
-    public String getNickname() {
-        return this.nickname;
-    }
-
-    public String getGameName() {
-        return this.gameName;
-    }
-    public ClientImplementation(CLI view, Server server) throws RemoteException {
+    public ClientImplementation(View view, Server server) throws RemoteException {
         super();
         this.view = view;
-        this.server = server;
         initialize(server);
     }
 
-    public ClientImplementation(CLI view, Server server, int port) throws RemoteException {
+
+    public ClientImplementation(View view, Server server, int port) throws RemoteException {
         super(port);
         this.view = view;
         initialize(server);
     }
 
-    public ClientImplementation(CLI view, Server server, int port, RMIClientSocketFactory csf, RMIServerSocketFactory ssf) throws RemoteException {
+    public ClientImplementation(View view, Server server, int port, RMIClientSocketFactory csf, RMIServerSocketFactory ssf) throws RemoteException {
         super(port, csf, ssf);
         this.view = view;
         initialize(server);
@@ -58,7 +53,7 @@ public class ClientImplementation extends UnicastRemoteObject implements Client 
     public void onMessage(MessageToClient message) throws RemoteException {
 
 //just to set the parametres, maybe it will be a problem with concurrency (?)
-        if(message instanceof RequestMessage) {
+        if (message instanceof RequestMessage) {
             switch (message.getType()) {
                 case CREATOR_LOGIN_RESPONSE -> {
                     CreatorLoginResponseMessage creatorLoginResponseMessage = (CreatorLoginResponseMessage) message;
@@ -80,30 +75,41 @@ public class ClientImplementation extends UnicastRemoteObject implements Client 
 
 
             }
-        }
-        else if (message instanceof ErrorMessage) {
+        } else if (message instanceof ErrorMessage) {
         }
         view.showMessage(message);
     }
 
-    public void disconnect() throws RemoteException{
-        // UnicastRemoteObject.unexportObject(this, true);
-        server.update(this, new DisconnectClientMessage(this, this.getNickname()));
-        server = null;
-        view = null;
 
-    }
 
 
     private void initialize(Server server) throws RemoteException {
-        this.server = server;
-        view.addObserver((observable, eventMessage) -> {
-            try {
-                server.update(this, (EventMessage) eventMessage);
-            } catch (RemoteException e) {
-                System.err.println("Unable to update the server: " + e.getMessage() + ". Skipping the update. ");
-            }
-        });
+        if (view instanceof CLI){
+             ((CLI) view).addObserver((observable, eventMessage) -> {
+                try {
+                    server.update(this, (EventMessage) eventMessage);
+                } catch (RemoteException e) {
+                    System.err.println("Unable to update the server: " + e.getMessage() + ". Skipping the update. ");
+                }
+            });
+
+        }
+        else if (view instanceof GUI){
+            ((GUI) view).addObserver((observable, eventMessage) -> {
+                try {
+                    server.update(this, (EventMessage) eventMessage);
+                } catch (RemoteException e) {
+                    System.err.println("Unable to update the server: " + e.getMessage() + ". Skipping the update. ");
+                }
+            });
+        }
+    }
+    public String getNickname() {
+        return this.nickname;
+    }
+
+    public String getGameName() {
+        return this.gameName;
     }
 }
 

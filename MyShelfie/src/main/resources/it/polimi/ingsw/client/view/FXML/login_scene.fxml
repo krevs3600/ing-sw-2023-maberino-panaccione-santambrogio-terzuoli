@@ -59,7 +59,7 @@
                         <Font size="21.0" />
                      </font>
                   </TextField>
-                        <Button fx:id="TryToConnectButton" mnemonicParsing="false" onAction="#connect" prefHeight="59.0" prefWidth="156.0" styleClass="button" stylesheets="@../css/server_scene.css" text="OK" textFill="WHITE">
+                        <Button fx:id="OKButton" mnemonicParsing="false" onMouseClicked="#connect" prefHeight="59.0" prefWidth="156.0" styleClass="button" stylesheets="@../css/server_scene.css" text="OK" textFill="WHITE">
                             <font>
                                 <Font size="28.0" />
                             </font>

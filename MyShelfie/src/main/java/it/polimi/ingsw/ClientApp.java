@@ -1,6 +1,9 @@
 package it.polimi.ingsw;
 
+import it.polimi.ingsw.network.eventMessages.DisconnectClientMessage;
 import it.polimi.ingsw.view.cli.CLI;
+import it.polimi.ingsw.network.ClientImplementation;
+import it.polimi.ingsw.network.Client;
 
 import java.rmi.RemoteException;
 
@@ -10,19 +13,15 @@ public class ClientApp {
         cli.run();
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
-                try {
-                    if (cli.getClient()!= null) {
-                        cli.getClient().disconnect();
-                        cli.resetClient();
-                        System.out.println("Dropping connection and quitting...");
-                    } else {
-                        System.out.println("Quitting...");
-                    }
-
-                } catch (RemoteException e) {
-                    System.out.println("Error " + e);
-                    throw new RuntimeException(e);
+                if (cli.getClient()!= null) {
+                    cli.setChanged();
+                    cli.notifyObservers(new DisconnectClientMessage( cli.getClient().getNickname()));
+                    cli.resetClient();
+                    System.out.println("Dropping connection and quitting...");
+                } else {
+                    System.out.println("Quitting...");
                 }
+
             }
         });
     }

@@ -9,9 +9,12 @@ import it.polimi.ingsw.model.enumerations.Color;
 
 import it.polimi.ingsw.model.Bookshelf;
 import it.polimi.ingsw.model.CommonGoalCard.CommonGoalCard;
+import it.polimi.ingsw.model.ModelView.GameView;
 import it.polimi.ingsw.model.ModelView.SpaceView;
 import it.polimi.ingsw.model.Space;
 import it.polimi.ingsw.network.MessagesToClient.MessageToClient;
+import it.polimi.ingsw.network.eventMessages.EventMessage;
+import it.polimi.ingsw.observer_observable.Observable;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -64,6 +67,8 @@ public interface View {
 
  void gameMenu();
 
+
+    void update(GameView gameView, EventMessage eventMessage);
 
 
 }

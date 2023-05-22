@@ -34,7 +34,7 @@ public class CLI extends Observable implements View {
 
     private ClientImplementation client = null;
 
-    public Client getClient() {
+    public ClientImplementation getClient() {
         return this.client;
     }
 
@@ -260,13 +260,10 @@ public class CLI extends Observable implements View {
                 joinGame();
             }
             case 3 -> {
-                try {
-                    client.disconnect();
-                    out.println("Closing game...");
-                    System.exit(0);
-                } catch (RemoteException e) {
-                    out.println("Couldn't disconnect from server, " + e);
-                }
+                out.println("Closing game...");
+                setChanged();
+                notifyObservers(new DisconnectClientMessage( this.client.getNickname()));
+                System.exit(0);
 
             }
             default -> {

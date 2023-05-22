@@ -1,7 +1,9 @@
 package it.polimi.ingsw.client.view.FXML;
 
 
+import it.polimi.ingsw.model.ModelView.GameView;
 import it.polimi.ingsw.network.MessagesToClient.MessageToClient;
+import it.polimi.ingsw.network.eventMessages.EventMessage;
 import it.polimi.ingsw.observer_observable.Observable;
 
 import java.rmi.NotBoundException;
@@ -68,6 +70,10 @@ public class GUI extends Observable implements View {
 
     @Override
     public void gameMenu() {
+
+    }
+
+    public void update(GameView game, EventMessage eventMessage) {
 
     }
 }
