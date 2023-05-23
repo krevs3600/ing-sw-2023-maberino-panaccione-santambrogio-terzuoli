@@ -28,12 +28,30 @@ public class RMIorSocketController extends Observable {
     private Parent root;
     private GUI gui;
 
+    private boolean RMI=false;
+
+    private boolean socket=false;
+
+
+    public boolean isRMI() {
+        return RMI;
+    }
+
+    public boolean isSocket(){
+        return socket;
+    }
+
+
     public void createRMIconnection(MouseEvent mouseEvent) throws IOException {
+        RMI=true;
         gui.createConnection();
 
     }
 
     public void createsocketconnection(MouseEvent mouseEvent) {
+        socket=true;
+        gui.createConnection();
+
 
     }
 

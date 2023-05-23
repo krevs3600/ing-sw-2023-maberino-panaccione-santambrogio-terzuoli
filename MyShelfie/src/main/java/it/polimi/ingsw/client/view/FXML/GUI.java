@@ -7,6 +7,7 @@ import it.polimi.ingsw.network.MessagesToClient.MessageToClient;
 import it.polimi.ingsw.network.MessagesToClient.requestMessage.GameCreationResponseMessage;
 import it.polimi.ingsw.network.MessagesToClient.requestMessage.GameNameResponseMessage;
 import it.polimi.ingsw.network.MessagesToClient.requestMessage.LoginResponseMessage;
+import it.polimi.ingsw.network.Socket.ServerStub;
 import it.polimi.ingsw.network.eventMessages.EventMessage;
 import it.polimi.ingsw.network.eventMessages.GameCreationMessage;
 import it.polimi.ingsw.network.eventMessages.GameNameMessage;
@@ -23,6 +24,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Set;
@@ -114,6 +116,7 @@ public class GUI extends Observable implements View{
         stage.show();
         RMIorSocketController rmIorSocketController1=fxmlLoader.getController();
         rmIorSocketController1.setGui(this);
+        this.rmIorSocketController=rmIorSocketController1;
     }
     @Override
     public void createConnection()  {
@@ -153,15 +156,38 @@ public class GUI extends Observable implements View{
 
 
     public void createConnection(String address,int port) throws IOException, NotBoundException {
-        try {
-         Registry registry = LocateRegistry.getRegistry(address, port);
-         AppServer server = (AppServer) registry.lookup("MyShelfieServer");
-            this.client = new ClientImplementation(this, server.connect());
+        if(rmIorSocketController.isRMI()) {
+            try {
+                Registry registry = LocateRegistry.getRegistry(address, port);
+                AppServer server = (AppServer) registry.lookup("MyShelfieServer");
+                this.client = new ClientImplementation(this, server.connect());
 
-        } catch (NotBoundException e) {
-            System.err.println("not bound exception registry");
+            } catch (NotBoundException e) {
+                System.err.println("not bound exception registry");
+            }
+        } else if (rmIorSocketController.isSocket()) {
+            port = (port == 1243) ? 1244 : port;
+            ServerStub serverStub = new ServerStub(address, port);
+            client = new ClientImplementation(this, serverStub);
+            serverStub.register(client);
+            new Thread(() -> {
+                while(true) {
+                    try {
+                        serverStub.receive(client);
+                    } catch (RemoteException e) {
+                        System.err.println("Cannot receive from server. Stopping...");
+
+                        try {
+                            serverStub.close();
+                        } catch (RemoteException ex) {
+                            System.err.println("Cannot close connection with server. Halting...");
+                            // todo: bisogna far comparire dei pop-up forse oppure chiudere totalmente lo stage
+                        }
+                        System.exit(1);
+                    }
+                }
+            }).start();
         }
-
 
         URL url = null;
         try {
@@ -274,9 +300,7 @@ public class GUI extends Observable implements View{
                     this.createorJoinGameController=createorJoinGameController;
 
 
-                   // GameNameController GameNameController = fxmlLoader.getController();
-                   // GameNameController.setGui(this);
-                   // this.gameNameController = GameNameController;
+
 
                     Platform.runLater(() -> stage.setScene(scene));
                     stage.show();
