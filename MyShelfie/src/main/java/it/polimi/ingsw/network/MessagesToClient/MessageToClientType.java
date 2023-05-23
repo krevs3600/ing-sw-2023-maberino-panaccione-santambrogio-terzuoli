@@ -11,12 +11,15 @@ public enum MessageToClientType {
     GAME_NAME_RESPONSE,
     CREATOR_LOGIN_RESPONSE,
 
-    // error messages types
-    JOIN_GAME_ERROR,
-
     WAIT_PLAYERS,
     ILLEGAL_POSITION, SCORE,
     PLAYER_OFFLINE,
-    KILL_GAME;
+    KILL_GAME,
+
+    // error messages types
+    JOIN_GAME_ERROR,
+    NOT_ENOUGH_INSERTABLE_TILES,
+    NOT_ENOUGH_INSERTABLE_TILES_IN_COLUMN,
+    UPPER_BOUND_TILEPACK;
 
 }

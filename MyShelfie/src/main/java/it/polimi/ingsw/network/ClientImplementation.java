@@ -108,6 +108,7 @@ public class ClientImplementation extends UnicastRemoteObject implements Client 
             });
         }
     }
+
     public String getNickname() {
         return this.nickname;
     }

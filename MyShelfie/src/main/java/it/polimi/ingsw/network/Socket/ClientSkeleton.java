@@ -70,6 +70,7 @@ public class ClientSkeleton implements Client {
             throw new RemoteException("Cannot send message " + message.getType());
         }
     }
+
     public void disconnect () throws RemoteException{}
 
     /*

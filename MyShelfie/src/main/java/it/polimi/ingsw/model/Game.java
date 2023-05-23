@@ -141,7 +141,6 @@ public class Game extends Observable<EventMessage> {
         for(Player player : subscribers){
             player.setStatus(PlayerStatus.INACTIVE);
         }
-        PlayerView playerView = new PlayerView(winner);
         setChanged();
         notifyObservers(new WinGameMessage(new PlayerView(winner)));
         // maybe call to a method to show results

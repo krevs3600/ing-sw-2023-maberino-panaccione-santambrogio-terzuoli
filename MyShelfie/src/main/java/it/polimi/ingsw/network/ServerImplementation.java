@@ -44,6 +44,16 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
         Game game = playerGame.get(client).getGame();
         game.addObserver((observer, eventMessage) -> {
             try {
+                /*if (eventMessage instanceof WinGameMessage) {
+                    for (Map.Entry<Client, GameController> entry : playerGame.entrySet()) {
+                        if (client.equals(entry.getKey())) {
+                            playerGame.remove(entry.getKey(), entry.getValue());
+                            currentGames.remove(game.getGameName(), entry.getValue());
+                        }
+                    }
+                }
+
+                 */
                 client.update(new GameView(game), (EventMessage) eventMessage);
             } catch (RemoteException e) {
                 System.err.println("Unable to update the client: " + e.getMessage() + ". Skipping the update");
