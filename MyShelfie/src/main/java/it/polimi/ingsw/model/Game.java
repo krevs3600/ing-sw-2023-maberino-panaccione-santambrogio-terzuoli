@@ -87,8 +87,8 @@ public class Game extends Observable<EventMessage> {
 
     public ItemTile drawTile(Position position) throws IllegalArgumentException{
         ItemTile itemTile = getLivingRoomBoard().getSpace(position).drawTile();
-        setChanged();
-        notifyObservers(new TilePositionMessage(getCurrentPlayer().getName(), (position)));
+        //setChanged();
+        //notifyObservers(new TilePositionMessage(getCurrentPlayer().getName(), (position)));
         return itemTile;
     }
 
@@ -97,7 +97,7 @@ public class Game extends Observable<EventMessage> {
         this.getTilePack().insertTile(itemTile);
         TilePackView tilePackView = new TilePackView(this.getTilePack());
         setChanged();
-        notifyObservers(new TilePackMessage(getCurrentPlayer().getName(), (tilePackView)));
+        notifyObservers(new TilePackMessage(getCurrentPlayer().getName(), tilePackView));
     }
 
     /**

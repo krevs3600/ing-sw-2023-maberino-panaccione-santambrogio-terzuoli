@@ -5,6 +5,7 @@ import it.polimi.ingsw.client.view.FXML.View;
 import it.polimi.ingsw.model.ModelView.CommonGoalCardView;
 import it.polimi.ingsw.model.ModelView.GameView;
 import it.polimi.ingsw.model.ModelView.PlayerView;
+import it.polimi.ingsw.model.TilePack;
 import it.polimi.ingsw.model.utils.GamePhase;
 import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.network.Client;
@@ -568,12 +569,17 @@ public class CLI extends Observable implements View {
                  */
             }
 
+            /*
             case TILE_POSITION -> {
-                out.println("\n-----------------------------------------------------------------------\n LIVING ROOM BOARD:");
-                out.println(game.getLivingRoomBoard().toString());
+
             }
 
+             */
+
             case TILE_PACK -> {
+                //TilePackMessage tilePackMessage = (TilePackMessage) eventMessage;
+                out.println("\n-----------------------------------------------------------------------\n LIVING ROOM BOARD:");
+                out.println(game.getLivingRoomBoard().toString());
                 if (activeTurn){
                     out.println("\n-----------------------------------------------------------------------\n TILE PACK:");
                     out.println(game.getTilePack().toString());
