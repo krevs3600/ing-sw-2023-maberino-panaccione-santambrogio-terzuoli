@@ -149,9 +149,7 @@ public class GameController {
                         ItemTile itemTile = game.drawTile(tilePositionMessage.getPosition());
                         game.getBuffer().add(tilePositionMessage.getPosition());
                         game.insertTileInTilePack(itemTile);
-                    }
-
-                    else if (game.getBuffer().size() == 1) {
+                    } else if (game.getBuffer().size() == 1) {
 
                         if (game.getBuffer().get(0).isAdjacent(tilePositionMessage.getPosition())) {
                             if (tilePositionMessage.getPosition().getColumn() == game.getBuffer().get(0).getColumn()) {
@@ -162,12 +160,10 @@ public class GameController {
                             ItemTile itemTile = game.drawTile(tilePositionMessage.getPosition());
                             game.getBuffer().add(tilePositionMessage.getPosition());
                             game.insertTileInTilePack(itemTile);
-                        }
-                        else {
+                        } else {
                             client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), new LivingRoomBoardView(game.getLivingRoomBoard())));
                         }
-                    }
-                    else if (game.getBuffer().size() == 2) {
+                    } else if (game.getBuffer().size() == 2) {
                         boolean fairPosition = false;
                         for (Position pos : game.getBuffer()) {
                             if (pos.isAdjacent(tilePositionMessage.getPosition())) {
@@ -178,21 +174,32 @@ public class GameController {
                         if (fairPosition) {
 
                             if (game.isAlongSideColumn()) {
-                                if (tilePositionMessage.getPosition().getColumn() != game.getBuffer().get(0).getColumn()) {
+                                if (tilePositionMessage.getPosition().getColumn() == game.getBuffer().get(0).getColumn()) {
+                                    ItemTile itemTile = game.drawTile(tilePositionMessage.getPosition());
+                                    game.getBuffer().add(tilePositionMessage.getPosition());
+                                    game.insertTileInTilePack(itemTile);
                                     // throw new IllegalAccessError("Space forbidden or empty");
+
+                                }
+                                else {
                                     client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), new LivingRoomBoardView(game.getLivingRoomBoard())));
                                 }
                             } else if (game.isAlongSideRow()) {
-                                if (tilePositionMessage.getPosition().getRow() != game.getBuffer().get(0).getRow()) {
+                                if (tilePositionMessage.getPosition().getRow() == game.getBuffer().get(0).getRow()) {
+                                    ItemTile itemTile = game.drawTile(tilePositionMessage.getPosition());
+                                    game.getBuffer().add(tilePositionMessage.getPosition());
+                                    game.insertTileInTilePack(itemTile);
                                     // throw new IllegalAccessError("Space forbidden or empty");
+                                }
+                                else {
                                     client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), new LivingRoomBoardView(game.getLivingRoomBoard())));
                                 }
                             }
-                            ItemTile itemTile = game.drawTile(tilePositionMessage.getPosition());
-                            game.getBuffer().add(tilePositionMessage.getPosition());
-                            game.insertTileInTilePack(itemTile);
+
+                        } else {
+                            client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), new LivingRoomBoardView(game.getLivingRoomBoard())));
+                            //throw new IllegalAccessError("Space forbidden or empty")
                         }
-                        client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), new LivingRoomBoardView(game.getLivingRoomBoard())));
                     } else {
                         client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), new LivingRoomBoardView(game.getLivingRoomBoard())));
                         //throw new IllegalAccessError("Space forbidden or empty");
@@ -242,6 +249,19 @@ public class GameController {
                 computeScoreMidGame();
 
                 if (game.getCurrentPlayer().getBookshelf().isFull()) {
+                    if (game.getCurrentPlayer().equals(game.getLastPlayer())){
+                        //TODO: show always the score to the clients, updating it when needed
+                        Player winner = setPlayersScoreEndGame();
+                        /*for (Client c : getClients()){
+                            // todo controllare messaggi e conto punteggi e capire come mandarli
+                            Player p = game.getSubscribers().stream().filter(x -> x.getName().equals(eventMessage.getNickname())).toList().get(0);
+                            c.onMessage(new ScoreMessage(eventMessage.getNickname(), p.getScore()));
+                        }
+
+                         */
+                        //TODO: create a new message specific to the case when the last player in the rotation fills the bookshelf
+                        game.endGame(winner);
+                    }
                     game.setFinalTurn();
                 }
 
@@ -260,6 +280,9 @@ public class GameController {
                     }
                 }
                 if (!game.isEnded()){
+                    if(game.getLivingRoomBoard().getAllFree().size()==game.getLivingRoomBoard().getDrawableTiles().size()) {
+                        game.refillLivingRoomBoard();
+                    }
                     game.setTurnPhase(GamePhase.PICKING_TILES);
                     game.changeTurn();
                 }

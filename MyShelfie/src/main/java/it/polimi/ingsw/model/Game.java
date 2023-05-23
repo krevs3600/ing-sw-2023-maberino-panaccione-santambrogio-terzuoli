@@ -182,9 +182,9 @@ public class Game extends Observable<EventMessage> {
      */
     public void refillLivingRoomBoard(){
         getLivingRoomBoard().refill();
-        setChanged();
-        LivingRoomBoardView livingRoomBoardView = new LivingRoomBoardView(getLivingRoomBoard());
-        notifyObservers(new BoardMessage(getCurrentPlayer().getName(), livingRoomBoardView));
+        //setChanged();
+        //LivingRoomBoardView livingRoomBoardView = new LivingRoomBoardView(getLivingRoomBoard());
+        //notifyObservers(new BoardMessage(getCurrentPlayer().getName(), livingRoomBoardView));
     }
 
     /**
@@ -324,11 +324,11 @@ public class Game extends Observable<EventMessage> {
 
     //TODO: change getSubscribers into getCurrentPlayer
     public void setColumnChoice (int columnChoice) throws IndexOutOfBoundsException {
-        if (columnChoice >= 0 && columnChoice < getSubscribers().get(0).getBookshelf().getMaxWidth()) this.columnChoice = columnChoice;
+        if (columnChoice >= 0 && columnChoice < getCurrentPlayer().getBookshelf().getMaxWidth()) this.columnChoice = columnChoice;
         else throw new IndexOutOfBoundsException("invalid column, please choose another one;");
         setChanged();
         // BookshelfView bookshelfView = new BookshelfView(getSubscribers().get(0).getBookshelf());
-        notifyObservers(new InsertRequestMessage(getSubscribers().get(0).getName(), columnChoice));
+        notifyObservers(new InsertRequestMessage(getCurrentPlayer().getName(), columnChoice));
     }
 
     public int getColumnChoice() {
@@ -339,9 +339,9 @@ public class Game extends Observable<EventMessage> {
     public void setPlayerScore(int score, Player player) {
 
         player.setScore(score);
-        setChanged();
-        PlayerView playerView = new PlayerView(player);
-        notifyObservers(new ScoreMessage(playerView.getName(), playerView.getScore()));
+        //setChanged();
+        //PlayerView playerView = new PlayerView(player);
+        //notifyObservers(new ScoreMessage(playerView.getName(), playerView.getScore()));
     }
     public int getCurrentPlayerScore () {return this.currentPlayerScore;}
 

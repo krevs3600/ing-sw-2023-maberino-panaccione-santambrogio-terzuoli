@@ -389,7 +389,7 @@ public class CLI extends Observable implements View {
             case LOGIN_RESPONSE -> {
                 LoginResponseMessage loginResponseMessage = (LoginResponseMessage) message;
                 if (loginResponseMessage.isValidNickname()) {
-                    System.out.println("\nAvailable nickname " + this.client.getNickname() + " :)");
+                    System.out.println("\nAvailable nickname " + this.client.getNickname() + " 😊");
                     gameMenu();
                     //showGameNamesList(loginResponseMessage.getAvailableGames());
 
@@ -494,10 +494,7 @@ public class CLI extends Observable implements View {
             case PLAYER_TURN -> {
                 if (this.client.getNickname().equals(eventMessage.getNickname())){
                     activeTurn = true;
-                    out.println("\n-----------------------------------------------------------------------\n YOUR PERSONAL GOAL CARD:");
-                    out.println(game.getCurrentPlayer().getPersonalGoalCard().toString());
-                    out.println("\n-----------------------------------------------------------------------\n");
-                    out.println(this.client.getNickname() + " is your turn!");
+                    out.println("\n" + this.client.getNickname() + " is your turn!");
                     boolean stopPickingTiles = false;
                     out.println("\nPlease enter a position: ");
                     out.print("r: ");
@@ -522,12 +519,20 @@ public class CLI extends Observable implements View {
                     out.println("\n-----------------------------------------------------------------------\n" + playerView.getName() + "'s BOOKSHELF:");
                     out.println(playerView.getBookshelf().toString());
                 }
+                for (PlayerView playerView: game.getSubscribers()) {
+                    if (this.client.getNickname().equals(playerView.getName())) {
+                        out.println("\n-----------------------------------------------------------------------\n YOUR PERSONAL GOAL CARD:");
+                        out.println(playerView.getPersonalGoalCard().toString());
+                        out.println("\n-----------------------------------------------------------------------\n");
+                    }
+                }
                 int i=0;
                 for (CommonGoalCardView commonGoalCardView: game.getLivingRoomBoard().getCommonGoalCards()) {
                     i++;
                     out.println("\n-----------------------------------------------------------------------\n");
                     out.println("Common goal card " + i + ":\n" + commonGoalCardView.toString());
                 }
+
                 /*
                 out.println(game.getSubscribers().get(0).getName() + "'s personal goal card: \n" + game.getSubscribers().get(0).getPersonalGoalCard().toString());
                 out.println("\n-----------------------------------------------------------------------\n");
@@ -615,14 +620,16 @@ public class CLI extends Observable implements View {
             }
 
             case BOOKSHELF -> {
-                out.println("\n-----------------------------------------------------------------------\n Your BOOKSHELF:");
-                out.println(game.getCurrentPlayer().getBookshelf().toString());
-                out.println("\n-----------------------------------------------------------------------\n");
-                out.print("In which column you want to insert your item tiles?\n");
-                int column = in.nextInt();
-                in.nextLine();
-                setChanged();
-                notifyObservers(new BookshelfColumnMessage(eventMessage.getNickname(), column));
+                if (activeTurn) {
+                    out.println("\n-----------------------------------------------------------------------\n Your BOOKSHELF:");
+                    out.println(game.getCurrentPlayer().getBookshelf().toString());
+                    out.println("\n-----------------------------------------------------------------------\n");
+                    out.print("In which column you want to insert your item tiles?\n");
+                    int column = in.nextInt();
+                    in.nextLine();
+                    setChanged();
+                    notifyObservers(new BookshelfColumnMessage(eventMessage.getNickname(), column));
+                }
             }
 
             case INSERTION_REQUEST -> {
