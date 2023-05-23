@@ -22,6 +22,10 @@ public class GameNameListController {
     @FXML
     public Label InvalidGameChoice;
 
+   @FXML
+   public String gameToJoin;
+
+
     public void setGui(GUI gui){
         this.gui=gui;
 
@@ -32,6 +36,9 @@ public class GameNameListController {
     public void SendGameNameChoise(MouseEvent mouseEvent) {
         // TODO: controllo sull'input vuoto
        String gameToJoin= GameNameTextField.getText();
+       this.gameToJoin=gameToJoin;
+       gui.chosenGame(gameToJoin); // oppure farlo senza input che prende il campo dopo aver fatto l'uguaglianza
+
 
 
     }

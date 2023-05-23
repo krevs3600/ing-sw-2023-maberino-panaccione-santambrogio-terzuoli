@@ -128,6 +128,7 @@ public class CLI extends Observable implements View {
             if (!connectionType.equals("s") && !connectionType.equals("r")) System.err.println("\ninvalid choice");
         } while (!connectionType.equals("s") && !connectionType.equals("r"));
         return connectionType;
+
     }
 
     public String askServerAddress(){
@@ -406,7 +407,9 @@ public class CLI extends Observable implements View {
             case JOIN_GAME_RESPONSE -> {
                 JoinGameResponseMessage joinGameResponseMessage= (JoinGameResponseMessage) message;
                 showGameNamesList(joinGameResponseMessage.getAvailableGamesInLobby());
+
             }
+
             case JOIN_GAME_ERROR -> {
                 JoinErrorMessage joinErrorMessage = (JoinErrorMessage) message;
                 System.err.println(joinErrorMessage.getErrorMessage());
