@@ -22,20 +22,21 @@ public class TilePackView implements Serializable {
 
     @Override
     public String toString(){
-        String tilePack = "";
+        String tilePackCli = "";
         String position = "  ";
-        for (int i=0; i<3; i++){
+        for (int i=0; i<tilePack.size(); i++){
             position = position.concat(String.valueOf(i)).concat("   ");
         }
-        tilePack = tilePack.concat("[");
-        for (int i=0; i<3;i++){
-            tilePack = tilePack.concat(getTiles().size() > i ? this.getTiles().get(i).toString() : "   ");
-            if (i==2){
-                tilePack = tilePack.concat("]");
+
+        tilePackCli = tilePackCli.concat("[");
+        for (int i=0; i<tilePack.size();i++){
+            tilePackCli = tilePackCli.concat(getTiles().size() > i ? this.getTiles().get(i).toString() : "   ");
+            if (i < tilePack.size()-1){
+                tilePackCli = tilePackCli.concat(",");
             } else {
-                tilePack = tilePack.concat(",");
+                tilePackCli = tilePackCli.concat("]");
             }
         }
-        return position.concat("\n").concat(tilePack);
+        return position.concat("\n").concat(tilePackCli);
     }
 }
