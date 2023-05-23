@@ -47,7 +47,7 @@ public class ClientSkeleton implements Client {
         }
     }
 
-    public void receive(Server server) throws RemoteException {
+    public void receive(Server server) throws IOException {
         EventMessage eventMessage;
         try {
             eventMessage = (EventMessage) ois.readObject();

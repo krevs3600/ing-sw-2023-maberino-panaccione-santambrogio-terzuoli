@@ -13,5 +13,18 @@ import java.io.IOException;
 import java.net.URL;
 
 public class LobbyController {
+
+    @FXML
     public Label numPinLobby;
+
+    @FXML
+    public Label NumberOfMissingPlayers;
+
+    @FXML
+    public Label PlayerJoinedGame;
+    private GUI gui;
+
+    public void setGui(GUI gui) {
+        this.gui=gui;
+    }
 }

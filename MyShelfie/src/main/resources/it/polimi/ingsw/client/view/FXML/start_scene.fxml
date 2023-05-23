@@ -26,15 +26,7 @@
                <children>
                   <VBox prefHeight="409.0" prefWidth="575.0">
                      <children>
-                              <Button fx:id="playBtn" alignment="CENTER" mnemonicParsing="false" onAction="#switchToConnection" prefHeight="90.0" prefWidth="575.0" styleClass="playBtn" stylesheets="@../css/start_scene.css" text="Create a new game" textAlignment="CENTER" textFill="#fffcfc">
-                                  <font>
-                                      <Font name="Libian SC Regular" size="40.0" />
-                                  </font>
-                           <VBox.margin>
-                              <Insets bottom="30.0" />
-                           </VBox.margin>
-                        </Button>
-                              <Button fx:id="quitBtn" mnemonicParsing="false" onMouseClicked="#JoinGame" prefHeight="90.0" prefWidth="575.0" styleClass="joinBtn" stylesheets="@../css/start_scene.css" text="Join a game" textAlignment="CENTER" textFill="#fffcfc">
+                              <Button fx:id="playBtn" alignment="CENTER" mnemonicParsing="false" onAction="#switchToConnection" prefHeight="90.0" prefWidth="575.0" styleClass="playBtn" stylesheets="@../css/start_scene.css" text="Start " textAlignment="CENTER" textFill="#fffcfc">
                                   <font>
                                       <Font name="Libian SC Regular" size="40.0" />
                                   </font>

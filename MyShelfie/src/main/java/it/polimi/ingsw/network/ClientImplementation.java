@@ -12,6 +12,7 @@ import it.polimi.ingsw.network.MessagesToClient.requestMessage.RequestMessage;
 import it.polimi.ingsw.network.eventMessages.EventMessage;
 import it.polimi.ingsw.view.cli.CLI;
 
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.RMIClientSocketFactory;
 import java.rmi.server.RMIServerSocketFactory;
@@ -49,7 +50,7 @@ public class ClientImplementation extends UnicastRemoteObject implements Client 
         view.update(gameView, eventMessage);
     }
 
-    public void onMessage(MessageToClient message) throws RemoteException {
+    public void onMessage(MessageToClient message) throws IOException {
 
 //just to set the parametres, maybe it will be a problem with concurrency (?)
         if (message instanceof RequestMessage) {
@@ -89,8 +90,10 @@ public class ClientImplementation extends UnicastRemoteObject implements Client 
                     server.update(this, (EventMessage) eventMessage);
                 } catch (RemoteException e) {
                     System.err.println("Unable to update the server: " + e.getMessage() + ". Skipping the update. ");
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
-            });
+             });
 
         }
         else if (view instanceof GUI){
@@ -99,6 +102,8 @@ public class ClientImplementation extends UnicastRemoteObject implements Client 
                     server.update(this, (EventMessage) eventMessage);
                 } catch (RemoteException e) {
                     System.err.println("Unable to update the server: " + e.getMessage() + ". Skipping the update. ");
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
             });
         }

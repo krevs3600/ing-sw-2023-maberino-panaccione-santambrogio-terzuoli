@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="761.0" prefWidth="1510.0" styleClass="rootPane" stylesheets="@../css/livingBoard_scene.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.FXML.LivingBoardController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="761.0" prefWidth="1510.0" styleClass="rootPane" stylesheets="@../css/livingBoard_scene.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <BorderPane prefHeight="785.0" prefWidth="1512.0" style="-fx-border-width: 10;">
             <center>
@@ -45,18 +45,12 @@
                         <StackPane layoutX="517.0" layoutY="460.0" prefHeight="61.0" prefWidth="64.0" rotate="7.6">
                            <children>
                               <ImageView fitHeight="65.0" fitWidth="62.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../scoring%20tokens/end%20game.jpg" />
-                                 </image>
                               </ImageView>
                            </children>
                         </StackPane>
                         <AnchorPane layoutX="12.0" layoutY="107.0" prefHeight="446.0" prefWidth="597.0" visible="false">
                            <children>
                               <ImageView fitHeight="431.0" fitWidth="499.0" layoutX="69.0" layoutY="-10.0">
-                                 <image>
-                                    <Image url="@../scoring%20tokens/scoring_back_EMPTY.jpg" />
-                                 </image>
                               </ImageView>
                               <Text fill="#e8c77acf" layoutX="158.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Congratulations you have reached the first/second common goal! You will now receive a scoring token.. Keep it up!" wrappingWidth="344.74981689453125">
                                  <font>
@@ -78,29 +72,13 @@
                                 <AnchorPane prefHeight="297.0" prefWidth="388.0">
                                     <children>
                                         <ImageView fx:id="commonGoalCardView1" fitHeight="175.0" fitWidth="269.0" layoutX="34.0" layoutY="136.0" pickOnBounds="true" preserveRatio="true">
-                                            <image>
-                                                <Image url="@../common%20goal%20cards/12.jpg" />
-                                            </image>
+
                                         </ImageView>
                                         <StackPane layoutX="196.0" layoutY="182.0" prefHeight="62.0" prefWidth="62.0" rotate="-81.5">
                                             <rotationAxis>
                                                 <Point3D z="-1.0" />
                                             </rotationAxis>
                                             <children>
-                                                <ImageView fx:id="First_2" fitHeight="67.0" fitWidth="67.0" onMouseClicked="#scoringTokenClicked" pickOnBounds="true" preserveRatio="true" rotate="-90.0">
-                                       <image>
-                                          <Image url="@../scoring%20tokens/scoring_2.jpg" />
-                                       </image></ImageView>
-                                                <ImageView fx:id="First_4" fitHeight="67.0" fitWidth="67.0" onMouseClicked="#scoringTokenClicked" pickOnBounds="true" preserveRatio="true" rotate="-90.0">
-                                       <image>
-                                          <Image url="@../scoring%20tokens/scoring_4.jpg" />
-                                       </image>
-                                    </ImageView>
-                                                <ImageView fx:id="First_6" fitHeight="67.0" fitWidth="67.0" onMouseClicked="#scoringTokenClicked" pickOnBounds="true" preserveRatio="true" rotate="-90.0" />
-                                                <ImageView fx:id="First_8" fitHeight="67.0" fitWidth="67.0" onMouseClicked="#scoringTokenClicked" pickOnBounds="true" preserveRatio="true" rotate="-90.0">
-                                       <image>
-                                          <Image url="@../scoring%20tokens/scoring_8.jpg" />
-                                       </image></ImageView>
                                             </children>
                                         </StackPane>
                                         <Label layoutX="42.0" layoutY="19.0" prefHeight="79.0" prefWidth="318.0" text="Common Goal Cards" textFill="#fffdfd">
@@ -117,32 +95,9 @@
                                 <AnchorPane prefHeight="220.0" prefWidth="374.0">
                                     <children>
                                         <ImageView fx:id="commonGoalCardView2" fitHeight="175.0" fitWidth="269.0" layoutX="36.0" layoutY="35.0" pickOnBounds="true" preserveRatio="true">
-                                            <image>
-                                                <Image url="@../common%20goal%20cards/9.jpg" />
-                                            </image>
                                         </ImageView>
                               <StackPane layoutX="197.0" layoutY="82.0" prefHeight="67.0" prefWidth="67.0" rotate="-7.6">
                                  <children>
-                                    <ImageView fx:id="Second_2" fitHeight="67.0" fitWidth="67.0" onMouseClicked="#scoringTokenClicked" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../scoring%20tokens/scoring_2.jpg" />
-                                       </image>
-                                    </ImageView>
-                                    <ImageView fx:id="Second_4" fitHeight="67.0" fitWidth="67.0" onMouseClicked="#scoringTokenClicked" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../scoring%20tokens/scoring_4.jpg" />
-                                       </image>
-                                    </ImageView>
-                                    <ImageView fx:id="Second_6" fitHeight="67.0" fitWidth="67.0" onMouseClicked="#scoringTokenClicked" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../scoring%20tokens/scoring_6.jpg" />
-                                       </image>
-                                    </ImageView>
-                                    <ImageView fx:id="Second_8" fitHeight="67.0" fitWidth="67.0" onMouseClicked="#scoringTokenClicked" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../scoring%20tokens/scoring_8.jpg" />
-                                       </image>
-                                    </ImageView>
                                  </children>
                               </StackPane>
                                     </children>
@@ -223,9 +178,6 @@
                                       </ImageView>
                            </children></AnchorPane>
                                 <ImageView fx:id="personalCard" fitHeight="200.0" fitWidth="143.0" layoutX="208.0" layoutY="566.0">
-                                    <image>
-                                        <Image url="@../personal%20goal%20cards/Personal_Goals3.png" />
-                                    </image>
                                 </ImageView>
                                 <Group fx:id="columnOptions">
                                     <RadioButton fx:id="Column1" layoutX="141.0" layoutY="161.0" mnemonicParsing="false">

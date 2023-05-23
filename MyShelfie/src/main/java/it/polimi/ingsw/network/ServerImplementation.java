@@ -9,6 +9,7 @@ import it.polimi.ingsw.network.MessagesToClient.errorMessages.JoinErrorMessage;
 import it.polimi.ingsw.network.MessagesToClient.requestMessage.*;
 import it.polimi.ingsw.network.eventMessages.*;
 
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.RMIClientSocketFactory;
 import java.rmi.server.RMIServerSocketFactory;
@@ -51,7 +52,7 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
     }
 
     @Override
-    public void update(Client client, EventMessage eventMessage) throws RemoteException {
+    public void update(Client client, EventMessage eventMessage) throws IOException {
 
         switch (eventMessage.getType()) {
             case NICKNAME -> {

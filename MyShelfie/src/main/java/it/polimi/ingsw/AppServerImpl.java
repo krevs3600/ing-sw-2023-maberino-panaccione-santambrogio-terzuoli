@@ -86,6 +86,8 @@ public class AppServerImpl extends UnicastRemoteObject implements AppServer
                         }
                     } catch (RemoteException e) {
                         System.err.println("Cannot receive from client. Closing this connection...");
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
                     } finally {
                         try {
                             socket.close();

@@ -54,6 +54,7 @@ public class StartController extends Observable {
 
 
     public void JoinGame(MouseEvent event) throws IOException{
+        gui.askNickname();
 
     }
 

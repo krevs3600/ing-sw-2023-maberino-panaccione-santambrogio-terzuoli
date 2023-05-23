@@ -42,7 +42,7 @@ public class GameController {
     }
 
 
-    public void update(Client client, EventMessage eventMessage) throws IllegalArgumentException, RemoteException {
+    public void update(Client client, EventMessage eventMessage) throws IllegalArgumentException, IOException {
         if (!clients.contains(client)) {
             System.err.println("Discarding event from " + client);
             return;

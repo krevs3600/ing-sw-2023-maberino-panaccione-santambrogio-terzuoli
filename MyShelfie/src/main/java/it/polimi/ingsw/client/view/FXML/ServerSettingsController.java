@@ -51,8 +51,16 @@ public void setGui(GUI gui) {
         this.chosenport=Integer.parseInt(port.getText());
 
 
-        //TODO: check for empty value and for string instead of integer value
+        //TODO: check for empty value and for string instead of integer v
+        // alue
       if(isValidIPAddress(address) && isValidPort(chosenport)) {
+        //  try {
+        //      Registry registry = LocateRegistry.getRegistry(address, chosenport);
+        //      AppServer server = (AppServer) registry.lookup("MyShelfieServer");
+        //      this.client = new ClientImplementation(gui, server.connect());
+        //      gui.setClient(client);
+        //  }
+
           gui.createConnection(address,chosenport);
 
 
