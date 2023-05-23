@@ -50,6 +50,8 @@ public class GUI extends Observable implements View{
     private GameNameController gameNameController;
     private NumberOfPlayersController numberOfPlayersController;
 
+    private GameNameListController gameNameListController;
+
     public Stage getStage() {
         return stage;
     }
@@ -401,6 +403,7 @@ public class GUI extends Observable implements View{
         return false;
     }
 
+    // TODO: mettere tutto in un metodo che cambia il root Pane in base al path che do in input
     @Override
     public void gameMenu() {
         if (createorJoinGameController.getCreateGame()) {
@@ -424,16 +427,41 @@ public class GUI extends Observable implements View{
             }
 
 
-
-
             GameNameController GameNameController = fxmlLoader.getController();
             GameNameController.setGui(this);
             this.gameNameController = GameNameController;
 
             Platform.runLater(() -> stage.setScene(scene));
             stage.show();
-        }
+        } else if (createorJoinGameController.getJoinGameb()) { URL url = null;
+            try {
+                url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/GameNameList_scene.fxml/").toURI().toURL();
+            } catch (MalformedURLException e) {
+                throw new RuntimeException(e);
+            }
+            FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("GameNameList_scene.fxml"));
+            try {
+                root = FXMLLoader.load(url);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            ;
+            try {
+                scene = new Scene(fxmlLoader.load());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
 
+
+            GameNameListController gameNameListController = fxmlLoader.getController();
+            gameNameListController.setGui(this);
+            this.gameNameListController=gameNameListController;
+
+            Platform.runLater(() -> stage.setScene(scene));
+            stage.show();
+
+
+        }
     }
 
     @Override

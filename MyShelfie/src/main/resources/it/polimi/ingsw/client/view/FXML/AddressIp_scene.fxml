@@ -48,8 +48,8 @@
                                 <Image url="@../itemtiles/Trofei1.1.png" />
                             </image>
                         </ImageView>
-                        <TextField fx:id="ipAddress" layoutX="233.0" layoutY="207.0" styleClass="rounded-input" stylesheets="@../css/server_scene.css" />
-                        <TextField fx:id="port" layoutX="235.0" layoutY="255.0" styleClass="rounded-input" stylesheets="@../css/server_scene.css" />
+                        <TextField fx:id="ipAddress" layoutX="233.0" layoutY="207.0" promptText="                127.0.0.1" styleClass="rounded-input" stylesheets="@../css/server_scene.css" />
+                        <TextField fx:id="port" layoutX="235.0" layoutY="255.0" promptText="                   1243" styleClass="rounded-input" stylesheets="@../css/server_scene.css" />
                         <Label layoutX="301.0" layoutY="165.0" text="IP" textFill="WHITE">
                             <font>
                                 <Font name="Libian SC Regular" size="36.0" />

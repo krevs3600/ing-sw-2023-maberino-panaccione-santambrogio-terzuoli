@@ -15,12 +15,18 @@ public class CreateorJoinGameController {
     @FXML
     public Button EXIT;
 
+    private boolean joinGameb=false;
 
     private boolean createGame=false;
 
 
     public boolean getCreateGame(){
         return createGame;
+    }
+
+
+    public boolean getJoinGameb(){
+        return  this.joinGameb;
     }
     private GUI gui;
    public void setGui(GUI gui){
@@ -31,9 +37,13 @@ public class CreateorJoinGameController {
        createGame=true;
        gui.gameMenu();
 
+
     }
 
     public void JoinGame(MouseEvent mouseEvent) {
+       joinGameb=true;
+       gui.gameMenu();
+
 
     }
 
