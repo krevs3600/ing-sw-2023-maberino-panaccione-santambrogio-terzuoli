@@ -42,6 +42,7 @@ public class ClientSkeleton implements Client {
         }
         try {
             oos.writeObject(eventMessage);
+            oos.reset();
         } catch (IOException e) {
             throw new RemoteException("Cannot send event", e);
         }
@@ -62,6 +63,7 @@ public class ClientSkeleton implements Client {
     public void onMessage (MessageToClient message) throws RemoteException{
         try {
             oos.writeObject(message);
+            oos.reset();
         } catch (IOException e) {
             throw new RemoteException("Cannot send message " + message.getType());
         }

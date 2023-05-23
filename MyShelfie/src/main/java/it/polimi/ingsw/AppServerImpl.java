@@ -80,7 +80,7 @@ public class AppServerImpl extends UnicastRemoteObject implements AppServer
                     try {
                         ClientSkeleton clientSkeleton = new ClientSkeleton(socket);
                         Server server = getInstance().connect();
-                        // server.register(clientSkeleton); questo però è il register di serverimplementation che prende game
+                        //server.register(clientSkeleton);
                         while (true) {
                             clientSkeleton.receive(server);
                         }
