@@ -436,23 +436,27 @@ public class GUI extends Observable implements View{
                      throw new RuntimeException(e);
                  }
 
+                GameNameListController gameNameListController = fxmlLoader.getController();
+                gameNameListController.setGui(this);
+                this.gameNameListController=gameNameListController;
 
-                 GameNameListController gameNameListController = fxmlLoader.getController();
-                 gameNameListController.setGui(this);
-                 this.gameNameListController=gameNameListController;
+                Platform.runLater(() -> stage.setScene(scene));
+                stage.show();
 
-                 Platform.runLater(() -> stage.setScene(scene));
-                 stage.show();
+
+
+
             }
 
             case JOIN_GAME_ERROR -> {
                 JoinErrorMessage joinErrorMessage = (JoinErrorMessage) message;
+                // pop up not available games in the lobby
                 this.createorJoinGameController.NoGamesInLobby.setVisible(true);
                 this.createorJoinGameController.NolobbygamesPane.setVisible(true);
                 this.createorJoinGameController.OkBtn.setVisible(true);
                 this.createorJoinGameController.NoLobbyGamesText.setVisible(true);
 
-                //todo fare il pop up che non ci sono giochi nella lobbi e tornare indietro
+
             }
 
 
@@ -468,6 +472,7 @@ public class GUI extends Observable implements View{
             case PLAYER_JOINED_LOBBY_RESPONSE -> {
                 PlayerJoinedLobbyMessage player = (PlayerJoinedLobbyMessage) message;
                 //out.println("\n" + player.getNickname() + " joined lobby") TODO: settare il text della lobby ;
+                this.lobbyController.PlayerJoinedGame.setText("player.getNickname() joined lobby");
             }
 
         }
