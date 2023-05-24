@@ -32,10 +32,12 @@
                </image>
             </ImageView>
             <ImageView fitHeight="366.0" fitWidth="1516.0" layoutX="-7.0" layoutY="560.0">
-            </ImageView>
-            <Label fx:id="NumberOfMissingPlayers" layoutX="437.0" layoutY="328.0" prefHeight="38.0" prefWidth="299.0" text="Missing Plaeyers number: " textFill="WHITE" visible="false">
+               <image>
+                  <Image url="@../Publisher_material/banner%201386x400px.png" />
+               </image></ImageView>
+            <Label fx:id="NumberOfMissingPlayers" alignment="BOTTOM_LEFT" layoutX="380.0" layoutY="328.0" prefHeight="41.0" prefWidth="636.0" text="Missing Players number: " textFill="WHITE" visible="false">
                <font>
-                  <Font name="Libian SC Regular" size="24.0" />
+                  <Font name="Libian SC Regular" size="65.0" />
                </font>
             </Label>
             <Label fx:id="PlayerJoinedGame" layoutX="431.0" layoutY="271.0" text="Name  joined the Game " textFill="WHITE" visible="false">

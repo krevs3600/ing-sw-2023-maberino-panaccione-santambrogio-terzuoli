@@ -244,16 +244,16 @@ public class GUI extends Observable implements View{
 
     @Override
     public void showGameNamesList(Set<String> availableGameNames) {
+        setChanged();
+        notifyObservers(new GameNameChoiceMessage(this.client.getNickname(),this.gameNameListController.getGameToJoin()));
 
 
     }
 
     //todo secondo me si può fare lo stesso metodo nell'interfaccia view e poi implementarlo
-    public void chosenGame(String gameChoice) {
-        setChanged();
-        notifyObservers(new GameNameChoiceMessage(this.client.getNickname(), gameChoice));
-
-    }
+    //public void chosenGame(String gameChoice) {
+    //
+    //}
 
 
 
@@ -422,6 +422,7 @@ public class GUI extends Observable implements View{
                    GameNameListController gameNameListController = fxmlLoader.getController();
                     gameNameListController.setGui(this);
                     this.gameNameListController = gameNameListController;
+                    this.gameNameListController.setCurrentLobbyGameNames(((JoinGameResponseMessage) message).getAvailableGamesInLobby());
 
                     Platform.runLater(() -> stage.setScene(scene));
                     stage.show();
@@ -444,17 +445,61 @@ public class GUI extends Observable implements View{
 
             case WAIT_PLAYERS -> {
                 WaitingResponseMessage waitingResponseMessage = (WaitingResponseMessage) message;
-                if (waitingResponseMessage.getMissingPlayers() == 1) {
-                    // out.println("\nWaiting for 1 player... "); TODO: settare il text della lobby
-                } else {
-                    //TODO: settare il text della lobby
-                    //  out.println("\nWaiting for " + waitingResponseMessage.getMissingPlayers() + " players... ");
+
+                URL url = null;
+                try {
+                    url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/lobby_scene.fxml/").toURI().toURL();
+                } catch (MalformedURLException e) {
+                    throw new RuntimeException(e);
                 }
+                FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("lobby_scene.fxml"));
+                try {
+                    root = FXMLLoader.load(url);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                ;
+                try {
+                    scene = new Scene(fxmlLoader.load());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
+                Platform.runLater(() -> stage.setScene(scene));
+                Platform.runLater(() -> stage.show());
+
+
+                //TODO capire la concorrenza tra queste due scene
+                LobbyController lobbyController = fxmlLoader.getController();
+                this.lobbyController = lobbyController;
+                lobbyController.setGui(this); // appunto per me: non dovrebbero esserci problemi di settagggio del testo perchè in caso entro nella lobby come creatore del gioco, nell'altro caso come  giocatore
+                lobbyController.NumberOfMissingPlayers.setText("Waiting for"+waitingResponseMessage.getMissingPlayers()+"players.....");
+                lobbyController.NumberOfMissingPlayers.setVisible(true);
+
+                //magari serve settare il numero di giocatori selezionato da far vedere
+
+
+
+                // if (waitingResponseMessage.getMissingPlayers() == 1) {
+               //
+               //     // out.println("\nWaiting for 1 player... "); TODO: settare il text della lobby
+               // } else {
+               //     //TODO: settare il text della lobby
+               //     //  out.println("\nWaiting for " + waitingResponseMessage.getMissingPlayers() + " players... ");
+               // }
             }
             case PLAYER_JOINED_LOBBY_RESPONSE -> {
                 PlayerJoinedLobbyMessage player = (PlayerJoinedLobbyMessage) message;
                 //out.println("\n" + player.getNickname() + " joined lobby") TODO: settare il text della lobby ;
-                this.lobbyController.PlayerJoinedGame.setText("player.getNickname() joined lobby");
+                this.lobbyController.PlayerJoinedGame.setText(player.getNickname()+ " joined lobby");
+                this.lobbyController.PlayerJoinedGame.setVisible(true);
+            // ok forse il comando sotto non ha senso perche sono nella GUI di un client che quindi vede il suo lobbyController
+              //  this.lobbyController.NumberOfMissingPlayers.setText("Waiting for"+ this.lobbyController.getPinLobby());
+              //  this.lobbyController.NumberOfMissingPlayers.setVisible(true);
+
+
+
+
             }
 
         }

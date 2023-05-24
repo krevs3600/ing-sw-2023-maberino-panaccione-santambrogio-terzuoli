@@ -24,6 +24,17 @@ public class LobbyController {
     public Label PlayerJoinedGame;
     private GUI gui;
 
+    private int PinLobby;
+
+
+    public void setPinLobby(int num){
+        this.PinLobby=num;
+    }
+
+    public int getPinLobby() {
+        return PinLobby;
+    }
+
     public void setGui(GUI gui) {
         this.gui=gui;
     }
