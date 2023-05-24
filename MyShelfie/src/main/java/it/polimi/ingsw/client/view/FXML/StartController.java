@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.net.URL;
 
 
-public class StartController extends Observable {
+public class StartController extends Observable{
     @FXML
     public AnchorPane rootPane;
 

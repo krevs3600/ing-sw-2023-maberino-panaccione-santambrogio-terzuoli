@@ -14,12 +14,12 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-public class NicknameController  {
+public class NicknameController {
 
-  @FXML
+    @FXML
     public AnchorPane PaneforParquet;
 
-  @FXML
+    @FXML
     public Button OKButton;
     @FXML
     public Label InvalidNickname;
@@ -50,13 +50,6 @@ public class NicknameController  {
         //TODO: FARE i check sull'input che arriva
         this.nickname = nicknameTextFiled.getText();
         gui.askNickname();
-
-
-
-
-
-
-
     }
 
     public void setGui(GUI gui) {

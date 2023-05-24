@@ -44,7 +44,7 @@ public class CreateorJoinGameController {
         return  this.joinGameb;
     }
     private GUI gui;
-   public void setGui(GUI gui){
+    public void setGui(GUI gui){
        this.gui=gui;
    }
 

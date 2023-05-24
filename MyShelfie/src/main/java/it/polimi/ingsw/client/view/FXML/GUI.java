@@ -36,6 +36,7 @@ public class GUI extends Observable implements View{
     private static double width;
     private static double height;
     private NicknameController nicknameController;
+    private ServerSettingsController serverSettingsController;
 
     private CreateorJoinGameController createorJoinGameController;
     private RMIorSocketController rmIorSocketController;
@@ -65,11 +66,8 @@ public class GUI extends Observable implements View{
     public void gameMenuGUI(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("start_scene.fxml"));
         Scene scene = null;
-
         scene = new Scene(fxmlLoader.load());
-
-      //  stage.setTitle("myShelfie!");
-
+        stage.setTitle("myShelfie!");
         stage.setScene(scene);
         this.stage=stage;
         stage.show();
@@ -79,7 +77,7 @@ public class GUI extends Observable implements View{
         stage.setResizable(true);
         width = stage.getWidth();
         height = stage.getHeight();
-        StartController startController=fxmlLoader.getController();
+        startController = fxmlLoader.getController();
         startController.setGui(this);
     }
     public ClientImplementation getClient(){
@@ -123,38 +121,26 @@ public class GUI extends Observable implements View{
     }
     @Override
     public void createConnection()  {
-        URL url = null;
         try {
-            url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/AddressIp_scene.fxml/").toURI().toURL();
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        }
-        FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("AddressIp_scene.fxml"));
-        try {
-            root = FXMLLoader.load(url);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        };
-        try {
+            URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/AddressIp_scene.fxml/").toURI().toURL();
+            FXMLLoader fxmlLoader = new FXMLLoader(url);
             scene = new Scene(fxmlLoader.load());
+            window=stage;
+            Platform.runLater(()->stage.setScene(scene));
+            stage.show();
+
+            serverSettingsController = fxmlLoader.getController();
+            serverSettingsController.setGui(this);
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        window=stage; // gor
-        Platform.runLater(()->stage.setScene(scene));
-        stage.show();
-
-        ServerSettingsController serverSettingsController=fxmlLoader.getController();
-        serverSettingsController.setGui(this);
-
-
     }
 
     @Override
     public void askNickname() {
         setChanged();
         notifyObservers(new NicknameMessage(this.nicknameController.getNickname()));
-
     }
 
 
@@ -169,7 +155,7 @@ public class GUI extends Observable implements View{
                 System.err.println("not bound exception registry");
             }
         } else if (rmIorSocketController.isSocket()) {
-            port = (port == 1243) ? 1244 : port;
+            if(port == 1243) port = 1244;
             ServerStub serverStub = new ServerStub(address, port);
             client = new ClientImplementation(this, serverStub);
             serverStub.register(client);
@@ -210,16 +196,12 @@ public class GUI extends Observable implements View{
             throw new RuntimeException(e);
         }
         Platform.runLater(()->stage.setScene(scene));
-            stage.show();
+        Platform.runLater(()->stage.show());
 
-            NicknameController nicknameController=fxmlLoader.getController();
-            nicknameController.setGui(this);
-            this.nicknameController=nicknameController;
-            // askNickname();
-
-
-
-
+        NicknameController nicknameController=fxmlLoader.getController();
+        nicknameController.setGui(this);
+        this.nicknameController=nicknameController;
+        // askNickname();
     }
 
     //@Override
@@ -258,9 +240,6 @@ public class GUI extends Observable implements View{
       String gameName=this.gameNameController.getGameName();
       setChanged();
       notifyObservers(new GameNameMessage(this.client.getNickname(),gameName));
-
-
-
     }
 
     @Override
@@ -319,8 +298,10 @@ public class GUI extends Observable implements View{
                     this.createorJoinGameController = createorJoinGameController;
 
 
-                    Platform.runLater(() -> stage.setScene(scene));
-                    stage.show();
+                    Platform.runLater(() ->
+                            stage.setScene(scene));
+                    Platform.runLater(() ->
+                            stage.show());
                     // this.nicknameController.InvalidNickname.setVisible(true);
 
 
@@ -352,7 +333,7 @@ public class GUI extends Observable implements View{
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-//TODO capire la concorrenza tra queste due scene
+                    //TODO capire la concorrenza tra queste due scene
                     NumberOfPlayersController numberOfPlayersController = fxmlLoader.getController();
                     this.numberOfPlayersController = numberOfPlayersController;
                     numberOfPlayersController.setGui(this);
@@ -360,15 +341,13 @@ public class GUI extends Observable implements View{
 
 
                     Platform.runLater(() -> stage.setScene(scene));
-                    stage.show();
+                    Platform.runLater(() -> stage.show());
+
                     // this.nicknameController.InvalidNickname.setVisible(true);
 
-
-                    ;
                 } else {
 
                     this.gameNameController.AlredytTakenGameName.setVisible(true);
-
                 }
             }
 
@@ -398,9 +377,10 @@ public class GUI extends Observable implements View{
                     }
 
                     Platform.runLater(() -> stage.setScene(scene));
-                    stage.show();
+                    Platform.runLater(() -> stage.show());
 
-//TODO capire la concorrenza tra queste due scene
+
+                    //TODO capire la concorrenza tra queste due scene
                     LobbyController lobbyController = fxmlLoader.getController();
                     this.lobbyController = lobbyController;
                     lobbyController.setGui(this);
@@ -481,9 +461,6 @@ public class GUI extends Observable implements View{
     public void askNumberOfPlayers(String gameName) {
         setChanged();
         notifyObservers(new GameCreationMessage(this.client.getNickname(), this.numberOfPlayersController.getNumberOfPlayersChosen(), gameName));
-
-
-
     }
 
     @Override

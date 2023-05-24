@@ -48,15 +48,8 @@ public class GuiApp extends Application {
         // ADD
       GUI gui=new GUI();
       gui.gameMenuGUI(stage);
-
-
-
-
-
-
-
-
     }
+
     public static void main(String[] args) {
         launch();
     }

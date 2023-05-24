@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -19,9 +20,11 @@ public class RMIorSocketController extends Observable {
     @FXML
     public AnchorPane PaneforParquet;
     @FXML
-    public RadioButton rmibutton;
+    public RadioButton RMIbutton;
     @FXML
-    public RadioButton socketbutton;
+    public RadioButton TCPbutton;
+    @FXML
+    public Button okButton;
 
     private Stage stage;
     private Scene scene;
@@ -41,18 +44,16 @@ public class RMIorSocketController extends Observable {
         return socket;
     }
 
-
-    public void createRMIconnection(MouseEvent mouseEvent) throws IOException {
-        RMI=true;
-        gui.createConnection();
-
-    }
-
-    public void createsocketconnection(MouseEvent mouseEvent) {
-        socket=true;
-        gui.createConnection();
-
-
+    public void createConnection(MouseEvent event) throws IOException{
+        if (RMIbutton.isSelected()) {
+            RMI = true;
+            socket = false;
+            gui.createConnection();
+        } else if (TCPbutton.isSelected()){
+            RMI = false;
+            socket = true;
+            gui.createConnection();
+        }
     }
 
     public void setGui(GUI gui) {

@@ -32,28 +32,28 @@ public class ServerSettingsController {
     @FXML
     Button tryToConnectButton;
 
-    private ClientImplementation client=null;
+    private ClientImplementation client = null;
 
     private GUI gui=null;
 
-    private ClientImplementation clientImplementation=null;
+    private ClientImplementation clientImplementation = null;
 
 
-public void setGui(GUI gui) {
+    public void setGui(GUI gui) {
     this.gui=gui;
 }
 
     private String address;
-    private int chosenport;
+    private int chosenPort;
 
     public void connect(MouseEvent event) throws IOException, NotBoundException {
-        this.address = (ipAddress.getText());
-        this.chosenport=Integer.parseInt(port.getText());
 
+        address = ipAddress.getText().isEmpty() ? "127.0.0.1" : ipAddress.getText();
+        chosenPort= port.getText().isEmpty() ? 1243 : Integer.parseInt(port.getText());
 
         //TODO: check for empty value and for string instead of integer v
         // alue
-      if(isValidIPAddress(address) && isValidPort(chosenport)) {
+      if(isValidIPAddress(address) && isValidPort(chosenPort)) {
         //  try {
         //      Registry registry = LocateRegistry.getRegistry(address, chosenport);
         //      AppServer server = (AppServer) registry.lookup("MyShelfieServer");
@@ -61,31 +61,17 @@ public void setGui(GUI gui) {
         //      gui.setClient(client);
         //  }
 
-          gui.createConnection(address,chosenport);
-
-
+          gui.createConnection(address,chosenPort);
       }
-      else if (!isValidIPAddress(address) || !isValidPort(chosenport) || isValidIPAddress("")|| isValidIPAddress(" ")){
+      else if (!isValidIPAddress(address) || !isValidPort(chosenPort) || isValidIPAddress("")|| isValidIPAddress(" ")){
           WrongValueInputs.setVisible(true);
-
-
       }
-
-
-
-
-
-
-
-
-
-
-
     }
 
-    private boolean isValidPort(int chosenport) {
+
+    private boolean isValidPort(int chosenPort) {
         try {
-            return chosenport >= 1 && chosenport <= 65535;
+            return chosenPort >= 1 && chosenPort <= 65535;
         } catch (NumberFormatException e){
             return false;
         }
