@@ -35,8 +35,8 @@ public class PersonalGoalCardDeck implements Drawable {
     public PersonalGoalCardDeck () {
         this.deck = new ArrayList<PersonalGoalCard>();
         try {
-            //String path = "src/main/java/it/polimi/ingsw/model/configs/PersonalGoalCards.json";
-            String path = "C:\\Users\\franc\\IdeaProjects\\ing-sw-2023-maberino-panaccione-santambrogio-terzuoli\\MyShelfie\\src\\main\\java\\it\\polimi\\ingsw\\model\\configs\\PersonalGoalCards.json";
+            String path = "src/main/java/it/polimi/ingsw/model/configs/PersonalGoalCards.json";
+            //String path = "C:\\Users\\franc\\IdeaProjects\\ing-sw-2023-maberino-panaccione-santambrogio-terzuoli\\MyShelfie\\src\\main\\java\\it\\polimi\\ingsw\\model\\configs\\PersonalGoalCards.json";
             Reader file = new FileReader(path);
             JSONParser parser = new JSONParser();
             Object jsonObj = parser.parse(file);

@@ -22,6 +22,7 @@ public class LobbyController {
 
     @FXML
     public Label PlayerJoinedGame;
+
     private GUI gui;
 
     private int PinLobby;
@@ -38,4 +39,5 @@ public class LobbyController {
     public void setGui(GUI gui) {
         this.gui=gui;
     }
+
 }

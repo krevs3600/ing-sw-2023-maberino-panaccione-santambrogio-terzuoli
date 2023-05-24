@@ -10,12 +10,14 @@ import it.polimi.ingsw.network.Socket.ServerStub;
 import it.polimi.ingsw.network.eventMessages.*;
 import it.polimi.ingsw.observer_observable.Observable;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -43,6 +45,7 @@ public class GUI extends Observable implements View{
 
     private LobbyController lobbyController;
     private StartController startController;
+    private LivingBoardController livingBoardController;
 
 
 
@@ -52,6 +55,7 @@ public class GUI extends Observable implements View{
     private NumberOfPlayersController numberOfPlayersController;
 
     private GameNameListController gameNameListController;
+    private String nickname;
 
     public Stage getStage() {
         return stage;
@@ -87,7 +91,6 @@ public class GUI extends Observable implements View{
     public void joinGame(){
         setChanged();
         notifyObservers(new JoinGameMessage(this.client.getNickname()));
-
     }
 
 
@@ -114,7 +117,7 @@ public class GUI extends Observable implements View{
         scene = new Scene(fxmlLoader.load());
         this.stage=stage;
         Platform.runLater(()->stage.setScene(scene));
-        stage.show();
+        //stage.show();
         RMIorSocketController rmIorSocketController1=fxmlLoader.getController();
         rmIorSocketController1.setGui(this);
         this.rmIorSocketController=rmIorSocketController1;
@@ -127,7 +130,7 @@ public class GUI extends Observable implements View{
             scene = new Scene(fxmlLoader.load());
             window=stage;
             Platform.runLater(()->stage.setScene(scene));
-            stage.show();
+            //stage.show();
 
             serverSettingsController = fxmlLoader.getController();
             serverSettingsController.setGui(this);
@@ -144,7 +147,7 @@ public class GUI extends Observable implements View{
     }
 
 
-    public void createConnection(String address,int port) throws IOException, NotBoundException {
+    public void createConnection(String address, int port) throws IOException, NotBoundException {
         if(rmIorSocketController.isRMI()) {
             try {
                 Registry registry = LocateRegistry.getRegistry(address, port);
@@ -196,7 +199,7 @@ public class GUI extends Observable implements View{
             throw new RuntimeException(e);
         }
         Platform.runLater(()->stage.setScene(scene));
-        Platform.runLater(()->stage.show());
+        //Platform.runLater(()->stage.show());
 
         NicknameController nicknameController=fxmlLoader.getController();
         nicknameController.setGui(this);
@@ -236,13 +239,11 @@ public class GUI extends Observable implements View{
     }
 
     //TODO: askgamespecs
-    /*public void askGameName() {
+    public void askGameName() {
         String gameName=this.gameNameController.getGameName();
         setChanged();
-        notifyObservers(new GameNameMessage(this.client.getNickname(),gameName));
+        notifyObservers(new GameNameMessage(this.client.getNickname(), gameName));
     }
-
-     */
 
     @Override
     public void showGameNamesList(Set<String> availableGameNames) {
@@ -292,13 +293,12 @@ public class GUI extends Observable implements View{
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-                    ;
                     try {
                         scene = new Scene(fxmlLoader.load());
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-
+                    this.nickname = ((LoginResponseMessage) message).getNickname();
                     CreateorJoinGameController createorJoinGameController = fxmlLoader.getController();
                     createorJoinGameController.setGui(this);
                     this.createorJoinGameController = createorJoinGameController;
@@ -306,8 +306,7 @@ public class GUI extends Observable implements View{
 
                     Platform.runLater(() ->
                             stage.setScene(scene));
-                    Platform.runLater(() ->
-                            stage.show());
+                    //Platform.runLater(() ->stage.show());
                     // this.nicknameController.InvalidNickname.setVisible(true);
 
 
@@ -347,7 +346,7 @@ public class GUI extends Observable implements View{
 
 
                     Platform.runLater(() -> stage.setScene(scene));
-                    Platform.runLater(() -> stage.show());
+                    //Platform.runLater(() -> stage.show());
 
                     // this.nicknameController.InvalidNickname.setVisible(true);
 
@@ -383,13 +382,14 @@ public class GUI extends Observable implements View{
                     }
 
                     Platform.runLater(() -> stage.setScene(scene));
-                    Platform.runLater(() -> stage.show());
+                    //Platform.runLater(() -> stage.show());
 
 
                     //TODO capire la concorrenza tra queste due scene
                     LobbyController lobbyController = fxmlLoader.getController();
                     this.lobbyController = lobbyController;
                     lobbyController.setGui(this);
+                    //lobbyController.PIU.setVisible(true);
                     //magari serve settare il numero di giocatori selezionato da far vedere
 
 
@@ -424,16 +424,14 @@ public class GUI extends Observable implements View{
                         throw new RuntimeException(e);
                     }
 
-
-                   GameNameListController gameNameListController = fxmlLoader.getController();
+                    GameNameListController gameNameListController = fxmlLoader.getController();
                     gameNameListController.setGui(this);
                     this.gameNameListController = gameNameListController;
                     this.gameNameListController.setCurrentLobbyGameNames(((JoinGameResponseMessage) message).getAvailableGamesInLobby());
 
                     Platform.runLater(() -> stage.setScene(scene));
-                    stage.show();
-
-
+                    //Platform.runLater(() -> stage.show());
+                    //stage.show();
                 }
             }
 
@@ -444,43 +442,41 @@ public class GUI extends Observable implements View{
                 this.createorJoinGameController.NolobbygamesPane.setVisible(true);
                 this.createorJoinGameController.OkBtn.setVisible(true);
                 this.createorJoinGameController.NoLobbyGamesText.setVisible(true);
-
-
             }
 
 
             case WAIT_PLAYERS -> {
                 WaitingResponseMessage waitingResponseMessage = (WaitingResponseMessage) message;
+                if (this.lobbyController == null) {
+                    URL url = null;
+                    try {
+                        url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/lobby_scene.fxml/").toURI().toURL();
+                    } catch (MalformedURLException e) {
+                        throw new RuntimeException(e);
+                    }
+                    FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("lobby_scene.fxml"));
+                    try {
+                        root = FXMLLoader.load(url);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    ;
+                    try {
+                        scene = new Scene(fxmlLoader.load());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
 
-                URL url = null;
-                try {
-                    url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/lobby_scene.fxml/").toURI().toURL();
-                } catch (MalformedURLException e) {
-                    throw new RuntimeException(e);
+                    Platform.runLater(() -> stage.setScene(scene));
+                    //TODO capire la concorrenza tra queste due scene
+                    LobbyController lobbyController = fxmlLoader.getController();
+                    this.lobbyController = lobbyController;
+                    lobbyController.setGui(this); // appunto per me: non dovrebbero esserci problemi di settagggio del testo perchè in caso entro nella lobby come creatore del gioco, nell'altro caso come  giocatore
                 }
-                FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("lobby_scene.fxml"));
-                try {
-                    root = FXMLLoader.load(url);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                ;
-                try {
-                    scene = new Scene(fxmlLoader.load());
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-
-                Platform.runLater(() -> stage.setScene(scene));
-                Platform.runLater(() -> stage.show());
-
-
-                //TODO capire la concorrenza tra queste due scene
-                LobbyController lobbyController = fxmlLoader.getController();
-                this.lobbyController = lobbyController;
-                lobbyController.setGui(this); // appunto per me: non dovrebbero esserci problemi di settagggio del testo perchè in caso entro nella lobby come creatore del gioco, nell'altro caso come  giocatore
                 lobbyController.NumberOfMissingPlayers.setText("Waiting for"+waitingResponseMessage.getMissingPlayers()+"players.....");
                 lobbyController.NumberOfMissingPlayers.setVisible(true);
+
+
 
                 //magari serve settare il numero di giocatori selezionato da far vedere
 
@@ -497,14 +493,11 @@ public class GUI extends Observable implements View{
             case PLAYER_JOINED_LOBBY_RESPONSE -> {
                 PlayerJoinedLobbyMessage player = (PlayerJoinedLobbyMessage) message;
                 //out.println("\n" + player.getNickname() + " joined lobby") TODO: settare il text della lobby ;
-                this.lobbyController.PlayerJoinedGame.setText(player.getNickname()+ " joined lobby");
+                Platform.runLater(()->lobbyController.PlayerJoinedGame.setText(player.getNickname()+ " joined lobby"));
                 this.lobbyController.PlayerJoinedGame.setVisible(true);
             // ok forse il comando sotto non ha senso perche sono nella GUI di un client che quindi vede il suo lobbyController
               //  this.lobbyController.NumberOfMissingPlayers.setText("Waiting for"+ this.lobbyController.getPinLobby());
               //  this.lobbyController.NumberOfMissingPlayers.setVisible(true);
-
-
-
 
             }
 
@@ -555,7 +548,7 @@ public class GUI extends Observable implements View{
             this.gameNameController = GameNameController;
 
             Platform.runLater(() -> stage.setScene(scene));
-            stage.show();
+            //stage.show();
         }
         //
 
@@ -564,7 +557,28 @@ public class GUI extends Observable implements View{
 
     @Override
     public void update(GameView gameView, EventMessage eventMessage) {
+        switch (eventMessage.getType()) {
+            case PLAYER_TURN -> {
+                try {
+                    URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/livingBoard_scene.fxml/").toURI().toURL();
+                    FXMLLoader fxmlLoader = new FXMLLoader(url);
+                    Scene scene = new Scene(fxmlLoader.load());
+                    livingBoardController = fxmlLoader.getController();
+                    livingBoardController.setGui(this);
+                    Platform.runLater(() -> stage.setScene(scene));
+                    Platform.runLater(() -> {
+                        try {
+                            livingBoardController.initialize(gameView, nickname);
+                        } catch (FileNotFoundException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+                } catch (IOException e) {
+                    System.out.println(e);
+                }
 
+            }
+        }
     }
 
 
@@ -575,8 +589,5 @@ public class GUI extends Observable implements View{
     public static Scene getActiveScene() {return activeScene;}
     public static double getWidth() {return width;}
     public static double getHeight() {return height;}
-
-
-
 
 }

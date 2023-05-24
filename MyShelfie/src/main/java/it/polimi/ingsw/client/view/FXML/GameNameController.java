@@ -34,19 +34,15 @@ public class GameNameController {
 
     public String getGameName(){
         return this.gameName;
-
     }
-
-
 
     public void GameNameChosen(MouseEvent mouseEvent) {
         //TODO: controllo sugli input spazi vuoti
         this.gameName=GameName.getText();
-         gui.askGameName(gameName);
+         gui.askGameName();
     }
 
     public void setGui(GUI gui) {
         this.gui=gui;
-
     }
 }

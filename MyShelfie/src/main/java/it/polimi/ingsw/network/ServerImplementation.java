@@ -79,7 +79,7 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                     client.onMessage(new LoginResponseMessage(false));                                                                            //        client.onMessage(new CreatorLoginResponseMessage(validNickname));
             }                                                                                                                                     //}
             //this.gameController.update(client, eventMessage);
-            /**case GAME_NAME -> {
+            case GAME_NAME -> {
                 GameNameMessage gameNameMessage = (GameNameMessage) eventMessage;
                 // da capire cosa modificare
                 if (!currentLobbyGameNames.contains(gameNameMessage.getGameName()) && !currentGames.containsKey(gameNameMessage.getGameName())) {
@@ -105,7 +105,6 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                 }
                 client.onMessage(new GameCreationResponseMessage(isValid));
             }
-             */
 
             case GAME_SPECS -> {
                 GameSpecsMessage gameSpecsMessage = (GameSpecsMessage) eventMessage;

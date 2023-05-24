@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.utils.NumberOfPlayers;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class GameView implements Serializable {
@@ -87,4 +88,64 @@ public class GameView implements Serializable {
 
     }
      */
+    public String toCLI(String nickname) {
+        String code = "\033[H\033[2J"; // out.flush
+        String game = "";
+        String DIVIDER = "      ";
+        String UP_MARGIN = "\n\n\n";
+        String MARGIN = "\n\n";
+        String HEADER_PERSONAL_CARD = "YOUR PERSONAL GOAL CARD:";
+
+        HashMap<Integer, String> personalCard =  this.getSubscribers().get(0).getPersonalGoalCard().toDict();
+        HashMap<Integer, String> gameBoard = this.getLivingRoomBoard().toDict();
+        HashMap<Integer, String> bookshelf = this.getSubscribers().get(0).getBookshelf().toDict();
+        int personal = 0;
+        int board = 0;
+        int book = 0;
+        game = game.concat(UP_MARGIN);
+        for (int i=0; i<20; i++){
+            if (i==0){
+                game = game.concat("YOUR PERSONAL GOAL CARD:").concat(DIVIDER);
+                game = game.concat(gameBoard.get(board)).concat("\n");
+                board += 1;
+            } else if (i<8){
+                game = game.concat(personalCard.get(personal)).concat(DIVIDER);
+                personal+=1;
+                game = game.concat(gameBoard.get(board).concat(DIVIDER)).concat("\n");
+                board+=1;
+            } else if (i<13) {
+                game = game.concat(getStringWithSpaces("", HEADER_PERSONAL_CARD.length())).concat(DIVIDER);
+                game = game.concat(gameBoard.get(board)).concat("\n");
+                board+=1;
+            } else {
+                game = game.concat(bookshelf.get(book)).concat(DIVIDER);
+                book+=1;
+                game = game.concat(gameBoard.get(board).concat(DIVIDER)).concat("\n");
+                board+=1;
+            }
+        }
+        return game;
+    }
+    private static String getStringWithSpaces(String text, int rowLength) {
+        int spaces = rowLength - text.length();
+        String result = "";
+        result = result.concat(text);
+        for(int i=0; i<spaces; i++){
+            result = result.concat(" ");
+        }
+        return result;
+    }
+
+    public static void main(String args[]){
+        Game game = new Game(NumberOfPlayers.TWO_PLAYERS, "Zo");
+        game.subscribe(new Player("Carlo"));
+        game.subscribe(new Player("Fra"));
+        game.initLivingRoomBoard();
+        PersonalGoalCardDeck deck = new PersonalGoalCardDeck();
+        game.getSubscribers().get(0).setPersonalGoalCard(deck.draw());
+        game.getSubscribers().get(1).setPersonalGoalCard(deck.draw());
+        GameView view = new GameView(game);
+        System.out.println(view.toCLI("Carlo"));
+    }
+
 }

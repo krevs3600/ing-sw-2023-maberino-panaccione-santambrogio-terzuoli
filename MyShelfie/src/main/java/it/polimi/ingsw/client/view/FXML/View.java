@@ -27,14 +27,14 @@ import java.util.Set;
  */
 public interface View {
 
-   String askConnectionType();
+    String askConnectionType();
 
 
     void createConnection()  throws RemoteException, NotBoundException;
 
- void askNickname();
+    void askNickname();
 
- /**
+     /**
      * Asks the user to choose a Nickname.
      */
     //void askNickname();
@@ -44,6 +44,7 @@ public interface View {
     int askServerPort();
 
     void askGameSpecs();
+    void askGameName();
 
     void showGameNamesList(Set<String> availableGameNames);
 
@@ -56,9 +57,6 @@ public interface View {
 
    void showMessage(MessageToClient message) throws IOException;
 
-
-
-
     /**
      * Asks the user how many players he wants to play with.
      */
@@ -67,14 +65,12 @@ public interface View {
 
     boolean isValidPort(String serverPort);
 
- boolean isValidIPAddress(String address);
+     boolean isValidIPAddress(String address);
 
- void gameMenu();
-
-
- void update(GameView gameView, EventMessage eventMessage);
+     void gameMenu();
 
 
+     void update(GameView gameView, EventMessage eventMessage);
 
 }
 

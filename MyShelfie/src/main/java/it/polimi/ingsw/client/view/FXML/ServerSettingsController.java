@@ -49,23 +49,22 @@ public class ServerSettingsController {
     public void connect(MouseEvent event) throws IOException, NotBoundException {
 
         address = ipAddress.getText().isEmpty() ? "127.0.0.1" : ipAddress.getText();
-        chosenPort= port.getText().isEmpty() ? 1243 : Integer.parseInt(port.getText());
+        chosenPort = port.getText().isEmpty() ? 1243 : Integer.parseInt(port.getText());
 
         //TODO: check for empty value and for string instead of integer v
         // alue
-      if(isValidIPAddress(address) && isValidPort(chosenPort)) {
+        if(isValidIPAddress(address) && isValidPort(chosenPort)) {
         //  try {
         //      Registry registry = LocateRegistry.getRegistry(address, chosenport);
         //      AppServer server = (AppServer) registry.lookup("MyShelfieServer");
         //      this.client = new ClientImplementation(gui, server.connect());
         //      gui.setClient(client);
         //  }
-
-          gui.createConnection(address,chosenPort);
-      }
-      else if (!isValidIPAddress(address) || !isValidPort(chosenPort) || isValidIPAddress("")|| isValidIPAddress(" ")){
-          WrongValueInputs.setVisible(true);
-      }
+            gui.createConnection(address, chosenPort);
+        }
+        else if (!isValidIPAddress(address) || !isValidPort(chosenPort) || isValidIPAddress("")|| isValidIPAddress(" ")){
+            WrongValueInputs.setVisible(true);
+        }
     }
 
 

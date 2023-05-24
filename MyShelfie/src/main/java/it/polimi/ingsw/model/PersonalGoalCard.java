@@ -83,6 +83,9 @@ public class PersonalGoalCard extends GoalCard implements Serializable {
                 map.put(j, rows);
                 rows = "";
             }
+            if (i==28){
+                map.put(j, rows);
+            }
         }
         return map;
     }

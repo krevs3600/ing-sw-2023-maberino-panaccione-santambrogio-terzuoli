@@ -51,16 +51,12 @@ public class CreateorJoinGameController {
     public void CreateGame(MouseEvent mouseEvent) {
        createGame=true;
        gui.gameMenu();
-
-
     }
 
     public void JoinGame(MouseEvent mouseEvent) {
        joinGameb=true;
        //gui.gameMenu();
         gui.joinGame();
-
-
     }
 
     public void ExitGame(MouseEvent mouseEvent) {

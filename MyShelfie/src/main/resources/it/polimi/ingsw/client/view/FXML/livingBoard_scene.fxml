@@ -1,13 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Point3D?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="761.0" prefWidth="1510.0" styleClass="rootPane" stylesheets="@../css/livingBoard_scene.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="761.0" prefWidth="1510.0" styleClass="rootPane" stylesheets="@../css/livingBoard_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.FXML.LivingBoardController">
     <children>
         <BorderPane prefHeight="785.0" prefWidth="1512.0" style="-fx-border-width: 10;">
             <center>
@@ -38,27 +51,33 @@
                                         <RowConstraints maxHeight="66.6" minHeight="10.0" prefHeight="7.0" vgrow="SOMETIMES" />
                                         <RowConstraints maxHeight="66.6" minHeight="10.0" prefHeight="7.0" vgrow="SOMETIMES" />
                                     </rowConstraints>
-                           <padding>
-                              <Insets bottom="32.0" left="9.0" right="27.0" top="5.0" />
-                           </padding>
+                                    <padding>
+                                        <Insets bottom="32.0" left="9.0" right="27.0" top="5.0" />
+                                    </padding>
                                 </GridPane>
-                        <StackPane layoutX="517.0" layoutY="460.0" prefHeight="61.0" prefWidth="64.0" rotate="7.6">
-                           <children>
-                              <ImageView fitHeight="65.0" fitWidth="62.0" pickOnBounds="true" preserveRatio="true">
-                              </ImageView>
-                           </children>
-                        </StackPane>
-                        <AnchorPane layoutX="12.0" layoutY="107.0" prefHeight="446.0" prefWidth="597.0" visible="false">
-                           <children>
-                              <ImageView fitHeight="431.0" fitWidth="499.0" layoutX="69.0" layoutY="-10.0">
-                              </ImageView>
-                              <Text fill="#e8c77acf" layoutX="158.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Congratulations you have reached the first/second common goal! You will now receive a scoring token.. Keep it up!" wrappingWidth="344.74981689453125">
-                                 <font>
-                                    <Font name="Libian SC Regular" size="36.0" />
-                                 </font>
-                              </Text>
-                           </children>
-                        </AnchorPane>
+                                <StackPane layoutX="517.0" layoutY="460.0" prefHeight="61.0" prefWidth="64.0" rotate="7.6">
+                                    <children>
+                                        <ImageView fitHeight="65.0" fitWidth="62.0" pickOnBounds="true" preserveRatio="true">
+                                            <image>
+                                                <Image url="@../scoring%20tokens/end%20game.jpg" />
+                                            </image>
+                                        </ImageView>
+                                    </children>
+                                </StackPane>
+                                <AnchorPane layoutX="12.0" layoutY="107.0" prefHeight="446.0" prefWidth="597.0" visible="false">
+                                    <children>
+                                        <ImageView fitHeight="431.0" fitWidth="499.0" layoutX="69.0" layoutY="-10.0">
+                                            <image>
+                                                <Image url="@../scoring%20tokens/scoring_back_EMPTY.jpg" />
+                                            </image>
+                                        </ImageView>
+                                        <Text fill="#e8c77acf" layoutX="158.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Congratulations you have reached the first/second common goal! You will now receive a scoring token.. Keep it up!" wrappingWidth="344.74981689453125">
+                                            <font>
+                                                <Font name="Libian SC Regular" size="36.0" />
+                                            </font>
+                                        </Text>
+                                    </children>
+                                </AnchorPane>
                             </children>
                         </AnchorPane>
                     </children>
@@ -71,14 +90,30 @@
                             <children>
                                 <AnchorPane prefHeight="297.0" prefWidth="388.0">
                                     <children>
-                                        <ImageView fx:id="commonGoalCardView1" fitHeight="175.0" fitWidth="269.0" layoutX="34.0" layoutY="136.0" pickOnBounds="true" preserveRatio="true">
-
+                                        <ImageView fx:id="commonGoalCard1" fitHeight="175.0" fitWidth="269.0" layoutX="34.0" layoutY="136.0" pickOnBounds="true" preserveRatio="true">
+                                            <image>
+                                                <Image url="@../common%20goal%20cards/12.jpg" />
+                                            </image>
                                         </ImageView>
                                         <StackPane layoutX="196.0" layoutY="182.0" prefHeight="62.0" prefWidth="62.0" rotate="-81.5">
                                             <rotationAxis>
                                                 <Point3D z="-1.0" />
                                             </rotationAxis>
                                             <children>
+                                                <ImageView fx:id="First_2" fitHeight="67.0" fitWidth="67.0" onMouseClicked="#scoringTokenClicked" pickOnBounds="true" preserveRatio="true" rotate="-90.0">
+                                                    <image>
+                                                        <Image url="@../scoring%20tokens/scoring_2.jpg" />
+                                                    </image></ImageView>
+                                                <ImageView fx:id="First_4" fitHeight="67.0" fitWidth="67.0" onMouseClicked="#scoringTokenClicked" pickOnBounds="true" preserveRatio="true" rotate="-90.0">
+                                                    <image>
+                                                        <Image url="@../scoring%20tokens/scoring_4.jpg" />
+                                                    </image>
+                                                </ImageView>
+                                                <ImageView fx:id="First_6" fitHeight="67.0" fitWidth="67.0" onMouseClicked="#scoringTokenClicked" pickOnBounds="true" preserveRatio="true" rotate="-90.0" />
+                                                <ImageView fx:id="First_8" fitHeight="67.0" fitWidth="67.0" onMouseClicked="#scoringTokenClicked" pickOnBounds="true" preserveRatio="true" rotate="-90.0">
+                                                    <image>
+                                                        <Image url="@../scoring%20tokens/scoring_8.jpg" />
+                                                    </image></ImageView>
                                             </children>
                                         </StackPane>
                                         <Label layoutX="42.0" layoutY="19.0" prefHeight="79.0" prefWidth="318.0" text="Common Goal Cards" textFill="#fffdfd">
@@ -94,12 +129,35 @@
                             <children>
                                 <AnchorPane prefHeight="220.0" prefWidth="374.0">
                                     <children>
-                                        <ImageView fx:id="commonGoalCardView2" fitHeight="175.0" fitWidth="269.0" layoutX="36.0" layoutY="35.0" pickOnBounds="true" preserveRatio="true">
+                                        <ImageView fx:id="commonGoalCard2" fitHeight="175.0" fitWidth="269.0" layoutX="36.0" layoutY="35.0" pickOnBounds="true" preserveRatio="true">
+                                            <image>
+                                                <Image url="@../common%20goal%20cards/9.jpg" />
+                                            </image>
                                         </ImageView>
-                              <StackPane layoutX="197.0" layoutY="82.0" prefHeight="67.0" prefWidth="67.0" rotate="-7.6">
-                                 <children>
-                                 </children>
-                              </StackPane>
+                                        <StackPane layoutX="197.0" layoutY="82.0" prefHeight="67.0" prefWidth="67.0" rotate="-7.6">
+                                            <children>
+                                                <ImageView fx:id="Second_2" fitHeight="67.0" fitWidth="67.0" onMouseClicked="#scoringTokenClicked" pickOnBounds="true" preserveRatio="true">
+                                                    <image>
+                                                        <Image url="@../scoring%20tokens/scoring_2.jpg" />
+                                                    </image>
+                                                </ImageView>
+                                                <ImageView fx:id="Second_4" fitHeight="67.0" fitWidth="67.0" onMouseClicked="#scoringTokenClicked" pickOnBounds="true" preserveRatio="true">
+                                                    <image>
+                                                        <Image url="@../scoring%20tokens/scoring_4.jpg" />
+                                                    </image>
+                                                </ImageView>
+                                                <ImageView fx:id="Second_6" fitHeight="67.0" fitWidth="67.0" onMouseClicked="#scoringTokenClicked" pickOnBounds="true" preserveRatio="true">
+                                                    <image>
+                                                        <Image url="@../scoring%20tokens/scoring_6.jpg" />
+                                                    </image>
+                                                </ImageView>
+                                                <ImageView fx:id="Second_8" fitHeight="67.0" fitWidth="67.0" onMouseClicked="#scoringTokenClicked" pickOnBounds="true" preserveRatio="true">
+                                                    <image>
+                                                        <Image url="@../scoring%20tokens/scoring_8.jpg" />
+                                                    </image>
+                                                </ImageView>
+                                            </children>
+                                        </StackPane>
                                     </children>
                                 </AnchorPane>
                             </children>
@@ -149,41 +207,44 @@
                                         </image>
                                     </ImageView>
                                 </Group>
-                        <AnchorPane layoutX="85.0" layoutY="178.0" prefHeight="366.0" prefWidth="349.0">
-                           <children>
-                              <GridPane fx:id="bookshelf" hgap="15.0" layoutX="28.0" layoutY="16.0" prefHeight="300.0" prefWidth="300.0" vgap="10.0">
-                                <columnConstraints>
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                </columnConstraints>
-                                <rowConstraints>
-                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                </rowConstraints>
-                                 <padding>
-                                    <Insets bottom="14.0" left="16.0" right="21.0" top="11.0" />
-                                 </padding>
-                              </GridPane>
-                                      <ImageView fitHeight="365.0" fitWidth="350.0" pickOnBounds="true" preserveRatio="true">
-                                          <image>
-                                              <Image url="@../boards/bookshelf.png" />
-                                          </image>
-                                      </ImageView>
-                           </children></AnchorPane>
+                                <AnchorPane layoutX="85.0" layoutY="178.0" prefHeight="366.0" prefWidth="349.0">
+                                    <children>
+                                        <GridPane fx:id="bookshelf" hgap="15.0" layoutX="28.0" layoutY="16.0" prefHeight="300.0" prefWidth="300.0" vgap="10.0">
+                                            <columnConstraints>
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                            </rowConstraints>
+                                            <padding>
+                                                <Insets bottom="14.0" left="16.0" right="21.0" top="11.0" />
+                                            </padding>
+                                        </GridPane>
+                                        <ImageView fitHeight="365.0" fitWidth="350.0" pickOnBounds="true" preserveRatio="true">
+                                            <image>
+                                                <Image url="@../boards/bookshelf.png" />
+                                            </image>
+                                        </ImageView>
+                                    </children></AnchorPane>
                                 <ImageView fx:id="personalCard" fitHeight="200.0" fitWidth="143.0" layoutX="208.0" layoutY="566.0">
+                                    <image>
+                                        <Image url="@../personal%20goal%20cards/Personal_Goals3.png" />
+                                    </image>
                                 </ImageView>
                                 <Group fx:id="columnOptions">
                                     <RadioButton fx:id="Column1" layoutX="141.0" layoutY="161.0" mnemonicParsing="false">
-                              <toggleGroup>
-                                 <ToggleGroup fx:id="columnOption" />
-                              </toggleGroup></RadioButton>
+                                        <toggleGroup>
+                                            <ToggleGroup fx:id="columnOption" />
+                                        </toggleGroup></RadioButton>
                                     <RadioButton fx:id="Column2" layoutX="200.0" layoutY="161.0" mnemonicParsing="false" toggleGroup="$columnOption" />
                                     <RadioButton fx:id="Column4" layoutX="310.0" layoutY="161.0" mnemonicParsing="false" toggleGroup="$columnOption" />
                                     <RadioButton fx:id="Column5" layoutX="368.0" layoutY="161.0" mnemonicParsing="false" toggleGroup="$columnOption" />
