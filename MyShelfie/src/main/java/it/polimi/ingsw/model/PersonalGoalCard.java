@@ -43,17 +43,33 @@ public class PersonalGoalCard extends GoalCard implements Serializable {
 
     @Override
     public String toString() {
+        String card = "";
+        HashMap<Integer, String> cardMap = toDict();
+        for(int i = 0; i< cardMap.size(); i++){
+            card = card.concat(cardMap.get(i));
+            if (i< cardMap.size()-1){
+                card = card.concat("\n");
+            }
+        }
+        return card;
+
+    }
+    public HashMap<Integer, String> toDict(){
+        HashMap<Integer, String> map = new HashMap<>();
         String number = "";
         for(int i=0; i<5; i++){
             number = number.concat("   " + String.valueOf(i));
         }
+        map.put(0, number);
 
         String rows = "";
         Set<Integer> keys = scoringItem.keySet();
+        int j = 0;
         for(int i=0; i<29;i++){
             // new row
             if (i%5 == 0){
-                rows = rows.concat("\n").concat(String.valueOf(5-i/5)+ " ");
+                j += 1;
+                rows = rows.concat(String.valueOf(5-i/5)+ " ");
             }
 
             if(keys.contains(i)){
@@ -63,11 +79,11 @@ public class PersonalGoalCard extends GoalCard implements Serializable {
             else{
                 rows = rows.concat("    ");
             }
-
-
+            if (i%5 == 4) {
+                map.put(j, rows);
+                rows = "";
+            }
         }
-        return number.concat("\n").concat(rows);
-
+        return map;
     }
-   
 }

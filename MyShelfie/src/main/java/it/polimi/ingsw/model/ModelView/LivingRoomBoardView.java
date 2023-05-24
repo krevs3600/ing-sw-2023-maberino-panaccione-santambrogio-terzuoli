@@ -1,14 +1,13 @@
 package it.polimi.ingsw.model.ModelView;
 
-import it.polimi.ingsw.model.Bag;
 import it.polimi.ingsw.model.CommonGoalCard.CommonGoalCard;
 import it.polimi.ingsw.model.LivingRoomBoard;
-import it.polimi.ingsw.model.Space;
 import it.polimi.ingsw.model.utils.Position;
 
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class LivingRoomBoardView implements Serializable {
@@ -62,24 +61,39 @@ public class LivingRoomBoardView implements Serializable {
     @Override
     public String toString(){
         String board = "";
-        board = board.concat(cliPrintHorizontalNums()).concat("\n");
-        board = board.concat(cliPrintLine()).concat("\n");
-        for (int i=0; i < MAX_HEIGHT; i++){
-            board = board.concat("\033[0;31m"+i + "\033[0m ");
-            for (int j=0; j<MAX_WIDTH; j++){
-                board = board.concat( "|" + getSpace(new Position(i,j)).toString());
+        HashMap<Integer, String> livingRoom = toDict();
+        for(int i = 0; i< livingRoom.size(); i++){
+            board = board.concat(livingRoom.get(i));
+            if (i< livingRoom.size()-1){
+                board = board.concat("\n");
             }
-            board = board.concat("|\n");
-            board = board.concat(cliPrintLine()).concat("\n");
         }
         return board;
+    }
+
+    public HashMap<Integer, String> toDict(){
+        HashMap<Integer, String> map = new HashMap<>();
+        map.put(0, cliHorizontalNums());
+        map.put(1, cliLine());
+        String board = "";
+        for (int i=0; i < MAX_HEIGHT*2; i+=2){
+            board = board.concat("\033[0;31m"+i/2 + "\033[0m ");
+            for (int j=0; j<MAX_WIDTH; j++){
+                board = board.concat( "|" + getSpace(new Position(i/2,j)).toString());
+            }
+            board = board.concat("|");
+            map.put(i+2, board);
+            map.put(i+3, cliLine());
+            board = "";
+        }
+        return map;
     }
 
     /**
      * This private method is an auxiliary method for the toString method of the class
      * @return String It returns the string representing the horizontal numbers
      */
-    private String cliPrintHorizontalNums(){
+    private String cliHorizontalNums(){
         String line = "   ".concat("\033[0;31m");
         for (int i=0; i<MAX_WIDTH; i++){
             line = line.concat(" " + i + "  ");
@@ -91,7 +105,7 @@ public class LivingRoomBoardView implements Serializable {
      * This private method is an auxiliary method for the toString method of the class
      * @return String It returns the string representing a line of the board
      */
-    private String cliPrintLine(){
+    private String cliLine(){
         String line = "  +";
         for (int i=0; i<MAX_WIDTH; i++){
             line = line.concat("---+");
