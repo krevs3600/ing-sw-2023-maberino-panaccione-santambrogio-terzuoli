@@ -237,9 +237,9 @@ public class GUI extends Observable implements View{
 
     @Override
     public void askGameName() {
-      String gameName=this.gameNameController.getGameName();
-      setChanged();
-      notifyObservers(new GameNameMessage(this.client.getNickname(),gameName));
+        String gameName=this.gameNameController.getGameName();
+        setChanged();
+        notifyObservers(new GameNameMessage(this.client.getNickname(),gameName));
     }
 
     @Override
@@ -248,10 +248,10 @@ public class GUI extends Observable implements View{
 
     }
 
-   //todo secondo me si può fare lo stesso metodo nell'interfaccia view e poi implementarlo
+    //todo secondo me si può fare lo stesso metodo nell'interfaccia view e poi implementarlo
     public void chosenGame(String gameChoice) {
-         setChanged();
-         notifyObservers(new GameNameChoiceMessage(this.client.getNickname(), gameChoice));
+        setChanged();
+        notifyObservers(new GameNameChoiceMessage(this.client.getNickname(), gameChoice));
 
     }
 
@@ -262,11 +262,11 @@ public class GUI extends Observable implements View{
 
     }
 
-   // @Override
-   // public void showGameNamesList(Set<String> availableGameNames) {
-   //     setChanged();
-   //     notifyObservers(new GameNameChoiceMessage(this.client.getNickname(),gameNameListController.);
-   // }
+    // @Override
+    // public void showGameNamesList(Set<String> availableGameNames) {
+    //     setChanged();
+    //     notifyObservers(new GameNameChoiceMessage(this.client.getNickname(),gameNameListController.);
+    // }
 
     @Override
     public void showMessage(MessageToClient message) {
@@ -397,35 +397,37 @@ public class GUI extends Observable implements View{
                 JoinGameResponseMessage joinGameResponseMessage = (JoinGameResponseMessage) message;
                 //showGameNamesList(joinGameResponseMessage.getAvailableGamesInLobby());//todo: aggiungere qui lo switch alla scena in cui viene mostrata la lista di giochi
                 //else if (createorJoinGameController.getJoinGameb()) {
-                 URL url = null;
-                 try {
-                     url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/GameNameList_scene.fxml/").toURI().toURL();
-                 } catch (MalformedURLException e) {
-                     throw new RuntimeException(e);
-                 }
-                 FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("GameNameList_scene.fxml"));
-                 try {
-                     root = FXMLLoader.load(url);
-                 } catch (IOException e) {
-                     throw new RuntimeException(e);
-                 }
-                 ;
-                 try {
-                     scene = new Scene(fxmlLoader.load());
-                 } catch (IOException e) {
-                     throw new RuntimeException(e);
-                 }
 
-                GameNameListController gameNameListController = fxmlLoader.getController();
-                gameNameListController.setGui(this);
-                this.gameNameListController=gameNameListController;
+                if (!((JoinGameResponseMessage) message).getAvailableGamesInLobby().isEmpty()) {
+                    URL url = null;
+                    try {
+                        url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/GameNameList_scene.fxml/").toURI().toURL();
+                    } catch (MalformedURLException e) {
+                        throw new RuntimeException(e);
+                    }
+                    FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("GameNameList_scene.fxml"));
+                    try {
+                        root = FXMLLoader.load(url);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
 
-                Platform.runLater(() -> stage.setScene(scene));
-                stage.show();
+                    try {
+                        scene = new Scene(fxmlLoader.load());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
 
 
+                   GameNameListController gameNameListController = fxmlLoader.getController();
+                    gameNameListController.setGui(this);
+                    this.gameNameListController = gameNameListController;
+
+                    Platform.runLater(() -> stage.setScene(scene));
+                    stage.show();
 
 
+                }
             }
 
             case JOIN_GAME_ERROR -> {
@@ -443,10 +445,10 @@ public class GUI extends Observable implements View{
             case WAIT_PLAYERS -> {
                 WaitingResponseMessage waitingResponseMessage = (WaitingResponseMessage) message;
                 if (waitingResponseMessage.getMissingPlayers() == 1) {
-                   // out.println("\nWaiting for 1 player... "); TODO: settare il text della lobby
+                    // out.println("\nWaiting for 1 player... "); TODO: settare il text della lobby
                 } else {
                     //TODO: settare il text della lobby
-                  //  out.println("\nWaiting for " + waitingResponseMessage.getMissingPlayers() + " players... ");
+                    //  out.println("\nWaiting for " + waitingResponseMessage.getMissingPlayers() + " players... ");
                 }
             }
             case PLAYER_JOINED_LOBBY_RESPONSE -> {
@@ -504,9 +506,9 @@ public class GUI extends Observable implements View{
             Platform.runLater(() -> stage.setScene(scene));
             stage.show();
         }
-          //
+        //
 
-        }
+    }
 
 
     @Override
