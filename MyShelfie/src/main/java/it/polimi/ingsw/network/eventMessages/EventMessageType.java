@@ -26,8 +26,10 @@ public enum EventMessageType {
     SCORE,
     FILL_BOOKSHELF,
     SWITCH_PHASE,
-    DISCONNECT_CLIENT;
+    DISCONNECT_CLIENT,
     // error
+    GAME_SPECS;
+
 
 
 }

@@ -208,7 +208,7 @@ public class CLI extends Observable implements View {
     }
 
     private void createGame() {
-        askGameName();
+        askGameSpecs();
     }
 
     private void joinGame(){
@@ -228,6 +228,22 @@ public class CLI extends Observable implements View {
             notifyObservers(new GameCreationMessage(this.client.getNickname(), numOfPlayers, gameName));
     }
 
+
+    public void askGameSpecs(){
+        int numOfPlayers = 0;
+        String gameName = "";
+
+        while (gameName.length() < 1 || numOfPlayers <= 0) {
+            out.print("\n" + this.client.getNickname() + " choose your game's name: ");
+            gameName = in.nextLine();
+            out.print("\nPlease insert the number of players: ");
+            numOfPlayers = in.nextInt();
+            in.nextLine();
+        }
+
+        setChanged();
+        notifyObservers(new GameSpecsMessage(this.client.getNickname(),gameName, numOfPlayers));
+    }
     public void askGameName() {
 
         String gameName = "";
@@ -239,6 +255,7 @@ public class CLI extends Observable implements View {
         notifyObservers(new GameNameMessage(this.client.getNickname(),gameName));
 
     }
+
 
     public void askNickname() {
         String nickName = "";
@@ -288,7 +305,7 @@ public class CLI extends Observable implements View {
 
 
 
-            case GAME_NAME_RESPONSE -> {
+            /**case GAME_NAME_RESPONSE -> {
                 GameNameResponseMessage gameNameResponseMessage = (GameNameResponseMessage) message;
                 if (gameNameResponseMessage.isValidGameName()) {
                     System.out.println("\nAvailable game name :) ");
@@ -298,6 +315,7 @@ public class CLI extends Observable implements View {
                     askGameName();
                 }
             }
+
             //this case is related to the insertion of the number of players
             case GAME_CREATION -> {
                 GameCreationResponseMessage gameCreationResponseMessage = (GameCreationResponseMessage) message;
@@ -309,6 +327,27 @@ public class CLI extends Observable implements View {
                     askNumberOfPlayers(this.client.getGameName());
                 }
             }
+
+             */
+
+
+            case GAME_SPECS -> {
+                GameSpecsResponseMessage gameSpecsResponseMessage = (GameSpecsResponseMessage) message;
+                if (gameSpecsResponseMessage.isValidGameName()) {
+                    System.out.println("\nAvailable game name :) ");
+                } else {
+                    System.err.println("\nThe game name is already taken, please choose another game name");
+                    askGameSpecs();
+                }
+                if(gameSpecsResponseMessage.isValidGameCreation()){
+                    System.out.println("\nValid number of players :) ");
+                    System.out.println("\nWaiting for other players... ");
+                } else {
+                    System.err.println("\nInvalid number of players, please choose a number within the available range");
+                    askGameSpecs();
+                }
+            }
+
             case LOGIN_RESPONSE -> {
                 LoginResponseMessage loginResponseMessage = (LoginResponseMessage) message;
                 if (loginResponseMessage.isValidNickname()) {

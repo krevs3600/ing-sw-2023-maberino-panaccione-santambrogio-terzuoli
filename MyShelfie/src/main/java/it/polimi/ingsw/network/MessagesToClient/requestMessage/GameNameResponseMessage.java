@@ -24,6 +24,6 @@ public class GameNameResponseMessage extends RequestMessage {
         return validGameName;
     }
     public String getGameName(){
-        return  this.GameName;
+        return this.GameName;
     }
 }

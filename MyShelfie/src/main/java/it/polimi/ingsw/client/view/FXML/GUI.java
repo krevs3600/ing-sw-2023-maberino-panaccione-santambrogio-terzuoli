@@ -235,12 +235,14 @@ public class GUI extends Observable implements View{
         return 0;
     }
 
-    @Override
-    public void askGameName() {
+    //TODO: askgamespecs
+    /*public void askGameName() {
         String gameName=this.gameNameController.getGameName();
         setChanged();
         notifyObservers(new GameNameMessage(this.client.getNickname(),gameName));
     }
+
+     */
 
     @Override
     public void showGameNamesList(Set<String> availableGameNames) {
@@ -259,6 +261,10 @@ public class GUI extends Observable implements View{
 
 
     public void askGameName(String GameName) {
+
+    }
+
+    public void askGameSpecs(){
 
     }
 
@@ -504,7 +510,7 @@ public class GUI extends Observable implements View{
 
         }
     }
-    @Override
+
     public void askNumberOfPlayers(String gameName) {
         setChanged();
         notifyObservers(new GameCreationMessage(this.client.getNickname(), this.numberOfPlayersController.getNumberOfPlayersChosen(), gameName));

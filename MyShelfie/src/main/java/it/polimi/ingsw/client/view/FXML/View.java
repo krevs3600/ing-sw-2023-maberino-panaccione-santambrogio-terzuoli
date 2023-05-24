@@ -31,16 +31,19 @@ public interface View {
 
 
     void createConnection()  throws RemoteException, NotBoundException;
-    /**
+
+ void askNickname();
+
+ /**
      * Asks the user to choose a Nickname.
      */
-    void askNickname();
+    //void askNickname();
 
     String askServerAddress();
 
     int askServerPort();
 
-     void askGameName();
+    void askGameSpecs();
 
     void showGameNamesList(Set<String> availableGameNames);
 

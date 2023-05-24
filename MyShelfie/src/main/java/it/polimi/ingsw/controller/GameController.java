@@ -91,6 +91,13 @@ public class GameController {
                 game.subscribe(newPlayer);
             }
 
+            case GAME_SPECS -> {
+                GameSpecsMessage gameSpecsMessage = (GameSpecsMessage) eventMessage;
+                game.setGameName(gameSpecsMessage.getGameName());
+                Player newPlayer = new Player(eventMessage.getNickname());
+                game.subscribe(newPlayer);
+            }
+
             case TILE_POSITION -> {
                 TilePositionMessage tilePositionMessage = (TilePositionMessage) eventMessage;
 

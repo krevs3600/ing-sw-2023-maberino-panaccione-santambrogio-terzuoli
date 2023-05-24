@@ -79,7 +79,7 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                     client.onMessage(new LoginResponseMessage(false));                                                                            //        client.onMessage(new CreatorLoginResponseMessage(validNickname));
             }                                                                                                                                     //}
             //this.gameController.update(client, eventMessage);
-            case GAME_NAME -> {
+            /**case GAME_NAME -> {
                 GameNameMessage gameNameMessage = (GameNameMessage) eventMessage;
                 // da capire cosa modificare
                 if (!currentLobbyGameNames.contains(gameNameMessage.getGameName()) && !currentGames.containsKey(gameNameMessage.getGameName())) {
@@ -104,6 +104,29 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                     isValid = true;
                 }
                 client.onMessage(new GameCreationResponseMessage(isValid));
+            }
+             */
+
+            case GAME_SPECS -> {
+                GameSpecsMessage gameSpecsMessage = (GameSpecsMessage) eventMessage;
+                boolean isValidGameName = false;
+                boolean isValidNumOfPlayers = false;
+                if (!currentLobbyGameNames.contains(gameSpecsMessage.getGameName()) && !currentGames.containsKey(gameSpecsMessage.getGameName())) {
+                    currentLobbyGameNames.add(gameSpecsMessage.getGameName());
+                    isValidGameName = true;
+                    if(gameSpecsMessage.getNumOfPlayers() > 1 && gameSpecsMessage.getNumOfPlayers() < 5){
+                        Game game = new Game(Arrays.stream(NumberOfPlayers.values()).filter(x -> x.getValue() == gameSpecsMessage.getNumOfPlayers()).toList().get(0), gameSpecsMessage.getGameName());
+                        GameController gameController = new GameController(this, game);
+                        playerGame.put(client, gameController);
+                        register(client);
+                        currentGames.put(gameSpecsMessage.getGameName(), gameController);
+                        // first player is directly added
+                        gameController.getClients().add(client);
+                        gameController.update(client, gameSpecsMessage);
+                        isValidNumOfPlayers = true;
+                    }
+                }
+                client.onMessage(new GameSpecsResponseMessage(isValidGameName, isValidNumOfPlayers));
             }
 
             case JOIN_GAME_REQUEST -> {

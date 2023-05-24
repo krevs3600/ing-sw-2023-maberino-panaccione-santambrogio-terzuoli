@@ -42,7 +42,7 @@ public class GameNameController {
     public void GameNameChosen(MouseEvent mouseEvent) {
         //TODO: controllo sugli input spazi vuoti
         this.gameName=GameName.getText();
-         gui.askGameName();
+         gui.askGameName(gameName);
     }
 
     public void setGui(GUI gui) {
