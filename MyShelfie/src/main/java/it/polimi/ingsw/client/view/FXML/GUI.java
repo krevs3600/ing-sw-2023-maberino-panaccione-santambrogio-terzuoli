@@ -101,7 +101,6 @@ public class GUI extends Observable implements View{
     }
 
 
-
     public void askTypeofConnection(Stage stage) throws IOException {
         URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/RMIorSocket_scene.fxml/").toURI().toURL();
 
@@ -248,8 +247,6 @@ public class GUI extends Observable implements View{
     public void showGameNamesList(Set<String> availableGameNames) {
         setChanged();
         notifyObservers(new GameNameChoiceMessage(this.client.getNickname(),this.gameNameListController.getGameToJoin()));
-
-
     }
 
     //todo secondo me si può fare lo stesso metodo nell'interfaccia view e poi implementarlo
@@ -306,10 +303,7 @@ public class GUI extends Observable implements View{
 
                     Platform.runLater(() ->
                             stage.setScene(scene));
-                    //Platform.runLater(() ->stage.show());
                     // this.nicknameController.InvalidNickname.setVisible(true);
-
-
                     //showGameNamesList(loginResponseMessage.getAvailableGames());
 
                 } else {
@@ -467,12 +461,7 @@ public class GUI extends Observable implements View{
                 lobbyController.NumberOfMissingPlayers.setText("Waiting for"+waitingResponseMessage.getMissingPlayers()+"players.....");
                 lobbyController.NumberOfMissingPlayers.setVisible(true);
 
-
-
                 //magari serve settare il numero di giocatori selezionato da far vedere
-
-
-
                 // if (waitingResponseMessage.getMissingPlayers() == 1) {
                //
                //     // out.println("\nWaiting for 1 player... "); TODO: settare il text della lobby
@@ -491,7 +480,6 @@ public class GUI extends Observable implements View{
               //  this.lobbyController.NumberOfMissingPlayers.setVisible(true);
 
             }
-
         }
     }
 

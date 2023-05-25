@@ -36,7 +36,6 @@ public class StartController extends Observable{
 
     private GUI gui;
 
-
     public void setGui(GUI gui){
         this.gui=gui;
     }
@@ -47,18 +46,12 @@ public class StartController extends Observable{
 //TODO: refactor del metodo (createGame)
     public void switchToConnection(ActionEvent event) throws IOException {
         gui.askTypeofConnection(gui.getStage());
-
-
-
     }
 
 
     public void JoinGame(MouseEvent event) throws IOException{
         gui.askNickname();
-
     }
-
-
 }
 
 

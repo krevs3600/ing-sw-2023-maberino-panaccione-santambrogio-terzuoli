@@ -11,10 +11,12 @@ public class CommonGoalCardView implements Serializable {
     private final Stack<ScoringToken> stack;
     private final String toString;
     private static final long serialVersionUID = 1L;
+    private final String getType;
 
     public CommonGoalCardView(CommonGoalCard commonGoalCard){
         this.stack = commonGoalCard.getStack();
         this.toString = commonGoalCard.toString();
+        this.getType = commonGoalCard.getType();
     }
 
 
@@ -22,4 +24,6 @@ public class CommonGoalCardView implements Serializable {
     public String toString(){
         return this.toString;
     }
+
+    public String getType() {return this.getType;}
 }

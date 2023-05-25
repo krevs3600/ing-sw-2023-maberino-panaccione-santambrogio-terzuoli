@@ -131,6 +131,10 @@ public class FourLinesCommonGoalCard extends CommonGoalCard  {
         return "Four lines each formed by 5 tiles of maximum three different types.\n" +
                 "One line can show the same or a different combination of another line";
     }
+    @Override
+    public String getType () {
+        return this.getClass().getSimpleName();
+    }
 }
 
 

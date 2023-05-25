@@ -54,4 +54,8 @@ public class CornersCommonGoalCard extends CommonGoalCard {
     public String toString(){
         return "Four tiles of the same type in the four corners";
     }
+    @Override
+    public String getType () {
+        return this.getClass().getSimpleName();
+    }
 }

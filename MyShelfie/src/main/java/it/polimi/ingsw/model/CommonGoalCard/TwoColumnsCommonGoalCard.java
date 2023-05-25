@@ -73,6 +73,10 @@ public class TwoColumnsCommonGoalCard extends CommonGoalCard{
     public String toString(){
         return "Two columns each formed by six different types of tiles";
     }
+    @Override
+    public String getType () {
+        return this.getClass().getSimpleName();
+    }
 }
 
 

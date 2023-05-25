@@ -78,6 +78,10 @@ public class TwoLinesCommonGoalCard extends CommonGoalCard{
         return "Two lines each formed by five different types of tiles\n" +
                 "One line can show the same or a different combination of the other line.";
     }
+    @Override
+    public String getType () {
+        return this.getClass().getSimpleName();
+    }
 }
 
 

@@ -58,4 +58,8 @@ public class IncreasingColumnsCommonGoalCard extends CommonGoalCard{
                 Starting from the first column on the left or on the right, each next column must be made of exactly one more tile.\s
                 Tiles can be of any type""";
     }
+    @Override
+    public String getType () {
+        return this.getClass().getSimpleName();
+    }
 }

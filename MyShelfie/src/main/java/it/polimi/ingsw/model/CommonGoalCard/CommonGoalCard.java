@@ -68,4 +68,6 @@ public abstract class CommonGoalCard extends GoalCard {
     public String toString(){
         return "AbstractCommonGoalCard";
     }
+
+    public String getType() { return this.getClass().getName();}
 }

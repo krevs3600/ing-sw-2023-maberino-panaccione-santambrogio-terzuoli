@@ -65,4 +65,8 @@ public class FourGroupsCommonGoalCard extends CommonGoalCard {
         return "Four groups each containing at least 4 tiles of the same type.\n" +
                 "The tiles of one group can be different from those of another group";
     }
+    @Override
+    public String getType () {
+        return this.getClass().getSimpleName();
+    }
 }

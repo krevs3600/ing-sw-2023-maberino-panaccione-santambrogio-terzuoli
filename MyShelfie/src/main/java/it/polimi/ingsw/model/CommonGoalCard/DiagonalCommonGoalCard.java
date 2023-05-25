@@ -76,4 +76,8 @@ public class DiagonalCommonGoalCard extends CommonGoalCard{
     public String toString(){
         return "Five tiles of the same type forming a diagonal";
     }
+    @Override
+    public String getType () {
+        return this.getClass().getSimpleName();
+    }
 }

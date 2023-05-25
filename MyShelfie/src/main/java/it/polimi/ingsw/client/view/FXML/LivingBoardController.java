@@ -1,13 +1,8 @@
 package it.polimi.ingsw.client.view.FXML;
 import it.polimi.ingsw.controller.GameController;
+import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.CommonGoalCard.*;
-import it.polimi.ingsw.model.Game;
-import it.polimi.ingsw.model.LivingRoomBoard;
-import it.polimi.ingsw.model.ModelView.GameView;
-import it.polimi.ingsw.model.ModelView.LivingRoomBoardView;
-import it.polimi.ingsw.model.ModelView.SpaceView;
-import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.Space;
+import it.polimi.ingsw.model.ModelView.*;
 import it.polimi.ingsw.model.utils.NumberOfPlayers;
 import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.model.utils.SpaceType;
@@ -217,46 +212,48 @@ public class LivingBoardController {
         this.gui = gui;
     }
 
-    public static String getCommonGoalCardPic(Object o){
+    public static String getCommonGoalCardPic(CommonGoalCardView card){
         String path = "src/main/resources/it/polimi/ingsw/client/view/common goal cards/";
-        if (o instanceof TwoSquaresCommonGoalCard){
-            return path + "1.jpg";
-        }
-        else if (o instanceof TwoColumnsCommonGoalCard){
-            return path + "2.jpg";
-        }
-        else if (o instanceof FourGroupsCommonGoalCard){
-            return path + "3.jpg";
-        }
-        else if (o instanceof SixGroupsCommonGoalCard){
-            return path + "4.jpg";
-        }
-        else if (o instanceof ThreeColumnsCommonGoalCard){
-            return path + "5.jpg";
-        }
-        else if (o instanceof TwoLinesCommonGoalCard){
-            return path + "6.jpg";
-        }
-        else if (o instanceof FourLinesCommonGoalCard){
-            return path + "7.jpg";
-        }
-        else if (o instanceof CornersCommonGoalCard){
-            return path + "8.jpg";
-        }
-        else if (o instanceof EightTilesCommonGoalCard){
-            return path + "9.jpg";
-        }
-        else if (o instanceof CrossCommonGoalCard){
-            return path + "10.jpg";
-        }
-        else if (o instanceof DiagonalCommonGoalCard){
-            return path + "11.jpg";
-        }
-        else if (o instanceof IncreasingColumnsCommonGoalCard){
-            return path + "12.jpg";
-        }
-        else {
-            return path + "back.jpg";
+        switch (card.getType()) {
+            case "TwoSquaresCommonGoalCard" -> {
+                return path + "1.jpg";
+            }
+            case "TwoColumnsCommonGoalCard" -> {
+                return path + "2.jpg";
+            }
+            case "FourGroupsCommonGoalCard" -> {
+                return path + "3.jpg";
+            }
+            case "SixGroupsCommonGoalCard" -> {
+                return path + "4.jpg";
+            }
+            case "ThreeColumnsCommonGoalCard" -> {
+                return path + "5.jpg";
+            }
+            case "TwoLinesCommonGoalCard" -> {
+                return path + "6.jpg";
+            }
+            case "FourLinesCommonGoalCard" -> {
+                return path + "7.jpg";
+            }
+            case "CornersCommonGoalCard" -> {
+                return path + "8.jpg";
+            }
+            case "EightTilesCommonGoalCard" -> {
+                return path + "9.jpg";
+            }
+            case "CrossCommonGoalCard" -> {
+                return path + "10.jpg";
+            }
+            case "DiagonalCommonGoalCard" -> {
+                return path + "11.jpg";
+            }
+            case "IncreasingColumnsCommonGoalCard" -> {
+                return path + "12.jpg";
+            }
+            default -> {
+                return path + "back.jpg";
+            }
         }
     }
 }

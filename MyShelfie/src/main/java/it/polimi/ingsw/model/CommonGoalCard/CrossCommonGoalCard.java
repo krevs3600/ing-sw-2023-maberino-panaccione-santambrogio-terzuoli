@@ -60,4 +60,8 @@ public class CrossCommonGoalCard extends CommonGoalCard{
     public String toString(){
         return "Five tiles of the same type forming an X";
     }
+    @Override
+    public String getType () {
+        return this.getClass().getSimpleName();
+    }
 }
