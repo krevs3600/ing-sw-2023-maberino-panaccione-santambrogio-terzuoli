@@ -203,6 +203,7 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                         }
                     }
                 }
+                client.onMessage(new DisconnectionResponseMessage());
             }
         }
     }

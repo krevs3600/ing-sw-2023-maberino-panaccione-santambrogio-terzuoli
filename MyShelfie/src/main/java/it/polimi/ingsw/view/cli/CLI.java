@@ -197,7 +197,6 @@ public class CLI extends Observable implements View {
                 out.println("Closing game...");
                 setChanged();
                 notifyObservers(new DisconnectClientMessage( this.client.getNickname()));
-                System.exit(0);
 
             }
             default -> {
@@ -441,6 +440,18 @@ public class CLI extends Observable implements View {
 
                 } catch (NotBoundException e) {
                     throw new RuntimeException(e);
+                }
+            }
+
+            case DISCONNECTION_RESPONSE -> {
+                this.client = null;
+                out.println("\nYou lost the connection to the server, and can no longer play");
+                try {
+                    createConnection();
+                } catch (RemoteException e) {
+
+                } catch (NotBoundException e) {
+
                 }
             }
         }
