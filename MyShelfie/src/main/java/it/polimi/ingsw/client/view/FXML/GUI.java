@@ -13,6 +13,8 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -38,21 +40,14 @@ public class GUI extends Observable implements View{
     private static double height;
     private NicknameController nicknameController;
     private ServerSettingsController serverSettingsController;
-
     private CreateorJoinGameController createorJoinGameController;
     private RMIorSocketController rmIorSocketController;
-
     private LobbyController lobbyController;
     private StartController startController;
     private LivingBoardController livingBoardController;
-
-
-
     private ClientImplementation client;
-
     private GameNameController gameNameController;
     private NumberOfPlayersController numberOfPlayersController;
-
     private GameNameListController gameNameListController;
     private String nickname;
 
@@ -62,8 +57,7 @@ public class GUI extends Observable implements View{
 
 
     public void setClient(ClientImplementation client){
-        this.client=client;
-
+        this.client = client;
     }
 
     public void gameMenuGUI(Stage stage) throws IOException {
@@ -93,13 +87,11 @@ public class GUI extends Observable implements View{
     }
 
 
-
     @Override
     public String askConnectionType() {
 
         return null;
     }
-
 
     public void askTypeofConnection(Stage stage) throws IOException {
         URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/RMIorSocket_scene.fxml/").toURI().toURL();
@@ -115,7 +107,6 @@ public class GUI extends Observable implements View{
         scene = new Scene(fxmlLoader.load());
         this.stage=stage;
         Platform.runLater(()->stage.setScene(scene));
-        //stage.show();
         RMIorSocketController rmIorSocketController1=fxmlLoader.getController();
         rmIorSocketController1.setGui(this);
         this.rmIorSocketController=rmIorSocketController1;
@@ -205,27 +196,6 @@ public class GUI extends Observable implements View{
         // askNickname();
     }
 
-    //@Override
-    //public void askNickname() {
-    //
-    //
-    //
-    //    Stage stage = GuiApp.getWindow();
-    //    URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/livingBoard_scene.fxml").toURI().toURL();
-    //    FXMLLoader fxmlLoader = new FXMLLoader(url);
-    //    Scene scene = new Scene(fxmlLoader.load());
-    //    stage.setScene(scene);
-    //
-    //}
-
-
-    //public void askNickname(String nickname) {
-    //
-    //    setChanged();
-    //    notifyObservers(new NicknameMessage(nickname));
-    //
-    //
-    //}
     @Override
     public String askServerAddress() {
         return null;
@@ -253,10 +223,6 @@ public class GUI extends Observable implements View{
     //public void chosenGame(String gameChoice) {
     //
     //}
-
-
-
-
     public void askGameName(String GameName) {
 
     }
@@ -277,72 +243,44 @@ public class GUI extends Observable implements View{
             case LOGIN_RESPONSE -> {
                 LoginResponseMessage loginResponseMessage = (LoginResponseMessage) message;
                 if (loginResponseMessage.isValidNickname()) {
-                    URL url = null;
+
                     try {
-                        url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/CreateorJoinGame_scene.fxml/").toURI().toURL();
-                    } catch (MalformedURLException e) {
-                        throw new RuntimeException(e);
-                    }
-                    FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("CreateorJoinGame_scene.fxml"));
-                    try {
-                        root = FXMLLoader.load(url);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                    try {
+                        URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/CreateorJoinGame_scene.fxml/").toURI().toURL();
+                        FXMLLoader fxmlLoader = new FXMLLoader(url);
                         scene = new Scene(fxmlLoader.load());
+                        this.nickname = ((LoginResponseMessage) message).getNickname();
+                        CreateorJoinGameController createorJoinGameController = fxmlLoader.getController();
+                        createorJoinGameController.setGui(this);
+                        this.createorJoinGameController = createorJoinGameController;
+                        Platform.runLater(() -> stage.setScene(scene));
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-                    this.nickname = ((LoginResponseMessage) message).getNickname();
-                    System.out.println(nickname);
-                    CreateorJoinGameController createorJoinGameController = fxmlLoader.getController();
-                    createorJoinGameController.setGui(this);
-                    this.createorJoinGameController = createorJoinGameController;
-
-
-                    Platform.runLater(() ->
-                            stage.setScene(scene));
                     // this.nicknameController.InvalidNickname.setVisible(true);
-                    //showGameNamesList(loginResponseMessage.getAvailableGames());
-
+                    // showGameNamesList(loginResponseMessage.getAvailableGames());
                 } else {
-
-                    this.nicknameController.InvalidNickname.setVisible(true);
+                    // this.nicknameController.InvalidNickname.setVisible(true);
+                    showPopup("Unavailable nickname, please choose another one");
                 }
             }
             case GAME_NAME_RESPONSE -> {
                 GameNameResponseMessage gameNameResponseMessage = (GameNameResponseMessage) message;
                 if (gameNameResponseMessage.isValidGameName()) {
-                    URL url = null;
                     try {
-                        url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/NumberofPlayers_scene.fxml/").toURI().toURL();
-                    } catch (MalformedURLException e) {
-                        throw new RuntimeException(e);
-                    }
-                    FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("NumberofPlayers_scene.fxml"));
-                    try {
-                        root = FXMLLoader.load(url);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                    ;
-                    try {
+                        URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/NumberofPlayers_scene.fxml/").toURI().toURL();
+                        FXMLLoader fxmlLoader = new FXMLLoader(url);
                         scene = new Scene(fxmlLoader.load());
+                        NumberOfPlayersController numberOfPlayersController = fxmlLoader.getController();
+                        this.numberOfPlayersController = numberOfPlayersController;
+                        numberOfPlayersController.setGui(this);
+                        numberOfPlayersController.setGameName(gameNameResponseMessage.getGameName());
+                        Platform.runLater(() -> stage.setScene(scene));
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-                    //TODO capire la concorrenza tra queste due scene
-                    NumberOfPlayersController numberOfPlayersController = fxmlLoader.getController();
-                    this.numberOfPlayersController = numberOfPlayersController;
-                    numberOfPlayersController.setGui(this);
-                    numberOfPlayersController.setGameName(gameNameResponseMessage.getGameName());
-
-                    Platform.runLater(() -> stage.setScene(scene));
-                    // this.nicknameController.InvalidNickname.setVisible(true);
                 } else {
-
-                    this.gameNameController.alreadyTakenGameName.setVisible(true);
+                    // this.gameNameController.alreadyTakenGameName.setVisible(true);
+                    showPopup("Invalid game name, please choose another one");
                 }
             }
 
@@ -352,32 +290,16 @@ public class GUI extends Observable implements View{
                 // anzi in realtà potrebbe premere ok prima di selezionare il numero di giocatori
                 GameCreationResponseMessage gameCreationResponseMessage = (GameCreationResponseMessage) message;
                 if (gameCreationResponseMessage.isValidGameCreation()) {
-                    URL url = null;
                     try {
-                        url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/lobby_scene.fxml/").toURI().toURL();
-                    } catch (MalformedURLException e) {
-                        throw new RuntimeException(e);
-                    }
-                    FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("lobby_scene.fxml"));
-                    try {
-                        root = FXMLLoader.load(url);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                    try {
+                        URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/lobby_scene.fxml/").toURI().toURL();
+                        FXMLLoader fxmlLoader = new FXMLLoader(url);
                         scene = new Scene(fxmlLoader.load());
+                        lobbyController = fxmlLoader.getController();
+                        lobbyController.setGui(this);
+                        Platform.runLater(() -> stage.setScene(scene));
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-                    Platform.runLater(() -> stage.setScene(scene));
-                    //TODO capire la concorrenza tra queste due scene
-                    LobbyController lobbyController = fxmlLoader.getController();
-                    this.lobbyController = lobbyController;
-                    lobbyController.setGui(this);
-                    //lobbyController.PIU.setVisible(true);
-                    //magari serve settare il numero di giocatori selezionato da far vedere
-
-
                 } else {
                     this.numberOfPlayersController.missingNumberLabel.setVisible(true);
                 }
@@ -388,97 +310,64 @@ public class GUI extends Observable implements View{
                 JoinGameResponseMessage joinGameResponseMessage = (JoinGameResponseMessage) message;
                 //showGameNamesList(joinGameResponseMessage.getAvailableGamesInLobby());//todo: aggiungere qui lo switch alla scena in cui viene mostrata la lista di giochi
                 //else if (createorJoinGameController.getJoinGameb()) {
-
                 if (!((JoinGameResponseMessage) message).getAvailableGamesInLobby().isEmpty()) {
-                    URL url = null;
                     try {
-                        url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/GameNameList_scene.fxml/").toURI().toURL();
-                    } catch (MalformedURLException e) {
-                        throw new RuntimeException(e);
-                    }
-                    FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("GameNameList_scene.fxml"));
-                    try {
-                        root = FXMLLoader.load(url);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-
-                    try {
+                        URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/GameNameList_scene.fxml/").toURI().toURL();
+                        FXMLLoader fxmlLoader = new FXMLLoader(url);
                         scene = new Scene(fxmlLoader.load());
+                        GameNameListController gameNameListController = fxmlLoader.getController();
+                        gameNameListController.setGui(this);
+                        this.gameNameListController = gameNameListController;
+                        this.gameNameListController.setCurrentLobbyGameNames(((JoinGameResponseMessage) message).getAvailableGamesInLobby());
+
+                        Platform.runLater(() -> stage.setScene(scene));
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-
-                    GameNameListController gameNameListController = fxmlLoader.getController();
-                    gameNameListController.setGui(this);
-                    this.gameNameListController = gameNameListController;
-                    this.gameNameListController.setCurrentLobbyGameNames(((JoinGameResponseMessage) message).getAvailableGamesInLobby());
-
-                    Platform.runLater(() -> stage.setScene(scene));
-                    //Platform.runLater(() -> stage.show());
-                    //stage.show();
                 }
             }
 
             case JOIN_GAME_ERROR -> {
                 JoinErrorMessage joinErrorMessage = (JoinErrorMessage) message;
                 // pop up not available games in the lobby
-                this.createorJoinGameController.NoGamesInLobby.setVisible(true);
-                this.createorJoinGameController.NolobbygamesPane.setVisible(true);
-                this.createorJoinGameController.OkBtn.setVisible(true);
-                this.createorJoinGameController.NoLobbyGamesText.setVisible(true);
+                showPopup("No available games in the lobby");
             }
 
 
             case WAIT_PLAYERS -> {
                 WaitingResponseMessage waitingResponseMessage = (WaitingResponseMessage) message;
                 if (this.lobbyController == null) {
-                    URL url = null;
                     try {
-                        url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/lobby_scene.fxml/").toURI().toURL();
-                    } catch (MalformedURLException e) {
-                        throw new RuntimeException(e);
-                    }
-                    FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("lobby_scene.fxml"));
-                    try {
-                        root = FXMLLoader.load(url);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                    ;
-                    try {
+                        URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/lobby_scene.fxml/").toURI().toURL();
+                        FXMLLoader fxmlLoader = new FXMLLoader(url);
                         scene = new Scene(fxmlLoader.load());
+                        lobbyController = fxmlLoader.getController();
+                        lobbyController.setGui(this);
+                        Platform.runLater(() -> stage.setScene(scene));
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-
-                    Platform.runLater(() -> stage.setScene(scene));
-                    //TODO capire la concorrenza tra queste due scene
-                    LobbyController lobbyController = fxmlLoader.getController();
-                    this.lobbyController = lobbyController;
-                    lobbyController.setGui(this); // appunto per me: non dovrebbero esserci problemi di settagggio del testo perchè in caso entro nella lobby come creatore del gioco, nell'altro caso come  giocatore
                 }
-                lobbyController.NumberOfMissingPlayers.setText("Waiting for"+waitingResponseMessage.getMissingPlayers()+"players.....");
+                lobbyController.NumberOfMissingPlayers.setText("Waiting for" + waitingResponseMessage.getMissingPlayers()+"players.....");
                 lobbyController.NumberOfMissingPlayers.setVisible(true);
 
                 //magari serve settare il numero di giocatori selezionato da far vedere
                 // if (waitingResponseMessage.getMissingPlayers() == 1) {
-               //
-               //     // out.println("\nWaiting for 1 player... "); TODO: settare il text della lobby
-               // } else {
-               //     //TODO: settare il text della lobby
-               //     //  out.println("\nWaiting for " + waitingResponseMessage.getMissingPlayers() + " players... ");
-               // }
+                //
+                //     // out.println("\nWaiting for 1 player... "); TODO: settare il text della lobby
+                // } else {
+                //     //TODO: settare il text della lobby
+                //     //  out.println("\nWaiting for " + waitingResponseMessage.getMissingPlayers() + " players... ");
+                // }
             }
             case PLAYER_JOINED_LOBBY_RESPONSE -> {
                 PlayerJoinedLobbyMessage player = (PlayerJoinedLobbyMessage) message;
                 //out.println("\n" + player.getNickname() + " joined lobby") TODO: settare il text della lobby ;
                 Platform.runLater(()->lobbyController.PlayerJoinedGame.setText(player.getNickname()+ " joined lobby"));
                 this.lobbyController.PlayerJoinedGame.setVisible(true);
-            // ok forse il comando sotto non ha senso perche sono nella GUI di un client che quindi vede il suo lobbyController
-              //  this.lobbyController.NumberOfMissingPlayers.setText("Waiting for"+ this.lobbyController.getPinLobby());
-              //  this.lobbyController.NumberOfMissingPlayers.setVisible(true);
-
+                // ok forse il comando sotto non ha senso perche sono nella GUI di un client che quindi vede il suo lobbyController
+                //  this.lobbyController.NumberOfMissingPlayers.setText("Waiting for"+ this.lobbyController.getPinLobby());
+                //  this.lobbyController.NumberOfMissingPlayers.setVisible(true);
             }
         }
     }
@@ -502,37 +391,18 @@ public class GUI extends Observable implements View{
     @Override
     public void gameMenu() {
         if (createorJoinGameController.getCreateGame()) {
-            URL url = null;
             try {
-                url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/GameName_scene.fxml/").toURI().toURL();
-            } catch (MalformedURLException e) {
-                throw new RuntimeException(e);
-            }
-            FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("GameName_scene.fxml"));
-            try {
-                root = FXMLLoader.load(url);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            ;
-            try {
+                URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/GameName_scene.fxml/").toURI().toURL();
+                FXMLLoader fxmlLoader = new FXMLLoader(url);
                 scene = new Scene(fxmlLoader.load());
+                gameNameController = fxmlLoader.getController();
+                gameNameController.setGui(this);
+                Platform.runLater(() -> stage.setScene(scene));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-
-
-            GameNameController GameNameController = fxmlLoader.getController();
-            GameNameController.setGui(this);
-            this.gameNameController = GameNameController;
-
-            Platform.runLater(() -> stage.setScene(scene));
-            //stage.show();
         }
-        //
-
     }
-
 
     @Override
     public void update(GameView gameView, EventMessage eventMessage) {
@@ -555,12 +425,19 @@ public class GUI extends Observable implements View{
                 } catch (IOException e) {
                     System.out.println(e);
                 }
-
             }
         }
     }
-
-
+    public void showPopup(String text){
+        Popup popup = new Popup();
+        Label noSelection = new Label(text);
+        noSelection.setStyle("-fx-background-color: #FFCCCC; -fx-text-fill: #FF0000;-fx-font-size: 30; -fx-padding: 30px;");
+        popup.getContent().add(noSelection);
+        popup.setAutoHide(true);
+        if (getStage()!=null){
+            Platform.runLater(()-> popup.show(this.getStage()));
+        }
+    }
 
     public static Stage getWindow(){
         return window;

@@ -70,18 +70,26 @@ public class LivingBoardController {
     public ImageView commonGoalCard1;
     @FXML
     public ImageView commonGoalCard2;
+    @FXML
+    public GridPane otherBookshelf;
+    @FXML
+    public Button previousPlayer;
+    @FXML
+    public Button nextPlayer;
+    @FXML
+    public Button playerBookshelf;
 
     private boolean columnSelected = false;
     private int column;
     private String nickname = "carlo";
     private GUI gui;
+    private Map<TileType, String[]> images = new HashMap<>();
 
 
 
     public void initialize(GameView gameView, String nickname) throws FileNotFoundException {
         // loading itemTiles paths and creating support structures
         String path = "src/main/resources/it/polimi/ingsw/client/view/itemtiles/";
-        Map<TileType, String[]> images = new HashMap<>();
         String[] cats = {"Gatti1.1.png", "Gatti1.2.png", "Gatti1.3.png"};
         String[] frames = {"Cornici1.1.png", "Cornici1.2.png", "Cornici1.3.png"};
         String[] games = {"Giochi1.1.png", "Giochi1.2.png", "Giochi1.3.png"};
@@ -134,6 +142,15 @@ public class LivingBoardController {
                 bookshelf.add(imageView, c,r);
             }
         }
+        for (int r=0; r<6;r++){
+            for (int c=0; c<5; c++){
+                ImageView imageView = new ImageView();
+                imageView.setFitWidth((otherBookshelf.getPrefWidth() - (int)otherBookshelf.getPadding().getLeft() - (int)otherBookshelf.getPadding().getRight() - ((otherBookshelf.getColumnCount()-1)*otherBookshelf.getHgap()))/otherBookshelf.getColumnCount());
+                imageView.setFitHeight((otherBookshelf.getPrefHeight() - (int)otherBookshelf.getPadding().getTop() - (int)otherBookshelf.getPadding().getBottom() - ((otherBookshelf.getRowCount()-1)*otherBookshelf.getVgap()))/otherBookshelf.getRowCount());
+                imageView.setImage(null);
+                otherBookshelf.add(imageView, c,r);
+            }
+        }
 
         // INIT BUTTONS
         // first make buttons invisible, then enable the right ones
@@ -163,6 +180,19 @@ public class LivingBoardController {
         commonGoalCard2.setImage(new Image(new FileInputStream(getCommonGoalCardPic(gameView.getLivingRoomBoard().getCommonGoalCards().get(1)))));
     }
 
+    public void updateBookshelf(BookshelfView bookshelf, GridPane bookshelfGrid) throws FileNotFoundException {
+        String path = "src/main/resources/it/polimi/ingsw/client/view/itemtiles/";
+        for(int r=0;r<bookshelfGrid.getRowCount(); r++){
+            for (int c=0; c<bookshelfGrid.getColumnCount(); c++){
+                // TODO: set a fixed image
+                String randImage = images.get(bookshelf.getGrid()[r][c].getType())[new Random().nextInt(0,2)];
+                Image tile = new Image(new FileInputStream(path + randImage));
+
+                ImageView bookshelfImage = (ImageView) bookshelfGrid.getChildren().get(r*5 + c);
+                bookshelfImage.setImage(tile);
+            }
+        }
+    }
     private void radioButtonPressed(MouseEvent event) {
         System.out.println("Button pressed");
         RadioButton buttonEvent = (RadioButton) event.getSource();

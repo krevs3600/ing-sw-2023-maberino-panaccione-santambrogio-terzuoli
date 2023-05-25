@@ -1,14 +1,19 @@
 package it.polimi.ingsw.client.view.FXML;
 
 import it.polimi.ingsw.observer_observable.Observable;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Bounds;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -53,6 +58,8 @@ public class RMIorSocketController extends Observable {
             RMI = false;
             socket = true;
             gui.createConnection();
+        } else {
+            gui.showPopup("Please select an option");
         }
     }
 

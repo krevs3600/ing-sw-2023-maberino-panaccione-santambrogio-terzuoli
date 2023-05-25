@@ -18,21 +18,8 @@ public class CreateorJoinGameController {
     @FXML
     public Button EXIT;
 
-    @FXML
-    public Group NoGamesInLobby;
-
-    @FXML
-    public Button OkBtn;
-
-    @FXML
-    public Label NoLobbyGamesText;
-    @FXML
-    public DialogPane NolobbygamesPane;
-
-
-    private boolean joinGameb=false;
-
-    private boolean createGame=false;
+    private boolean joinGameb = false;
+    private boolean createGame = false;
 
 
     public boolean getCreateGame(){
@@ -61,11 +48,5 @@ public class CreateorJoinGameController {
 
     public void ExitGame(MouseEvent mouseEvent) {
 
-    }
-
-    public void PanelDisappearing(MouseEvent mouseEvent) {
-        this.NolobbygamesPane.setVisible(false);
-        this.OkBtn.setVisible(false);
-        this.NoLobbyGamesText.setVisible(false);
     }
 }
