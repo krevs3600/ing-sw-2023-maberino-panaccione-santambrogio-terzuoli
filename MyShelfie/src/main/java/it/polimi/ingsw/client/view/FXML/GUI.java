@@ -348,7 +348,7 @@ public class GUI extends Observable implements View{
                         throw new RuntimeException(e);
                     }
                 }
-                lobbyController.NumberOfMissingPlayers.setText("Waiting for" + waitingResponseMessage.getMissingPlayers()+"players.....");
+                Platform.runLater(()->lobbyController.NumberOfMissingPlayers.setText("Waiting for" + waitingResponseMessage.getMissingPlayers()+" players....."));
                 lobbyController.NumberOfMissingPlayers.setVisible(true);
 
                 //magari serve settare il numero di giocatori selezionato da far vedere

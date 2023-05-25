@@ -81,13 +81,29 @@ public class LivingBoardController {
 
     private boolean columnSelected = false;
     private int column;
-    private String nickname = "carlo";
+    private String nickname;
     private GUI gui;
     private Map<TileType, String[]> images = new HashMap<>();
+    private int playerToWatch;
+    private int personalGameIndex;
+    private int watchedPlayer;
+    private Map<Integer, String> players = new HashMap<>();
+    private GameView gameView;
+    private int selectedTileR;
+    private int selectedTileC;
 
-
+    public void setGameView(GameView gameView){
+        this.gameView = gameView;
+    }
 
     public void initialize(GameView gameView, String nickname) throws FileNotFoundException {
+        setGameView(gameView);
+        this.nickname = nickname;
+        personalGameIndex = getPersonalGameIndex(gameView);
+        for (int i=0; i< gameView.getSubscribers().size(); i++){
+            players.put(i, gameView.getSubscribers().get(i).getName());
+        }
+
         // loading itemTiles paths and creating support structures
         String path = "src/main/resources/it/polimi/ingsw/client/view/itemtiles/";
         String[] cats = {"Gatti1.1.png", "Gatti1.2.png", "Gatti1.3.png"};
@@ -104,26 +120,10 @@ public class LivingBoardController {
         images.put(TileType.TROPHY, trophey);
 
         // INIT LIVING_ROOM_BOARD
-        for (int r=0; r<9; r++){
-            for (int c=0; c<9; c++){
-                SpaceView space = gameView.getLivingRoomBoard().getSpace(new Position(r,c));
-                if (space.getType() == SpaceType.PLAYABLE){
-                    String randImage = images.get(space.getTile().getType())[new Random().nextInt(0,2)];
-                    ImageView imageView = new ImageView(new Image(new FileInputStream(path + randImage)));
-                    imageView.setFitWidth((board.getPrefWidth() - ((board.getColumnCount()-1)*board.getHgap()))/board.getColumnCount()-10);
-                    imageView.setFitHeight((board.getPrefHeight() - ((board.getRowCount()-1)*board.getVgap()))/board.getRowCount()-10);
-                    imageView.setOnMouseClicked(this::boardTileClicked);
-                    board.add(imageView, c, r);
-                }
-            }
-        }
+        updateLivingRoomBoard(gameView.getLivingRoomBoard());
 
         // INIT TILEPACK
-        for (Node node : tilePack.getChildren()){
-            ImageView imageView = (ImageView) node;
-            ((ImageView) node).setImage(null);
-            imageView.setOnMouseClicked(this::packTileClicked);
-        }
+        updateTilePack(gameView.getTilePack());
 
 
         // INIT COLUMN BUTTONS
@@ -152,11 +152,22 @@ public class LivingBoardController {
             }
         }
 
-        // INIT BUTTONS
-        // first make buttons invisible, then enable the right ones
-        for(Node node : playerBookshelves.getChildren()){
-            Button button = (Button) node;
-            button.setVisible(false);
+        if (gameView.getSubscribers().size() == 2){
+            nextPlayer.setVisible(false);
+            previousPlayer.setVisible(false);
+            playerBookshelf.setText(gameView.getSubscribers().stream().map(PlayerView::getName).filter(x->!x.equals(nickname)).toList().get(0));
+            watchedPlayer = players.get(0).equals(nickname) ? 1 : 0;
+            playerBookshelf.setText(players.get(watchedPlayer));
+        } else {
+            if (watchedPlayer < players.size()-1){
+                watchedPlayer +=1;
+            } else watchedPlayer = 0;
+            if (watchedPlayer == personalGameIndex){
+                if (watchedPlayer < players.size()-1){
+                    watchedPlayer +=1;
+                } else watchedPlayer = 0;
+            }
+            playerBookshelf.setText(players.get(watchedPlayer));
         }
 /*
         System.out.println(game.getNumberOfPlayers().getValue());
@@ -180,19 +191,66 @@ public class LivingBoardController {
         commonGoalCard2.setImage(new Image(new FileInputStream(getCommonGoalCardPic(gameView.getLivingRoomBoard().getCommonGoalCards().get(1)))));
     }
 
+    private int getPersonalGameIndex(GameView gameView) {
+        for(int i=0; i<gameView.getSubscribers().size(); i++){
+            if(gameView.getSubscribers().get(i).getName().equals(nickname)){
+                personalGameIndex = i;
+                break;
+            }
+        }
+        return personalGameIndex;
+    }
+
+    private void initTilePack(){
+        for (Node node : tilePack.getChildren()){
+            ImageView imageView = (ImageView) node;
+            ((ImageView) node).setImage(null);
+            imageView.setOnMouseClicked(this::packTileClicked);
+        }
+    }
+
     public void updateBookshelf(BookshelfView bookshelf, GridPane bookshelfGrid) throws FileNotFoundException {
         String path = "src/main/resources/it/polimi/ingsw/client/view/itemtiles/";
         for(int r=0;r<bookshelfGrid.getRowCount(); r++){
             for (int c=0; c<bookshelfGrid.getColumnCount(); c++){
                 // TODO: set a fixed image
-                String randImage = images.get(bookshelf.getGrid()[r][c].getType())[new Random().nextInt(0,2)];
-                Image tile = new Image(new FileInputStream(path + randImage));
+                if (bookshelf.getGrid()[r][c] != null){
+                    String randImage = images.get(bookshelf.getGrid()[r][c].getType())[new Random().nextInt(0,2)];
+                    Image tile = new Image(new FileInputStream(path + randImage));
 
-                ImageView bookshelfImage = (ImageView) bookshelfGrid.getChildren().get(r*5 + c);
-                bookshelfImage.setImage(tile);
+                    ImageView bookshelfImage = (ImageView) bookshelfGrid.getChildren().get(r*5 + c);
+                    bookshelfImage.setImage(tile);
+                }
             }
         }
     }
+
+    public void updateTilePack(TilePackView tilePackView) throws FileNotFoundException {
+        initTilePack();
+        for (int i=0; i<tilePackView.getTiles().size(); i++){
+            String randImage = images.get(tilePackView.getTiles().get(i).getType())[new Random().nextInt(0,2)];
+            ImageView imageView = (ImageView) tilePack.getChildren().get(i);
+            imageView.setImage(new Image(new FileInputStream(randImage)));
+        }
+    }
+
+    public void updateLivingRoomBoard(LivingRoomBoardView livingRoomBoardView) throws FileNotFoundException {
+        String path = "src/main/resources/it/polimi/ingsw/client/view/itemtiles/";
+        for (int r=0; r<9; r++){
+            for (int c=0; c<9; c++){
+                SpaceView space = livingRoomBoardView.getSpace(new Position(r,c));
+                if (space.getType() == SpaceType.PLAYABLE){
+                    String randImage = images.get(space.getTile().getType())[new Random().nextInt(0,2)];
+                    ImageView imageView = new ImageView(new Image(new FileInputStream(path + randImage)));
+                    imageView.setFitWidth((board.getPrefWidth() - ((board.getColumnCount()-1)*board.getHgap()))/board.getColumnCount()-10);
+                    imageView.setFitHeight((board.getPrefHeight() - ((board.getRowCount()-1)*board.getVgap()))/board.getRowCount()-10);
+                    imageView.setOnMouseClicked(this::boardTileClicked);
+                    board.add(imageView, c, r);
+                }
+            }
+        }
+    }
+
     private void radioButtonPressed(MouseEvent event) {
         System.out.println("Button pressed");
         RadioButton buttonEvent = (RadioButton) event.getSource();
@@ -215,28 +273,56 @@ public class LivingBoardController {
     }
 
     public void boardTileClicked(MouseEvent event){
-        System.out.println("carta cliccata");
-        // tilePack needs to be updated
         ImageView sourceImageView = (ImageView) event.getSource();
-        for (Node node : tilePack.getChildren()){
-            ImageView imageView = (ImageView) node;
-            if (imageView.getImage() == null){
-                ((ImageView) node).setImage(sourceImageView.getImage());
-                sourceImageView.setImage(null);
+        for (int i=0; i<board.getChildren().size(); i++){
+            if (((ImageView) board.getChildren().get(i)).equals(sourceImageView)){
+                selectedTileR = i/5;
+                selectedTileC = i%5;
+                break;
             }
         }
     }
 
-    public void bookshelfButtonPressed(MouseEvent event) {
-        Stage stage = new Stage();
-        stage.show();
+    public int getSelectedTileR(){
+        return selectedTileR;
+    }
+
+    public int getSelectedTileC(){
+        return selectedTileC;
+    }
+
+    public void changeBookshelf(MouseEvent event) throws FileNotFoundException {
+        if (event.getSource().equals(nextPlayer)){
+            if (watchedPlayer < players.size()-1){
+                watchedPlayer +=1;
+            } else watchedPlayer = 0;
+            if (watchedPlayer == personalGameIndex){
+                if (watchedPlayer < players.size()-1){
+                    watchedPlayer +=1;
+                } else watchedPlayer = 0;
+            }
+            playerBookshelf.setText(players.get(watchedPlayer));
+            updateBookshelf(gameView.getPlayer(players.get(watchedPlayer)).getBookshelf(), otherBookshelf);
+        }
+        else if (event.getSource().equals(previousPlayer)){
+
+            if (watchedPlayer > 0){
+                watchedPlayer -=1;
+            } else watchedPlayer = players.size()-1;
+            if (watchedPlayer == personalGameIndex){
+                if (watchedPlayer > 0){
+                    watchedPlayer -=1;
+                } else watchedPlayer = players.size()-1;
+            }
+            playerBookshelf.setText(players.get(watchedPlayer));
+            updateBookshelf(gameView.getPlayer(players.get(watchedPlayer)).getBookshelf(), otherBookshelf);
+        }
     }
 
 
     public void scoringTokenClicked(MouseEvent event){
         First_8.setVisible(false);
     }
-
 
     public void setGui(GUI gui){
         this.gui = gui;
