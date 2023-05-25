@@ -68,7 +68,9 @@ public class GameView implements Serializable {
     public PlayerView getCurrentPlayer(){
         return this.currentPlayer;
     }
-
+    public PlayerView getPlayer(String nickname){
+        return this.getSubscribers().stream().filter(x->x.getName().equals(nickname)).toList().get(0);
+    }
 
 
     /**public void update(Observable o, Object arg) {

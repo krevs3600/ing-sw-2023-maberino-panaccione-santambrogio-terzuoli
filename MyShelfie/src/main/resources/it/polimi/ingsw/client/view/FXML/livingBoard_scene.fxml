@@ -190,8 +190,8 @@
                               <Image url="@../boards/bookshelf.png" />
                            </image>
                         </ImageView>
-                        <Button fx:id="nextPlayer" layoutX="233.0" layoutY="29.0" mnemonicParsing="false" prefHeight="5.0" prefWidth="29.0" text="&gt;" textFill="WHITE" />
-                        <Button fx:id="previousPlayer" layoutX="74.0" layoutY="29.0" mnemonicParsing="false" prefHeight="5.0" prefWidth="29.0" text="&lt;" textFill="WHITE" />
+                        <Button fx:id="nextPlayer" layoutX="233.0" layoutY="29.0" mnemonicParsing="false" onMouseClicked="#changeBookshelf" prefHeight="5.0" prefWidth="29.0" text="&gt;" textFill="WHITE" />
+                        <Button fx:id="previousPlayer" layoutX="74.0" layoutY="29.0" mnemonicParsing="false" onMouseClicked="#changeBookshelf" prefHeight="5.0" prefWidth="29.0" text="&lt;" textFill="WHITE" />
                         <Button fx:id="playerBookshelf" layoutX="105.0" layoutY="29.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="126.0" text="Player Name" textFill="WHITE" />
                             </children>
                         </AnchorPane>
