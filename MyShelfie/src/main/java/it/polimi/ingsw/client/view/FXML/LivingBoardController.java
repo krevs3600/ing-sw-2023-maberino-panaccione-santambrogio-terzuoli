@@ -100,7 +100,6 @@ public class LivingBoardController {
         images.put(TileType.PLANT, plants);
         images.put(TileType.TROPHY, trophey);
 
-
         // INIT LIVING_ROOM_BOARD
         for (int r=0; r<9; r++){
             for (int c=0; c<9; c++){
@@ -115,8 +114,6 @@ public class LivingBoardController {
                 }
             }
         }
-
-
 
         // INIT TILEPACK
         for (Node node : tilePack.getChildren()){
@@ -167,8 +164,8 @@ public class LivingBoardController {
         personalCard.setImage(new Image(new FileInputStream("src/main/resources/it/polimi/ingsw/client/view/personal goal cards/Personal_Goals" + String.valueOf(num) + ".png")));
 
         //init common goal card
-        commonGoalCard1.setImage(new Image(new FileInputStream(getCommonGoalCardPic(commonGoalCard1))));
-        commonGoalCard2.setImage(new Image(new FileInputStream(getCommonGoalCardPic(commonGoalCard2))));
+        commonGoalCard1.setImage(new Image(new FileInputStream(getCommonGoalCardPic(gameView.getLivingRoomBoard().getCommonGoalCards().get(0)))));
+        commonGoalCard2.setImage(new Image(new FileInputStream(getCommonGoalCardPic(gameView.getLivingRoomBoard().getCommonGoalCards().get(1)))));
     }
 
     private void radioButtonPressed(MouseEvent event) {
@@ -259,7 +256,7 @@ public class LivingBoardController {
             return path + "12.jpg";
         }
         else {
-            return "back.jpg";
+            return path + "back.jpg";
         }
     }
 }

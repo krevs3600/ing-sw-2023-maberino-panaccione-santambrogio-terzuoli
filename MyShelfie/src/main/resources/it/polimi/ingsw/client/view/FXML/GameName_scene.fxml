@@ -1,71 +1,100 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.Group?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="908.0" prefWidth="1510.0" styleClass="rootPane" stylesheets="@../css/livingBoard_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.FXML.GameNameController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="908.0" prefWidth="1510.0" styleClass="rootPane" stylesheets="@../css/server_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.FXML.GameNameController">
     <children>
-            <Group scaleX="2.45" scaleY="1.9">
-                <children>
-                    <AnchorPane fx:id="PaneforParquet" prefHeight="490.0" prefWidth="623.0" styleClass="rootPane" stylesheets="@../css/server_scene.css">
-                        <children>
-                            <ImageView fitHeight="165.0" fitWidth="173.0" layoutX="1.0" layoutY="367.0" pickOnBounds="true" preserveRatio="true">
-                                <image>
-                                    <Image url="@../itemtiles/Piante1.2.png" />
-                                </image>
-                            </ImageView>
-                            <ImageView fitHeight="165.0" fitWidth="174.0" layoutX="165.0" layoutY="367.0" pickOnBounds="true" preserveRatio="true">
-                                <image>
-                                    <Image url="@../itemtiles/Gatti1.1.png" />
-                                </image>
-                            </ImageView>
-                            <ImageView fitHeight="165.0" fitWidth="294.0" layoutX="329.0" layoutY="366.0">
-                                <image>
-                                    <Image url="@../itemtiles/Libri1.2.png" />
-                                </image>
-                            </ImageView>
-                            <ImageView fitHeight="146.0" fitWidth="173.0" layoutX="207.0" pickOnBounds="true" preserveRatio="true" />
-                            <ImageView fitHeight="183.0" fitWidth="197.0" layoutX="258.0" layoutY="-4.0" pickOnBounds="true" preserveRatio="true">
-                                <image>
-                                    <Image url="@../itemtiles/Giochi1.1.png" />
-                                </image>
-                            </ImageView>
-                            <ImageView fitHeight="184.0" fitWidth="183.0" layoutX="440.0" layoutY="-4.0" pickOnBounds="true" preserveRatio="true">
-                                <image>
-                                    <Image url="@../itemtiles/Cornici1.3.png" />
-                                </image>
-                            </ImageView>
-                            <ImageView fitHeight="183.0" fitWidth="266.0" layoutX="-1.0" layoutY="-4.0">
-                                <image>
-                                    <Image url="@../itemtiles/Trofei1.1.png" />
-                                </image>
-                            </ImageView>
-                            <TextField fx:id="GameName" layoutX="233.0" layoutY="224.0" styleClass="rounded-input" stylesheets="@../css/server_scene.css" />
-                            <Label layoutX="186.0" layoutY="182.0" text="choose the name of the game:" textFill="WHITE">
-                                <font>
-                                    <Font name="Libian SC Regular" size="24.0" />
-                                </font>
-                            </Label>
-                  <Button fx:id="ok" layoutX="294.0" layoutY="264.0" mnemonicParsing="false" onMouseClicked="#GameNameChosen" text="ok" textFill="#fffdfd">
-                     <font>
-                        <Font name="Libian SC Regular" size="13.0" />
-                     </font>
-                  </Button>
-                  <Label fx:id="AlredytTakenGameName" layoutX="11.0" layoutY="280.0" prefHeight="71.0" prefWidth="612.0" text="The game name is already taken, please choose another game name" textFill="#d33939" visible="false">
-                     <font>
-                        <Font name="Libian SC Regular" size="24.0" />
-                     </font>
-                  </Label>
-                        </children>
-                    </AnchorPane>
-                </children>
-            </Group>
+        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+            <children>
+                <VBox prefHeight="200.0" prefWidth="100.0">
+                    <children>
+                        <HBox alignment="CENTER" prefHeight="221.0" prefWidth="1510.0">
+                            <children>
+                                <ImageView fitHeight="250.0" fitWidth="500.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../itemtiles/Giochi1.1.png" />
+                                    </image>
+                                </ImageView>
+                                <ImageView fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../itemtiles/Cornici1.3.png" />
+                                    </image>
+                                </ImageView>
+                                <ImageView fitHeight="250.0" fitWidth="250.0" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../itemtiles/Trofei1.1.png" />
+                                    </image>
+                                </ImageView>
+                            </children>
+                        </HBox>
+                    </children>
+                    <VBox.margin>
+                        <Insets bottom="60.0" />
+                    </VBox.margin>
+                </VBox>
+                <Label prefHeight="53.0" prefWidth="586.0" text="Type the game of the name to join" textFill="WHITE">
+                    <font>
+                        <Font name="Libian SC Regular" size="36.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets bottom="20.0" />
+                    </VBox.margin>
+                </Label>
+                <TextField fx:id="textField" alignment="CENTER" maxHeight="500.0" maxWidth="500.0" prefHeight="49.0" prefWidth="500.0" promptText="insert game name..." styleClass="rounded-input" stylesheets="@../css/server_scene.css">
+                    <VBox.margin>
+                        <Insets bottom="20.0" />
+                    </VBox.margin>
+                    <font>
+                        <Font size="21.0" />
+                    </font>
+                </TextField>
+                <Button fx:id="ok" mnemonicParsing="false" onMouseClicked="#gameNameChosen" prefHeight="59.0" prefWidth="156.0" styleClass="button" stylesheets="@../css/server_scene.css" text="OK" textFill="WHITE">
+                    <font>
+                        <Font size="28.0" />
+                    </font>
+                </Button>
+                <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                    <children>
+                        <Label fx:id="alreadyTakenGameName" text="Invalid game name, please choose another one" textFill="#e84646" visible="false">
+                            <font>
+                                <Font name="Libian SC Regular" size="64.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </VBox>
+                <VBox alignment="BOTTOM_CENTER" prefHeight="301.0" prefWidth="1510.0">
+                    <children>
+                        <HBox alignment="BOTTOM_CENTER" prefHeight="273.0" prefWidth="1513.0">
+                            <children>
+                                <ImageView fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../itemtiles/Piante1.2.png" />
+                                    </image>
+                                </ImageView>
+                                <ImageView fitHeight="334.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../itemtiles/Gatti1.1.png" />
+                                    </image>
+                                </ImageView>
+                                <ImageView fitHeight="250.0" fitWidth="485.0" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../itemtiles/Libri1.2.png" />
+                                    </image>
+                                </ImageView>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+            </children>
+        </VBox>
     </children>
 </StackPane>

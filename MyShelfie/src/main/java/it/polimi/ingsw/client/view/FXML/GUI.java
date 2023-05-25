@@ -10,7 +10,6 @@ import it.polimi.ingsw.network.Socket.ServerStub;
 import it.polimi.ingsw.network.eventMessages.*;
 import it.polimi.ingsw.observer_observable.Observable;
 import javafx.application.Platform;
-import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -240,7 +239,7 @@ public class GUI extends Observable implements View{
 
     //TODO: askgamespecs
     public void askGameName() {
-        String gameName=this.gameNameController.getGameName();
+        String gameName=this.gameNameController.getTextField();
         setChanged();
         notifyObservers(new GameNameMessage(this.client.getNickname(), gameName));
     }
@@ -299,6 +298,7 @@ public class GUI extends Observable implements View{
                         throw new RuntimeException(e);
                     }
                     this.nickname = ((LoginResponseMessage) message).getNickname();
+                    System.out.println(nickname);
                     CreateorJoinGameController createorJoinGameController = fxmlLoader.getController();
                     createorJoinGameController.setGui(this);
                     this.createorJoinGameController = createorJoinGameController;
@@ -344,15 +344,11 @@ public class GUI extends Observable implements View{
                     numberOfPlayersController.setGui(this);
                     numberOfPlayersController.setGameName(gameNameResponseMessage.getGameName());
 
-
                     Platform.runLater(() -> stage.setScene(scene));
-                    //Platform.runLater(() -> stage.show());
-
                     // this.nicknameController.InvalidNickname.setVisible(true);
-
                 } else {
 
-                    this.gameNameController.AlredytTakenGameName.setVisible(true);
+                    this.gameNameController.alreadyTakenGameName.setVisible(true);
                 }
             }
 
@@ -374,17 +370,12 @@ public class GUI extends Observable implements View{
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-                    ;
                     try {
                         scene = new Scene(fxmlLoader.load());
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-
                     Platform.runLater(() -> stage.setScene(scene));
-                    //Platform.runLater(() -> stage.show());
-
-
                     //TODO capire la concorrenza tra queste due scene
                     LobbyController lobbyController = fxmlLoader.getController();
                     this.lobbyController = lobbyController;
@@ -394,7 +385,7 @@ public class GUI extends Observable implements View{
 
 
                 } else {
-                    this.numberOfPlayersController.MissingNumberLabel.setVisible(true);
+                    this.numberOfPlayersController.missingNumberLabel.setVisible(true);
                 }
             }
 
