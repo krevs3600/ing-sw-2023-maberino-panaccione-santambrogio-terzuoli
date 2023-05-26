@@ -2,7 +2,6 @@ package it.polimi.ingsw.client.view.FXML;
 
 import it.polimi.ingsw.AppServer;
 import it.polimi.ingsw.model.ModelView.GameView;
-import it.polimi.ingsw.model.ModelView.PlayerView;
 import it.polimi.ingsw.model.utils.GamePhase;
 import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.network.ClientImplementation;
@@ -32,13 +31,10 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Set;
 
-import static it.polimi.ingsw.network.MessagesToClient.MessageToClientType.*;
-import static it.polimi.ingsw.network.eventMessages.EventMessageType.TILE_PACK;
-
 
 public class GUI extends Observable implements View{
 
-    private boolean activeTurn=false;
+    private boolean activeTurn = false;
     private Stage stage;
     private Scene scene;
     private Parent root;
@@ -214,10 +210,9 @@ public class GUI extends Observable implements View{
         return 0;
     }
 
-    public void chosenposition(int r,int c){
+    public void chosenPosition(int r, int c){
         setChanged();
         notifyObservers(new TilePositionMessage(this.client.getNickname(), new Position(r,c)));
-
     }
 
 
@@ -475,12 +470,10 @@ public class GUI extends Observable implements View{
                     Scene scene = new Scene(fxmlLoader.load());
                     livingBoardController = fxmlLoader.getController();
                     livingBoardController.setGui(this);
-                    this.livingBoardController = livingBoardController;
                     Platform.runLater(() -> stage.setScene(scene));
                     Platform.runLater(() -> {
                         try {
-                            // cambiato nickname a quello dell'event
-                            livingBoardController.initialize(game,nickname);
+                            livingBoardController.initialize(game, eventMessage.getNickname());
                         } catch (FileNotFoundException e) {
                             throw new RuntimeException(e);
                         }
@@ -493,14 +486,13 @@ public class GUI extends Observable implements View{
                 if (this.client.getNickname().equals(eventMessage.getNickname())) {
                     activeTurn = true;
 
-                    showPopup("it's your turn, remember you can select a maximum of 3 tiles" +
-                            " adjacent to each other that must form a line and they must" +
+                    showPopup("it's your turn, remember you can select a maximum of 3 tiles\n" +
+                            " adjacent to each other that must form a line and they must\n" +
                             " all have a free side at the beginning! Good luck and always keep in mind the achievement " +
-                            "of personal and common goal cards ! \uD83D\uDCAA\uD83C\uDFFB\uD83D\uDCAA\uD83C\uDFFE");
+                            "\nof personal and common goal cards ! \uD83D\uDCAA\uD83C\uDFFB\uD83D\uDCAA\uD83C\uDFFE");
 
                     // todo : farei un do-while fin quando la carta non è cliccata mettere un
                     //  timer che fa scadere il turno se non è cliccata entro 3 minuti tipo
-
 
                 } else {
                     activeTurn = false;
@@ -509,50 +501,46 @@ public class GUI extends Observable implements View{
             }
 
 
-                case TILE_PACK -> {
-                    TilePackMessage tilePackMessage = (TilePackMessage) eventMessage;
-                   // for (PlayerView playerView : game.getSubscribers()) {
-                    //    out.println("\n-----------------------------------------------------------------------\n" + playerView.getName() + "'s BOOKSHELF:");
-                    //out.println(playerView.getBookshelf().toString());
-                    //    out.println("\n" + playerView.getName() + "'s score: " + playerView.getScore());
-                        try {
-                            this.livingBoardController.updateLivingRoomBoard(game.getLivingRoomBoard());
-                        } catch (FileNotFoundException e) {
-                            throw new RuntimeException(e);
-                        }
-
-                      // out.println("\n-----------------------------------------------------------------------\n LIVING ROOM BOARD:");
-                      //  out.println(game.getLivingRoomBoard().toString());
-                        if (activeTurn) {
-                            try {
-                                this.livingBoardController.updateTilePack(game.getTilePack());
-                            } catch (FileNotFoundException e) {
-                                throw new RuntimeException(e);
-                            }
-                           // out.println("\n-----------------------------------------------------------------------\n TILE PACK:");
-                           // out.println(game.getTilePack().toString());
-                            livingBoardController.ContinuepickingT.setVisible(true);
-                            livingBoardController.stopPickingT.setVisible(true);
-
-                            while(!livingBoardController.WantStopPickingTiles() && !livingBoardController.WantPickAnotherTile()) {
-                                if (livingBoardController.WantStopPickingTiles()) {
-                                    setChanged();
-                                    notifyObservers(new SwitchPhaseMessage(client.getNickname(), GamePhase.PLACING_TILES));
-                                }
-
-                                // case "easteregg" -> {
-                                //    setChanged();
-                                //   notifyObservers(new FillBookshelfMessage(eventMessage.getNickname()));
-                                 //   }
-                                }
-
-                        }
-
+            case TILE_PACK -> {
+                TilePackMessage tilePackMessage = (TilePackMessage) eventMessage;
+               // for (PlayerView playerView : game.getSubscribers()) {
+                //    out.println("\n-----------------------------------------------------------------------\n" + playerView.getName() + "'s BOOKSHELF:");
+                //out.println(playerView.getBookshelf().toString());
+                //    out.println("\n" + playerView.getName() + "'s score: " + playerView.getScore());
+                livingBoardController.setGameView(game);
+                Platform.runLater(()-> {
+                    try {
+                        livingBoardController.updateLivingRoomBoard(game.getLivingRoomBoard());
+                        /*if (activeTurn){
+                            livingBoardController.updateTilePack(game.getTilePack());
+                        }*/
+                    } catch (FileNotFoundException e) {
+                        throw new RuntimeException(e);
                     }
+                });
+                // out.println("\n-----------------------------------------------------------------------\n LIVING ROOM BOARD:");
+                //  out.println(game.getLivingRoomBoard().toString());
+
+                    // out.println("\n-----------------------------------------------------------------------\n TILE PACK:");
+                    // out.println(game.getTilePack().toString());
+                    // livingBoardController.ContinuepickingT.setVisible(true);
+                    // livingBoardController.stopPickingT.setVisible(true);
+
+                    while(!livingBoardController.WantStopPickingTiles() && !livingBoardController.WantPickAnotherTile()) {
+                        if (livingBoardController.WantStopPickingTiles()) {
+                            setChanged();
+                            notifyObservers(new SwitchPhaseMessage(client.getNickname(), GamePhase.PLACING_TILES));
+                        }
+
+                        // case "easteregg" -> {
+                        //    setChanged();
+                        //   notifyObservers(new FillBookshelfMessage(eventMessage.getNickname()));
+                         //   }
+                    }
+
                 }
-
-
             }
+        }
 
 
     public void showPopup(String text){

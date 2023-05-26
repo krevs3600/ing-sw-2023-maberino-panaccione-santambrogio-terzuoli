@@ -276,17 +276,5 @@
                 </HBox>
             </right>
         </BorderPane>
-      <AnchorPane prefHeight="751.0" prefWidth="1510.0">
-         <children>
-            <Button fx:id="ContinuepickingT" layoutX="445.0" layoutY="275.0" mnemonicParsing="false" onMouseClicked="#AnotherTile" prefHeight="77.0" prefWidth="252.0" text="Keep taking tiles" textFill="WHITE" visible="false">
-               <font>
-                  <Font name="Libian SC Regular" size="24.0" />
-               </font></Button>
-            <Button fx:id="stopPickingT" layoutX="728.0" layoutY="275.0" mnemonicParsing="false" onMouseClicked="#StopTiles" prefHeight="77.0" prefWidth="252.0" text="Stop picking tiles " textFill="WHITE" visible="false">
-               <font>
-                  <Font name="Libian SC Regular" size="24.0" />
-               </font></Button>
-         </children>
-      </AnchorPane>
     </children>
 </StackPane>
