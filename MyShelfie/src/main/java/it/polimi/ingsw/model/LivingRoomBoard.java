@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 import java.util.stream.Collectors;
 
 /**
@@ -33,6 +34,8 @@ public class LivingRoomBoard {
 
     private List<CommonGoalCard> commonGoalCards = new ArrayList<>();
 
+    //private Stack<EndGameToken> endGameToken;
+
     private Bag bag = new Bag();
 
     /**
@@ -44,6 +47,7 @@ public class LivingRoomBoard {
     public LivingRoomBoard(NumberOfPlayers numberOfPlayers) throws IllegalArgumentException {
         ArrayList<ArrayList<Long>> activeList;
         CommonGoalCardDeck commonGoalCardDeck = new CommonGoalCardDeck();
+        //endGameToken.push(new EndGameToken());
 
         String path = "src/main/java/it/polimi/ingsw/model/configs/LivingRoomBoard.json";
         //String path = "C:\\Users\\franc\\IdeaProjects\\ing-sw-2023-maberino-panaccione-santambrogio-terzuoli\\MyShelfie\\src\\main\\java\\it\\polimi\\ingsw\\model\\configs\\LivingRoomBoard.json";

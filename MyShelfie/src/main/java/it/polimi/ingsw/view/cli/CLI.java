@@ -64,6 +64,7 @@ public class CLI extends Observable implements View {
             lock.notifyAll();
         }
     }
+
     public void run() {
         printLogo();
         try {
@@ -596,15 +597,19 @@ public class CLI extends Observable implements View {
             }
 
             case END_GAME -> {
+                out.println("\n");
+                for (PlayerView playerView: game.getSubscribers()) {
+                    out.println(playerView.getName() + "'s score is " + playerView.getScore() + " points");
+                }
                 if(eventMessage.getNickname().equals(this.client.getNickname())) {
                     out.println("\nCongratulations, you won!");
                 }
                 out.println("\nGame has ended... Hope you had fun!");
                 //TODO: togliere il gioco dalla lista!!
-                gameMenu();
+                //gameMenu();
+                //setChanged();
+                //notifyObservers(new DisconnectClientMessage( this.client.getNickname()));
             }
-
-
         }
     }
 }

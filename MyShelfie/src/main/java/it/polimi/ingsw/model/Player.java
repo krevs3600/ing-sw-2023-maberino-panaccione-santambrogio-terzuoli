@@ -144,5 +144,4 @@ public class Player {
     public void setPersonalGoalCard(GoalCard personalGoalCard) {
         this.personalGoalCard = (PersonalGoalCard) personalGoalCard;
     }
-
 }

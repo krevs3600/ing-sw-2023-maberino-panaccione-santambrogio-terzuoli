@@ -98,8 +98,7 @@ public class GameController {
                 game.subscribe(newPlayer);
             }
 
-            case TILE_POSITION -> { // quindi dal server ho chiamato l'update passandogli il nickname e il messaggio di tipo TilePack
-                 // il tile position message all'interno ha anche la posizione che sto prendendo
+            case TILE_POSITION -> {
                 TilePositionMessage tilePositionMessage = (TilePositionMessage) eventMessage;
 
                 if (game.getDrawableTiles().contains(game.getLivingRoomBoard().getSpace(tilePositionMessage.getPosition()))) {
@@ -107,7 +106,7 @@ public class GameController {
                         ItemTile itemTile = game.drawTile(tilePositionMessage.getPosition());
                         game.getBuffer().add(tilePositionMessage.getPosition());
                         game.insertTileInTilePack(itemTile);
-                    } else if (game.getBuffer().size() == 1) { // quindi se ho già una tile nel buffer delle tre tiles prendibili allora devo controllare le adiacenze nel buffer
+                    } else if (game.getBuffer().size() == 1) {
 
                         if (game.getBuffer().get(0).isAdjacent(tilePositionMessage.getPosition())) {
                             if (game.getCurrentPlayer().getBookshelf().getNumberInsertableTiles() >= game.getBuffer().size() + 1) {
@@ -127,7 +126,7 @@ public class GameController {
                         }
                     } else if (game.getBuffer().size() == 2) {
                         boolean fairPosition = false;
-                        for (Position pos : game.getBuffer()) { // scorro le posizioni indicate nel buffer degli adiacenti
+                        for (Position pos : game.getBuffer()) {
                             if (pos.isAdjacent(tilePositionMessage.getPosition())) {
                                 fairPosition = true;
                                 break;
@@ -138,8 +137,7 @@ public class GameController {
                             if (game.isAlongSideColumn()) {
                                 if (tilePositionMessage.getPosition().getColumn() == game.getBuffer().get(0).getColumn()) {
                                         if (game.getCurrentPlayer().getBookshelf().getNumberInsertableTiles() >= game.getBuffer().size() + 1) {
-                                            ItemTile itemTile = game.drawTile(tilePositionMessage.getPosition()); // controllo sulla bookshelf del numero di Tiles che posso inserire, escludendo a pripri il caso in cui  sono minori di quelli nel tiles.
-
+                                            ItemTile itemTile = game.drawTile(tilePositionMessage.getPosition());
                                             game.getBuffer().add(tilePositionMessage.getPosition());
                                             game.insertTileInTilePack(itemTile);
                                         } else {
@@ -206,6 +204,10 @@ public class GameController {
                 computeScoreMidGame();
 
                 if (game.getCurrentPlayer().getBookshelf().isFull()) {
+                    if (!game.isFirstPlayerHasEnded()) {
+                        game.setFirstPlayerHasEnded();
+                        game.getCurrentPlayer().setScore(1);
+                    }
                     if (game.getCurrentPlayer().equals(game.getLastPlayer())){
                         //TODO: show always the score to the clients, updating it when needed
                         Player winner = getWinner();

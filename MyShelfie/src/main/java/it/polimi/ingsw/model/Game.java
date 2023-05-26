@@ -47,6 +47,8 @@ public class Game extends Observable<EventMessage> {
     private boolean alongSideRow;
     private boolean alongSideColumn;
 
+    private boolean firstPlayerHasEnded;
+
     public Game(NumberOfPlayers numberOfPlayers, String gameName){
         //initialize id with random string, This should be quiet random...
         this.gameName = gameName;
@@ -59,6 +61,7 @@ public class Game extends Observable<EventMessage> {
         this.isFinalTurn = false;
         this.alongSideRow = false;
         this.alongSideColumn = false;
+        this.firstPlayerHasEnded = false;
     }
 
     public void initLivingRoomBoard(){
@@ -353,5 +356,9 @@ public class Game extends Observable<EventMessage> {
     public void setAlongSideColumn(boolean alongSideColumn) {this.alongSideColumn = alongSideColumn; }
 
     public boolean isAlongSideColumn() {return this.alongSideColumn; }
+
+    public boolean isFirstPlayerHasEnded() {return this.firstPlayerHasEnded;}
+
+    public void setFirstPlayerHasEnded() {this.firstPlayerHasEnded = true;}
 
 }
