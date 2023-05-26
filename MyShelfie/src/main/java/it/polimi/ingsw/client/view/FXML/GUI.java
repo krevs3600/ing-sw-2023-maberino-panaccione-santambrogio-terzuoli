@@ -97,6 +97,16 @@ public class GUI extends Observable implements View{
         return null;
     }
 
+    public void StopPickingTiles(int column){
+        // Non devo fare il controllo che il turno sia attivo perche altrmenti i pulsanti sono disabilitati
+        // quindi anche nel caso in cui sbaglia se si toglie il pop up non c'è problema, l'unica cosa da estire è
+        // il caso in cui sceglie 3 tiles
+        setChanged();
+        notifyObservers(new BookshelfColumnMessage(this.nickname, column));
+        System.out.println("qui ok?");
+
+    }
+
     public void askTypeofConnection(Stage stage) throws IOException {
         URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/RMIorSocket_scene.fxml/").toURI().toURL();
 
@@ -417,6 +427,12 @@ public class GUI extends Observable implements View{
                 }
             }
 
+            case NOT_ENOUGH_INSERTABLE_TILES_IN_COLUMN -> {
+                ErrorMessage errorMessage = (ErrorMessage) message;
+                showPopup(errorMessage.getErrorMessage());
+                // quindi poi automaticamente risceglie la colonna
+            }
+
 
 
 
@@ -460,7 +476,7 @@ public class GUI extends Observable implements View{
     }
 
     @Override
-    public void update(GameView game, EventMessage eventMessage)  {
+    public void update(GameView game, EventMessage eventMessage) {
         switch (eventMessage.getType()) {
             case BOARD -> {
                 // todo: in questo caso deve comparire il pop up con i personal goal card e i common goal cards e si inizializza la scena
@@ -483,6 +499,13 @@ public class GUI extends Observable implements View{
                 }
             }
             case PLAYER_TURN -> {
+                // livingBoardController.board.setDisable(true);
+                livingBoardController.bookshelf.setDisable(true);
+                livingBoardController.Column1.setDisable(true);
+                livingBoardController.Column2.setDisable(true);
+                livingBoardController.Column3.setDisable(true);
+                livingBoardController.Column4.setDisable(true);
+                livingBoardController.Column5.setDisable(true);
                 if (this.client.getNickname().equals(eventMessage.getNickname())) {
                     activeTurn = true;
 
@@ -497,11 +520,15 @@ public class GUI extends Observable implements View{
                 } else {
                     activeTurn = false;
                     showPopup("It's " + eventMessage.getNickname() + "'s turn\n");
+                    livingBoardController.OtherPlayerTurnLabel.setText("Wait... " + this.client.getNickname() + "is picking tiles");
+                    livingBoardController.OtherPlayerTurnLabel.setVisible(true);
+
                 }
             }
 
-
+            //in questo caso appena preme il bottone della colonna passa all'inserimento nella Bookshelf
             case TILE_PACK -> {
+
 
                 TilePackMessage tilePackMessage = (TilePackMessage) eventMessage;
                 // for (PlayerView playerView : game.getSubscribers()) {
@@ -510,11 +537,16 @@ public class GUI extends Observable implements View{
                 //    out.println("\n" + playerView.getName() + "'s score: " + playerView.getScore());
                 livingBoardController.setGameView(game);
 
-                Platform.runLater(()-> {
+                Platform.runLater(() -> {
                     try {
                         livingBoardController.updateLivingRoomBoard(game.getLivingRoomBoard());
-                        if (activeTurn){
+                        if (activeTurn) {
                             livingBoardController.updateTilePack(game.getTilePack());
+                            livingBoardController.Column1.setDisable(false);
+                            livingBoardController.Column2.setDisable(false);
+                            livingBoardController.Column3.setDisable(false);
+                            livingBoardController.Column4.setDisable(false);
+                            livingBoardController.Column5.setDisable(false);
                         }
                     } catch (FileNotFoundException e) {
                         throw new RuntimeException(e);
@@ -542,9 +574,36 @@ public class GUI extends Observable implements View{
                          //   }
                     }*/
 
+            }
+
+            // va in questo case se nella colonna inserita c'è abbastanza spazio per inserire le tiles.
+
+            case INSERTION_REQUEST -> {
+                if (activeTurn) {
+                    System.out.println("fin qui ci sono ");
+                    Platform.runLater(()->showPopup("F"));
+                    //  out.println("\n-----------------------------------------------------------------------\n" + game.getSubscribers().get(0).getName() + "'s BOOKSHELF:");
+                    //  out.println(game.getCurrentPlayer().getBookshelf().toString());
+                    //  out.println("\n-----------------------------------------------------------------------\n TILE PACK:");
+                    // out.println(game.getTilePack().toString());
+                   // if (game.getTilePack().getTiles().size() > 0) {
+                        //    out.print("Choose an item tile to insert from the tilepack into the selected column\n");
+                        //    int itemTileIndex = in.nextInt();
+                        //    setChanged();
+                        //    notifyObservers(new ItemTileIndexMessage(eventMessage.getNickname(), itemTileIndex));
+                        //} else {
+                        //    //activeTurn = false;
+                        //    setChanged();
+                        //    notifyObservers(new EndTurnMessage(eventMessage.getNickname()));
+                        //}
+                    }   //
+
                 }
+
+
             }
         }
+
 
 
     public void showPopup(String text){

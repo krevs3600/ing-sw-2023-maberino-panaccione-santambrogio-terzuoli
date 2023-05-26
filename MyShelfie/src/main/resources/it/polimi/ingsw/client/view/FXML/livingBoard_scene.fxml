@@ -248,15 +248,16 @@
                                             </image>
                                         </ImageView>
                                       <Group fx:id="columnOptions" layoutX="-87.0" layoutY="-214.0">
-                                          <RadioButton fx:id="Column1" accessibleRole="CHECK_BOX" layoutX="141.0" layoutY="162.0" mnemonicParsing="false">
+                                          <RadioButton fx:id="Column1" layoutX="141.0" layoutY="162.0" mnemonicParsing="false" onMouseClicked="#InsertInColumn1">
                                               <toggleGroup>
                                                   <ToggleGroup fx:id="columnOption" />
                                               </toggleGroup>
                                  </RadioButton>
-                                          <RadioButton fx:id="Column2" layoutX="200.0" layoutY="161.0" mnemonicParsing="false" toggleGroup="$columnOption" />
-                                          <RadioButton fx:id="Column4" layoutX="310.0" layoutY="161.0" mnemonicParsing="false" toggleGroup="$columnOption" />
-                                          <RadioButton fx:id="Column5" layoutX="368.0" layoutY="161.0" mnemonicParsing="false" toggleGroup="$columnOption" />
-                                          <RadioButton fx:id="Column3" layoutX="256.0" layoutY="161.0" mnemonicParsing="false" toggleGroup="$columnOption" />
+                                          <RadioButton fx:id="Column2" layoutX="200.0" layoutY="161.0" mnemonicParsing="false" onMouseClicked="#InsertInColumn2" toggleGroup="$columnOption" />
+                                          <RadioButton fx:id="Column4" layoutX="310.0" layoutY="161.0" mnemonicParsing="false" onMouseClicked="#InsertInColumn4" toggleGroup="$columnOption" />
+                                          <RadioButton fx:id="Column5" layoutX="368.0" layoutY="161.0" mnemonicParsing="false" onMouseClicked="#InsertInColumn5" toggleGroup="$columnOption" />
+                                          <RadioButton fx:id="Column3" layoutX="256.0" layoutY="161.0" mnemonicParsing="false" onMouseClicked="#InsertInColumn3" toggleGroup="$columnOption" />
+                                 <Button fx:id="column1" onMouseClicked="#InsertInColumn1" layoutX="133.0" layoutY="158.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="33.0" text="Button" />
                                       </Group>
       
                                       <Label alignment="CENTER" contentDisplay="CENTER" layoutX="73.0" layoutY="295.0" prefHeight="35.0" prefWidth="210.0" text="Personal Goal Card" textFill="WHITE">
@@ -264,6 +265,7 @@
                                               <Font size="20.0" />
                                           </font>
                               </Label>
+                              <Button fx:id="prova" layoutX="41.0" layoutY="-34.0" mnemonicParsing="false" onMouseClicked="#InsertInColumn1" prefHeight="275.0" prefWidth="45.0" text="Button" visible="false" />
                                     </children></AnchorPane>
                                 <ImageView fx:id="personalCard" fitHeight="245.0" fitWidth="163.0" layoutX="179.0" layoutY="507.0">
                                     <image>
@@ -275,6 +277,13 @@
                     </children>
                 </HBox>
             </right>
+         <top>
+            <Label fx:id="OtherPlayerTurnLabel" alignment="TOP_LEFT" textFill="#f5f2f2" visible="false" BorderPane.alignment="CENTER">
+               <font>
+                  <Font name="Libian SC Regular" size="36.0" />
+               </font>
+            </Label>
+         </top>
         </BorderPane>
     </children>
 </StackPane>

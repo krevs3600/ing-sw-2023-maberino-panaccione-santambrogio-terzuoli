@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -79,12 +80,25 @@ public class LivingBoardController {
 
     @FXML
     public Button stopPickingT;
+    @FXML
+    public RadioButton Column1;
 
+    @FXML
+    public RadioButton Column2;
 
+    @FXML
+    public RadioButton Column5;
 
+    @FXML
+    public RadioButton Column4;
 
+    @FXML
+    public RadioButton Column3;
 
-
+    @FXML
+    public Label OtherPlayerTurnLabel;
+    @FXML
+    public Button column1;
 
 
 
@@ -289,6 +303,7 @@ public class LivingBoardController {
 
     private void packTileClicked(MouseEvent event) {
         if (columnSelected){
+            System.out.println("carta sel");
             ImageView sourceImageView = (ImageView) event.getSource();
             for(int r=bookshelf.getRowCount()-1; r>0; r--){
                 ImageView bookshelfImage = (ImageView) bookshelf.getChildren().get(r*5 + column);
@@ -423,6 +438,54 @@ public class LivingBoardController {
         anotherTile=true;
 
 
+    }
+
+    public void InsertInColumn1(MouseEvent mouseEvent) {
+        columnSelected=true;
+        column=0;
+        Column2.setDisable(true);
+        Column3.setDisable(true);
+        Column4.setDisable(true);
+        Column5.setDisable(true);
+        Platform.runLater(()->this.gui.StopPickingTiles(0));
+    }
+
+    public void InsertInColumn2(MouseEvent mouseEvent) {
+        columnSelected=true;
+            Column1.setDisable(true);
+            Column3.setDisable(true);
+            Column4.setDisable(true);
+            Column5.setDisable(true);
+        this.gui.StopPickingTiles(1);
+    }
+
+    public void InsertInColumn3(MouseEvent mouseEvent) {
+        columnSelected=true;
+        Column1.setDisable(true);
+        Column2.setDisable(true);
+        Column4.setDisable(true);
+        Column5.setDisable(true);
+        this.gui.StopPickingTiles(2);
+
+    }
+
+    public void InsertInColumn4(MouseEvent mouseEvent) {
+        columnSelected=true;
+        Column1.setDisable(true);
+        Column3.setDisable(true);
+        Column2.setDisable(true);
+        Column5.setDisable(true);
+        this.gui.StopPickingTiles(3);
+
+    }
+
+    public void InsertInColumn5(MouseEvent mouseEvent) {
+        columnSelected=true;
+        Column1.setDisable(true);
+        Column3.setDisable(true);
+        Column4.setDisable(true);
+        Column2.setDisable(true);
+        this.gui.StopPickingTiles(4);
     }
 }
 

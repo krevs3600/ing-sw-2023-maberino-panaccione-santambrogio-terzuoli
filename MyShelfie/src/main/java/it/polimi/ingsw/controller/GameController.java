@@ -110,7 +110,7 @@ public class GameController {
                     } else if (game.getBuffer().size() == 1) { // quindi se ho già una tile nel buffer delle tre tiles prendibili allora devo controllare le adiacenze nel buffer
 
                         if (game.getBuffer().get(0).isAdjacent(tilePositionMessage.getPosition())) {
-                            if (game.getCurrentPlayer().getBookshelf().getNumberInsertableTiles() < game.getBuffer().size() + 1) {
+                            if (game.getCurrentPlayer().getBookshelf().getNumberInsertableTiles() >= game.getBuffer().size() + 1) {
                                 if (tilePositionMessage.getPosition().getColumn() == game.getBuffer().get(0).getColumn()) {
                                     game.setAlongSideColumn(true);
                                 } else {
@@ -137,7 +137,7 @@ public class GameController {
 
                             if (game.isAlongSideColumn()) {
                                 if (tilePositionMessage.getPosition().getColumn() == game.getBuffer().get(0).getColumn()) {
-                                        if (game.getCurrentPlayer().getBookshelf().getNumberInsertableTiles() < game.getBuffer().size() + 1) {
+                                        if (game.getCurrentPlayer().getBookshelf().getNumberInsertableTiles() >= game.getBuffer().size() + 1) {
                                             ItemTile itemTile = game.drawTile(tilePositionMessage.getPosition()); // controllo sulla bookshelf del numero di Tiles che posso inserire, escludendo a pripri il caso in cui  sono minori di quelli nel tiles.
 
                                             game.getBuffer().add(tilePositionMessage.getPosition());
@@ -151,7 +151,7 @@ public class GameController {
                                 }
                             } else if (game.isAlongSideRow()) {
                                 if (tilePositionMessage.getPosition().getRow() == game.getBuffer().get(0).getRow()) {
-                                    if (game.getCurrentPlayer().getBookshelf().getNumberInsertableTiles() < game.getBuffer().size() + 1) {
+                                    if (game.getCurrentPlayer().getBookshelf().getNumberInsertableTiles() >= game.getBuffer().size() + 1) {
                                         ItemTile itemTile = game.drawTile(tilePositionMessage.getPosition());
                                         game.getBuffer().add(tilePositionMessage.getPosition());
                                         game.insertTileInTilePack(itemTile);
