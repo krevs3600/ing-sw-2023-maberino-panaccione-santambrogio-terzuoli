@@ -10,6 +10,7 @@ import it.polimi.ingsw.network.MessagesToClient.requestMessage.GameNameResponseM
 import it.polimi.ingsw.network.MessagesToClient.requestMessage.LoginResponseMessage;
 import it.polimi.ingsw.network.MessagesToClient.requestMessage.RequestMessage;
 import it.polimi.ingsw.network.eventMessages.EventMessage;
+import it.polimi.ingsw.observer_observable.Observer;
 import it.polimi.ingsw.view.cli.CLI;
 
 import java.io.IOException;
@@ -73,11 +74,23 @@ public class ClientImplementation extends UnicastRemoteObject implements Client 
 
                 }
 
+                case DISCONNECTION_RESPONSE -> {
+                    if (view instanceof CLI) {
+                        ((CLI) view).deleteAllObservers();
+                    }
+                    else{
+                        ((GUI) view).deleteAllObservers();
+                    }
+
+                }
+
 
             }
         } else if (message instanceof ErrorMessage) {
         }
         view.showMessage(message);
+
+
     }
 
 
