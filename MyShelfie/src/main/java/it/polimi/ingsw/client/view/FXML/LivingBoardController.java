@@ -252,11 +252,12 @@ public class LivingBoardController {
     }
 
     public void updateTilePack(TilePackView tilePackView) throws FileNotFoundException {
+        String path = "src/main/resources/it/polimi/ingsw/client/view/itemtiles/";
         initTilePack();
         for (int i=0; i<tilePackView.getTiles().size(); i++){
             String randImage = images.get(tilePackView.getTiles().get(i).getType())[new Random().nextInt(0,2)];
             ImageView imageView = (ImageView) tilePack.getChildren().get(i);
-            imageView.setImage(new Image(new FileInputStream(randImage)));
+            imageView.setImage(new Image(new FileInputStream(path + randImage)));
         }
     }
 
@@ -264,17 +265,15 @@ public class LivingBoardController {
         String path = "src/main/resources/it/polimi/ingsw/client/view/itemtiles/";
         for (int r=0; r<9; r++){
             for (int c=0; c<9; c++){
-                System.out.println(r + " " + c);
                 SpaceView space = livingRoomBoardView.getSpace(new Position(r,c));
                 ImageView imageView = (ImageView) board.getChildren().get(r*9 + c);
                 if (!space.isFree() && space.getType().equals(SpaceType.PLAYABLE)){
-                    System.out.println(space.getTile().getType());
                     String randImage = images.get(space.getTile().getType())[new Random().nextInt(0,2)];
                     imageView.setImage(new Image(new FileInputStream(path + randImage)));
                 }
                 else {
-                    System.out.println("forbidden");
                     imageView.setOnMouseClicked(null);
+                    imageView.setImage(null);
                 }
             }
         }

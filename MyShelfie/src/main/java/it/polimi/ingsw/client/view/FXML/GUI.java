@@ -473,7 +473,7 @@ public class GUI extends Observable implements View{
                     Platform.runLater(() -> stage.setScene(scene));
                     Platform.runLater(() -> {
                         try {
-                            livingBoardController.initialize(game, eventMessage.getNickname());
+                            livingBoardController.initialize(game, nickname);
                         } catch (FileNotFoundException e) {
                             throw new RuntimeException(e);
                         }
@@ -502,22 +502,26 @@ public class GUI extends Observable implements View{
 
 
             case TILE_PACK -> {
+
                 TilePackMessage tilePackMessage = (TilePackMessage) eventMessage;
-               // for (PlayerView playerView : game.getSubscribers()) {
+                // for (PlayerView playerView : game.getSubscribers()) {
                 //    out.println("\n-----------------------------------------------------------------------\n" + playerView.getName() + "'s BOOKSHELF:");
                 //out.println(playerView.getBookshelf().toString());
                 //    out.println("\n" + playerView.getName() + "'s score: " + playerView.getScore());
                 livingBoardController.setGameView(game);
+
                 Platform.runLater(()-> {
                     try {
                         livingBoardController.updateLivingRoomBoard(game.getLivingRoomBoard());
-                        /*if (activeTurn){
+                        if (activeTurn){
                             livingBoardController.updateTilePack(game.getTilePack());
-                        }*/
+                        }
                     } catch (FileNotFoundException e) {
                         throw new RuntimeException(e);
                     }
                 });
+                /*
+
                 // out.println("\n-----------------------------------------------------------------------\n LIVING ROOM BOARD:");
                 //  out.println(game.getLivingRoomBoard().toString());
 
@@ -525,7 +529,7 @@ public class GUI extends Observable implements View{
                     // out.println(game.getTilePack().toString());
                     // livingBoardController.ContinuepickingT.setVisible(true);
                     // livingBoardController.stopPickingT.setVisible(true);
-
+                    /*
                     while(!livingBoardController.WantStopPickingTiles() && !livingBoardController.WantPickAnotherTile()) {
                         if (livingBoardController.WantStopPickingTiles()) {
                             setChanged();
@@ -536,7 +540,7 @@ public class GUI extends Observable implements View{
                         //    setChanged();
                         //   notifyObservers(new FillBookshelfMessage(eventMessage.getNickname()));
                          //   }
-                    }
+                    }*/
 
                 }
             }
