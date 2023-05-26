@@ -247,6 +247,9 @@ public class LivingBoardController {
                     imageView.setOnMouseClicked(this::boardTileClicked);
                     board.add(imageView, c, r);
                 }
+                else {
+                    board.add(new ImageView(), c, r);
+                }
             }
         }
     }
@@ -276,8 +279,8 @@ public class LivingBoardController {
         ImageView sourceImageView = (ImageView) event.getSource();
         for (int i=0; i<board.getChildren().size(); i++){
             if (((ImageView) board.getChildren().get(i)).equals(sourceImageView)){
-                selectedTileR = i/5;
-                selectedTileC = i%5;
+                selectedTileR = i/9;
+                selectedTileC = i%9;
                 break;
             }
         }
