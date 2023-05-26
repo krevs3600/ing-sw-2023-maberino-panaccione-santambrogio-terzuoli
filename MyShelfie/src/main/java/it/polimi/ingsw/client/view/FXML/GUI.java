@@ -2,8 +2,12 @@ package it.polimi.ingsw.client.view.FXML;
 
 import it.polimi.ingsw.AppServer;
 import it.polimi.ingsw.model.ModelView.GameView;
+import it.polimi.ingsw.model.ModelView.PlayerView;
+import it.polimi.ingsw.model.utils.GamePhase;
+import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.network.ClientImplementation;
 import it.polimi.ingsw.network.MessagesToClient.MessageToClient;
+import it.polimi.ingsw.network.MessagesToClient.errorMessages.ErrorMessage;
 import it.polimi.ingsw.network.MessagesToClient.errorMessages.JoinErrorMessage;
 import it.polimi.ingsw.network.MessagesToClient.requestMessage.*;
 import it.polimi.ingsw.network.Socket.ServerStub;
@@ -28,9 +32,13 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Set;
 
+import static it.polimi.ingsw.network.MessagesToClient.MessageToClientType.*;
+import static it.polimi.ingsw.network.eventMessages.EventMessageType.TILE_PACK;
 
 
 public class GUI extends Observable implements View{
+
+    private boolean activeTurn=false;
     private Stage stage;
     private Scene scene;
     private Parent root;
@@ -206,6 +214,14 @@ public class GUI extends Observable implements View{
         return 0;
     }
 
+    public void chosenposition(int r,int c){
+        setChanged();
+        notifyObservers(new TilePositionMessage(this.client.getNickname(), new Position(r,c)));
+
+    }
+
+
+
     //TODO: askgamespecs
     public void askGameName() {
         String gameName=this.gameNameController.getTextField();
@@ -217,6 +233,7 @@ public class GUI extends Observable implements View{
     public void showGameNamesList(Set<String> availableGameNames) {
         setChanged();
         notifyObservers(new GameNameChoiceMessage(this.client.getNickname(),this.gameNameListController.getGameToJoin()));
+
     }
 
     //todo secondo me si può fare lo stesso metodo nell'interfaccia view e poi implementarlo
@@ -334,6 +351,8 @@ public class GUI extends Observable implements View{
             }
 
 
+
+
             case WAIT_PLAYERS -> {
                 WaitingResponseMessage waitingResponseMessage = (WaitingResponseMessage) message;
                 if (this.lobbyController == null) {
@@ -348,7 +367,7 @@ public class GUI extends Observable implements View{
                         throw new RuntimeException(e);
                     }
                 }
-                Platform.runLater(()->lobbyController.NumberOfMissingPlayers.setText("Waiting for" + waitingResponseMessage.getMissingPlayers()+" players....."));
+                Platform.runLater(() -> lobbyController.NumberOfMissingPlayers.setText("Waiting for" + waitingResponseMessage.getMissingPlayers() + " players....."));
                 lobbyController.NumberOfMissingPlayers.setVisible(true);
 
                 //magari serve settare il numero di giocatori selezionato da far vedere
@@ -363,14 +382,55 @@ public class GUI extends Observable implements View{
             case PLAYER_JOINED_LOBBY_RESPONSE -> {
                 PlayerJoinedLobbyMessage player = (PlayerJoinedLobbyMessage) message;
                 //out.println("\n" + player.getNickname() + " joined lobby") TODO: settare il text della lobby ;
-                Platform.runLater(()->lobbyController.PlayerJoinedGame.setText(player.getNickname()+ " joined lobby"));
+                Platform.runLater(() -> lobbyController.PlayerJoinedGame.setText(player.getNickname() + " joined lobby"));
                 this.lobbyController.PlayerJoinedGame.setVisible(true);
                 // ok forse il comando sotto non ha senso perche sono nella GUI di un client che quindi vede il suo lobbyController
                 //  this.lobbyController.NumberOfMissingPlayers.setText("Waiting for"+ this.lobbyController.getPinLobby());
                 //  this.lobbyController.NumberOfMissingPlayers.setVisible(true);
             }
+
+            case ILLEGAL_POSITION, UPPER_BOUND_TILEPACK, NOT_ENOUGH_INSERTABLE_TILES -> {
+                if (activeTurn) {
+                    ErrorMessage errorMessage = (ErrorMessage) message;
+                    this.showPopup(errorMessage.getErrorMessage());
+                    String answer = "";
+                    livingBoardController.ContinuepickingT.setVisible(true);
+                    livingBoardController.stopPickingT.setVisible(true);
+
+                    while(!livingBoardController.WantStopPickingTiles() && !livingBoardController.WantPickAnotherTile()) {
+                        if (livingBoardController.WantStopPickingTiles()) {
+                            setChanged();
+                            notifyObservers(new SwitchPhaseMessage(client.getNickname(), GamePhase.PLACING_TILES));
+                        }
+                    }
+                        //if(livingBoardController.WantPickAnotherTile()){
+                        //    case "" -> {
+                        //        out.print("r: ");
+                        //        int r = in.nextInt();
+                        //        in.nextLine();
+                        //        System.out.print("c: ");
+                        //        int c = in.nextInt();
+                        //        in.nextLine();
+                        //        setChanged();
+                        //        notifyObservers(new TilePositionMessage(((ErrorMessage) message).getNickName(), new Position(r, c)));
+                        //    }
+
+                    livingBoardController.stopPickingT.setVisible(false);
+                    livingBoardController.ContinuepickingT.setVisible(false);
+                    livingBoardController.resetAnotherTile();
+                    livingBoardController.resetStopPickingTiles();
+                }
+            }
+
+
+
+
+
+
+            }
         }
-    }
+
+
 
     public void askNumberOfPlayers(String gameName) {
         setChanged();
@@ -405,19 +465,22 @@ public class GUI extends Observable implements View{
     }
 
     @Override
-    public void update(GameView gameView, EventMessage eventMessage) {
+    public void update(GameView game, EventMessage eventMessage)  {
         switch (eventMessage.getType()) {
-            case PLAYER_TURN -> {
+            case BOARD -> {
+                // todo: in questo caso deve comparire il pop up con i personal goal card e i common goal cards e si inizializza la scena
                 try {
                     URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/livingBoard_scene.fxml/").toURI().toURL();
                     FXMLLoader fxmlLoader = new FXMLLoader(url);
                     Scene scene = new Scene(fxmlLoader.load());
                     livingBoardController = fxmlLoader.getController();
                     livingBoardController.setGui(this);
+                    this.livingBoardController = livingBoardController;
                     Platform.runLater(() -> stage.setScene(scene));
                     Platform.runLater(() -> {
                         try {
-                            livingBoardController.initialize(gameView, nickname);
+                            // cambiato nickname a quello dell'event
+                            livingBoardController.initialize(game,eventMessage.getNickname());
                         } catch (FileNotFoundException e) {
                             throw new RuntimeException(e);
                         }
@@ -426,8 +489,72 @@ public class GUI extends Observable implements View{
                     System.out.println(e);
                 }
             }
-        }
-    }
+            case PLAYER_TURN -> {
+                if (this.client.getNickname().equals(eventMessage.getNickname())) {
+                    activeTurn = true;
+
+                    showPopup("it's your turn, remember you can select a maximum of 3 tiles" +
+                            " adjacent to each other that must form a line and they must" +
+                            " all have a free side at the beginning! Good luck and always keep in mind the achievement " +
+                            "of personal and common goal cards ! \uD83D\uDCAA\uD83C\uDFFB\uD83D\uDCAA\uD83C\uDFFE");
+
+                    // todo : farei un do-while fin quando la carta non è cliccata mettere un
+                    //  timer che fa scadere il turno se non è cliccata entro 3 minuti tipo
+
+
+                } else {
+                    activeTurn = false;
+                    showPopup("It's " + eventMessage.getNickname() + "'s turn\n");
+                }
+            }
+
+
+                case TILE_PACK -> {
+                    TilePackMessage tilePackMessage = (TilePackMessage) eventMessage;
+                   // for (PlayerView playerView : game.getSubscribers()) {
+                    //    out.println("\n-----------------------------------------------------------------------\n" + playerView.getName() + "'s BOOKSHELF:");
+                    //out.println(playerView.getBookshelf().toString());
+                    //    out.println("\n" + playerView.getName() + "'s score: " + playerView.getScore());
+                        try {
+                            this.livingBoardController.updateLivingRoomBoard(game.getLivingRoomBoard());
+                        } catch (FileNotFoundException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                      // out.println("\n-----------------------------------------------------------------------\n LIVING ROOM BOARD:");
+                      //  out.println(game.getLivingRoomBoard().toString());
+                        if (activeTurn) {
+                            try {
+                                this.livingBoardController.updateTilePack(game.getTilePack());
+                            } catch (FileNotFoundException e) {
+                                throw new RuntimeException(e);
+                            }
+                           // out.println("\n-----------------------------------------------------------------------\n TILE PACK:");
+                           // out.println(game.getTilePack().toString());
+                            livingBoardController.ContinuepickingT.setVisible(true);
+                            livingBoardController.stopPickingT.setVisible(true);
+
+                            while(!livingBoardController.WantStopPickingTiles() && !livingBoardController.WantPickAnotherTile()) {
+                                if (livingBoardController.WantStopPickingTiles()) {
+                                    setChanged();
+                                    notifyObservers(new SwitchPhaseMessage(client.getNickname(), GamePhase.PLACING_TILES));
+                                }
+
+                                // case "easteregg" -> {
+                                //    setChanged();
+                                //   notifyObservers(new FillBookshelfMessage(eventMessage.getNickname()));
+                                 //   }
+                                }
+
+                        }
+
+                    }
+                }
+
+
+            }
+
+
     public void showPopup(String text){
         Popup popup = new Popup();
         Label noSelection = new Label(text);

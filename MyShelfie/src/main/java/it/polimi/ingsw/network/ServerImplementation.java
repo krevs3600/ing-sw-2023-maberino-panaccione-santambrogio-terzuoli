@@ -148,7 +148,11 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
             }
 
             case TILE_POSITION, BOOKSHELF_COLUMN, ITEM_TILE_INDEX, END_TURN, FILL_BOOKSHELF, SWITCH_PHASE -> {
-                playerGame.get(client).update(client, eventMessage);
+                playerGame.get(client).update(client, eventMessage); //prendo il controller associato al client e su di questo chiamo l'update passando
+                                                                    // il client e l'event message che non deve essere castato ed il tipo di messaggio che
+                                                                    // mando è di tipo TilePack message
+                // quindi player turn--> update del client che chiama l'update del server che passa per il game controller il quale poi rinvia direttamente
+                // il messaggio al client.
             }
 
             case DISCONNECT_CLIENT -> {

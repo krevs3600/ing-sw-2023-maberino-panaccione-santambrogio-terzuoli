@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.utils.NumberOfPlayers;
 import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.model.utils.SpaceType;
 import it.polimi.ingsw.model.utils.TileType;
+import javafx.application.Platform;
 import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
@@ -78,6 +79,21 @@ public class LivingBoardController {
     public Button nextPlayer;
     @FXML
     public Button playerBookshelf;
+
+    @FXML
+    public Button ContinuepickingT;
+
+    @FXML
+    public Button stopPickingT;
+
+
+
+
+
+
+
+
+
 
     private boolean columnSelected = false;
     private int column;
@@ -281,6 +297,7 @@ public class LivingBoardController {
             if (((ImageView) board.getChildren().get(i)).equals(sourceImageView)){
                 selectedTileR = i/9;
                 selectedTileC = i%9;
+                Platform.runLater(()->this.gui.chosenposition(selectedTileR,selectedTileC));
                 break;
             }
         }
@@ -374,6 +391,36 @@ public class LivingBoardController {
                 return path + "back.jpg";
             }
         }
+    }
+
+    private boolean stopPickingTiles=false;
+    private boolean anotherTile=false;
+
+    public boolean WantStopPickingTiles(){
+        return stopPickingTiles;
+
+    }
+    public boolean WantPickAnotherTile(){
+        return anotherTile;
+
+    }
+
+    public void resetStopPickingTiles(){
+        this.stopPickingTiles=true;
+    }
+
+    public void resetAnotherTile(){
+        this.anotherTile=true;
+    }
+
+    public void StopTiles(MouseEvent mouseEvent) {
+        stopPickingTiles=true;
+    }
+
+    public void AnotherTile(MouseEvent mouseEvent) {
+        anotherTile=true;
+
+
     }
 }
 
