@@ -480,7 +480,7 @@ public class GUI extends Observable implements View{
                     Platform.runLater(() -> {
                         try {
                             // cambiato nickname a quello dell'event
-                            livingBoardController.initialize(game,eventMessage.getNickname());
+                            livingBoardController.initialize(game,nickname);
                         } catch (FileNotFoundException e) {
                             throw new RuntimeException(e);
                         }

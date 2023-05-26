@@ -292,15 +292,16 @@ public class LivingBoardController {
     }
 
     public void boardTileClicked(MouseEvent event){
+        System.out.println("sos");
         ImageView sourceImageView = (ImageView) event.getSource();
         for (int i=0; i<board.getChildren().size(); i++){
             if (((ImageView) board.getChildren().get(i)).equals(sourceImageView)){
                 selectedTileR = i/9;
                 selectedTileC = i%9;
-                Platform.runLater(()->this.gui.chosenposition(selectedTileR,selectedTileC));
                 break;
             }
         }
+        Platform.runLater(()->this.gui.chosenposition(selectedTileR,selectedTileC));
     }
 
     public int getSelectedTileR(){
