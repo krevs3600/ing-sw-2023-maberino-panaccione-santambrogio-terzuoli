@@ -12,13 +12,16 @@ import it.polimi.ingsw.network.MessagesToClient.requestMessage.*;
 import it.polimi.ingsw.network.Socket.ServerStub;
 import it.polimi.ingsw.network.eventMessages.*;
 import it.polimi.ingsw.observer_observable.Observable;
+import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -470,6 +473,12 @@ public class GUI extends Observable implements View{
                     Platform.runLater(() -> {
                         try {
                             stage.setScene(scene);
+                            int displayTimeMillis=9000;
+                            livingBoardController.AnchorPaneforTheCandPgoalcards.setVisible(true);
+                            FadeTransition fadeTransition=new FadeTransition(Duration.millis(displayTimeMillis), livingBoardController.AnchorPaneforTheCandPgoalcards);
+                            fadeTransition.setOnFinished(event-> {livingBoardController.AnchorPaneforTheCandPgoalcards.setVisible(false);
+                            });
+                          fadeTransition.play();
                             livingBoardController.initialize(game, nickname);
                         } catch (FileNotFoundException e) {
                             throw new RuntimeException(e);

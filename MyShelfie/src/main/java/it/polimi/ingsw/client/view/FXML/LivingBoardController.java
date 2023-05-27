@@ -15,6 +15,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -77,6 +78,9 @@ public class LivingBoardController {
     public Button playerBookshelf;
     @FXML
     public Label OtherPlayerTurnLabel;
+
+    @FXML
+    public AnchorPane AnchorPaneforTheCandPgoalcards;
 
     private boolean columnSelected = false;
     private int column;
@@ -261,7 +265,7 @@ public class LivingBoardController {
                     gui.insertTileInColumn(i);
                 }
             }
-            for(int r=bookshelf.getRowCount()-1; r>0; r--){
+            for(int r=bookshelf.getRowCount()-1; r>1; r--){
                 ImageView bookshelfImage = (ImageView) bookshelf.getChildren().get(r*5 + column);
                 if (bookshelfImage.getImage() == null) {
                     bookshelfImage.setImage(sourceImageView.getImage());

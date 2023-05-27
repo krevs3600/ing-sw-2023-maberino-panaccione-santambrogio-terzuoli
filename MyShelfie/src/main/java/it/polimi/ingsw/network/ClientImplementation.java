@@ -24,6 +24,10 @@ public class ClientImplementation extends UnicastRemoteObject implements Client 
     private String nickname;
     private String gameName; // in realtà è un optional
 
+    public View getView() {
+        return view;
+    }
+
     public ClientImplementation(View view, Server server) throws RemoteException {
         super();
         this.view = view;

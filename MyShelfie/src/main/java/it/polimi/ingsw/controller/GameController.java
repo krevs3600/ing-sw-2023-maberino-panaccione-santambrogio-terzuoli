@@ -193,6 +193,7 @@ public class GameController {
                 try {
                     game.setColumnChoice(game.getColumnChoice());
                 } catch (IndexOutOfBoundsException e) {}
+
             }
 
             case SWITCH_PHASE -> {

@@ -12,9 +12,11 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
@@ -86,7 +88,7 @@
                     <children>
                         <Group>
                             <children>
-                                <AnchorPane prefHeight="274.0" prefWidth="388.0">
+                                <AnchorPane layoutX="275.0" layoutY="251.0" prefHeight="274.0" prefWidth="388.0">
                                     <children>
                                         <ImageView fx:id="commonGoalCard1" fitHeight="175.0" fitWidth="269.0" layoutX="61.0" layoutY="77.0" pickOnBounds="true" preserveRatio="true">
                                             <image>
@@ -279,5 +281,27 @@
             </Label>
          </top>
         </BorderPane>
+      <AnchorPane fx:id="AnchorPaneforTheCandPgoalcards" prefHeight="733.0" prefWidth="1047.0">
+         <children>
+            <ImageView fx:id="PersonalGoalCard" fitHeight="415.0" fitWidth="306.0" layoutX="804.0" layoutY="284.0" pickOnBounds="true" preserveRatio="true" />
+            <Pane layoutX="169.0" layoutY="91.0" prefHeight="722.0" prefWidth="1063.0" styleClass="rootPane" stylesheets="@../css/livingBoard_scene.css">
+               <children>
+                  <Label layoutX="10.0" layoutY="13.0" prefHeight="154.0" prefWidth="629.0" text="COMMON GOAL CARDS OF THE GAME" textFill="WHITE">
+                     <font>
+                        <Font name="Libian SC Regular" size="36.0" />
+                     </font>
+                  </Label>
+                  <Line endX="132.5" endY="486.0" layoutX="399.0" layoutY="236.0" startX="141.9998779296875" startY="-231.71817016601562" stroke="WHITE" />
+                  <ImageView fx:id="First_CommonGoalCard" fitHeight="234.0" fitWidth="429.0" layoutX="65.0" layoutY="402.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="First_CommonGoalCard1" fitHeight="234.0" fitWidth="429.0" layoutX="67.0" layoutY="174.0" pickOnBounds="true" preserveRatio="true" />
+                  <Label layoutX="584.0" layoutY="14.0" prefHeight="150.0" prefWidth="455.0" text="YOUR PERSONAL GOAL CARD" textFill="WHITE">
+                     <font>
+                        <Font name="Libian SC Regular" size="36.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
+         </children>
+      </AnchorPane>
     </children>
 </StackPane>
