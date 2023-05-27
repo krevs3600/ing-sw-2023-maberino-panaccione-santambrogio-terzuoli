@@ -21,8 +21,6 @@ import java.rmi.server.UnicastRemoteObject;
 public class ClientImplementation extends UnicastRemoteObject implements Client {
 
     View view;
-
-
     private String nickname;
     private String gameName; // in realtà è un optional
 
@@ -113,6 +111,7 @@ public class ClientImplementation extends UnicastRemoteObject implements Client 
             ((GUI) view).addObserver((observable, eventMessage) -> {
                 try {
                     server.update(this, (EventMessage) eventMessage);
+                    ((GUI) view).setClient(this);
                 } catch (RemoteException e) {
                     System.err.println("Unable to update the server: " + e.getMessage() + ". Skipping the update. ");
                 } catch (IOException e) {

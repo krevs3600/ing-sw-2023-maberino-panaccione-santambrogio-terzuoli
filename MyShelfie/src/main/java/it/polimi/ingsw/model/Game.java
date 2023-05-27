@@ -329,7 +329,6 @@ public class Game extends Observable<EventMessage> {
         if (columnChoice >= 0 && columnChoice < getCurrentPlayer().getBookshelf().getMaxWidth()) this.columnChoice = columnChoice;
         else throw new IndexOutOfBoundsException("invalid column, please choose another one;");
         setChanged();
-        // BookshelfView bookshelfView = new BookshelfView(getSubscribers().get(0).getBookshelf());
         notifyObservers(new InsertRequestMessage(getCurrentPlayer().getName(), columnChoice));
     }
 
