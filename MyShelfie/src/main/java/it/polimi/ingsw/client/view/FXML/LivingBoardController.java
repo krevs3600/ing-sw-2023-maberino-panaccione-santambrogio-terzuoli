@@ -1,4 +1,5 @@
 package it.polimi.ingsw.client.view.FXML;
+import it.polimi.ingsw.model.ItemTile;
 import it.polimi.ingsw.model.ModelView.*;
 import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.model.utils.SpaceType;
@@ -81,24 +82,23 @@ public class LivingBoardController {
     @FXML
     public Button stopPickingT;
     @FXML
-    public RadioButton Column1;
+    public Button Column1;
 
     @FXML
-    public RadioButton Column2;
+    public Button Column2;
 
     @FXML
-    public RadioButton Column5;
+    public Button Column5;
 
     @FXML
-    public RadioButton Column4;
+    public Button Column4;
 
     @FXML
-    public RadioButton Column3;
+    public Button Column3;
 
     @FXML
     public Label OtherPlayerTurnLabel;
-    @FXML
-    public Button column1;
+
 
 
 
@@ -117,6 +117,10 @@ public class LivingBoardController {
         this.gameView = gameView;
     }
 
+    private String tilePath(ItemTile itemTile){
+        String path = "src/main/resources/it/polimi/ingsw/client/view/itemtiles/";
+        return path.concat(itemTile.getType().toString()).concat("1.").concat(itemTile.getImageIndex()).concat(".png");
+    }
     public void initialize(GameView gameView, String nickname) throws FileNotFoundException {
         setGameView(gameView);
         this.nickname = nickname;
@@ -126,7 +130,8 @@ public class LivingBoardController {
         }
 
         // loading itemTiles paths and creating support structures
-        String path = "src/main/resources/it/polimi/ingsw/client/view/itemtiles/";
+
+        /*
         String[] cats = {"Gatti1.1.png", "Gatti1.2.png", "Gatti1.3.png"};
         String[] frames = {"Cornici1.1.png", "Cornici1.2.png", "Cornici1.3.png"};
         String[] games = {"Giochi1.1.png", "Giochi1.2.png", "Giochi1.3.png"};
@@ -138,7 +143,7 @@ public class LivingBoardController {
         images.put(TileType.GAME, games);
         images.put(TileType.BOOK, books);
         images.put(TileType.PLANT, plants);
-        images.put(TileType.TROPHY, trophey);
+        images.put(TileType.TROPHY, trophey);*/
 
         // INIT LIVING_ROOM_BOARD
 
@@ -147,8 +152,7 @@ public class LivingBoardController {
             for (int c=0; c<9; c++){
                 SpaceView space = gameView.getLivingRoomBoard().getSpace(new Position(r,c));
                 if (space.getType() == SpaceType.PLAYABLE){
-                    String randImage = images.get(space.getTile().getType())[new Random().nextInt(0,2)];
-                    ImageView imageView = new ImageView(new Image(new FileInputStream(path + randImage)));
+                    ImageView imageView = new ImageView(new Image(new FileInputStream(tilePath(space.getTile()))));
                     imageView.setFitWidth((board.getPrefWidth() - ((board.getColumnCount()-1)*board.getHgap()))/board.getColumnCount()-10);
                     imageView.setFitHeight((board.getPrefHeight() - ((board.getRowCount()-1)*board.getVgap()))/board.getRowCount()-10);
                     imageView.setOnMouseClicked(this::boardTileClicked);
@@ -250,14 +254,11 @@ public class LivingBoardController {
     }
 
     public void updateBookshelf(BookshelfView bookshelf, GridPane bookshelfGrid) throws FileNotFoundException {
-        String path = "src/main/resources/it/polimi/ingsw/client/view/itemtiles/";
         for(int r=0;r<bookshelfGrid.getRowCount(); r++){
             for (int c=0; c<bookshelfGrid.getColumnCount(); c++){
                 // TODO: set a fixed image
                 if (bookshelf.getGrid()[r][c] != null){
-                    String randImage = images.get(bookshelf.getGrid()[r][c].getType())[new Random().nextInt(0,2)];
-                    Image tile = new Image(new FileInputStream(path + randImage));
-
+                    Image tile = new Image(new FileInputStream(tilePath(bookshelf.getGrid()[r][c])));
                     ImageView bookshelfImage = (ImageView) bookshelfGrid.getChildren().get(r*5 + c);
                     bookshelfImage.setImage(tile);
                 }
@@ -266,24 +267,28 @@ public class LivingBoardController {
     }
 
     public void updateTilePack(TilePackView tilePackView) throws FileNotFoundException {
-        String path = "src/main/resources/it/polimi/ingsw/client/view/itemtiles/";
-        initTilePack();
-        for (int i=0; i<tilePackView.getTiles().size(); i++){
-            String randImage = images.get(tilePackView.getTiles().get(i).getType())[new Random().nextInt(0,2)];
+        //initTilePack();
+        for (int i=0; i<3; i++){
             ImageView imageView = (ImageView) tilePack.getChildren().get(i);
-            imageView.setImage(new Image(new FileInputStream(path + randImage)));
+            if (i<tilePackView.getTiles().size()){
+                imageView.setImage(new Image(new FileInputStream(tilePath(tilePackView.getTiles().get(i)))));
+                if (imageView.getEventDispatcher() == null){
+                    imageView.setOnMouseClicked(this::packTileClicked);
+                }
+            } else {
+                imageView.setOnMouseClicked(null);
+                imageView.setImage(null);
+            }
         }
     }
 
     public void updateLivingRoomBoard(LivingRoomBoardView livingRoomBoardView) throws FileNotFoundException {
-        String path = "src/main/resources/it/polimi/ingsw/client/view/itemtiles/";
         for (int r=0; r<9; r++){
             for (int c=0; c<9; c++){
                 SpaceView space = livingRoomBoardView.getSpace(new Position(r,c));
                 ImageView imageView = (ImageView) board.getChildren().get(r*9 + c);
                 if (!space.isFree() && space.getType().equals(SpaceType.PLAYABLE)){
-                    String randImage = images.get(space.getTile().getType())[new Random().nextInt(0,2)];
-                    imageView.setImage(new Image(new FileInputStream(path + randImage)));
+                    imageView.setImage(new Image(new FileInputStream(tilePath(space.getTile()))));
                 }
                 else {
                     imageView.setOnMouseClicked(null);
@@ -447,7 +452,7 @@ public class LivingBoardController {
         Column3.setDisable(true);
         Column4.setDisable(true);
         Column5.setDisable(true);
-        Platform.runLater(()->this.gui.StopPickingTiles(0));
+        Platform.runLater(()->this.gui.stopPickingTiles(0));
     }
 
     public void InsertInColumn2(MouseEvent mouseEvent) {
@@ -456,7 +461,7 @@ public class LivingBoardController {
             Column3.setDisable(true);
             Column4.setDisable(true);
             Column5.setDisable(true);
-        this.gui.StopPickingTiles(1);
+        this.gui.stopPickingTiles(1);
     }
 
     public void InsertInColumn3(MouseEvent mouseEvent) {
@@ -465,7 +470,7 @@ public class LivingBoardController {
         Column2.setDisable(true);
         Column4.setDisable(true);
         Column5.setDisable(true);
-        this.gui.StopPickingTiles(2);
+        this.gui.stopPickingTiles(2);
 
     }
 
@@ -475,7 +480,7 @@ public class LivingBoardController {
         Column3.setDisable(true);
         Column2.setDisable(true);
         Column5.setDisable(true);
-        this.gui.StopPickingTiles(3);
+        this.gui.stopPickingTiles(3);
 
     }
 
@@ -485,7 +490,7 @@ public class LivingBoardController {
         Column3.setDisable(true);
         Column4.setDisable(true);
         Column2.setDisable(true);
-        this.gui.StopPickingTiles(4);
+        this.gui.stopPickingTiles(4);
     }
 }
 

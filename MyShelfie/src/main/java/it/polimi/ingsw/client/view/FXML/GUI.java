@@ -97,7 +97,7 @@ public class GUI extends Observable implements View{
         return null;
     }
 
-    public void StopPickingTiles(int column){
+    public void stopPickingTiles(int column){
         // Non devo fare il controllo che il turno sia attivo perche altrmenti i pulsanti sono disabilitati
         // quindi anche nel caso in cui sbaglia se si toglie il pop up non c'è problema, l'unica cosa da estire è
         // il caso in cui sceglie 3 tiles

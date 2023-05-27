@@ -25,6 +25,33 @@ public enum TileType {
         this.colorBackground = colorBackground;
     }
 
+    @Override
+    public String toString() {
+        switch (abbreviation){
+            case "C" -> {
+                return "Gatti";
+            }
+            case "B" -> {
+                return "Libri";
+            }
+            case "G" -> {
+                return "Giochi";
+            }
+            case "F" -> {
+                return "Cornici";
+            }
+            case "T" -> {
+                return "Trofei";
+            }
+            case "P" -> {
+                return "Piante";
+            }
+            default -> {
+                return "";
+            }
+        }
+    }
+
     public String getAbbreviation() {
         return abbreviation;
     }

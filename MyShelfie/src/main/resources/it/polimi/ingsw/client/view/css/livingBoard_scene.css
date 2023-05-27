@@ -23,3 +23,25 @@
     -fx-cursor: hand;
 
 }
+
+#column {
+    -fx-background-image:none;
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+    -fx-border-color:#792e12;
+    -fx-border-radius: 3px !important;
+    -fx-cursor:hand;
+
+}
+#column:hover {
+    -fx-effect: dropshadow(gaussian, #bbf4b0, 20, 0.5, 0, 0);
+    -fx-border-color:#9fecf0cc;
+    -fx-cursor:hand;
+    -fx-border-width:2;
+
+}
+#column:focused{
+    -fx-effect: dropshadow(gaussian, #bbf4b0, 20, 0.5, 0, 0);
+    -fx-border-color:#bbf4b0;
+    -fx-border-width: 3;
+}

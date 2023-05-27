@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.utils.TileType;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Random;
 
 /**
  * <h1>Class ItemTile</h1>
@@ -12,6 +13,7 @@ import java.io.Serializable;
  * */
 public class ItemTile implements Serializable {
     private final TileType type;
+    private final String imageIndex;
     @Serial private static final long serialVersionUID = 1L;
 
     /**
@@ -20,6 +22,7 @@ public class ItemTile implements Serializable {
      */
     public ItemTile(TileType type){
         this.type = type;
+        this.imageIndex = String.valueOf(new Random().nextInt(0,2)+1);
     }
 
     /**
@@ -37,5 +40,9 @@ public class ItemTile implements Serializable {
     @Override
     public String toString() {
         return getType().getColorBackground() + " " + getType().getAbbreviation() + " " + "\033[0m";
+    }
+
+    public String getImageIndex() {
+        return imageIndex;
     }
 }
