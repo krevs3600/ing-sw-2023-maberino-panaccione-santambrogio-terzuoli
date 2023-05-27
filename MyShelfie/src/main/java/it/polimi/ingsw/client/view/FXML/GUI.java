@@ -486,9 +486,9 @@ public class GUI extends Observable implements View{
                     Scene scene = new Scene(fxmlLoader.load());
                     livingBoardController = fxmlLoader.getController();
                     livingBoardController.setGui(this);
-                    Platform.runLater(() -> stage.setScene(scene));
                     Platform.runLater(() -> {
                         try {
+                            stage.setScene(scene);
                             livingBoardController.initialize(game, nickname);
                         } catch (FileNotFoundException e) {
                             throw new RuntimeException(e);

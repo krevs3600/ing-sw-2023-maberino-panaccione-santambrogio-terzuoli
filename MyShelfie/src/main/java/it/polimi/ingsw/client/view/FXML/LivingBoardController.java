@@ -168,12 +168,6 @@ public class LivingBoardController {
         updateTilePack(gameView.getTilePack());
 
 
-        // INIT COLUMN BUTTONS
-        for (Node node : columnOptions.getChildren()){
-            RadioButton radioButton = (RadioButton) node;
-            radioButton.setOnMouseClicked(this::radioButtonPressed);
-        }
-
         // INIT BOOKSHELF
         for (int r=0; r<6;r++){
             for (int c=0; c<5; c++){
@@ -193,7 +187,7 @@ public class LivingBoardController {
                 otherBookshelf.add(imageView, c,r);
             }
         }
-
+        System.out.println(gameView.getSubscribers().size());
         if (gameView.getSubscribers().size() == 2){
             nextPlayer.setVisible(false);
             previousPlayer.setVisible(false);
