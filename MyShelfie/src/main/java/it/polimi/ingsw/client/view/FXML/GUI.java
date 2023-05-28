@@ -475,65 +475,77 @@ public class GUI extends Observable implements View{
     public void update(GameView game, EventMessage eventMessage) {
         switch (eventMessage.getType()) {
             case BOARD -> {
-                System.out.println(nickname + " " + client.getNickname());
                 // todo: in questo caso deve comparire il pop up con i personal goal card e i common goal cards e si inizializza la scena
-                try {
-                    
-                    URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/livingBoard_scene.fxml/").toURI().toURL();
-                    FXMLLoader fxmlLoader = new FXMLLoader(url);
-                    Scene scene = new Scene(fxmlLoader.load());
-                    livingBoardController = fxmlLoader.getController();
-                    livingBoardController.setGui(this);
+               if(isFirstTime) {
+                   try {
+                       URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/livingBoard_scene.fxml/").toURI().toURL();
+                       FXMLLoader fxmlLoader = new FXMLLoader(url);
+                       Scene scene = new Scene(fxmlLoader.load());
+                       livingBoardController = fxmlLoader.getController();
+                       livingBoardController.setGui(this);
 
-                    Platform.runLater(() -> {
-                        try {
+                       Platform.runLater(() -> {
+                           try {
 
-                            stage.setScene(scene);
-                           // if (isFirstTime) {
-                           //     int displayTimeMillis = 9000;
-                           //     livingBoardController.AnchorPaneforTheCandPgoalcards.setVisible(true);
-                           //     FadeTransition fadeTransition = new FadeTransition(Duration.millis(displayTimeMillis), livingBoardController.AnchorPaneforTheCandPgoalcards);
-                           //     fadeTransition.setOnFinished(event -> {
-                           //         livingBoardController.AnchorPaneforTheCandPgoalcards.setVisible(false);
-                           //     });
-                           //     fadeTransition.play();
-                           //     isFirstTime = false;
-                           //
-                           // }
-                            if(isFirstTime) {
-                                livingBoardController.initialize(game, nickname);
-                               isFirstTime=false;
-                            }
-                        } catch (FileNotFoundException e) {
-                            throw new RuntimeException(e);
-                        }
-                    });
-                } catch (IOException e) {
-                    System.out.println(e);
-                }
+                               stage.setScene(scene);
+                               // if (isFirstTime) {
+                               //     int displayTimeMillis = 9000;
+                               //     livingBoardController.AnchorPaneforTheCandPgoalcards.setVisible(true);
+                               //     FadeTransition fadeTransition = new FadeTransition(Duration.millis(displayTimeMillis), livingBoardController.AnchorPaneforTheCandPgoalcards);
+                               //     fadeTransition.setOnFinished(event -> {
+                               //         livingBoardController.AnchorPaneforTheCandPgoalcards.setVisible(false);
+                               //     });
+                               //     fadeTransition.play();
+                               //     isFirstTime = false;
+                               //
+                               // }
+
+                               livingBoardController.initialize(game, nickname);
 
 
-            }
+                           } catch (FileNotFoundException e) {
+                               throw new RuntimeException(e);
+                           }
+                       });
+                   } catch (IOException e) {
+                       System.out.println(e);
+                   }
+                   isFirstTime=false;
+               }
+               else {
+                   Platform.runLater(()-> {  showPopup("NEW TURN HAS JUST STARTED");});
+
+
+                   }
+               }
+
+
             case PLAYER_TURN -> {
+                System.out.println("it's "+game.getCurrentPlayer().getName()+" turn");
 
-                livingBoardController.board.setDisable(true);
-               livingBoardController.disableColumnChoice();
                 if (this.client.getNickname().equals(game.getCurrentPlayer().getName())) {
+                    Platform.runLater(()-> { livingBoardController.board.setDisable(false);
+                        showPopup("it's your turn"); // todo ricontrollare questo pop up non mi sembra che compaia
+                        livingBoardController.OtherPlayerTurnLabel.setVisible(false);
+                    });
                     //salva per vedere se sono gli stessi
-                  livingBoardController.board.setDisable(false);
-                    showPopup("it's your turn"); // todo ricontrollare questo pop up non mi sembra che compaia
 
                     // todo : farei un do-while fin quando la carta non è cliccata mettere un
                     //  timer che fa scadere il turno se non è cliccata entro 3 minuti tipo
 
                 } else {
-                    livingBoardController.OtherPlayerTurnLabel.setText("Wait... " + eventMessage.getNickname() + " is picking tiles");
+
+                  livingBoardController.board.setDisable(true);
+                        livingBoardController.disableColumnChoice();
+                        livingBoardController.OtherPlayerTurnLabel.setText("Wait... " + eventMessage.getNickname() + " is picking tiles");
                     livingBoardController.OtherPlayerTurnLabel.setVisible(true);
+                    };
+
                 }
 
                     //  showPopup("It's " + eventMessage.getNickname() + "'s turn\n"); adesso lo indica nel board turn il turno dell'altra persona
 
-                }
+
 
                 // adessso questo metodo dovrebbe essere inutile perchè appena sceglie la colonna se è giusta va nel placing Tiles
 
@@ -561,7 +573,6 @@ public class GUI extends Observable implements View{
             case PLACING_TILES -> { // poi ogni volta che seleziona una carta il Item tile indexMessage lo riporta qui
                 livingBoardController.tilePack.setDisable(false);
                 livingBoardController.setGameView(game); // questo potrebbe essere sbagliato
-                System.out.println(nickname + " " + activeTurn);
                 if (this.client.getNickname().equals(game.getCurrentPlayer().getName())) {
                     Platform.runLater(() -> {
                         livingBoardController.updateTilePack(game.getTilePack());
@@ -579,6 +590,11 @@ public class GUI extends Observable implements View{
 
 
             case PICKING_TILES -> {
+                try {
+                    livingBoardController.updateLivingRoomBoard(game.getLivingRoomBoard());
+                } catch (FileNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
                 if (this.client.getNickname().equals(game.getCurrentPlayer().getName())) {
                     System.out.println("arrivato a" + this.client.getNickname());
                     livingBoardController.updateTilePack(game.getTilePack());
