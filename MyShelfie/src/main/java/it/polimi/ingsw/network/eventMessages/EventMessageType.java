@@ -27,8 +27,10 @@ public enum EventMessageType {
     FILL_BOOKSHELF,
     SWITCH_PHASE,
     DISCONNECT_CLIENT,
+    PICKING_TILES,
+    PLACING_TILES,
     // error
-    GAME_SPECS;
+    GAME_SPECS, COLUMN_CHOICE;
 
 
 

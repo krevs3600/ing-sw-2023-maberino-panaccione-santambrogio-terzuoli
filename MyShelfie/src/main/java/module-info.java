@@ -12,4 +12,5 @@ module PSP47{
     exports it.polimi.ingsw.model.ModelView;
     exports it.polimi.ingsw.network.eventMessages;
     exports it.polimi.ingsw.network.MessagesToClient.requestMessage;
+    exports it.polimi.ingsw.client.view.FXML;
 }

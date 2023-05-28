@@ -56,7 +56,6 @@ public class Game extends Observable<EventMessage> {
         this.numberOfPlayers = numberOfPlayers;
         this.personalGoalCardDeck = new PersonalGoalCardDeck();
         this.tilePack = new TilePack();
-        this.turnPhase = GamePhase.INIT_GAME;
         this.buffer = new ArrayList<>();
         this.isFinalTurn = false;
         this.alongSideRow = false;
@@ -66,11 +65,6 @@ public class Game extends Observable<EventMessage> {
 
     public void initLivingRoomBoard(){
         this.livingRoomBoard = new LivingRoomBoard(numberOfPlayers);
-        // LivingRoomBoardView livingRoomBoardView = new LivingRoomBoardView(this.livingRoomBoard);
-        // TODO: da cambiare i messaggi di inizializzazione
-        // ok, this is now done in set drawable tiles.
-        // setChanged();
-        // notifyObservers(new BoardMessage("tutti", livingRoomBoardView));
     }
 
     public void setGameName (String gameName) {
@@ -90,8 +84,6 @@ public class Game extends Observable<EventMessage> {
 
     public ItemTile drawTile(Position position) throws IllegalArgumentException{
         ItemTile itemTile = getLivingRoomBoard().getSpace(position).drawTile();
-        //setChanged();
-        //notifyObservers(new TilePositionMessage(getCurrentPlayer().getName(), (position)));
         return itemTile;
     }
 
@@ -116,9 +108,6 @@ public class Game extends Observable<EventMessage> {
 
     public void setDrawableTiles(){
         this.drawableTiles = getLivingRoomBoard().getDrawableTiles();
-        LivingRoomBoardView livingRoomBoardView = new LivingRoomBoardView(this.getLivingRoomBoard());
-        setChanged();
-        notifyObservers(new BoardMessage(getCurrentPlayer().getName(), livingRoomBoardView));
     }
     public List<Space> getDrawableTiles(){
         return this.drawableTiles;
@@ -132,7 +121,7 @@ public class Game extends Observable<EventMessage> {
         Player firstPlayer = subscribers.get(0);
         firstPlayer.setStatus(PlayerStatus.PICKING_TILES);
         this.cursor = 0;
-        setTurnPhase(GamePhase.PICKING_TILES);
+        setTurnPhase(GamePhase.INIT_GAME);
         setChanged();
         notifyObservers(new PlayerTurnMessage(firstPlayer.getName()));
     }
@@ -167,12 +156,6 @@ public class Game extends Observable<EventMessage> {
      */
     //TODO: add message event
     public void changeTurn(){
-        getBuffer().clear();
-        setAlongSideColumn(false);
-        setAlongSideRow(false);
-        setDrawableTiles();
-        //this.cursor = cursor < subscribers.size()-1 ? cursor+1 : 0;
-        setCursor();
         setChanged();
         notifyObservers(new PlayerTurnMessage(getCurrentPlayer().getName()));
     }
@@ -184,9 +167,6 @@ public class Game extends Observable<EventMessage> {
      */
     public void refillLivingRoomBoard(){
         getLivingRoomBoard().refill();
-        //setChanged();
-        //LivingRoomBoardView livingRoomBoardView = new LivingRoomBoardView(getLivingRoomBoard());
-        //notifyObservers(new BoardMessage(getCurrentPlayer().getName(), livingRoomBoardView));
     }
 
     /**
@@ -242,8 +222,6 @@ public class Game extends Observable<EventMessage> {
 
     public void setPersonalGoalCard(Player player, GoalCard personalGoalCard){
         player.setPersonalGoalCard(personalGoalCard);
-        //setChanged();
-        //notifyObservers(new PersonalGoalCardMessage(player.getName(), player.getPersonalGoalCard()));
     }
     public PersonalGoalCardDeck getPersonalGoalCardDeck(){
         return personalGoalCardDeck;}
@@ -314,12 +292,36 @@ public class Game extends Observable<EventMessage> {
     
     public GamePhase getTurnPhase() {return this.turnPhase;};
     public void setTurnPhase(GamePhase turnPhase) {
+        this.turnPhase = turnPhase;
         if (turnPhase.equals(GamePhase.PLACING_TILES)) {
+            setChanged();
+            notifyObservers(new PlacingTilesMessage(getCurrentPlayer().getName()));
+        }
+        if (turnPhase.equals(GamePhase.INIT_GAME)) {
+            setChanged();
+            notifyObservers(new BoardMessage(getCurrentPlayer().getName(), new LivingRoomBoardView(getLivingRoomBoard())));
+        }
+        if (turnPhase.equals(GamePhase.INIT_TURN)){
+            getBuffer().clear();
+            setAlongSideColumn(false);
+            setAlongSideRow(false);
+            setDrawableTiles();
+            //this.cursor = cursor < subscribers.size()-1 ? cursor+1 : 0;
+            setCursor();
+            setChanged();
+            notifyObservers(new BoardMessage(getCurrentPlayer().getName(), new LivingRoomBoardView(getLivingRoomBoard())));
+        }
+        if (turnPhase.equals(GamePhase.PICKING_TILES)) {
+            setChanged();
+            notifyObservers(new PickingTilesMessage(getCurrentPlayer().getName()));
+        }
+        if (turnPhase.equals(GamePhase.COLUMN_CHOICE)) {
             BookshelfView bookshelfView = new BookshelfView(getCurrentPlayer().getBookshelf());
             setChanged();
             notifyObservers(new BookshelfMessage(getCurrentPlayer().getName(), bookshelfView));
+            setChanged();
+            notifyObservers(new ColumnChoiceMessage(getCurrentPlayer().getName()));
         }
-        this.turnPhase = turnPhase;
     }
 
     public TilePack getTilePack () { return tilePack;}
@@ -329,7 +331,7 @@ public class Game extends Observable<EventMessage> {
         if (columnChoice >= 0 && columnChoice < getCurrentPlayer().getBookshelf().getMaxWidth()) this.columnChoice = columnChoice;
         else throw new IndexOutOfBoundsException("invalid column, please choose another one;");
         setChanged();
-        notifyObservers(new InsertRequestMessage(getCurrentPlayer().getName(), columnChoice));
+        notifyObservers(new BookshelfMessage(getCurrentPlayer().getName(), new BookshelfView(getCurrentPlayer().getBookshelf())));
     }
 
     public int getColumnChoice() {
@@ -340,9 +342,6 @@ public class Game extends Observable<EventMessage> {
     public void setPlayerScore(int score, Player player) {
 
         player.setScore(score);
-        //setChanged();
-        //PlayerView playerView = new PlayerView(player);
-        //notifyObservers(new ScoreMessage(playerView.getName(), playerView.getScore()));
     }
     public int getCurrentPlayerScore () {return this.currentPlayerScore;}
 

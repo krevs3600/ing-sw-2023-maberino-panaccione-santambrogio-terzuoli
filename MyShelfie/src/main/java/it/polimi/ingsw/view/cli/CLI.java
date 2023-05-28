@@ -5,16 +5,12 @@ import it.polimi.ingsw.client.view.FXML.View;
 import it.polimi.ingsw.model.ModelView.CommonGoalCardView;
 import it.polimi.ingsw.model.ModelView.GameView;
 import it.polimi.ingsw.model.ModelView.PlayerView;
-import it.polimi.ingsw.model.TilePack;
 import it.polimi.ingsw.model.utils.GamePhase;
 import it.polimi.ingsw.model.utils.Position;
-import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.ClientImplementation;
 import it.polimi.ingsw.network.MessagesToClient.MessageToClient;
 import it.polimi.ingsw.network.MessagesToClient.errorMessages.ErrorMessage;
-import it.polimi.ingsw.network.MessagesToClient.errorMessages.IllegalTilePositionErrorMessage;
 import it.polimi.ingsw.network.MessagesToClient.errorMessages.JoinErrorMessage;
-import it.polimi.ingsw.network.MessagesToClient.errorMessages.UpperBoundTilePackErrorMessage;
 import it.polimi.ingsw.network.MessagesToClient.requestMessage.*;
 import it.polimi.ingsw.network.eventMessages.EventMessage;
 import it.polimi.ingsw.network.Socket.ServerStub;
@@ -30,12 +26,9 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class CLI extends Observable implements View {
-    private boolean activeTurn = false;
-
     private final PrintStream out = System.out;
     private final Scanner in = new Scanner(System.in);
     private final Object lock = new Object();
-    private boolean joined = false;
 
     private ClientImplementation client = null;
 
@@ -43,27 +36,9 @@ public class CLI extends Observable implements View {
         return this.client;
     }
 
+
     public void resetClient(){this.client=null;}
 
-
-    private enum State {
-        WAITING_FOR_PLAYER,
-        WAITING_FOR_MODEL_VIEW
-    }
-
-    private State state = State.WAITING_FOR_PLAYER;
-    private State getState() {
-        synchronized (lock) {
-            return state;
-        }
-    }
-
-    private void setState(State state) {
-        synchronized (lock) {
-            this.state = state;
-            lock.notifyAll();
-        }
-    }
 
     public void run() {
         printLogo();
@@ -303,34 +278,6 @@ public class CLI extends Observable implements View {
 
         switch (message.getType()) {
 
-
-
-            /**case GAME_NAME_RESPONSE -> {
-                GameNameResponseMessage gameNameResponseMessage = (GameNameResponseMessage) message;
-                if (gameNameResponseMessage.isValidGameName()) {
-                    System.out.println("\nAvailable game name :) ");
-                    askNumberOfPlayers(gameNameResponseMessage.getGameName());
-                } else {
-                    System.err.println("\nThe game name is already taken, please choose another game name");
-                    askGameName();
-                }
-            }
-
-            //this case is related to the insertion of the number of players
-            case GAME_CREATION -> {
-                GameCreationResponseMessage gameCreationResponseMessage = (GameCreationResponseMessage) message;
-                if (gameCreationResponseMessage.isValidGameCreation()) {
-                    System.out.println("\nValid number of players :) ");
-                    System.out.println("\nWaiting for other players... ");
-                } else {
-                    System.err.println("\nInvalid number of players, please choose a number within the available range");
-                    askNumberOfPlayers(this.client.getGameName());
-                }
-            }
-
-             */
-
-
             case GAME_SPECS -> {
                 GameSpecsResponseMessage gameSpecsResponseMessage = (GameSpecsResponseMessage) message;
                 if (gameSpecsResponseMessage.isValidGameName()) {
@@ -385,7 +332,6 @@ public class CLI extends Observable implements View {
                 out.println("\n" + player.getNickname() + " joined lobby");
             }
             case ILLEGAL_POSITION, UPPER_BOUND_TILEPACK, NOT_ENOUGH_INSERTABLE_TILES -> {
-                if (activeTurn) {
                     ErrorMessage errorMessage = (ErrorMessage) message;
                     out.println(errorMessage.getErrorMessage());
                     String answer = "";
@@ -396,7 +342,7 @@ public class CLI extends Observable implements View {
                         switch (answer) {
                             case "stop" -> {
                                 setChanged();
-                                notifyObservers(new SwitchPhaseMessage(client.getNickname(), GamePhase.PLACING_TILES));
+                                notifyObservers(new SwitchPhaseMessage(client.getNickname(), GamePhase.COLUMN_CHOICE));
                             }
                             case "" -> {
                                 out.print("r: ");
@@ -406,11 +352,10 @@ public class CLI extends Observable implements View {
                                 int c = in.nextInt();
                                 in.nextLine();
                                 setChanged();
-                                notifyObservers(new TilePositionMessage(((ErrorMessage) message).getNickName(), new Position(r, c)));
+                                notifyObservers(new TilePositionMessage(message.getNickname(), new Position(r, c)));
                             }
                         }
                     }while (!answer.equals("stop") && !answer.equals(""));
-                }
             }
 
             case NOT_ENOUGH_INSERTABLE_TILES_IN_COLUMN -> {
@@ -420,15 +365,9 @@ public class CLI extends Observable implements View {
                 int column = in.nextInt();
                 in.nextLine();
                 setChanged();
-                notifyObservers(new BookshelfColumnMessage(errorMessage.getNickName(), column));
+                notifyObservers(new BookshelfColumnMessage(message.getNickname(), column));
             }
 
-            /*
-            case SCORE -> {
-                // todo da spostare nel game nel metodo setscore dei giocatori
-                out.println(((ScoreMessage)message).getNickname() + "'score is: " + ((ScoreMessage)message).getScore());
-            }
-            */
             case PLAYER_OFFLINE -> {
                 PlayerOfflineMessage offlineMessage = (PlayerOfflineMessage) message;
                 out.println(offlineMessage.getNickname() + " got disconnected");
@@ -449,10 +388,7 @@ public class CLI extends Observable implements View {
                 out.println("\nYou lost the connection to the server, and can no longer play");
                 try {
                     createConnection();
-                } catch (RemoteException e) {
-
-                } catch (NotBoundException e) {
-
+                } catch (RemoteException | NotBoundException ignored) {
                 }
             }
         }
@@ -461,17 +397,9 @@ public class CLI extends Observable implements View {
     public void update(GameView game, EventMessage eventMessage) {
         switch (eventMessage.getType()) {
 
-            /*case PERSONAL_GOAL_CARD -> {
-                if (eventMessage.getNickname().equals(client.getNickname())){
-                    out.println(((PersonalGoalCardMessage)eventMessage).getPersonalGoalCard().toString());
-                }
-            }
-
-             */
             case PLAYER_TURN -> {
-                if (this.client.getNickname().equals(eventMessage.getNickname())){
-                    activeTurn = true;
-                    out.println("\n" + this.client.getNickname() + " it's your turn!");
+                if (this.client.getNickname().equals(game.getCurrentPlayer().getName())) {
+                    out.println("\n" + eventMessage.getNickname() + " it's your turn!");
                     out.println("\nPlease enter a position: ");
                     out.print("r: ");
                     int r = in.nextInt();
@@ -481,40 +409,45 @@ public class CLI extends Observable implements View {
                     in.nextLine();
                     setChanged();
                     notifyObservers(new TilePositionMessage(eventMessage.getNickname(), new Position(r, c)));
-                } else {
-                    activeTurn = false;
-                    out.println("\nIt's " + eventMessage.getNickname() + "'s turn\n" );
                 }
             }
+
             case BOARD -> {
                 out.println("\n-----------------------------------------------------------------------\n");
                 System.out.println("--- NEW TURN ---");
                 out.println("\nLIVING ROOM BOARD:");
                 out.println(game.getLivingRoomBoard().toString());
-                for (PlayerView playerView: game.getSubscribers()) {
+                for (PlayerView playerView : game.getSubscribers()) {
                     out.println("\n-----------------------------------------------------------------------\n" + playerView.getName() + "'s BOOKSHELF:");
                     out.println(playerView.getBookshelf().toString());
                     out.println("\n" + playerView.getName() + "'s score: " + playerView.getScore());
                 }
-                for (PlayerView playerView: game.getSubscribers()) {
+                for (PlayerView playerView : game.getSubscribers()) {
                     if (this.client.getNickname().equals(playerView.getName())) {
                         out.println("\n-----------------------------------------------------------------------\n YOUR PERSONAL GOAL CARD:");
                         out.println(playerView.getPersonalGoalCard().toString());
                     }
                 }
-                int i=0;
-                for (CommonGoalCardView commonGoalCardView: game.getLivingRoomBoard().getCommonGoalCards()) {
+                int i = 0;
+                for (CommonGoalCardView commonGoalCardView : game.getLivingRoomBoard().getCommonGoalCards()) {
                     i++;
                     out.println("\n-----------------------------------------------------------------------\n");
                     out.println("Common goal card " + i + ":\n" + commonGoalCardView.toString());
                 }
+
+                if (!this.client.getNickname().equals(game.getCurrentPlayer().getName())) {
+                    out.println("\nIt's " + eventMessage.getNickname() + "'s turn\n");
+                }
             }
 
+
             case TILE_PACK -> {
-                //TilePackMessage tilePackMessage = (TilePackMessage) eventMessage;
                 out.println("\n-----------------------------------------------------------------------\n LIVING ROOM BOARD:");
                 out.println(game.getLivingRoomBoard().toString());
-                if (activeTurn){
+            }
+
+            case PICKING_TILES -> {
+                if (this.client.getNickname().equals(game.getCurrentPlayer().getName())) {
                     out.println("\n-----------------------------------------------------------------------\n TILE PACK:");
                     out.println(game.getTilePack().toString());
                     String answer = "";
@@ -525,7 +458,7 @@ public class CLI extends Observable implements View {
                         switch (answer) {
                             case "stop" -> {
                                 setChanged();
-                                notifyObservers(new SwitchPhaseMessage(client.getNickname(), GamePhase.PLACING_TILES));
+                                notifyObservers(new SwitchPhaseMessage(client.getNickname(), GamePhase.COLUMN_CHOICE));
                             }
                             case "" -> {
                                 out.println("\nPlease enter a position: ");
@@ -545,14 +478,10 @@ public class CLI extends Observable implements View {
                         }
                     } while (!answer.equals("stop") && !answer.equals("") && !answer.equals("easteregg"));
                 }
-
             }
 
-            case BOOKSHELF -> {
-                if (activeTurn) {
-                    out.println("\n-----------------------------------------------------------------------\n Your BOOKSHELF:");
-                    out.println(game.getCurrentPlayer().getBookshelf().toString());
-                    out.println("\n-----------------------------------------------------------------------\n");
+            case COLUMN_CHOICE -> {
+                if (this.client.getNickname().equals(game.getCurrentPlayer().getName())) {
                     out.print("In which column you want to insert your item tiles?\n");
                     int column = in.nextInt();
                     in.nextLine();
@@ -561,13 +490,19 @@ public class CLI extends Observable implements View {
                 }
             }
 
-            case INSERTION_REQUEST -> {
-                if (activeTurn){
-                    out.println("\n-----------------------------------------------------------------------\n" + game.getSubscribers().get(0).getName() + "'s BOOKSHELF:");
-                    out.println(game.getCurrentPlayer().getBookshelf().toString());
-                    out.println("\n-----------------------------------------------------------------------\n TILE PACK:");
-                    out.println(game.getTilePack().toString());
-                    if (game.getTilePack().getTiles().size()>0) {
+            case BOOKSHELF -> {
+                out.println("\n-----------------------------------------------------------------------\n" + game.getCurrentPlayer().getName() + "'s BOOKSHELF");
+                out.println(game.getCurrentPlayer().getBookshelf().toString());
+                out.println("\n-----------------------------------------------------------------------\n" + game.getCurrentPlayer().getName() + "'s TILE PACK:");
+                out.println(game.getTilePack().toString());
+                if (!this.client.getNickname().equals(game.getCurrentPlayer().getName())) {
+                    out.println("\n" + eventMessage.getNickname() + " is inserting tiles in the bookshelf\n");
+                }
+            }
+
+            case PLACING_TILES -> {
+                if (this.client.getNickname().equals(game.getCurrentPlayer().getName())) {
+                    if (game.getTilePack().getTiles().size() > 0) {
                         out.print("Choose an item tile to insert from the tilepack into the selected column\n");
                         int itemTileIndex = in.nextInt();
                         setChanged();
@@ -578,35 +513,27 @@ public class CLI extends Observable implements View {
                         notifyObservers(new EndTurnMessage(eventMessage.getNickname()));
                     }
                 }
-
             }
 
             case LAST_TURN -> {
-                if (activeTurn){
+                if (this.client.getNickname().equals(game.getCurrentPlayer().getName())) {
                     out.println("\nCongrats, you filled your bookshelf! You have an extra point!");
                 } else {
                     out.println("\n" + eventMessage.getNickname() + " filled his bookshelf...");
                 }
             }
 
-            case SCORE -> {
-                ScoreMessage scoreMessage = (ScoreMessage) eventMessage;
-                if (scoreMessage.getNickname().equals(this.client.getNickname())) {
-                    out.println("Your final score is " + scoreMessage.getScore() + " points");
-                }
-            }
-
             case END_GAME -> {
                 out.println("\n");
-                for (PlayerView playerView: game.getSubscribers()) {
+                for (PlayerView playerView : game.getSubscribers()) {
                     out.println(playerView.getName() + "'s score is " + playerView.getScore() + " points");
                 }
-                if(eventMessage.getNickname().equals(this.client.getNickname())) {
+                if (eventMessage.getNickname().equals(this.client.getNickname())) {
                     out.println("\nCongratulations, you won!");
                 }
                 out.println("\nGame has ended... Hope you had fun!");
                 //TODO: togliere il gioco dalla lista!!
-                //gameMenu();
+                gameMenu();
                 //setChanged();
                 //notifyObservers(new DisconnectClientMessage( this.client.getNickname()));
             }

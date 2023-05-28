@@ -10,14 +10,14 @@ public class GameSpecsResponseMessage extends RequestMessage{
     private final boolean validGameCreation;
 
 
-    public GameSpecsResponseMessage(String gameName,boolean validGameName, boolean validGameCreation) {
-        super(MessageToClientType.GAME_SPECS);
+    public GameSpecsResponseMessage(String nickname, String gameName,boolean validGameName, boolean validGameCreation) {
+        super(nickname, MessageToClientType.GAME_SPECS);
         this.validGameCreation = validGameCreation;
         this.validGameName = validGameName;
         this.gameName = gameName;
     }
-    public GameSpecsResponseMessage(boolean validGameName, boolean validGameCreation) {
-        super(MessageToClientType.GAME_SPECS);
+    public GameSpecsResponseMessage(String nickname, boolean validGameName, boolean validGameCreation) {
+        super(nickname, MessageToClientType.GAME_SPECS);
         this.validGameName = validGameName;
         this.validGameCreation = validGameCreation;
     }

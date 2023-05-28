@@ -11,26 +11,14 @@ public class LoginResponseMessage extends RequestMessage {
     private  boolean GamesOk;
     private Set<String> availableGames;
 
-    private String Nickname;
-
-    public LoginResponseMessage(boolean validNickname) {
-        super(MessageToClientType.LOGIN_RESPONSE);
+    public LoginResponseMessage(String nickname, boolean validNickname) {
+        super(nickname, MessageToClientType.LOGIN_RESPONSE);
         this.validNickname = validNickname;
     }
 
-    public LoginResponseMessage(boolean validNickname,String nickname) {
-        super(MessageToClientType.LOGIN_RESPONSE);
+    public LoginResponseMessage(String nickname, boolean validNickname,boolean GamesOk,Set<String> availableGames) {
+        super(nickname, MessageToClientType.LOGIN_RESPONSE);
         this.validNickname = validNickname;
-        this.Nickname=nickname;
-
-       // this.GamesOk=GamesOk;
-
-    }
-
-    public LoginResponseMessage(String Nickname, boolean validNickname,boolean GamesOk,Set<String> availableGames) {
-        super(MessageToClientType.LOGIN_RESPONSE);
-        this.validNickname = validNickname;
-        this.Nickname=Nickname;
         this.availableGames=availableGames;
         this.GamesOk=GamesOk;
     }
@@ -38,10 +26,6 @@ public class LoginResponseMessage extends RequestMessage {
 
 public boolean isGamesOk(){return GamesOk;}
     public boolean isValidNickname() { return validNickname;}
-
-    public String getNickname(){
-        return this.Nickname;
-    }
 
     public Set<String> getAvailableGames(){
         return this.availableGames;

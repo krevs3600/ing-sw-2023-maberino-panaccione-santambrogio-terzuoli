@@ -60,7 +60,7 @@ public class GameController {
                 game.subscribe(newPlayer);
                 // if players are still missing a wait message is sent to the new player
                 if (game.getSubscribers().size() < game.getNumberOfPlayers().getValue()-1){
-                    client.onMessage(new WaitingResponseMessage(game.getNumberOfPlayers().getValue()-game.getSubscribers().size()));
+                    client.onMessage(new WaitingResponseMessage(eventMessage.getNickname(), game.getNumberOfPlayers().getValue()-game.getSubscribers().size()));
                 }
                 for (Client player : this.getClients()){
                     // notify other clients that a new player has joined the game
@@ -69,7 +69,7 @@ public class GameController {
                     }
 
                     if (game.getSubscribers().size() < game.getNumberOfPlayers().getValue()){
-                        player.onMessage(new WaitingResponseMessage(game.getNumberOfPlayers().getValue()-game.getSubscribers().size()));
+                        player.onMessage(new WaitingResponseMessage(eventMessage.getNickname(), game.getNumberOfPlayers().getValue()-game.getSubscribers().size()));
                     }
                 }
 
@@ -106,6 +106,7 @@ public class GameController {
                         ItemTile itemTile = game.drawTile(tilePositionMessage.getPosition());
                         game.getBuffer().add(tilePositionMessage.getPosition());
                         game.insertTileInTilePack(itemTile);
+                        game.setTurnPhase(GamePhase.PICKING_TILES);
                     } else if (game.getBuffer().size() == 1) {
 
                         if (game.getBuffer().get(0).isAdjacent(tilePositionMessage.getPosition())) {
@@ -118,6 +119,7 @@ public class GameController {
                                 ItemTile itemTile = game.drawTile(tilePositionMessage.getPosition());
                                 game.getBuffer().add(tilePositionMessage.getPosition());
                                 game.insertTileInTilePack(itemTile);
+                                game.setTurnPhase(GamePhase.PICKING_TILES);
                             } else {
                                 client.onMessage(new NotEnoughInsertableTilesErrorMessage(eventMessage.getNickname(), "The number of insertable tiles in your bookshelf is too small, you cannot insert all of the tiles then"));
                             }
@@ -140,6 +142,7 @@ public class GameController {
                                             ItemTile itemTile = game.drawTile(tilePositionMessage.getPosition());
                                             game.getBuffer().add(tilePositionMessage.getPosition());
                                             game.insertTileInTilePack(itemTile);
+                                            game.setTurnPhase(GamePhase.PICKING_TILES);
                                         } else {
                                             client.onMessage(new NotEnoughInsertableTilesErrorMessage(eventMessage.getNickname(), "The number of insertable tiles in your bookshelf is too small, you cannot insert all of the tiles then"));
                                         }
@@ -153,6 +156,7 @@ public class GameController {
                                         ItemTile itemTile = game.drawTile(tilePositionMessage.getPosition());
                                         game.getBuffer().add(tilePositionMessage.getPosition());
                                         game.insertTileInTilePack(itemTile);
+                                        game.setTurnPhase(GamePhase.PICKING_TILES);
                                     } else {
                                         client.onMessage(new NotEnoughInsertableTilesErrorMessage(eventMessage.getNickname(), "The number of insertable tiles in your bookshelf is too small, you cannot insert all of the tiles then"));
                                     }
@@ -184,6 +188,7 @@ public class GameController {
                 }
                 try {
                     game.setColumnChoice(bookshelfColumnMessage.getColumn());
+                    game.setTurnPhase(GamePhase.PLACING_TILES);
                 } catch (IndexOutOfBoundsException e) {}
             }
 
@@ -192,6 +197,7 @@ public class GameController {
                 game.getCurrentPlayer().insertTile(game.getTilePack(), game.getColumnChoice(), itemTileIndexMessage.getIndex());
                 try {
                     game.setColumnChoice(game.getColumnChoice());
+                    game.setTurnPhase(GamePhase.PLACING_TILES);
                 } catch (IndexOutOfBoundsException e) {}
 
             }
@@ -204,27 +210,6 @@ public class GameController {
             case END_TURN -> {
                 computeScoreMidGame();
 
-                if (game.getCurrentPlayer().getBookshelf().isFull()) {
-                    if (!game.isFirstPlayerHasEnded()) {
-                        game.setFirstPlayerHasEnded();
-                        game.getCurrentPlayer().setScore(1);
-                    }
-                    if (game.getCurrentPlayer().equals(game.getLastPlayer())){
-                        //TODO: show always the score to the clients, updating it when needed
-                        Player winner = getWinner();
-                        /*for (Client c : getClients()){
-                            // todo controllare messaggi e conto punteggi e capire come mandarli
-                            Player p = game.getSubscribers().stream().filter(x -> x.getName().equals(eventMessage.getNickname())).toList().get(0);
-                            c.onMessage(new ScoreMessage(eventMessage.getNickname(), p.getScore()));
-                        }
-
-                         */
-                        //TODO: create a new message specific to the case when the last player in the rotation fills the bookshelf
-                        game.endGame(winner);
-                    }
-                    game.setFinalTurn();
-                }
-
                 if(game.isFinalTurn()) {
                     // game is ended
                     if (game.getCurrentPlayer().equals(game.getLastPlayer())){
@@ -232,17 +217,34 @@ public class GameController {
                         game.endGame(winner);
                     }
                 }
+
+                if (game.getCurrentPlayer().getBookshelf().isFull()) {
+                    if (!game.isFirstPlayerHasEnded()) {
+                        game.setFirstPlayerHasEnded();
+                        game.setFinalTurn();
+                        game.getCurrentPlayer().setScore(1);
+                        if (game.getCurrentPlayer().equals(game.getLastPlayer())){
+                            //TODO: show always the score to the clients, updating it when needed
+                            Player winner = getWinner();
+                            //TODO: create a new message specific to the case when the last player in the rotation fills the bookshelf
+                            game.endGame(winner);
+                        }
+                    }
+                }
+
                 if (!game.isEnded()){
                     if(game.getLivingRoomBoard().getAllFree().size()==game.getLivingRoomBoard().getDrawableTiles().size()) {
                         game.refillLivingRoomBoard();
                     }
-                    game.setTurnPhase(GamePhase.PICKING_TILES);
+                    game.setTurnPhase(GamePhase.INIT_TURN);
                     game.changeTurn();
+
                 }
             }
             case FILL_BOOKSHELF -> {
                 game.getCurrentPlayer().getBookshelf().insertTileTest();
                 game.insertTileInTilePack(new ItemTile(TileType.CAT));
+                game.setTurnPhase(GamePhase.PICKING_TILES);
             }
         }
 

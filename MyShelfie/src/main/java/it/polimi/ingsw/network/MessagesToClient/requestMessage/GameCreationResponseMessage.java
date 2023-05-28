@@ -8,8 +8,8 @@ public class GameCreationResponseMessage extends RequestMessage {
 
 
 
-    public GameCreationResponseMessage(boolean validGameCreation) {
-        super(MessageToClientType.GAME_CREATION);
+    public GameCreationResponseMessage(String nickname, boolean validGameCreation) {
+        super(nickname, MessageToClientType.GAME_CREATION);
         this.validGameCreation = validGameCreation;
 
     }

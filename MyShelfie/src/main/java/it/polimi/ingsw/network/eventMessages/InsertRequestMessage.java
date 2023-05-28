@@ -2,7 +2,7 @@ package it.polimi.ingsw.network.eventMessages;
 
 public class InsertRequestMessage extends EventMessage {
     private final long serialVersionUID = 1L;
-    private int column;
+    private final int column;
 
     public InsertRequestMessage (String nickName, int column) {
         super(nickName, EventMessageType.INSERTION_REQUEST);

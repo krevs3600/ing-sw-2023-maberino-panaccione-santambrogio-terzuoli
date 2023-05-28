@@ -73,10 +73,10 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                     //  if(currentLobbyGameNames.size()==0){                                                                                          //        currentPlayersNicknames.add(eventMessage.getNickName());
                     //      client.onMessage(new LoginResponseMessage(true,false, eventMessage.getNickName()));                                       //        connectedClients.put(eventMessage.getNickName(), client);
                     //  }                                                                                                                             //    }
-                    client.onMessage(new LoginResponseMessage(true, eventMessage.getNickname()));                       //    if (validNickname) {
+                    client.onMessage(new LoginResponseMessage(eventMessage.getNickname(), true));                       //    if (validNickname) {
                 }                                                                                                                                 //        client.onMessage(new CreatorLoginResponseMessage(eventMessage.getNickName(), validNickname));
                 else                                                                                                                              //    } else
-                    client.onMessage(new LoginResponseMessage(false));                                                                            //        client.onMessage(new CreatorLoginResponseMessage(validNickname));
+                    client.onMessage(new LoginResponseMessage(eventMessage.getNickname(), false));                                                                            //        client.onMessage(new CreatorLoginResponseMessage(validNickname));
             }                                                                                                                                     //}
             //this.gameController.update(client, eventMessage);
             case GAME_NAME -> {
@@ -86,7 +86,7 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                     currentLobbyGameNames.add(gameNameMessage.getGameName());
                     client.onMessage(new GameNameResponseMessage(gameNameMessage.getGameName(), true));
                 } else {
-                    client.onMessage(new GameNameResponseMessage(false));
+                    client.onMessage(new GameNameResponseMessage(eventMessage.getNickname(), false));
                 }
             }
             case GAME_CREATION -> {
@@ -103,7 +103,7 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                     gameController.update(client, gameCreationMessage);
                     isValid = true;
                 }
-                client.onMessage(new GameCreationResponseMessage(isValid));
+                client.onMessage(new GameCreationResponseMessage(eventMessage.getNickname(), isValid));
             }
 
             case GAME_SPECS -> {
@@ -125,7 +125,7 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                         isValidNumOfPlayers = true;
                     }
                 }
-                client.onMessage(new GameSpecsResponseMessage(isValidGameName, isValidNumOfPlayers));
+                client.onMessage(new GameSpecsResponseMessage(eventMessage.getNickname(), isValidGameName, isValidNumOfPlayers));
             }
 
             case JOIN_GAME_REQUEST -> {
@@ -134,7 +134,7 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                 if (currentLobbyGameNames.isEmpty()) {
                     client.onMessage(new JoinErrorMessage(joinGameMessage.getNickname(), "no available games in lobby"));
                 } else {
-                    client.onMessage(new JoinGameResponseMessage(true, availableGames));
+                    client.onMessage(new JoinGameResponseMessage(eventMessage.getNickname(), true, availableGames));
 
                 }
             }
@@ -181,7 +181,7 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                                 // todo: maybe add game.unsubscribe(String nickname)
                                 entry.getKey().onMessage(new PlayerOfflineMessage(eventMessage.getNickname()));
                                 int missingPlayers = game.getNumberOfPlayers().getValue()-game.getSubscribers().size();
-                                entry.getKey().onMessage(new WaitingResponseMessage(missingPlayers));
+                                entry.getKey().onMessage(new WaitingResponseMessage(eventMessage.getNickname(), missingPlayers));
                                 }
                             }
 
@@ -207,7 +207,7 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                         }
                     }
                 }
-                client.onMessage(new DisconnectionResponseMessage());
+                client.onMessage(new DisconnectionResponseMessage(eventMessage.getNickname()));
             }
         }
     }

@@ -10,7 +10,7 @@ import it.polimi.ingsw.network.MessagesToClient.MessageToClientType;
 
 public class ScoreMessage extends EventMessage {
     private final long serialVersionUID = 1L;
-    private int score;
+    private final int score;
     public ScoreMessage(String nickname, int score) {
         super(nickname, EventMessageType.SCORE);
         this.score = score;

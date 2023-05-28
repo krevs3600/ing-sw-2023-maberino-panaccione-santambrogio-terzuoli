@@ -10,7 +10,6 @@ import it.polimi.ingsw.network.MessagesToClient.requestMessage.GameNameResponseM
 import it.polimi.ingsw.network.MessagesToClient.requestMessage.LoginResponseMessage;
 import it.polimi.ingsw.network.MessagesToClient.requestMessage.RequestMessage;
 import it.polimi.ingsw.network.eventMessages.EventMessage;
-import it.polimi.ingsw.observer_observable.Observer;
 import it.polimi.ingsw.view.cli.CLI;
 
 import java.io.IOException;

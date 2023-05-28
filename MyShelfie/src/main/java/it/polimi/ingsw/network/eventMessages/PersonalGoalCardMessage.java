@@ -4,7 +4,7 @@ import it.polimi.ingsw.model.PersonalGoalCard;
 
 public class PersonalGoalCardMessage extends EventMessage {
     private final long serialVersionUID = 1L;
-    private PersonalGoalCard personalGoalCard;
+    private final PersonalGoalCard personalGoalCard;
     public PersonalGoalCardMessage(String nickName, PersonalGoalCard personalGoalCard) {
         super(nickName, EventMessageType.PERSONAL_GOAL_CARD);
         this.personalGoalCard = personalGoalCard;
