@@ -31,6 +31,8 @@ public class Game extends Observable<EventMessage> {
     private LivingRoomBoard livingRoomBoard;
     private NumberOfPlayers numberOfPlayers;
     private int cursor;
+
+    private Player firstPlayer;
     private GamePhase turnPhase;
     private List<Space> drawableTiles = new ArrayList<>();
 
@@ -119,6 +121,7 @@ public class Game extends Observable<EventMessage> {
     public void startGame(){
         Collections.shuffle(subscribers);
         Player firstPlayer = subscribers.get(0);
+        this.firstPlayer=firstPlayer;
         firstPlayer.setStatus(PlayerStatus.PICKING_TILES);
         this.cursor = 0;
         setTurnPhase(GamePhase.INIT_GAME);

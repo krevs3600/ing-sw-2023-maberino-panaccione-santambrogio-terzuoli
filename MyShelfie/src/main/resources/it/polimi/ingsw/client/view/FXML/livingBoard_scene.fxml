@@ -12,11 +12,9 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
@@ -88,7 +86,7 @@
                     <children>
                         <Group>
                             <children>
-                                <AnchorPane layoutX="275.0" layoutY="251.0" prefHeight="274.0" prefWidth="388.0">
+                                <AnchorPane prefHeight="274.0" prefWidth="388.0">
                                     <children>
                                         <ImageView fx:id="commonGoalCard1" fitHeight="175.0" fitWidth="269.0" layoutX="61.0" layoutY="77.0" pickOnBounds="true" preserveRatio="true">
                                             <image>
@@ -165,34 +163,34 @@
                         <Group />
                         <AnchorPane fx:id="playerBookshelves" prefHeight="271.0" prefWidth="388.0">
                             <children>
-                        <GridPane fx:id="otherBookshelf" hgap="10.0" layoutX="74.0" layoutY="69.0" prefHeight="200.0" prefWidth="200.0" vgap="5.0">
-                           <columnConstraints>
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                           </columnConstraints>
-                           <rowConstraints>
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                           </rowConstraints>
-                           <padding>
-                              <Insets bottom="14.0" left="16.0" right="21.0" top="11.0" />
-                           </padding>
-                        </GridPane>
-                        <ImageView fitHeight="225.0" fitWidth="222.0" layoutX="60.0" layoutY="63.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../boards/bookshelf.png" />
-                           </image>
-                        </ImageView>
-                        <Button fx:id="nextPlayer" layoutX="233.0" layoutY="29.0" mnemonicParsing="false" onMouseClicked="#changeBookshelf" prefHeight="5.0" prefWidth="29.0" text="&gt;" textFill="WHITE" />
-                        <Button fx:id="previousPlayer" layoutX="74.0" layoutY="29.0" mnemonicParsing="false" onMouseClicked="#changeBookshelf" prefHeight="5.0" prefWidth="29.0" text="&lt;" textFill="WHITE" />
-                        <Button fx:id="playerBookshelf" layoutX="105.0" layoutY="29.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="126.0" text="Player Name" textFill="WHITE" />
+                                <GridPane fx:id="otherBookshelf" hgap="10.0" layoutX="74.0" layoutY="69.0" prefHeight="200.0" prefWidth="200.0" vgap="5.0">
+                                    <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                    </columnConstraints>
+                                    <rowConstraints>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    </rowConstraints>
+                                    <padding>
+                                        <Insets bottom="14.0" left="16.0" right="21.0" top="11.0" />
+                                    </padding>
+                                </GridPane>
+                                <ImageView fitHeight="225.0" fitWidth="222.0" layoutX="60.0" layoutY="63.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../boards/bookshelf.png" />
+                                    </image>
+                                </ImageView>
+                                <Button fx:id="nextPlayer" layoutX="233.0" layoutY="29.0" mnemonicParsing="false" onMouseClicked="#changeBookshelf" prefHeight="5.0" prefWidth="29.0" text="&gt;" textFill="WHITE" />
+                                <Button fx:id="previousPlayer" layoutX="74.0" layoutY="29.0" mnemonicParsing="false" onMouseClicked="#changeBookshelf" prefHeight="5.0" prefWidth="29.0" text="&lt;" textFill="WHITE" />
+                                <Button fx:id="playerBookshelf" layoutX="105.0" layoutY="29.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="126.0" text="Player Name" textFill="WHITE" />
                             </children>
                         </AnchorPane>
                     </children>
@@ -247,21 +245,21 @@
                                                 <Insets bottom="14.0" left="16.0" right="21.0" top="11.0" />
                                             </padding>
                                         </GridPane>
-      
-                                      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="73.0" layoutY="295.0" prefHeight="35.0" prefWidth="210.0" text="Personal Goal Card" textFill="WHITE">
-                                          <font>
-                                              <Font size="20.0" />
-                                          </font>
-                              </Label>
-                              <Group fx:id="columnButtons" layoutX="35.0" layoutY="-34.0">
-                                 <children>
-                                    <Button id="column" fx:id="Column1" layoutX="3.0" mnemonicParsing="false" onMouseClicked="#insertInColumn" prefHeight="280.0" prefWidth="45.0" />
-                                    <Button id="column" fx:id="Column2" layoutX="56.0" layoutY="2.0" mnemonicParsing="false" onMouseClicked="#insertInColumn" prefHeight="280.0" prefWidth="45.0" />
-                                    <Button id="column" fx:id="Column3" layoutX="114.0" layoutY="1.0" mnemonicParsing="false" onMouseClicked="#insertInColumn" prefHeight="280.0" prefWidth="45.0" styleClass="column" />
-                                    <Button id="column" fx:id="Column4" layoutX="172.0" mnemonicParsing="false" onMouseClicked="#insertInColumn" prefHeight="280.0" prefWidth="45.0" styleClass="column" />
-                                    <Button id="column" fx:id="Column5" layoutX="226.0" mnemonicParsing="false" onMouseClicked="#insertInColumn" prefHeight="280.0" prefWidth="45.0" styleClass="column" />
-                                 </children>
-                              </Group>
+
+                                        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="73.0" layoutY="295.0" prefHeight="35.0" prefWidth="210.0" text="Personal Goal Card" textFill="WHITE">
+                                            <font>
+                                                <Font size="20.0" />
+                                            </font>
+                                        </Label>
+                                        <Group fx:id="columnButtons" layoutX="35.0" layoutY="-34.0">
+                                            <children>
+                                                <Button id="column" fx:id="Column1" layoutX="3.0" mnemonicParsing="false" onMouseClicked="#insertInColumn" prefHeight="280.0" prefWidth="45.0" />
+                                                <Button id="column" fx:id="Column2" layoutX="56.0" layoutY="2.0" mnemonicParsing="false" onMouseClicked="#insertInColumn" prefHeight="280.0" prefWidth="45.0" />
+                                                <Button id="column" fx:id="Column3" layoutX="114.0" layoutY="1.0" mnemonicParsing="false" onMouseClicked="#insertInColumn" prefHeight="280.0" prefWidth="45.0" styleClass="column" />
+                                                <Button id="column" fx:id="Column4" layoutX="172.0" mnemonicParsing="false" onMouseClicked="#insertInColumn" prefHeight="280.0" prefWidth="45.0" styleClass="column" />
+                                                <Button id="column" fx:id="Column5" layoutX="226.0" mnemonicParsing="false" onMouseClicked="#insertInColumn" prefHeight="280.0" prefWidth="45.0" styleClass="column" />
+                                            </children>
+                                        </Group>
                                     </children></AnchorPane>
                                 <ImageView fx:id="personalCard" fitHeight="245.0" fitWidth="163.0" layoutX="179.0" layoutY="507.0">
                                     <image>
@@ -273,35 +271,13 @@
                     </children>
                 </HBox>
             </right>
-         <top>
-            <Label fx:id="OtherPlayerTurnLabel" alignment="TOP_LEFT" textFill="#f5f2f2" visible="false" BorderPane.alignment="CENTER">
-               <font>
-                  <Font name="Libian SC Regular" size="36.0" />
-               </font>
-            </Label>
-         </top>
+            <top>
+                <Label fx:id="OtherPlayerTurnLabel" alignment="TOP_LEFT" textFill="#f5f2f2" visible="false" BorderPane.alignment="CENTER">
+                    <font>
+                        <Font name="Libian SC Regular" size="36.0" />
+                    </font>
+                </Label>
+            </top>
         </BorderPane>
-      <AnchorPane fx:id="AnchorPaneforTheCandPgoalcards" prefHeight="733.0" prefWidth="1047.0">
-         <children>
-            <ImageView fx:id="PersonalGoalCard" fitHeight="415.0" fitWidth="306.0" layoutX="804.0" layoutY="284.0" pickOnBounds="true" preserveRatio="true" />
-            <Pane layoutX="169.0" layoutY="91.0" prefHeight="722.0" prefWidth="1063.0" styleClass="rootPane" stylesheets="@../css/livingBoard_scene.css">
-               <children>
-                  <Label layoutX="10.0" layoutY="13.0" prefHeight="154.0" prefWidth="629.0" text="COMMON GOAL CARDS OF THE GAME" textFill="WHITE">
-                     <font>
-                        <Font name="Libian SC Regular" size="36.0" />
-                     </font>
-                  </Label>
-                  <Line endX="132.5" endY="486.0" layoutX="399.0" layoutY="236.0" startX="141.9998779296875" startY="-231.71817016601562" stroke="WHITE" />
-                  <ImageView fx:id="First_CommonGoalCard" fitHeight="234.0" fitWidth="429.0" layoutX="65.0" layoutY="402.0" pickOnBounds="true" preserveRatio="true" />
-                  <ImageView fx:id="First_CommonGoalCard1" fitHeight="234.0" fitWidth="429.0" layoutX="67.0" layoutY="174.0" pickOnBounds="true" preserveRatio="true" />
-                  <Label layoutX="584.0" layoutY="14.0" prefHeight="150.0" prefWidth="455.0" text="YOUR PERSONAL GOAL CARD" textFill="WHITE">
-                     <font>
-                        <Font name="Libian SC Regular" size="36.0" />
-                     </font>
-                  </Label>
-               </children>
-            </Pane>
-         </children>
-      </AnchorPane>
     </children>
 </StackPane>

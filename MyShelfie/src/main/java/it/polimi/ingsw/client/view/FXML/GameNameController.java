@@ -27,6 +27,7 @@ public class GameNameController {
 
     private String gameName;
 
+
     public String getTextField(){
         return this.gameName;
     }

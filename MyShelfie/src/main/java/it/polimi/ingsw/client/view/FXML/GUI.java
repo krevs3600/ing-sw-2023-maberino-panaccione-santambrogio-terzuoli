@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.view.FXML;
 
 import it.polimi.ingsw.AppServer;
 import it.polimi.ingsw.model.ModelView.GameView;
+import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.utils.GamePhase;
 import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.network.ClientImplementation;
@@ -39,6 +40,7 @@ public class GUI extends Observable implements View{
 
     boolean activeTurn = false;
     private Stage stage;
+    private Player firstPlayer;
     private Scene scene;
     private Parent root;
     private static Stage window;
@@ -57,6 +59,8 @@ public class GUI extends Observable implements View{
     private NumberOfPlayersController numberOfPlayersController;
     private GameNameListController gameNameListController;
     private String nickname;
+
+    private String nicknameForPlacingTiles;
 
     public Stage getStage() {
         return stage;
@@ -106,7 +110,7 @@ public class GUI extends Observable implements View{
         // il caso in cui sceglie 3 tiles
         livingBoardController.board.setDisable(true);
         setChanged();
-        notifyObservers(new BookshelfColumnMessage(this.nickname, column));
+        notifyObservers(new BookshelfColumnMessage(this.nickname, column)); // dopo questo entra nel placing tile case
     }
 
 
@@ -221,7 +225,11 @@ public class GUI extends Observable implements View{
 
     public void chosenPosition(int r, int c){
         setChanged();
+        System.out.println(this.client.getNickname());
+        // ok this.nicknameForPlacingTiles non funziona
+        System.out.println(this.client.getNickname()+"ha scelto la tile nella posizione"+r+c); // prova per vedere se sono uguali ma dovrebbe essere cosi perche sono disabilitati
         notifyObservers(new TilePositionMessage(this.client.getNickname(), new Position(r,c)));
+
     }
 
     //TODO: askgamespecs
@@ -233,6 +241,8 @@ public class GUI extends Observable implements View{
 
     @Override
     public void showGameNamesList(Set<String> availableGameNames) {
+        System.out.println(" il gioco da joinare si chiama " +this.gameNameListController.getGameToJoin());
+        System.out.println("il client è "+ this.client.getNickname());
         setChanged();
         notifyObservers(new GameNameChoiceMessage(this.client.getNickname(),this.gameNameListController.getGameToJoin()));
 
@@ -293,6 +303,7 @@ public class GUI extends Observable implements View{
                         this.numberOfPlayersController = numberOfPlayersController;
                         numberOfPlayersController.setGui(this);
                         numberOfPlayersController.setGameName(gameNameResponseMessage.getGameName());
+                        System.out.println("il nome del gioco è "+numberOfPlayersController.getGameName());
                         Platform.runLater(() -> stage.setScene(scene));
                     } catch (IOException e) {
                         throw new RuntimeException(e);
@@ -457,6 +468,8 @@ public class GUI extends Observable implements View{
             }
         }
     }
+    // booleano per distinguere la prima volta del gioco e le altre
+    private boolean isFirstTime=true;
 
     @Override
     public void update(GameView game, EventMessage eventMessage) {
@@ -465,21 +478,32 @@ public class GUI extends Observable implements View{
                 System.out.println(nickname + " " + client.getNickname());
                 // todo: in questo caso deve comparire il pop up con i personal goal card e i common goal cards e si inizializza la scena
                 try {
+                    
                     URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/livingBoard_scene.fxml/").toURI().toURL();
                     FXMLLoader fxmlLoader = new FXMLLoader(url);
                     Scene scene = new Scene(fxmlLoader.load());
                     livingBoardController = fxmlLoader.getController();
                     livingBoardController.setGui(this);
+
                     Platform.runLater(() -> {
                         try {
+
                             stage.setScene(scene);
-                            int displayTimeMillis=9000;
-                            livingBoardController.AnchorPaneforTheCandPgoalcards.setVisible(true);
-                            FadeTransition fadeTransition=new FadeTransition(Duration.millis(displayTimeMillis), livingBoardController.AnchorPaneforTheCandPgoalcards);
-                            fadeTransition.setOnFinished(event-> {livingBoardController.AnchorPaneforTheCandPgoalcards.setVisible(false);
-                            });
-                          fadeTransition.play();
-                            livingBoardController.initialize(game, nickname);
+                           // if (isFirstTime) {
+                           //     int displayTimeMillis = 9000;
+                           //     livingBoardController.AnchorPaneforTheCandPgoalcards.setVisible(true);
+                           //     FadeTransition fadeTransition = new FadeTransition(Duration.millis(displayTimeMillis), livingBoardController.AnchorPaneforTheCandPgoalcards);
+                           //     fadeTransition.setOnFinished(event -> {
+                           //         livingBoardController.AnchorPaneforTheCandPgoalcards.setVisible(false);
+                           //     });
+                           //     fadeTransition.play();
+                           //     isFirstTime = false;
+                           //
+                           // }
+                            if(isFirstTime) {
+                                livingBoardController.initialize(game, nickname);
+                               isFirstTime=false;
+                            }
                         } catch (FileNotFoundException e) {
                             throw new RuntimeException(e);
                         }
@@ -487,54 +511,59 @@ public class GUI extends Observable implements View{
                 } catch (IOException e) {
                     System.out.println(e);
                 }
+
+
             }
             case PLAYER_TURN -> {
+
                 livingBoardController.board.setDisable(true);
-                livingBoardController.disableColumnChoice();
-                if (this.client.getNickname().equals(eventMessage.getNickname())) {
-                    activeTurn = true;
-                    livingBoardController.board.setDisable(false);
-                    showPopup("it's your turn, remember you can select a maximum of 3 tiles\n" +
-                            " adjacent to each other that must form a line and they must\n" +
-                            " all have a free side at the beginning! Good luck and always keep in mind the achievement " +
-                            "\nof personal and common goal cards ! \uD83D\uDCAA\uD83C\uDFFB\uD83D\uDCAA\uD83C\uDFFE");
+               livingBoardController.disableColumnChoice();
+                if (this.client.getNickname().equals(game.getCurrentPlayer().getName())) {
+                    //salva per vedere se sono gli stessi
+                  livingBoardController.board.setDisable(false);
+                    showPopup("it's your turn"); // todo ricontrollare questo pop up non mi sembra che compaia
 
                     // todo : farei un do-while fin quando la carta non è cliccata mettere un
                     //  timer che fa scadere il turno se non è cliccata entro 3 minuti tipo
 
                 } else {
-                    activeTurn = false;
-                    showPopup("It's " + eventMessage.getNickname() + "'s turn\n");
-                    livingBoardController.OtherPlayerTurnLabel.setText("Wait... " + this.client.getNickname() + " is picking tiles");
+                    livingBoardController.OtherPlayerTurnLabel.setText("Wait... " + eventMessage.getNickname() + " is picking tiles");
                     livingBoardController.OtherPlayerTurnLabel.setVisible(true);
                 }
-            }
+
+                    //  showPopup("It's " + eventMessage.getNickname() + "'s turn\n"); adesso lo indica nel board turn il turno dell'altra persona
+
+                }
+
+                // adessso questo metodo dovrebbe essere inutile perchè appena sceglie la colonna se è giusta va nel placing Tiles
 
             //in questo caso appena preme il bottone della colonna passa all'inserimento nella Bookshelf
-            case TILE_PACK -> {
-                livingBoardController.tilePack.setDisable(false);
-                TilePackMessage tilePackMessage = (TilePackMessage) eventMessage;
-                livingBoardController.setGameView(game);
-
-                Platform.runLater(() -> {
-                    try {
-                        livingBoardController.setGameView(game);
-                        livingBoardController.updateLivingRoomBoard(game.getLivingRoomBoard());
-                        if (activeTurn) {
-                            livingBoardController.updateTilePack(game.getTilePack());
-                            livingBoardController.resetColumnChoice();
-                        }
-                    } catch (FileNotFoundException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
-            }
+           // case TILE_PACK -> {
+           //     livingBoardController.tilePack.setDisable(false);
+           //     TilePackMessage tilePackMessage = (TilePackMessage) eventMessage;
+           //     livingBoardController.setGameView(game);
+           //
+           //     Platform.runLater(() -> {
+           //         try {
+           //             livingBoardController.setGameView(game);
+           //             livingBoardController.updateLivingRoomBoard(game.getLivingRoomBoard());
+           //             if (activeTurn) {
+           //                 livingBoardController.updateTilePack(game.getTilePack());
+           //                 livingBoardController.resetColumnChoice();
+           //             }
+           //         } catch (FileNotFoundException e) {
+           //             throw new RuntimeException(e);
+           //         }
+           //     });
+           // }
 
             // va in questo case se nella colonna inserita c'è abbastanza spazio per inserire le tiles.
-            case INSERTION_REQUEST -> {
+            case PLACING_TILES -> { // poi ogni volta che seleziona una carta il Item tile indexMessage lo riporta qui
+                livingBoardController.tilePack.setDisable(false);
+                livingBoardController.setGameView(game); // questo potrebbe essere sbagliato
                 System.out.println(nickname + " " + activeTurn);
-                if (activeTurn) {
-                    Platform.runLater(()->{
+                if (this.client.getNickname().equals(game.getCurrentPlayer().getName())) {
+                    Platform.runLater(() -> {
                         livingBoardController.updateTilePack(game.getTilePack());
                         livingBoardController.updateBookshelf(game.getCurrentPlayer().getBookshelf(), livingBoardController.bookshelf);
                         livingBoardController.updateBookshelf(game.getPlayer(livingBoardController.getPlayers().get(livingBoardController.getWatchedPlayer())).getBookshelf(), livingBoardController.otherBookshelf);
@@ -542,11 +571,25 @@ public class GUI extends Observable implements View{
                     if (game.getTilePack().getTiles().size() > 0) {
                         Platform.runLater(() -> showPopup("Choose an item tile to insert from the tilepack \ninto the selected column"));
                     } else {
-                        activeTurn = false;
                         setChanged();
                         notifyObservers(new EndTurnMessage(eventMessage.getNickname()));
                     }
                 }
+            }
+
+
+            case PICKING_TILES -> {
+                if (this.client.getNickname().equals(game.getCurrentPlayer().getName())) {
+                    System.out.println("arrivato a" + this.client.getNickname());
+                    livingBoardController.updateTilePack(game.getTilePack());
+                    livingBoardController.resetColumnChoice();
+                }
+                else {
+                    showPopup(game.getCurrentPlayer().getName() + "is picking Tiles");
+                }
+
+                // forse per noi questo caso è inutile
+
             }
         }
     }

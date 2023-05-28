@@ -84,9 +84,9 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                 // da capire cosa modificare
                 if (!currentLobbyGameNames.contains(gameNameMessage.getGameName()) && !currentGames.containsKey(gameNameMessage.getGameName())) {
                     currentLobbyGameNames.add(gameNameMessage.getGameName());
-                    client.onMessage(new GameNameResponseMessage(gameNameMessage.getGameName(), true));
+                    client.onMessage(new GameNameResponseMessage(gameNameMessage.getNickname(),gameNameMessage.getGameName(), true));
                 } else {
-                    client.onMessage(new GameNameResponseMessage(eventMessage.getNickname(), false));
+                    client.onMessage(new GameNameResponseMessage(eventMessage.getNickname(), gameNameMessage.getGameName(), false));
                 }
             }
             case GAME_CREATION -> {

@@ -79,6 +79,8 @@ public class LivingBoardController {
     @FXML
     public Label OtherPlayerTurnLabel;
 
+    private int columnForTheInsertion;
+
     @FXML
     public AnchorPane AnchorPaneforTheCandPgoalcards;
 
@@ -266,7 +268,7 @@ public class LivingBoardController {
                 }
             }
             for(int r=bookshelf.getRowCount()-1; r>1; r--){
-                ImageView bookshelfImage = (ImageView) bookshelf.getChildren().get(r*5 + column);
+                ImageView bookshelfImage = (ImageView) bookshelf.getChildren().get(r*5 + column); // TODO: PROVO A CAMBIARE CON column selected
                 if (bookshelfImage.getImage() == null) {
                     bookshelfImage.setImage(sourceImageView.getImage());
                     sourceImageView.setImage(null);
@@ -276,7 +278,6 @@ public class LivingBoardController {
     }
 
     public void boardTileClicked(MouseEvent event){
-        if (gui.activeTurn){
             ImageView sourceImageView = (ImageView) event.getSource();
             for (int i=0; i<board.getChildren().size(); i++){
                 if (board.getChildren().get(i).equals(sourceImageView)){
@@ -288,7 +289,7 @@ public class LivingBoardController {
                 }
             }
         }
-    }
+
 
     public void changeBookshelf(MouseEvent event) throws FileNotFoundException {
         if (event.getSource().equals(nextPlayer)){
@@ -412,6 +413,7 @@ public class LivingBoardController {
             if (node.equals(column)){
                 columnSelected = true;
                 int j = i;
+                columnForTheInsertion=j;
                 Platform.runLater(()->this.gui.stopPickingTiles(j));
             }
             else {
