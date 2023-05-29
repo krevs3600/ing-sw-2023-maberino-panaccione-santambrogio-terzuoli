@@ -238,7 +238,6 @@ public class GameController {
                     }
                     game.setTurnPhase(GamePhase.INIT_TURN);
                     game.changeTurn();
-
                 }
             }
             case FILL_BOOKSHELF -> {
@@ -247,7 +246,6 @@ public class GameController {
                 game.setTurnPhase(GamePhase.PICKING_TILES);
             }
         }
-
     }
 
     /**

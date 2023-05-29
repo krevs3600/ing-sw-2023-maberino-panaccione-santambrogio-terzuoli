@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.ModelView;
 
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.utils.GamePhase;
 import it.polimi.ingsw.model.utils.NumberOfPlayers;
 
 import java.io.Serializable;
@@ -20,9 +21,10 @@ public class GameView implements Serializable {
     private final PlayerView currentPlayer;
 
     private static final long serialVersionUID = 1L;
+    private final GamePhase turnPhase;
 
     public GameView (Game game) {
-
+        this.turnPhase = game.getTurnPhase();
         this.cursor = game.getCursor();
         this.id = game.getGameName();
         this.numberOfPlayers = game.getNumberOfPlayers();
@@ -70,6 +72,9 @@ public class GameView implements Serializable {
     }
     public PlayerView getPlayer(String nickname){
         return this.getSubscribers().stream().filter(x->x.getName().equals(nickname)).toList().get(0);
+    }
+    public GamePhase getTurnPhase(){
+        return this.turnPhase;
     }
 
 

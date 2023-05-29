@@ -106,6 +106,7 @@ public class GUI extends Observable implements View{
         // Non devo fare il controllo che il turno sia attivo perche altrmenti i pulsanti sono disabilitati
         // quindi anche nel caso in cui sbaglia se si toglie il pop up non c'è problema, l'unica cosa da estire è
         // il caso in cui sceglie 3 tiles
+
         livingBoardController.board.setDisable(true);
         setChanged();
         notifyObservers(new BookshelfColumnMessage(this.nickname, column)); // dopo questo entra nel placing tile case
@@ -210,10 +211,8 @@ public class GUI extends Observable implements View{
     }
 
     public void chosenPosition(int r, int c){
-        setChanged();
-        System.out.println(this.client.getNickname());
-        // ok this.nicknameForPlacingTiles non funziona
         System.out.println(this.client.getNickname()+" ha scelto la tile nella posizione "+r + " " + c); // prova per vedere se sono uguali ma dovrebbe essere cosi perche sono disabilitati
+        setChanged();
         notifyObservers(new TilePositionMessage(this.client.getNickname(), new Position(r,c)));
 
     }
@@ -415,7 +414,7 @@ public class GUI extends Observable implements View{
                 // ma le avevo disabilitate...
                 livingBoardController.resetColumnChoice();
             }
-
+            case PLAYER_OFFLINE, KILL_GAME, DISCONNECTION_RESPONSE -> {}
         }
     }
 
@@ -457,7 +456,6 @@ public class GUI extends Observable implements View{
 
     @Override
     public void update(GameView game, EventMessage eventMessage) {
-        System.out.println(eventMessage.getType().name());
         switch (eventMessage.getType()) {
             case BOARD -> {
                 // todo: in questo caso deve comparire il pop up con i personal goal card e i common goal cards e si inizializza la scena
@@ -487,7 +485,6 @@ public class GUI extends Observable implements View{
                             livingBoardController.initialize(game, nickname);
                             livingBoardController.updateLivingRoomBoard(game.getLivingRoomBoard());
                             livingBoardController.tilePack.setDisable(true);
-                            livingBoardController.setGameView(game);
                         });
                     } catch (IOException e) {
                         System.out.println(e);
@@ -498,14 +495,12 @@ public class GUI extends Observable implements View{
                     Platform.runLater(()-> {
                         livingBoardController.tilePack.setDisable(true);
                         livingBoardController.resetColumnChoice();
-                        livingBoardController.setGameView(game);
                         showPopup("NEW TURN HAS JUST STARTED");
                     });
                 }
             }
 
             case PLAYER_TURN -> {
-                livingBoardController.setGameView(game);
                 System.out.println(client.getNickname() + " " + eventMessage.getNickname() + " " + game.getCurrentPlayer().getName());
                 System.out.println("it's " + game.getCurrentPlayer().getName() + " turn");
                 if (this.client.getNickname().equals(game.getCurrentPlayer().getName())) {
@@ -562,17 +557,16 @@ public class GUI extends Observable implements View{
             // va in questo case se nella colonna inserita c'è abbastanza spazio per inserire le tiles.
             case PLACING_TILES -> { // poi ogni volta che seleziona una carta il Item tile indexMessage lo riporta qui
                 livingBoardController.tilePack.setDisable(false);
-                livingBoardController.setGameView(game); // questo potrebbe essere sbagliato
                 if (this.client.getNickname().equals(game.getCurrentPlayer().getName())) {
                     Platform.runLater(() -> {
                         livingBoardController.updateTilePack(game.getTilePack());
                         livingBoardController.updateBookshelf(game.getCurrentPlayer().getBookshelf(), livingBoardController.bookshelf);
                         livingBoardController.updateBookshelf(game.getPlayer(livingBoardController.getPlayers().get(livingBoardController.getWatchedPlayer())).getBookshelf(), livingBoardController.otherBookshelf);
+                        livingBoardController.setGameView(game);
                     });
                     if (game.getTilePack().getTiles().size() > 0) {
                         Platform.runLater(() -> showPopup("Choose an item tile to insert from the tilepack \ninto the selected column"));
-                    } else {
-                        System.out.println("andato qua prima del previsto o giusto?");
+                    } else if (game.getTurnPhase().equals(GamePhase.PLACING_TILES)){
                         setChanged();
                         notifyObservers(new EndTurnMessage(eventMessage.getNickname()));
                     }
@@ -585,7 +579,6 @@ public class GUI extends Observable implements View{
             }
 
             case PICKING_TILES -> {
-                livingBoardController.setGameView(game);
                 if (this.client.getNickname().equals(game.getCurrentPlayer().getName())) {
                     System.out.println("arrivato a " + this.client.getNickname());
                     Platform.runLater(()->{
@@ -601,8 +594,21 @@ public class GUI extends Observable implements View{
                 }
                 // forse per noi questo caso è inutile
             }
-            default -> {
+            case TILE_PACK, COLUMN_CHOICE, BOOKSHELF -> {
                 break;
+            }
+            case LAST_TURN -> {
+                if (this.client.getNickname().equals(game.getCurrentPlayer().getName())) {
+                    showPopup("\nCongrats, you filled your bookshelf! You have an extra point!");
+                } else {
+                    showPopup("\n" + eventMessage.getNickname() + " filled his bookshelf...");
+                }
+            }
+            case END_GAME -> {
+                if (eventMessage.getNickname().equals(this.client.getNickname())) {
+                    Platform.runLater(() -> showPopup("You won"));
+                }
+                Platform.runLater(() -> showPopup(eventMessage.getNickname() + " won"));
             }
         }
     }

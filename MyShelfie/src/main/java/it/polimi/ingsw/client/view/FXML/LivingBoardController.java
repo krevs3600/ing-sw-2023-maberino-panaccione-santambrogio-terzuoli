@@ -85,7 +85,6 @@ public class LivingBoardController {
     public AnchorPane AnchorPaneforTheCandPgoalcards;
 
     private boolean columnSelected = false;
-    private int column;
     private String nickname;
     private GUI gui;
     private Map<TileType, String[]> images = new HashMap<>();
@@ -227,9 +226,7 @@ public class LivingBoardController {
 
                 if (bookshelf.getGrid()[r][c] != null){
                     try {
-                        System.out.println(r + " " + c);
                         Image tile = new Image(new FileInputStream(tilePath(bookshelf.getGrid()[r][c])));
-                        System.out.println("index " + (r*5 + c));
                         ImageView bookshelfImage = (ImageView) bookshelfGrid.getChildren().get(r*5 + c);
                         bookshelfImage.setImage(tile);
                     } catch (IOException e){
@@ -286,7 +283,6 @@ public class LivingBoardController {
             ImageView sourceImageView = (ImageView) event.getSource();
             for (int i=0; i<tilePack.getChildren().size(); i++){
                 if (tilePack.getChildren().get(i).equals(sourceImageView)){
-                    System.out.println("tilepack index " + i);
                     gui.insertTileInColumn(i);
                 }
             }
