@@ -38,9 +38,7 @@ import java.util.Set;
 
 public class GUI extends Observable implements View{
 
-    boolean activeTurn = false;
     private Stage stage;
-    private Player firstPlayer;
     private Scene scene;
     private Parent root;
     private static Stage window;
@@ -189,28 +187,16 @@ public class GUI extends Observable implements View{
             }).start();
         }
 
-        URL url = null;
         try {
-            url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/login_scene.fxml/").toURI().toURL();
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        }
-        FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("login_scene.fxml"));
-        try {
-            root = FXMLLoader.load(url);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        };
-        try {
+            URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/login_scene.fxml/").toURI().toURL();;
+            FXMLLoader fxmlLoader = new FXMLLoader(url);
             scene = new Scene(fxmlLoader.load());
+            Platform.runLater(()->stage.setScene(scene));
+            nicknameController=fxmlLoader.getController();
+            nicknameController.setGui(this);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        Platform.runLater(()->stage.setScene(scene));
-
-        NicknameController nicknameController=fxmlLoader.getController();
-        nicknameController.setGui(this);
-        this.nicknameController=nicknameController;
     }
 
     @Override
@@ -227,7 +213,7 @@ public class GUI extends Observable implements View{
         setChanged();
         System.out.println(this.client.getNickname());
         // ok this.nicknameForPlacingTiles non funziona
-        System.out.println(this.client.getNickname()+"ha scelto la tile nella posizione"+r+c); // prova per vedere se sono uguali ma dovrebbe essere cosi perche sono disabilitati
+        System.out.println(this.client.getNickname()+" ha scelto la tile nella posizione "+r + " " + c); // prova per vedere se sono uguali ma dovrebbe essere cosi perche sono disabilitati
         notifyObservers(new TilePositionMessage(this.client.getNickname(), new Position(r,c)));
 
     }
@@ -241,7 +227,7 @@ public class GUI extends Observable implements View{
 
     @Override
     public void showGameNamesList(Set<String> availableGameNames) {
-        System.out.println(" il gioco da joinare si chiama " +this.gameNameListController.getGameToJoin());
+        System.out.println(" il gioco da joinare si chiama " + this.gameNameListController.getGameToJoin());
         System.out.println("il client è "+ this.client.getNickname());
         setChanged();
         notifyObservers(new GameNameChoiceMessage(this.client.getNickname(),this.gameNameListController.getGameToJoin()));
@@ -393,7 +379,7 @@ public class GUI extends Observable implements View{
             }
 
             case ILLEGAL_POSITION, UPPER_BOUND_TILEPACK, NOT_ENOUGH_INSERTABLE_TILES -> {
-                if (activeTurn) {
+                if (this.client.getNickname().equals(message.getNickname())) {
                     ErrorMessage errorMessage = (ErrorMessage) message;
                     this.showPopup(errorMessage.getErrorMessage());
                     String answer = "";
@@ -430,10 +416,8 @@ public class GUI extends Observable implements View{
                 livingBoardController.resetColumnChoice();
             }
 
-
-
-            }
         }
+    }
 
 
 
@@ -473,75 +457,81 @@ public class GUI extends Observable implements View{
 
     @Override
     public void update(GameView game, EventMessage eventMessage) {
+        System.out.println(eventMessage.getType().name());
         switch (eventMessage.getType()) {
             case BOARD -> {
                 // todo: in questo caso deve comparire il pop up con i personal goal card e i common goal cards e si inizializza la scena
-               if(isFirstTime) {
-                   try {
-                       URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/livingBoard_scene.fxml/").toURI().toURL();
-                       FXMLLoader fxmlLoader = new FXMLLoader(url);
-                       Scene scene = new Scene(fxmlLoader.load());
-                       livingBoardController = fxmlLoader.getController();
-                       livingBoardController.setGui(this);
+                if(isFirstTime) {
+                    try {
+                        URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/livingBoard_scene.fxml/").toURI().toURL();
+                        FXMLLoader fxmlLoader = new FXMLLoader(url);
+                        Scene scene = new Scene(fxmlLoader.load());
+                        livingBoardController = fxmlLoader.getController();
+                        livingBoardController.setGui(this);
 
-                       Platform.runLater(() -> {
-                           try {
+                        Platform.runLater(() -> {
 
-                               stage.setScene(scene);
-                               // if (isFirstTime) {
-                               //     int displayTimeMillis = 9000;
-                               //     livingBoardController.AnchorPaneforTheCandPgoalcards.setVisible(true);
-                               //     FadeTransition fadeTransition = new FadeTransition(Duration.millis(displayTimeMillis), livingBoardController.AnchorPaneforTheCandPgoalcards);
-                               //     fadeTransition.setOnFinished(event -> {
-                               //         livingBoardController.AnchorPaneforTheCandPgoalcards.setVisible(false);
-                               //     });
-                               //     fadeTransition.play();
-                               //     isFirstTime = false;
-                               //
-                               // }
+                            stage.setScene(scene);
+                            // if (isFirstTime) {
+                            //     int displayTimeMillis = 9000;
+                            //     livingBoardController.AnchorPaneforTheCandPgoalcards.setVisible(true);
+                            //     FadeTransition fadeTransition = new FadeTransition(Duration.millis(displayTimeMillis), livingBoardController.AnchorPaneforTheCandPgoalcards);
+                            //     fadeTransition.setOnFinished(event -> {
+                            //         livingBoardController.AnchorPaneforTheCandPgoalcards.setVisible(false);
+                            //     });
+                            //     fadeTransition.play();
+                            //     isFirstTime = false;
+                            //
+                            // }
 
-                               livingBoardController.initialize(game, nickname);
-
-
-                           } catch (FileNotFoundException e) {
-                               throw new RuntimeException(e);
-                           }
-                       });
-                   } catch (IOException e) {
-                       System.out.println(e);
-                   }
-                   isFirstTime=false;
-               }
-               else {
-                   Platform.runLater(()-> {  showPopup("NEW TURN HAS JUST STARTED");});
-
-
-                   }
-               }
-
+                            livingBoardController.initialize(game, nickname);
+                            livingBoardController.updateLivingRoomBoard(game.getLivingRoomBoard());
+                            livingBoardController.tilePack.setDisable(true);
+                            livingBoardController.setGameView(game);
+                        });
+                    } catch (IOException e) {
+                        System.out.println(e);
+                    }
+                    isFirstTime = false;
+                }
+                else {
+                    Platform.runLater(()-> {
+                        livingBoardController.tilePack.setDisable(true);
+                        livingBoardController.resetColumnChoice();
+                        livingBoardController.setGameView(game);
+                        showPopup("NEW TURN HAS JUST STARTED");
+                    });
+                }
+            }
 
             case PLAYER_TURN -> {
-                System.out.println("it's "+game.getCurrentPlayer().getName()+" turn");
-
+                livingBoardController.setGameView(game);
+                System.out.println(client.getNickname() + " " + eventMessage.getNickname() + " " + game.getCurrentPlayer().getName());
+                System.out.println("it's " + game.getCurrentPlayer().getName() + " turn");
                 if (this.client.getNickname().equals(game.getCurrentPlayer().getName())) {
-                    Platform.runLater(()-> { livingBoardController.board.setDisable(false);
+                    Platform.runLater(() -> {
+                        livingBoardController.board.setDisable(false);
                         showPopup("it's your turn"); // todo ricontrollare questo pop up non mi sembra che compaia
                         livingBoardController.OtherPlayerTurnLabel.setVisible(false);
+                        livingBoardController.board.setDisable(false);
+                        livingBoardController.disableColumnChoice();
                     });
                     //salva per vedere se sono gli stessi
+
+                    // todo ricontrollare questo pop up non mi sembra che compaia
 
                     // todo : farei un do-while fin quando la carta non è cliccata mettere un
                     //  timer che fa scadere il turno se non è cliccata entro 3 minuti tipo
 
                 } else {
-
-                  livingBoardController.board.setDisable(true);
+                    Platform.runLater(() -> {
+                        livingBoardController.board.setDisable(true);
                         livingBoardController.disableColumnChoice();
                         livingBoardController.OtherPlayerTurnLabel.setText("Wait... " + eventMessage.getNickname() + " is picking tiles");
-                    livingBoardController.OtherPlayerTurnLabel.setVisible(true);
-                    };
-
+                        livingBoardController.OtherPlayerTurnLabel.setVisible(true);
+                    });
                 }
+            }
 
                     //  showPopup("It's " + eventMessage.getNickname() + "'s turn\n"); adesso lo indica nel board turn il turno dell'altra persona
 
@@ -582,30 +572,37 @@ public class GUI extends Observable implements View{
                     if (game.getTilePack().getTiles().size() > 0) {
                         Platform.runLater(() -> showPopup("Choose an item tile to insert from the tilepack \ninto the selected column"));
                     } else {
+                        System.out.println("andato qua prima del previsto o giusto?");
                         setChanged();
                         notifyObservers(new EndTurnMessage(eventMessage.getNickname()));
                     }
                 }
+                else {
+                    Platform.runLater(() -> {
+                        livingBoardController.updateBookshelf(game.getPlayer(livingBoardController.getPlayers().get(livingBoardController.getWatchedPlayer())).getBookshelf(), livingBoardController.otherBookshelf);
+                    });
+                }
             }
 
-
             case PICKING_TILES -> {
-                try {
-                    livingBoardController.updateLivingRoomBoard(game.getLivingRoomBoard());
-                } catch (FileNotFoundException e) {
-                    throw new RuntimeException(e);
-                }
+                livingBoardController.setGameView(game);
                 if (this.client.getNickname().equals(game.getCurrentPlayer().getName())) {
-                    System.out.println("arrivato a" + this.client.getNickname());
-                    livingBoardController.updateTilePack(game.getTilePack());
-                    livingBoardController.resetColumnChoice();
+                    System.out.println("arrivato a " + this.client.getNickname());
+                    Platform.runLater(()->{
+                        livingBoardController.updateLivingRoomBoard(game.getLivingRoomBoard());
+                        livingBoardController.updateTilePack(game.getTilePack());
+                        livingBoardController.resetColumnChoice();
+                    });
                 }
                 else {
-                    showPopup(game.getCurrentPlayer().getName() + "is picking Tiles");
+                    Platform.runLater(()->
+                        livingBoardController.updateLivingRoomBoard(game.getLivingRoomBoard()));
+                        showPopup(game.getCurrentPlayer().getName() + "is picking Tiles");
                 }
-
                 // forse per noi questo caso è inutile
-
+            }
+            default -> {
+                break;
             }
         }
     }

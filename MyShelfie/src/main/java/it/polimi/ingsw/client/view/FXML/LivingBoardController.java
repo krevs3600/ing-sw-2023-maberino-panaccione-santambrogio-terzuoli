@@ -112,7 +112,7 @@ public class LivingBoardController {
         String path = "src/main/resources/it/polimi/ingsw/client/view/itemtiles/";
         return path.concat(itemTile.getType().toString()).concat("1.").concat(itemTile.getImageIndex()).concat(".png");
     }
-    public void initialize(GameView gameView, String nickname) throws FileNotFoundException {
+    public void initialize(GameView gameView, String nickname) {
         setGameView(gameView);
         this.nickname = nickname;
         personalGameIndex = getPersonalGameIndex(gameView);
@@ -122,16 +122,19 @@ public class LivingBoardController {
 
         // INIT LIVING_ROOM_BOARD
 
-        // String path = "src/main/resources/it/polimi/ingsw/client/view/itemtiles/";
         for (int r=0; r<9; r++){
             for (int c=0; c<9; c++){
                 SpaceView space = gameView.getLivingRoomBoard().getSpace(new Position(r,c));
-                if (space.getType() == SpaceType.PLAYABLE){
-                    ImageView imageView = new ImageView(new Image(new FileInputStream(tilePath(space.getTile()))));
-                    imageView.setFitWidth((board.getPrefWidth() - ((board.getColumnCount()-1)*board.getHgap()))/board.getColumnCount()-10);
-                    imageView.setFitHeight((board.getPrefHeight() - ((board.getRowCount()-1)*board.getVgap()))/board.getRowCount()-10);
-                    imageView.setOnMouseClicked(this::boardTileClicked);
-                    board.add(imageView, c, r);
+                if (!space.isFree() && space.getType() == SpaceType.PLAYABLE){
+                    try {
+                        ImageView imageView = new ImageView(new Image(new FileInputStream(tilePath(space.getTile()))));
+                        imageView.setFitWidth((board.getPrefWidth() - ((board.getColumnCount()-1)*board.getHgap()))/board.getColumnCount()-10);
+                        imageView.setFitHeight((board.getPrefHeight() - ((board.getRowCount()-1)*board.getVgap()))/board.getRowCount()-10);
+                        imageView.setOnMouseClicked(this::boardTileClicked);
+                        board.add(imageView, c, r);
+                    } catch (FileNotFoundException e) {
+                        System.err.println(e.getMessage());
+                    }
                 }
                 else {
                     board.add(new ImageView(), c, r);
@@ -144,25 +147,13 @@ public class LivingBoardController {
         updateTilePack(gameView.getTilePack());
 
         // INIT BOOKSHELF
-        for (int r=0; r<6;r++){
-            for (int c=0; c<5; c++){
-                ImageView imageView = new ImageView();
-                imageView.setFitWidth((bookshelf.getPrefWidth() - (int)bookshelf.getPadding().getLeft() - (int)bookshelf.getPadding().getRight() - ((bookshelf.getColumnCount()-1)*bookshelf.getHgap()))/bookshelf.getColumnCount());
-                imageView.setFitHeight((bookshelf.getPrefHeight() - (int)bookshelf.getPadding().getTop() - (int)bookshelf.getPadding().getBottom() - ((bookshelf.getRowCount()-1)*bookshelf.getVgap()))/bookshelf.getRowCount());
-                imageView.setImage(null);
-                bookshelf.add(imageView, c,r);
-            }
-        }
-        for (int r=0; r<6;r++){
-            for (int c=0; c<5; c++){
-                ImageView imageView = new ImageView();
-                imageView.setFitWidth((otherBookshelf.getPrefWidth() - (int)otherBookshelf.getPadding().getLeft() - (int)otherBookshelf.getPadding().getRight() - ((otherBookshelf.getColumnCount()-1)*otherBookshelf.getHgap()))/otherBookshelf.getColumnCount());
-                imageView.setFitHeight((otherBookshelf.getPrefHeight() - (int)otherBookshelf.getPadding().getTop() - (int)otherBookshelf.getPadding().getBottom() - ((otherBookshelf.getRowCount()-1)*otherBookshelf.getVgap()))/otherBookshelf.getRowCount());
-                imageView.setImage(null);
-                otherBookshelf.add(imageView, c,r);
-            }
-        }
-        System.out.println(gameView.getSubscribers().size());
+
+        initBookshelf(bookshelf);
+        initBookshelf(otherBookshelf);
+
+        // updateBookshelf(gameView.getPlayer(getPlayers().get(personalGameIndex)).getBookshelf(), bookshelf);
+        // updateBookshelf(gameView.getPlayer(getPlayers().get(watchedPlayer)).getBookshelf(), otherBookshelf);
+
         if (gameView.getSubscribers().size() == 2){
             nextPlayer.setVisible(false);
             previousPlayer.setVisible(false);
@@ -183,11 +174,21 @@ public class LivingBoardController {
 
         //init personal Card
         int num = gameView.getSubscribers().stream().filter(x-> x.getName().equals(nickname)).toList().get(0).getPersonalGoalCard().getPath();
-        personalCard.setImage(new Image(new FileInputStream("src/main/resources/it/polimi/ingsw/client/view/personal goal cards/Personal_Goals" + num + ".png")));
+        try {
+            personalCard.setImage(new Image(new FileInputStream("src/main/resources/it/polimi/ingsw/client/view/personal goal cards/Personal_Goals" + num + ".png")));
+        } catch (FileNotFoundException e) {
+            System.err.println(e.getMessage());
+        }
 
         //init common goal card
-        commonGoalCard1.setImage(new Image(new FileInputStream(getCommonGoalCardPic(gameView.getLivingRoomBoard().getCommonGoalCards().get(0)))));
-        commonGoalCard2.setImage(new Image(new FileInputStream(getCommonGoalCardPic(gameView.getLivingRoomBoard().getCommonGoalCards().get(1)))));
+
+        try {
+            commonGoalCard1.setImage(new Image(new FileInputStream(getCommonGoalCardPic(gameView.getLivingRoomBoard().getCommonGoalCards().get(0)))));
+            commonGoalCard2.setImage(new Image(new FileInputStream(getCommonGoalCardPic(gameView.getLivingRoomBoard().getCommonGoalCards().get(1)))));
+        } catch (FileNotFoundException e) {
+            System.err.println(e.getMessage());
+        }
+
     }
 
     private int getPersonalGameIndex(GameView gameView) {
@@ -206,19 +207,37 @@ public class LivingBoardController {
             imageView.setOnMouseClicked(null);
         }
     }
-
-
-    public void updateBookshelf(BookshelfView bookshelf, GridPane bookshelfGrid) {
+    public void initBookshelf(GridPane bookshelfGrid){
         for(int r=0;r<bookshelfGrid.getRowCount(); r++){
             for (int c=0; c<bookshelfGrid.getColumnCount(); c++){
+                ImageView imageView = new ImageView();
+                imageView.setFitWidth((bookshelfGrid.getPrefWidth() - (int)bookshelfGrid.getPadding().getLeft() - (int)bookshelfGrid.getPadding().getRight() - ((bookshelfGrid.getColumnCount()-1)*bookshelfGrid.getHgap()))/bookshelfGrid.getColumnCount());
+                imageView.setFitHeight((bookshelfGrid.getPrefHeight() - (int)bookshelfGrid.getPadding().getTop() - (int)bookshelfGrid.getPadding().getBottom() - ((bookshelfGrid.getRowCount()-1)*bookshelfGrid.getVgap()))/bookshelfGrid.getRowCount());
+                imageView.setImage(null);
+                imageView.setOnMouseClicked(null);
+                bookshelfGrid.add(imageView, c,r);
+            }
+        }
+    }
+
+    public void updateBookshelf(BookshelfView bookshelf, GridPane bookshelfGrid) {
+        initBookshelf(bookshelfGrid);
+        for(int r=0;r<bookshelfGrid.getRowCount(); r++){
+            for (int c=0; c<bookshelfGrid.getColumnCount(); c++){
+
                 if (bookshelf.getGrid()[r][c] != null){
                     try {
+                        System.out.println(r + " " + c);
                         Image tile = new Image(new FileInputStream(tilePath(bookshelf.getGrid()[r][c])));
+                        System.out.println("index " + (r*5 + c));
                         ImageView bookshelfImage = (ImageView) bookshelfGrid.getChildren().get(r*5 + c);
                         bookshelfImage.setImage(tile);
                     } catch (IOException e){
                         System.err.println(e.getMessage());
                     }
+                } else {
+                    ImageView bookshelfImage = (ImageView) bookshelfGrid.getChildren().get(r*5 + c);
+                    bookshelfImage.setImage(null);
                 }
             }
         }
@@ -242,13 +261,17 @@ public class LivingBoardController {
         }
     }
 
-    public void updateLivingRoomBoard(LivingRoomBoardView livingRoomBoardView) throws FileNotFoundException {
+    public void updateLivingRoomBoard(LivingRoomBoardView livingRoomBoardView) {
         for (int r=0; r<9; r++){
             for (int c=0; c<9; c++){
                 SpaceView space = livingRoomBoardView.getSpace(new Position(r,c));
                 ImageView imageView = (ImageView) board.getChildren().get(r*9 + c);
                 if (!space.isFree() && space.getType().equals(SpaceType.PLAYABLE)){
-                    imageView.setImage(new Image(new FileInputStream(tilePath(space.getTile()))));
+                    try {
+                        imageView.setImage(new Image(new FileInputStream(tilePath(space.getTile()))));
+                    } catch (FileNotFoundException e) {
+                        System.err.println(e.getMessage());
+                    }
                 }
                 else {
                     imageView.setOnMouseClicked(null);
@@ -259,21 +282,22 @@ public class LivingBoardController {
     }
 
     private void packTileClicked(MouseEvent event) {
-        System.out.println("clicked");
         if (columnSelected){
             ImageView sourceImageView = (ImageView) event.getSource();
             for (int i=0; i<tilePack.getChildren().size(); i++){
                 if (tilePack.getChildren().get(i).equals(sourceImageView)){
+                    System.out.println("tilepack index " + i);
                     gui.insertTileInColumn(i);
                 }
             }
+            /*
             for(int r=bookshelf.getRowCount()-1; r>1; r--){
                 ImageView bookshelfImage = (ImageView) bookshelf.getChildren().get(r*5 + column); // TODO: PROVO A CAMBIARE CON column selected
                 if (bookshelfImage.getImage() == null) {
                     bookshelfImage.setImage(sourceImageView.getImage());
                     sourceImageView.setImage(null);
                 }
-            }
+            }*/
         }
     }
 
@@ -283,7 +307,7 @@ public class LivingBoardController {
                 if (board.getChildren().get(i).equals(sourceImageView)){
                     int r = i/9;
                     int c = i%9;
-                    System.out.println(r + " " + c);
+                    System.out.println(nickname + "board clicked in " + r + " " + c);
                     Platform.runLater(()->this.gui.chosenPosition(r,c));
                     break;
                 }

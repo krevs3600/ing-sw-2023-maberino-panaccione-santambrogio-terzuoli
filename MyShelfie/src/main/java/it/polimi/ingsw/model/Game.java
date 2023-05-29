@@ -300,11 +300,11 @@ public class Game extends Observable<EventMessage> {
             setChanged();
             notifyObservers(new PlacingTilesMessage(getCurrentPlayer().getName()));
         }
-        if (turnPhase.equals(GamePhase.INIT_GAME)) {
+        else if (turnPhase.equals(GamePhase.INIT_GAME)) {
             setChanged();
             notifyObservers(new BoardMessage(getCurrentPlayer().getName(), new LivingRoomBoardView(getLivingRoomBoard())));
         }
-        if (turnPhase.equals(GamePhase.INIT_TURN)){
+        else if (turnPhase.equals(GamePhase.INIT_TURN)){
             getBuffer().clear();
             setAlongSideColumn(false);
             setAlongSideRow(false);
@@ -314,11 +314,11 @@ public class Game extends Observable<EventMessage> {
             setChanged();
             notifyObservers(new BoardMessage(getCurrentPlayer().getName(), new LivingRoomBoardView(getLivingRoomBoard())));
         }
-        if (turnPhase.equals(GamePhase.PICKING_TILES)) {
+        else if (turnPhase.equals(GamePhase.PICKING_TILES)) {
             setChanged();
             notifyObservers(new PickingTilesMessage(getCurrentPlayer().getName()));
         }
-        if (turnPhase.equals(GamePhase.COLUMN_CHOICE)) {
+        else if (turnPhase.equals(GamePhase.COLUMN_CHOICE)) {
             BookshelfView bookshelfView = new BookshelfView(getCurrentPlayer().getBookshelf());
             setChanged();
             notifyObservers(new BookshelfMessage(getCurrentPlayer().getName(), bookshelfView));
