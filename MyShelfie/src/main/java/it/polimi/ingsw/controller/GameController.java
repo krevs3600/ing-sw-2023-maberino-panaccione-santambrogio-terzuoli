@@ -29,6 +29,8 @@ public class GameController {
     private Server server;
     private Game game;
 
+    private Object lock= new Object();
+
     private List<Client> clients = new ArrayList<>();
 
     public GameController(Server server, Game game){
@@ -70,6 +72,7 @@ public class GameController {
 
                     if (game.getSubscribers().size() < game.getNumberOfPlayers().getValue()){
                         player.onMessage(new WaitingResponseMessage(eventMessage.getNickname(), game.getNumberOfPlayers().getValue()-game.getSubscribers().size()));
+
                     }
                 }
 

@@ -108,6 +108,8 @@ public class Game extends Observable<EventMessage> {
          */
     }
 
+
+
     public void setDrawableTiles(){
         this.drawableTiles = getLivingRoomBoard().getDrawableTiles();
     }

@@ -1,9 +1,12 @@
 package it.polimi.ingsw.client.view.FXML;
 
 import it.polimi.ingsw.AppServer;
+import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.ModelView.GameView;
+import it.polimi.ingsw.model.ModelView.PlayerView;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.utils.GamePhase;
+import it.polimi.ingsw.model.utils.NumberOfPlayers;
 import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.network.ClientImplementation;
 import it.polimi.ingsw.network.MessagesToClient.MessageToClient;
@@ -33,10 +36,12 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 
-public class GUI extends Observable implements View{
+public class GUI extends Observable implements View {
 
     private Stage stage;
     private Scene scene;
@@ -51,12 +56,15 @@ public class GUI extends Observable implements View{
     private RMIorSocketController rmIorSocketController;
     private LobbyController lobbyController;
     private StartController startController;
+    private WinController winController;
     private LivingBoardController livingBoardController;
     private ClientImplementation client;
     private GameNameController gameNameController;
     private NumberOfPlayersController numberOfPlayersController;
     private GameNameListController gameNameListController;
     private String nickname;
+
+    private GameView game; // aggiunto referenza al game
 
     private String nicknameForPlacingTiles;
 
@@ -65,7 +73,9 @@ public class GUI extends Observable implements View{
     }
 
 
-    public void setClient(ClientImplementation client){
+
+
+    public void setClient(ClientImplementation client) {
         this.client = client;
     }
 
@@ -75,22 +85,23 @@ public class GUI extends Observable implements View{
         scene = new Scene(fxmlLoader.load());
         stage.setTitle("myShelfie!");
         stage.setScene(scene);
-        this.stage=stage;
+        this.stage = stage;
         stage.show();
         stage.setHeight(scene.getHeight());
         stage.setWidth(scene.getWidth());
-        window=stage;
+        window = stage;
         stage.setResizable(true);
         width = stage.getWidth();
         height = stage.getHeight();
         startController = fxmlLoader.getController();
         startController.setGui(this);
     }
-    public ClientImplementation getClient(){
+
+    public ClientImplementation getClient() {
         return this.client;
     }
 
-    public void joinGame(){
+    public void joinGame() {
         setChanged();
         notifyObservers(new JoinGameMessage(this.client.getNickname()));
     }
@@ -102,7 +113,7 @@ public class GUI extends Observable implements View{
         return null;
     }
 
-    public void stopPickingTiles(int column){
+    public void stopPickingTiles(int column) {
         // Non devo fare il controllo che il turno sia attivo perche altrmenti i pulsanti sono disabilitati
         // quindi anche nel caso in cui sbaglia se si toglie il pop up non c'è problema, l'unica cosa da estire è
         // il caso in cui sceglie 3 tiles
@@ -123,22 +134,23 @@ public class GUI extends Observable implements View{
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        window=stage; // gor
+        window = stage; // gor
         scene = new Scene(fxmlLoader.load());
-        this.stage=stage;
-        Platform.runLater(()->stage.setScene(scene));
-        RMIorSocketController rmIorSocketController1=fxmlLoader.getController();
+        this.stage = stage;
+        Platform.runLater(() -> stage.setScene(scene));
+        RMIorSocketController rmIorSocketController1 = fxmlLoader.getController();
         rmIorSocketController1.setGui(this);
-        this.rmIorSocketController=rmIorSocketController1;
+        this.rmIorSocketController = rmIorSocketController1;
     }
+
     @Override
-    public void createConnection()  {
+    public void createConnection() {
         try {
             URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/AddressIp_scene.fxml/").toURI().toURL();
             FXMLLoader fxmlLoader = new FXMLLoader(url);
             scene = new Scene(fxmlLoader.load());
             window = stage;
-            Platform.runLater(()->stage.setScene(scene));
+            Platform.runLater(() -> stage.setScene(scene));
             serverSettingsController = fxmlLoader.getController();
             serverSettingsController.setGui(this);
 
@@ -155,7 +167,7 @@ public class GUI extends Observable implements View{
 
 
     public void createConnection(String address, int port) throws IOException, NotBoundException {
-        if(rmIorSocketController.isRMI()) {
+        if (rmIorSocketController.isRMI()) {
             try {
                 Registry registry = LocateRegistry.getRegistry(address, port);
                 AppServer server = (AppServer) registry.lookup("MyShelfieServer");
@@ -165,12 +177,12 @@ public class GUI extends Observable implements View{
                 System.err.println("not bound exception registry");
             }
         } else if (rmIorSocketController.isSocket()) {
-            if(port == 1243) port = 1244;
+            if (port == 1243) port = 1244;
             ServerStub serverStub = new ServerStub(address, port);
             client = new ClientImplementation(this, serverStub);
             serverStub.register(client);
             new Thread(() -> {
-                while(true) {
+                while (true) {
                     try {
                         serverStub.receive(client);
                     } catch (RemoteException e) {
@@ -189,11 +201,12 @@ public class GUI extends Observable implements View{
         }
 
         try {
-            URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/login_scene.fxml/").toURI().toURL();;
+            URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/login_scene.fxml/").toURI().toURL();
+            ;
             FXMLLoader fxmlLoader = new FXMLLoader(url);
             scene = new Scene(fxmlLoader.load());
-            Platform.runLater(()->stage.setScene(scene));
-            nicknameController=fxmlLoader.getController();
+            Platform.runLater(() -> stage.setScene(scene));
+            nicknameController = fxmlLoader.getController();
             nicknameController.setGui(this);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -210,16 +223,16 @@ public class GUI extends Observable implements View{
         return 0;
     }
 
-    public void chosenPosition(int r, int c){
-        System.out.println(this.client.getNickname()+" ha scelto la tile nella posizione "+r + " " + c); // prova per vedere se sono uguali ma dovrebbe essere cosi perche sono disabilitati
+    public void chosenPosition(int r, int c) {
+        System.out.println(this.client.getNickname() + " ha scelto la tile nella posizione " + r + " " + c); // prova per vedere se sono uguali ma dovrebbe essere cosi perche sono disabilitati
         setChanged();
-        notifyObservers(new TilePositionMessage(this.client.getNickname(), new Position(r,c)));
+        notifyObservers(new TilePositionMessage(this.client.getNickname(), new Position(r, c)));
 
     }
 
     //TODO: askgamespecs
     public void askGameName() {
-        String gameName=this.gameNameController.getTextField();
+        String gameName = this.gameNameController.getTextField();
         setChanged();
         notifyObservers(new GameNameMessage(this.client.getNickname(), gameName));
     }
@@ -227,9 +240,9 @@ public class GUI extends Observable implements View{
     @Override
     public void showGameNamesList(Set<String> availableGameNames) {
         System.out.println(" il gioco da joinare si chiama " + this.gameNameListController.getGameToJoin());
-        System.out.println("il client è "+ this.client.getNickname());
+        System.out.println("il client è " + this.client.getNickname());
         setChanged();
-        notifyObservers(new GameNameChoiceMessage(this.client.getNickname(),this.gameNameListController.getGameToJoin()));
+        notifyObservers(new GameNameChoiceMessage(this.client.getNickname(), this.gameNameListController.getGameToJoin()));
 
     }
 
@@ -241,7 +254,7 @@ public class GUI extends Observable implements View{
 
     }
 
-    public void askGameSpecs(){
+    public void askGameSpecs() {
 
     }
 
@@ -288,7 +301,7 @@ public class GUI extends Observable implements View{
                         this.numberOfPlayersController = numberOfPlayersController;
                         numberOfPlayersController.setGui(this);
                         numberOfPlayersController.setGameName(gameNameResponseMessage.getGameName());
-                        System.out.println("il nome del gioco è "+numberOfPlayersController.getGameName());
+                        System.out.println("il nome del gioco è " + numberOfPlayersController.getGameName());
                         Platform.runLater(() -> stage.setScene(scene));
                     } catch (IOException e) {
                         throw new RuntimeException(e);
@@ -388,17 +401,17 @@ public class GUI extends Observable implements View{
                             notifyObservers(new SwitchPhaseMessage(client.getNickname(), GamePhase.PLACING_TILES));
                         }
                     }*/
-                        //if(livingBoardController.WantPickAnotherTile()){
-                        //    case "" -> {
-                        //        out.print("r: ");
-                        //        int r = in.nextInt();
-                        //        in.nextLine();
-                        //        System.out.print("c: ");
-                        //        int c = in.nextInt();
-                        //        in.nextLine();
-                        //        setChanged();
-                        //        notifyObservers(new TilePositionMessage(((ErrorMessage) message).getNickName(), new Position(r, c)));
-                        //    }
+                    //if(livingBoardController.WantPickAnotherTile()){
+                    //    case "" -> {
+                    //        out.print("r: ");
+                    //        int r = in.nextInt();
+                    //        in.nextLine();
+                    //        System.out.print("c: ");
+                    //        int c = in.nextInt();
+                    //        in.nextLine();
+                    //        setChanged();
+                    //        notifyObservers(new TilePositionMessage(((ErrorMessage) message).getNickName(), new Position(r, c)));
+                    //    }
 /*
                     livingBoardController.stopPickingT.setVisible(false);
                     livingBoardController.ContinuepickingT.setVisible(false);
@@ -414,10 +427,10 @@ public class GUI extends Observable implements View{
                 // ma le avevo disabilitate...
                 livingBoardController.resetColumnChoice();
             }
-            case PLAYER_OFFLINE, KILL_GAME, DISCONNECTION_RESPONSE -> {}
+            case PLAYER_OFFLINE, KILL_GAME, DISCONNECTION_RESPONSE -> {
+            }
         }
     }
-
 
 
     public void askNumberOfPlayers(String gameName) {
@@ -451,15 +464,17 @@ public class GUI extends Observable implements View{
             }
         }
     }
+
     // booleano per distinguere la prima volta del gioco e le altre
-    private boolean isFirstTime=true;
+    private boolean isFirstTime = true;
 
     @Override
     public void update(GameView game, EventMessage eventMessage) {
+        this.game = game;
         switch (eventMessage.getType()) {
             case BOARD -> {
                 // todo: in questo caso deve comparire il pop up con i personal goal card e i common goal cards e si inizializza la scena
-                if(isFirstTime) {
+                if (isFirstTime) {
                     try {
                         URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/livingBoard_scene.fxml/").toURI().toURL();
                         FXMLLoader fxmlLoader = new FXMLLoader(url);
@@ -490,13 +505,13 @@ public class GUI extends Observable implements View{
                         System.out.println(e);
                     }
                     isFirstTime = false;
-                }
-                else {
-                    Platform.runLater(()-> {
+                } else {
+                    Platform.runLater(() -> {
                         livingBoardController.updateLivingRoomBoard(game.getLivingRoomBoard());
                         livingBoardController.tilePack.setDisable(true);
                         livingBoardController.resetColumnChoice();
                         showPopup("NEW TURN HAS JUST STARTED");
+
                     });
                 }
             }
@@ -512,6 +527,12 @@ public class GUI extends Observable implements View{
                         livingBoardController.board.setDisable(false);
                         livingBoardController.disableColumnChoice();
                     });
+                    //salva per vedere se sono gli stessi
+
+                    // todo ricontrollare questo pop up non mi sembra che compaia
+
+                    // todo : farei un do-while fin quando la carta non è cliccata mettere un
+                    //  timer che fa scadere il turno se non è cliccata entro 3 minuti tipo
 
                 } else {
                     Platform.runLater(() -> {
@@ -523,31 +544,30 @@ public class GUI extends Observable implements View{
                 }
             }
 
-                    //  showPopup("It's " + eventMessage.getNickname() + "'s turn\n"); adesso lo indica nel board turn il turno dell'altra persona
+            //  showPopup("It's " + eventMessage.getNickname() + "'s turn\n"); adesso lo indica nel board turn il turno dell'altra persona
 
 
-
-                // adessso questo metodo dovrebbe essere inutile perchè appena sceglie la colonna se è giusta va nel placing Tiles
+            // adessso questo metodo dovrebbe essere inutile perchè appena sceglie la colonna se è giusta va nel placing Tiles
 
             //in questo caso appena preme il bottone della colonna passa all'inserimento nella Bookshelf
-           // case TILE_PACK -> {
-           //     livingBoardController.tilePack.setDisable(false);
-           //     TilePackMessage tilePackMessage = (TilePackMessage) eventMessage;
-           //     livingBoardController.setGameView(game);
-           //
-           //     Platform.runLater(() -> {
-           //         try {
-           //             livingBoardController.setGameView(game);
-           //             livingBoardController.updateLivingRoomBoard(game.getLivingRoomBoard());
-           //             if (activeTurn) {
-           //                 livingBoardController.updateTilePack(game.getTilePack());
-           //                 livingBoardController.resetColumnChoice();
-           //             }
-           //         } catch (FileNotFoundException e) {
-           //             throw new RuntimeException(e);
-           //         }
-           //     });
-           // }
+            // case TILE_PACK -> {
+            //     livingBoardController.tilePack.setDisable(false);
+            //     TilePackMessage tilePackMessage = (TilePackMessage) eventMessage;
+            //     livingBoardController.setGameView(game);
+            //
+            //     Platform.runLater(() -> {
+            //         try {
+            //             livingBoardController.setGameView(game);
+            //             livingBoardController.updateLivingRoomBoard(game.getLivingRoomBoard());
+            //             if (activeTurn) {
+            //                 livingBoardController.updateTilePack(game.getTilePack());
+            //                 livingBoardController.resetColumnChoice();
+            //             }
+            //         } catch (FileNotFoundException e) {
+            //             throw new RuntimeException(e);
+            //         }
+            //     });
+            // }
 
             // va in questo case se nella colonna inserita c'è abbastanza spazio per inserire le tiles.
             case PLACING_TILES -> { // poi ogni volta che seleziona una carta il Item tile indexMessage lo riporta qui
@@ -561,12 +581,11 @@ public class GUI extends Observable implements View{
                     });
                     if (game.getTilePack().getTiles().size() > 0) {
                         Platform.runLater(() -> showPopup("Choose an item tile to insert from the tilepack \ninto the selected column"));
-                    } else if (game.getTurnPhase().equals(GamePhase.PLACING_TILES)){
+                    } else if (game.getTurnPhase().equals(GamePhase.PLACING_TILES)) {
                         setChanged();
                         notifyObservers(new EndTurnMessage(eventMessage.getNickname()));
                     }
-                }
-                else {
+                } else {
                     Platform.runLater(() -> {
                         livingBoardController.updateBookshelf(game.getPlayer(livingBoardController.getPlayers().get(livingBoardController.getWatchedPlayer())).getBookshelf(), livingBoardController.otherBookshelf);
                     });
@@ -576,18 +595,20 @@ public class GUI extends Observable implements View{
             case PICKING_TILES -> {
                 if (this.client.getNickname().equals(game.getCurrentPlayer().getName())) {
                     System.out.println("arrivato a " + this.client.getNickname());
-                    Platform.runLater(()->{
+                    Platform.runLater(() -> {
                         livingBoardController.updateLivingRoomBoard(game.getLivingRoomBoard());
                         livingBoardController.updateTilePack(game.getTilePack());
                         livingBoardController.resetColumnChoice();
                     });
-                }
-                else {
-                    Platform.runLater(()->
-                        livingBoardController.updateLivingRoomBoard(game.getLivingRoomBoard()));
-                        showPopup(game.getCurrentPlayer().getName() + "is picking Tiles");
+                } else {
+                    Platform.runLater(() ->
+                            livingBoardController.updateLivingRoomBoard(game.getLivingRoomBoard()));
+                    showPopup(game.getCurrentPlayer().getName() + "is picking Tiles");
                 }
                 // forse per noi questo caso è inutile
+            }
+            case TILE_PACK, COLUMN_CHOICE, BOOKSHELF -> {
+                break;
             }
             case LAST_TURN -> {
                 if (this.client.getNickname().equals(game.getCurrentPlayer().getName())) {
@@ -595,15 +616,95 @@ public class GUI extends Observable implements View{
                 } else {
                     showPopup("\n" + eventMessage.getNickname() + " filled his bookshelf...");
                 }
+
             }
             case END_GAME -> {
-                if (eventMessage.getNickname().equals(this.client.getNickname())) {
-                    Platform.runLater(() -> showPopup("You won"));
+                try {
+                    URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/win_scene.fxml/").toURI().toURL();
+                    FXMLLoader fxmlLoader = new FXMLLoader(url);
+                    scene = new Scene(fxmlLoader.load());
+                    WinController winController = fxmlLoader.getController();
+                    winController.setGui(this);
+                    this.winController = winController;
+                    Platform.runLater(() -> stage.setScene(scene));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
-                Platform.runLater(() -> showPopup(eventMessage.getNickname() + " won"));
+                int scoreOfThisClient=0;
+                for(PlayerView player:game.getSubscribers()){
+                    if(player.getName().equals(this.client.getNickname())){
+                        scoreOfThisClient= player.getScore();
+                        break;
+                    }
+                }
+                // setto il punteggio di tutti tanto arriva a tutti il messaggio
+                winController.myscoretext.setText("YOUR  FINAL SCORE IS           " + scoreOfThisClient);
+
+                if (eventMessage.getNickname().equals(this.client.getNickname())) {
+                    winController.fail_1.setVisible(false);
+                    winController.fail_2.setVisible(false);
+                    winController.fail_3.setVisible(false);
+                    winController.fail_4.setVisible(false);
+                    winController.congratulations.setText("Congratulations "+ eventMessage.getNickname() +"!");
+
+
+                    // Platform.runLater(() -> showPopup("You won"));
+                    System.out.println(eventMessage.getNickname() + "win the game");
+                } else {
+                    winController.bestplayer.setVisible(false);
+                    winController.congratulations.setVisible(false);
+                    winController.YouWonTheGame.setVisible(false);
+                    winController.lost.setVisible(true);
+                    winController.lost.setText("Sorry " +client.getNickname()+"...... you lost");
+                    winController.DontGiveUp.setVisible(true);
+                    winController.willBeBetter.setVisible(true);
+                    Platform.runLater(() -> showPopup(eventMessage.getNickname() + " won"));
+                }
+
+                if (game.getNumberOfPlayers().equals(NumberOfPlayers.THREE_PLAYERS) || game.getNumberOfPlayers().equals(NumberOfPlayers.FOUR_PLAYERS)) {
+                    winController.lineone.setVisible(true);
+                    winController.thirdPlayerscoretxt.setVisible(true);
+                    winController.viewD_3player.setVisible(true);
+                    if (game.getNumberOfPlayers().equals(NumberOfPlayers.FOUR_PLAYERS)) {
+                        winController.linetwo.setVisible(true);
+                        winController.FourthPlayerScoretxt.setVisible(true);
+                        winController.viewD_4player.setVisible(true);
+                    }
+                }
+
+                PlayerView playerreal=null;
+
+
+
+                for (PlayerView player : game.getSubscribers()) {
+                    if (this.client.getNickname().equals(player.getName())) {
+                        playerreal=player;
+                        break; // quindi metodo che mi ritorna il giocatore associato a questo client e poi costruisco una lista senza quel giocatore.
+
+                    }
+                }
+
+
+                    System.out.println(" il giocatore a cui mi sono bloccata è "+playerreal.getName());
+                    for (int i = 0; i < game.otherPlayersList(playerreal).size(); i++) {
+                        if (i == 0) { // 2 giocatori1
+                            winController.secondPlayeRScoretxt.setText(game.otherPlayersList(playerreal).get(0).getName() + "'s score is:  " + game.otherPlayersList(playerreal).get(0).getScore());
+                        } else if (i == 1) { // 3 giocatori
+                            winController.thirdPlayerscoretxt.setText(game.otherPlayersList(playerreal).get(1).getName() + "'s score is:  " + game.otherPlayersList(playerreal).get(1).getScore());
+                        } else if (i == 2) {
+                            winController.FourthPlayerScoretxt.setText(game.otherPlayersList(playerreal).get(2).getName() + "'s score is:  " + game.otherPlayersList(playerreal).get(2).getScore());
+                        }
+                    }
+
+                }
+
+
             }
         }
-    }
+
+
+
+
 
 
 
@@ -629,5 +730,20 @@ public class GUI extends Observable implements View{
     public static Scene getActiveScene() {return activeScene;}
     public static double getWidth() {return width;}
     public static double getHeight() {return height;}
+
+    public void showThisClientScores() {
+        try {
+            URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/computeScore_scene.fxml/").toURI().toURL();
+            FXMLLoader fxmlLoader = new FXMLLoader(url);
+            scene = new Scene(fxmlLoader.load());
+            WinController winController = fxmlLoader.getController();
+            winController.setGui(this);
+            this.winController = winController;
+            Platform.runLater(() -> stage.setScene(scene));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 
 }

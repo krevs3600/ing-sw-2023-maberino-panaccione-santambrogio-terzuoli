@@ -14,46 +14,41 @@
     <children>
         <AnchorPane prefHeight="200.0" prefWidth="200.0">
             <children>
-                <Label layoutX="77.0" layoutY="1.0" prefHeight="82.0" prefWidth="1003.0" text="Your Score:   X points " textFill="WHITE">
+                <Label fx:id="myscoretext" layoutX="77.0" layoutY="1.0" prefHeight="82.0" prefWidth="1003.0" text="Your Score:   X points" textFill="WHITE">
                     <font>
-                        <Font name="Libian SC Regular" size="48.0" />
+                        <Font name="Libian SC Regular" size="36.0" />
                     </font>
                 </Label>
                 <Separator layoutX="85.0" layoutY="84.0" prefHeight="5.0" prefWidth="1233.0" />
-                <Label layoutX="77.0" layoutY="102.0" prefHeight="82.0" prefWidth="1003.0" text="P1 Score:    X points " textFill="WHITE">
+                <Label fx:id="secondPlayeRScoretxt" layoutX="77.0" layoutY="102.0" prefHeight="82.0" prefWidth="1003.0" text="P1 Score:    X points " textFill="WHITE">
                     <font>
-                        <Font name="Libian SC Regular" size="48.0" />
+                        <Font name="Libian SC Regular" size="36.0" />
                     </font>
                 </Label>
                 <Separator layoutX="94.0" layoutY="176.0" prefHeight="2.0" prefWidth="1220.0" />
-                <Label layoutX="77.0" layoutY="181.0" prefHeight="82.0" prefWidth="1003.0" text="P2 Score:   X points " textFill="WHITE">
+                <Label fx:id="thirdPlayerscoretxt" layoutX="77.0" layoutY="181.0" prefHeight="82.0" prefWidth="1003.0" text="P2 Score:   X points " textFill="WHITE" visible="false">
                     <font>
-                        <Font name="Libian SC Regular" size="48.0" />
+                        <Font name="Libian SC Regular" size="36.0" />
                     </font>
                 </Label>
-                <Separator layoutX="88.0" layoutY="249.0" prefHeight="8.0" prefWidth="1233.0" />
-                <Label layoutX="77.0" layoutY="260.0" prefHeight="82.0" prefWidth="1003.0" text="P3 Score:   X points " textFill="WHITE">
+                <Separator fx:id="lineone" layoutX="88.0" layoutY="249.0" prefHeight="8.0" prefWidth="1233.0" visible="false" />
+                <Label fx:id="FourthPlayerScoretxt" layoutX="77.0" layoutY="260.0" prefHeight="82.0" prefWidth="1003.0" text="P3 Score:   X points " textFill="WHITE" visible="false">
                     <font>
-                        <Font name="Libian SC Regular" size="48.0" />
+                        <Font name="Libian SC Regular" size="36.0" />
                     </font>
                 </Label>
-                <Separator layoutX="88.0" layoutY="328.0" prefHeight="8.0" prefWidth="1233.0" />
-                <ImageView fx:id="GoBackToYourScore" fitHeight="66.0" fitWidth="63.0" layoutY="8.0" onMouseClicked="#goBackonMyscore">
-                    <image>
-                        <Image url="@../misc/freccia.png" />
-                    </image>
-                </ImageView>
-                <Button fx:id="viewD_1" layoutX="553.0" layoutY="109.0" mnemonicParsing="false" onMouseClicked="#second_p_score" prefHeight="60.0" prefWidth="319.0" text="view detail" textFill="WHITE">
+                <Separator fx:id="linetwo" layoutX="88.0" layoutY="328.0" prefHeight="8.0" prefWidth="1233.0" visible="false" />
+                <Button fx:id="viewD_secondPlayer" layoutX="550.0" layoutY="109.0" mnemonicParsing="false" onMouseClicked="#second_p_score" prefHeight="60.0" prefWidth="319.0" text="view detail" textFill="WHITE">
                     <font>
                         <Font name="Libian SC Regular" size="26.0" />
                     </font>
                 </Button>
-                <Button fx:id="viewD_2" layoutX="554.0" layoutY="185.0" mnemonicParsing="false" onMouseClicked="#second_p_score" prefHeight="60.0" prefWidth="319.0" text="view detail" textFill="WHITE">
+                <Button fx:id="viewD_3player" layoutX="554.0" layoutY="185.0" mnemonicParsing="false" onMouseClicked="#second_p_score" prefHeight="60.0" prefWidth="319.0" text="view detail" textFill="WHITE" visible="false">
                     <font>
                         <Font name="Libian SC Regular" size="26.0" />
                     </font>
                 </Button>
-                <Button fx:id="viewD_3" layoutX="554.0" layoutY="268.0" mnemonicParsing="false" onMouseClicked="#third_p_score" prefHeight="60.0" prefWidth="319.0" text="view detail" textFill="WHITE">
+                <Button fx:id="viewD_4player" layoutX="554.0" layoutY="268.0" mnemonicParsing="false" onMouseClicked="#fourth_p_score" prefHeight="60.0" prefWidth="319.0" text="view detail" textFill="WHITE" visible="false">
                     <font>
                         <Font name="Libian SC Regular" size="26.0" />
                     </font>
@@ -96,17 +91,17 @@
                         <Font name="Libian SC Regular" size="72.0" />
                     </font>
                 </Label>
-                <Label fx:id="lost" layoutX="600.0" layoutY="583.0" prefHeight="107.0" prefWidth="680.0" text="Sorry...you lost! ">
+                <Label fx:id="lost" layoutX="600.0" layoutY="583.0" prefHeight="107.0" prefWidth="680.0" text="Sorry...you lost! " visible="false">
                     <font>
                         <Font name="Libian SC Regular" size="48.0" />
                     </font>
                 </Label>
-                <Label fx:id="DontGiveUp" layoutX="556.0" layoutY="651.0" text="...but don't give up ">
+                <Label fx:id="DontGiveUp" layoutX="556.0" layoutY="651.0" text="...but don't give up " visible="false">
                     <font>
                         <Font name="Libian SC Regular" size="48.0" />
                     </font>
                 </Label>
-                <Label fx:id="willBeBetter" layoutX="436.0" layoutY="690.0" text="it will be better next time!">
+                <Label fx:id="willBeBetter" layoutX="436.0" layoutY="690.0" text="it will be better next time!" visible="false">
                     <font>
                         <Font name="Libian SC Regular" size="72.0" />
                     </font>
@@ -131,6 +126,11 @@
                   <Image url="@../misc/575fcbe20f3561554e346b0e.png" />
                </image>
             </ImageView>
+            <Button fx:id="MyScoreDetail" layoutX="547.0" layoutY="18.0" mnemonicParsing="false" onMouseClicked="#showdetailsofthescore" prefHeight="60.0" prefWidth="319.0" text="view detail" textFill="WHITE">
+               <font>
+                  <Font name="Libian SC Regular" size="26.0" />
+               </font>
+            </Button>
             </children>
         </AnchorPane>
     </children>

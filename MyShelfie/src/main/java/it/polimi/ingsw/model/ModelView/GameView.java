@@ -13,6 +13,8 @@ public class GameView implements Serializable {
     private final String id;
     private final PersonalGoalCardDeckView personalGoalCardDeckView;
     private final List<PlayerView> subscribers;
+
+    private List<PlayerView> subscribersWithoutCurrent=new ArrayList<>();
     private final LivingRoomBoardView livingRoomBoardView;
     private final NumberOfPlayers numberOfPlayers;
     private final int cursor;
@@ -58,6 +60,16 @@ public class GameView implements Serializable {
 
     public NumberOfPlayers getNumberOfPlayers () {
         return this.numberOfPlayers;
+    }
+
+    public List<PlayerView> otherPlayersList(PlayerView player) {
+        for (PlayerView oplayer : subscribers) {
+            if(!oplayer.getName().equals(player.getName())){
+                subscribersWithoutCurrent.add(oplayer);
+            }
+
+        }
+        return  subscribersWithoutCurrent;
     }
 
     public int getCursor () {
