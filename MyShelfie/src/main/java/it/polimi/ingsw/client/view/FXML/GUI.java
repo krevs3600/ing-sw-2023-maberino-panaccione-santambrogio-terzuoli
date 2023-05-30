@@ -334,7 +334,7 @@ public class GUI extends Observable implements View{
                         gameNameListController.setGui(this);
                         this.gameNameListController = gameNameListController;
                         this.gameNameListController.setCurrentLobbyGameNames(((JoinGameResponseMessage) message).getAvailableGamesInLobby());
-
+                        gameNameListController.initialize();
                         Platform.runLater(() -> stage.setScene(scene));
                     } catch (IOException e) {
                         throw new RuntimeException(e);
@@ -493,6 +493,7 @@ public class GUI extends Observable implements View{
                 }
                 else {
                     Platform.runLater(()-> {
+                        livingBoardController.updateLivingRoomBoard(game.getLivingRoomBoard());
                         livingBoardController.tilePack.setDisable(true);
                         livingBoardController.resetColumnChoice();
                         showPopup("NEW TURN HAS JUST STARTED");
@@ -511,12 +512,6 @@ public class GUI extends Observable implements View{
                         livingBoardController.board.setDisable(false);
                         livingBoardController.disableColumnChoice();
                     });
-                    //salva per vedere se sono gli stessi
-
-                    // todo ricontrollare questo pop up non mi sembra che compaia
-
-                    // todo : farei un do-while fin quando la carta non è cliccata mettere un
-                    //  timer che fa scadere il turno se non è cliccata entro 3 minuti tipo
 
                 } else {
                     Platform.runLater(() -> {
@@ -593,9 +588,6 @@ public class GUI extends Observable implements View{
                         showPopup(game.getCurrentPlayer().getName() + "is picking Tiles");
                 }
                 // forse per noi questo caso è inutile
-            }
-            case TILE_PACK, COLUMN_CHOICE, BOOKSHELF -> {
-                break;
             }
             case LAST_TURN -> {
                 if (this.client.getNickname().equals(game.getCurrentPlayer().getName())) {

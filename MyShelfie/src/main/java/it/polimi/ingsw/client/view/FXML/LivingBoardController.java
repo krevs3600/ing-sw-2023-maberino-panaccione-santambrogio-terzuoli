@@ -252,7 +252,6 @@ public class LivingBoardController {
                 }
                 imageView.setOnMouseClicked(this::packTileClicked);
             } else {
-                imageView.setOnMouseClicked(null);
                 imageView.setImage(null);
             }
         }
@@ -271,7 +270,6 @@ public class LivingBoardController {
                     }
                 }
                 else {
-                    imageView.setOnMouseClicked(null);
                     imageView.setImage(null);
                 }
             }
@@ -299,13 +297,15 @@ public class LivingBoardController {
 
     public void boardTileClicked(MouseEvent event){
             ImageView sourceImageView = (ImageView) event.getSource();
-            for (int i=0; i<board.getChildren().size(); i++){
-                if (board.getChildren().get(i).equals(sourceImageView)){
-                    int r = i/9;
-                    int c = i%9;
-                    System.out.println(nickname + "board clicked in " + r + " " + c);
-                    Platform.runLater(()->this.gui.chosenPosition(r,c));
-                    break;
+            if (sourceImageView.getImage() != null){
+                for (int i=0; i<board.getChildren().size(); i++){
+                    if (board.getChildren().get(i).equals(sourceImageView)){
+                        int r = i/9;
+                        int c = i%9;
+                        System.out.println(nickname + "board clicked in " + r + " " + c);
+                        Platform.runLater(()->this.gui.chosenPosition(r,c));
+                        break;
+                    }
                 }
             }
         }
