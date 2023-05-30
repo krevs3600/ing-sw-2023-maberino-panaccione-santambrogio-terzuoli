@@ -429,7 +429,10 @@ public class GUI extends Observable implements View {
             }
             case PLAYER_OFFLINE, KILL_GAME, DISCONNECTION_RESPONSE -> {
             }
+            case FIRSTCOMMONGOAL -> {}
+            case SECONDCOMMONGOAL -> {}
         }
+
     }
 
 

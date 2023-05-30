@@ -2,16 +2,17 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.CommonGoalCard.CommonGoalCard;
-import it.polimi.ingsw.model.ModelView.LivingRoomBoardView;
 import it.polimi.ingsw.model.utils.GamePhase;
 import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.model.utils.TileType;
 import it.polimi.ingsw.network.Client;
+import it.polimi.ingsw.network.MessagesToClient.requestMessage.FirstCommonGoalMessage;
 import it.polimi.ingsw.network.MessagesToClient.errorMessages.IllegalTilePositionErrorMessage;
 import it.polimi.ingsw.network.MessagesToClient.errorMessages.NotEnoughInsertableTilesErrorMessage;
 import it.polimi.ingsw.network.MessagesToClient.errorMessages.NotEnoughInsertableTilesInColumnErrorMessage;
 import it.polimi.ingsw.network.MessagesToClient.errorMessages.UpperBoundTilePackErrorMessage;
 import it.polimi.ingsw.network.MessagesToClient.requestMessage.PlayerJoinedLobbyMessage;
+import it.polimi.ingsw.network.MessagesToClient.requestMessage.SecondCommonGoalMessage;
 import it.polimi.ingsw.network.MessagesToClient.requestMessage.WaitingResponseMessage;
 import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.network.eventMessages.*;
@@ -211,7 +212,9 @@ public class GameController {
             }
 
             case END_TURN -> {
-                computeScoreMidGame();
+                computeScoreMidGame(client);
+
+
 
                 if(game.isFinalTurn()) {
                     // game is ended
@@ -339,10 +342,10 @@ public class GameController {
      * In particular, the score is updated every time the player receives a scoring token
      * @return int It returns the updated score of the player
      */
-    private void computeScoreMidGame(){
+    private void computeScoreMidGame(Client client) throws IOException {
         List<CommonGoalCard> commonGoalCards = game.getLivingRoomBoard().getCommonGoalCards();
         for(CommonGoalCard card : commonGoalCards) {
-            Player currentPlayer = game.getCurrentPlayer();
+           Player currentPlayer = game.getCurrentPlayer();
             if (card.toBeChecked(currentPlayer.getBookshelf())) {
                 if(card.CheckPattern(currentPlayer.getBookshelf())){
                     //ScoringToken tempToken = card.getStack().pop();
@@ -350,10 +353,14 @@ public class GameController {
                     if(card.equals(commonGoalCards.get(0)) && !currentPlayer.isFirstCommonGoalAchieved()) {
                         game.setPlayerScore(card.getStack().pop().getValue(), currentPlayer);
                         currentPlayer.hasAchievedFirstGoal();
+                        client.onMessage(new FirstCommonGoalMessage(currentPlayer.getName()));
+
+
                     }
                     if(card.equals(commonGoalCards.get(1)) && !currentPlayer.isSecondCommonGoalAchieved()) {
                         game.setPlayerScore(card.getStack().pop().getValue(), currentPlayer);
                         currentPlayer.hasAchievedSecondGoal();
+                        client.onMessage(new SecondCommonGoalMessage((currentPlayer.getName())));
                     }
                 }
             }
