@@ -48,7 +48,7 @@
                         <Insets bottom="20.0" />
                     </VBox.margin>
                 </Label>
-            <ScrollPane fx:id="scrollPane" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="249.0" prefWidth="418.0" style="-fx-background-color: transparent;;">
+            <ScrollPane fx:id="scrollPane" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="247.0" prefWidth="418.0" style="-fx-background-color: transparent;;">
                <content>
                   <VBox fx:id="games" prefHeight="307.0" prefWidth="396.0" style="-fx-background-color: transparent;;" />
                </content>
