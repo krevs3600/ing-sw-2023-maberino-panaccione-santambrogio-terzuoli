@@ -5,7 +5,6 @@ import it.polimi.ingsw.model.ScoringToken;
 import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.model.utils.SpaceType;
 import it.polimi.ingsw.model.utils.TileType;
-import it.polimi.ingsw.network.eventMessages.CommonGoalCardMessage;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
@@ -24,40 +23,101 @@ import java.io.IOException;
 import java.util.*;
 
 public class LivingBoardController {
+    /**
+    * JavaFX GridPane with dimensions 9x9 representing the board
+    */
     @FXML
     public GridPane board;
+
+    /**
+     * JavaFX Group containing 3 ImageView for the tiles of the tilePack
+     */
     @FXML
     public Group tilePack;
+
+    /**
+     * JavaFX Group containing 5 buttons for the selection of the bookshelf's column
+     */
     @FXML
     public Group columnButtons;
+
+    /**
+     * JavaFX GridPane containing 6x5 ImageView for the tiles of the bookshelf
+     */
     @FXML
     public GridPane bookshelf;
-    @FXML
-    public ImageView tokenCommonCard1;
-    @FXML
-    public ImageView tokenCommonCard2;
-    @FXML
-    public AnchorPane playerBookshelves;
-    @FXML
-    public ImageView personalCard;
-    @FXML
-    public ImageView commonGoalCard1;
-    @FXML
-    public ImageView commonGoalCard2;
-    @FXML
-    public ImageView seatToken;
+    /**
+     * JavaFX GridPane containing 6x5 ImageView for the tiles of the other player's bookshelf
+     */
     @FXML
     public GridPane otherBookshelf;
+
+    /**
+     * JavaFX ImageView showing the first available token to be assigned for the completion of the first common goal
+     */
+    @FXML
+    public ImageView tokenCommonCard1;
+    /**
+     * JavaFX ImageView showing the first available token to be assigned for the completion of the second common goal
+     */
+    @FXML
+    public ImageView tokenCommonCard2;
+
+    /**
+     * AnchorPane element
+     */
+    @FXML
+    public AnchorPane playerBookshelves;
+    /**
+     * JavaFX ImageView showing the personalGoalCard
+     */
+    @FXML
+    public ImageView personalCard;
+    /**
+     * JavaFX ImageView for visualizing the first commonGoalCard
+     */
+    @FXML
+    public ImageView commonGoalCard1;
+
+    /**
+     * JavaFX ImageView for visualizing the second commonGoalCard
+     */
+    @FXML
+    public ImageView commonGoalCard2;
+    /**
+     * JavaFX ImageView for the first player seat
+     */
+    @FXML
+    public ImageView seatToken;
+
+    /**
+     * JavaFX Button for navigating backward between players
+     */
     @FXML
     public Button previousPlayer;
+
+    /**
+     * JavaFX Button for navigating forward between players
+     */
     @FXML
     public Button nextPlayer;
+    /**
+     * JavaFX Button containing the name of the current player's bookshelf
+     */
     @FXML
     public Button playerBookshelf;
+
     @FXML
     public Label OtherPlayerTurnLabel;
+    /**
+     * JavaFX ImageView for assigning the token for the completion of the first common goal
+     */
     @FXML
     ImageView tokenCommonGoalCard1;
+
+    /**
+     * JavaFX ImageView for assigning the token for the completion of the secondo common goal
+     */
     @FXML
     ImageView tokenCommonGoalCard2;
 
@@ -65,33 +125,61 @@ public class LivingBoardController {
     @FXML
     public AnchorPane anchorPaneForTheCandPGoalCards;
 
+    /**
+     * Boolean to keep track of the selection of the bookshelf's column
+     */
     private boolean columnSelected = false;
+    /**
+     * Nickname of the player
+     */
     private String nickname;
+    /**
+     * Reference to the current view/gui
+     */
     private GUI gui;
-    private Map<TileType, String[]> images = new HashMap<>();
+    /**
+     * Player index according to the order of the subscribers' list in game
+     */
     private int personalGameIndex;
 
-    public int getWatchedPlayer() {
-        return watchedPlayer;
-    }
-
+    /**
+     * Enemy's index according to the order of the subscribers' list in game
+     */
     private int watchedPlayer;
 
-    public Map<Integer, String> getPlayers() {
-        return players;
-    }
 
+    /**
+     * Map to link player's index to its name
+     */
     private Map<Integer, String> players = new HashMap<>();
+    /**
+     * Internal copy of the GameView
+     */
     private GameView gameView;
 
+    /**
+     * Setter to save a copy of the GameView whenever is needed
+     * @param gameView GameView
+     */
     public void setGameView(GameView gameView){
         this.gameView = gameView;
     }
 
+    /**
+     * Given an ItemTile it return its graphical representation's path
+     * @param itemTile ItemTile
+     * @return image's path of the ItemTile
+     */
     private static String tilePath(ItemTile itemTile){
         String path = "src/main/resources/it/polimi/ingsw/client/view/itemtiles/";
         return path.concat(itemTile.getType().toString()).concat("1.").concat(itemTile.getImageIndex()).concat(".png");
     }
+
+    /**
+     * Operations to load and set graphical elements for the livingBoard_scene
+     * @param gameView gameView
+     * @param nickname player's nickname
+     */
     public void initialize(GameView gameView, String nickname) {
         setGameView(gameView);
         this.nickname = nickname;
@@ -187,9 +275,11 @@ public class LivingBoardController {
 
     }
 
-    public static void initCommonGoalCards(){
-
-    }
+    /**
+     * Method to calculate the index of the player wrt the list of subscribers of the game
+     * @param gameView gameView
+     * @return int the index of the player
+     */
     private int getPersonalGameIndex(GameView gameView) {
         for(int i=0; i<gameView.getSubscribers().size(); i++){
             if(gameView.getSubscribers().get(i).getName().equals(nickname)){
@@ -200,12 +290,20 @@ public class LivingBoardController {
         return personalGameIndex;
     }
 
+    /**
+     * Initialize ImageViews of the tilePack in the tilePack group
+     */
     private void initTilePack(){
         for (Node node : tilePack.getChildren()){
             ImageView imageView = (ImageView) node;
             imageView.setOnMouseClicked(null);
         }
     }
+
+    /**
+     * Initialize ImageViews of the bookshelf in the gridPane
+     * @param bookshelfGrid gridPane
+     */
     public static void initBookshelf(GridPane bookshelfGrid){
         for(int r=0;r<bookshelfGrid.getRowCount(); r++){
             for (int c=0; c<bookshelfGrid.getColumnCount(); c++){
@@ -219,6 +317,11 @@ public class LivingBoardController {
         }
     }
 
+    /**
+     * Load the current tiles' displacement of the provided bookshelf in the gridPane
+     * @param bookshelf player's bookshelf
+     * @param bookshelfGrid JavaFX gridPane
+     */
     public static void updateBookshelf(BookshelfView bookshelf, GridPane bookshelfGrid) {
         initBookshelf(bookshelfGrid);
         for(int r=0;r<bookshelfGrid.getRowCount(); r++){
@@ -240,6 +343,10 @@ public class LivingBoardController {
         }
     }
 
+    /**
+     * Load the current tilePack's tiles
+     * @param tilePackView tilePack
+     */
     public void updateTilePack(TilePackView tilePackView)  {
         initTilePack();
         for (int i=0; i<3; i++){
@@ -257,6 +364,10 @@ public class LivingBoardController {
         }
     }
 
+    /**
+     * Load the current tiles' displacement in the board
+     * @param livingRoomBoardView board
+     */
     public void updateLivingRoomBoard(LivingRoomBoardView livingRoomBoardView) {
         for (int r=0; r<9; r++){
             for (int c=0; c<9; c++){
@@ -276,6 +387,10 @@ public class LivingBoardController {
         }
     }
 
+    /**
+     * On mouse event notify through insertInColumn() that the tile with index i has to be inserted in the bookshelf
+     * @param event
+     */
     private void packTileClicked(MouseEvent event) {
         if (columnSelected){
             ImageView sourceImageView = (ImageView) event.getSource();
@@ -287,6 +402,10 @@ public class LivingBoardController {
         }
     }
 
+    /**
+     * On mouse event notify through chosenPosition() that a tile in position (r,c) has been clicked
+     * @param event
+     */
     public void boardTileClicked(MouseEvent event){
             ImageView sourceImageView = (ImageView) event.getSource();
             if (sourceImageView.getImage() != null){
@@ -302,8 +421,11 @@ public class LivingBoardController {
             }
         }
 
-
-    public void changeBookshelf(MouseEvent event) throws FileNotFoundException {
+    /**
+     * On mouse event changes the player's bookshelf to observe
+     * @param event
+     */
+    public void changeBookshelf(MouseEvent event) {
         if (event.getSource().equals(nextPlayer)){
             if (watchedPlayer < players.size()-1){
                 watchedPlayer +=1;
@@ -334,10 +456,19 @@ public class LivingBoardController {
         }
     }
 
+    /**
+     * Setter to have a reference to the view
+     * @param gui reference to the view
+     */
     public void setGui(GUI gui){
         this.gui = gui;
     }
 
+    /**
+     * Method to get the correct image's path for the card
+     * @param card CommonGoalCard whose image needs to be retrieved
+     * @return String image's path to the correct representation of the commonGoalCard
+     */
     public static String getCommonGoalCardPic(CommonGoalCardView card){
         String path = "src/main/resources/it/polimi/ingsw/client/view/common goal cards/";
         switch (card.getType()) {
@@ -383,6 +514,10 @@ public class LivingBoardController {
         }
     }
 
+    /**
+     * Set the column where the player wants to insert the tilePack's tiles and send an eventMessage through stopPickingTiles()
+     * @param event
+     */
     public void insertInColumn(MouseEvent event){
         Button column = (Button) event.getSource();
         int i = 0;
@@ -399,6 +534,9 @@ public class LivingBoardController {
         }
     }
 
+    /**
+     * Reset the selection of the buttons for the column's selection
+     */
     public void resetColumnChoice() {
         for (Node node : columnButtons.getChildren()){
             Button button = (Button) node;
@@ -408,6 +546,9 @@ public class LivingBoardController {
         columnSelected = false;
     }
 
+    /**
+     * Makes the button for the column's selection unavailable
+     */
     public void disableColumnChoice(){
         for (Node node : columnButtons.getChildren()){
             Button button = (Button) node;
@@ -416,6 +557,11 @@ public class LivingBoardController {
         columnSelected = false;
     }
 
+    /**
+     * Method used to update ImageViews when a common goal is achieved
+     * @param gameView
+     * @param commonGoalCardIndex
+     */
     public void updateTokens(GameView gameView, int commonGoalCardIndex) {
         Stack<ScoringToken> oldStack = gameView.getLivingRoomBoard().getCommonGoalCards().get(commonGoalCardIndex).getStack();
         String path = "src/main/resources/it/polimi/ingsw/client/view/scoring tokens/scoring_";
@@ -447,6 +593,22 @@ public class LivingBoardController {
                     tokenCommonGoalCard2.setImage(poppedToken);
             }
         }
+    }
+
+    /**
+     * Getter for watchedPlayer
+     * @return int Return the index of the player whose bookshelf is being observed
+     */
+    public int getWatchedPlayer() {
+        return watchedPlayer;
+    }
+
+    /**
+     * Getter for map players
+     * @return Map<Integer, String> Returns a map with as key the index of the player and value the name of the player
+     */
+    public Map<Integer, String> getPlayers() {
+        return players;
     }
 }
 
