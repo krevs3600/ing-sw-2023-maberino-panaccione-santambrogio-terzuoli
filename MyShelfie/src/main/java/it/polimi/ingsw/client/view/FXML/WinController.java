@@ -6,15 +6,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-import javafx.scene.Node;
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
 
 
 public class WinController {
@@ -109,7 +100,7 @@ public class WinController {
     private GUI gui;
 
 
-    public void goBackonMyscore(MouseEvent mouseEvent) {
+    public void goBackOnMyScore(MouseEvent mouseEvent) {
 
     }
 
@@ -126,7 +117,7 @@ public class WinController {
 
     }
 
-    public void showdetailsofthescore(MouseEvent mouseEvent) {
+    public void showDetailsOfTheScore(MouseEvent mouseEvent) {
         gui.showThisClientScores();
 
     }

@@ -351,16 +351,19 @@ public class GameController {
                     //ScoringToken tempToken = card.getStack().pop();
                     //score+=tempToken.getValue();
                     if(card.equals(commonGoalCards.get(0)) && !currentPlayer.isFirstCommonGoalAchieved()) {
-                        game.setPlayerScore(card.getStack().pop().getValue(), currentPlayer);
+                        Stack<ScoringToken> oldStack = commonGoalCards.get(0).getStack();
+                        int value = game.popCommonGoalCardStack(0);
+                        game.setPlayerScore(value, currentPlayer);
                         currentPlayer.hasAchievedFirstGoal();
-                        client.onMessage(new FirstCommonGoalMessage(currentPlayer.getName()));
-
-
+                        // client.onMessage(new FirstCommonGoalMessage(currentPlayer.getName()));
                     }
                     if(card.equals(commonGoalCards.get(1)) && !currentPlayer.isSecondCommonGoalAchieved()) {
                         game.setPlayerScore(card.getStack().pop().getValue(), currentPlayer);
+                        int value = game.popCommonGoalCardStack(1);
+                        game.setPlayerScore(value, currentPlayer);
+                        currentPlayer.hasAchievedFirstGoal();
                         currentPlayer.hasAchievedSecondGoal();
-                        client.onMessage(new SecondCommonGoalMessage((currentPlayer.getName())));
+                        // client.onMessage(new SecondCommonGoalMessage((currentPlayer.getName())));
                     }
                 }
             }

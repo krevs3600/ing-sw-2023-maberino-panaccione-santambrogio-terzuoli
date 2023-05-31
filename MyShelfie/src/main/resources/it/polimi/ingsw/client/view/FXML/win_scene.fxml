@@ -126,7 +126,7 @@
                   <Image url="@../misc/575fcbe20f3561554e346b0e.png" />
                </image>
             </ImageView>
-            <Button fx:id="MyScoreDetail" layoutX="547.0" layoutY="18.0" mnemonicParsing="false" onMouseClicked="#showdetailsofthescore" prefHeight="60.0" prefWidth="319.0" text="view detail" textFill="WHITE">
+            <Button fx:id="MyScoreDetail" layoutX="547.0" layoutY="18.0" mnemonicParsing="false" onMouseClicked="#showDetailsOfTheScore" prefHeight="60.0" prefWidth="319.0" text="view detail" textFill="WHITE">
                <font>
                   <Font name="Libian SC Regular" size="26.0" />
                </font>

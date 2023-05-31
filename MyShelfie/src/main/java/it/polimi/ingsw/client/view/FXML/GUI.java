@@ -429,8 +429,6 @@ public class GUI extends Observable implements View {
             }
             case PLAYER_OFFLINE, KILL_GAME, DISCONNECTION_RESPONSE -> {
             }
-            case FIRSTCOMMONGOAL -> {}
-            case SECONDCOMMONGOAL -> {}
         }
 
     }
@@ -547,39 +545,14 @@ public class GUI extends Observable implements View {
                 }
             }
 
-            //  showPopup("It's " + eventMessage.getNickname() + "'s turn\n"); adesso lo indica nel board turn il turno dell'altra persona
-
-
-            // adessso questo metodo dovrebbe essere inutile perchè appena sceglie la colonna se è giusta va nel placing Tiles
-
-            //in questo caso appena preme il bottone della colonna passa all'inserimento nella Bookshelf
-            // case TILE_PACK -> {
-            //     livingBoardController.tilePack.setDisable(false);
-            //     TilePackMessage tilePackMessage = (TilePackMessage) eventMessage;
-            //     livingBoardController.setGameView(game);
-            //
-            //     Platform.runLater(() -> {
-            //         try {
-            //             livingBoardController.setGameView(game);
-            //             livingBoardController.updateLivingRoomBoard(game.getLivingRoomBoard());
-            //             if (activeTurn) {
-            //                 livingBoardController.updateTilePack(game.getTilePack());
-            //                 livingBoardController.resetColumnChoice();
-            //             }
-            //         } catch (FileNotFoundException e) {
-            //             throw new RuntimeException(e);
-            //         }
-            //     });
-            // }
-
             // va in questo case se nella colonna inserita c'è abbastanza spazio per inserire le tiles.
             case PLACING_TILES -> { // poi ogni volta che seleziona una carta il Item tile indexMessage lo riporta qui
                 livingBoardController.tilePack.setDisable(false);
                 if (this.client.getNickname().equals(game.getCurrentPlayer().getName())) {
                     Platform.runLater(() -> {
                         livingBoardController.updateTilePack(game.getTilePack());
-                        livingBoardController.updateBookshelf(game.getCurrentPlayer().getBookshelf(), livingBoardController.bookshelf);
-                        livingBoardController.updateBookshelf(game.getPlayer(livingBoardController.getPlayers().get(livingBoardController.getWatchedPlayer())).getBookshelf(), livingBoardController.otherBookshelf);
+                        LivingBoardController.updateBookshelf(game.getCurrentPlayer().getBookshelf(), livingBoardController.bookshelf);
+                        LivingBoardController.updateBookshelf(game.getPlayer(livingBoardController.getPlayers().get(livingBoardController.getWatchedPlayer())).getBookshelf(), livingBoardController.otherBookshelf);
                         livingBoardController.setGameView(game);
                     });
                     if (game.getTilePack().getTiles().size() > 0) {
@@ -590,7 +563,7 @@ public class GUI extends Observable implements View {
                     }
                 } else {
                     Platform.runLater(() -> {
-                        livingBoardController.updateBookshelf(game.getPlayer(livingBoardController.getPlayers().get(livingBoardController.getWatchedPlayer())).getBookshelf(), livingBoardController.otherBookshelf);
+                        LivingBoardController.updateBookshelf(game.getPlayer(livingBoardController.getPlayers().get(livingBoardController.getWatchedPlayer())).getBookshelf(), livingBoardController.otherBookshelf);
                     });
                 }
             }
@@ -608,10 +581,22 @@ public class GUI extends Observable implements View {
                             livingBoardController.updateLivingRoomBoard(game.getLivingRoomBoard()));
                     showPopup(game.getCurrentPlayer().getName() + "is picking Tiles");
                 }
-                // forse per noi questo caso è inutile
             }
             case TILE_PACK, COLUMN_CHOICE, BOOKSHELF -> {
                 break;
+            }
+            case COMMON_GOAL_CARD -> {
+                CommonGoalCardMessage message = (CommonGoalCardMessage) eventMessage;
+                System.out.println("Received message goalcard message");
+                Platform.runLater(()->{
+                    livingBoardController.updateTokens(game, message.getCommonGoalCardIndex());
+                    String number = message.getCommonGoalCardIndex() == 0 ? "first" : "second";
+                    if (eventMessage.getNickname().equals(nickname)){
+                        showPopup("You completed the " + number + " common goal");
+                    } else {
+                        showPopup(eventMessage.getNickname() + " completed the " + number + " common goal");
+                    }
+                });
             }
             case LAST_TURN -> {
                 if (this.client.getNickname().equals(game.getCurrentPlayer().getName())) {
@@ -619,7 +604,6 @@ public class GUI extends Observable implements View {
                 } else {
                     showPopup("\n" + eventMessage.getNickname() + " filled his bookshelf...");
                 }
-
             }
             case END_GAME -> {
                 try {

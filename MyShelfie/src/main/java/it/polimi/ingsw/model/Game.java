@@ -142,6 +142,13 @@ public class Game extends Observable<EventMessage> {
         notifyObservers(new WinGameMessage(new PlayerView(winner)));
         // maybe call to a method to show results
     }
+    public int popCommonGoalCardStack(int commonGoalCardIndex){
+        CommonGoalCard card = getCommonGoalCards().get(commonGoalCardIndex);
+        Stack<ScoringToken> tokens = (Stack<ScoringToken>) card.getStack().clone();
+        setChanged();
+        notifyObservers(new CommonGoalCardMessage(getCurrentPlayer().getName(), card, commonGoalCardIndex));
+        return card.getStack().pop().getValue();
+    }
 
     /**
      * This method gets the current Player

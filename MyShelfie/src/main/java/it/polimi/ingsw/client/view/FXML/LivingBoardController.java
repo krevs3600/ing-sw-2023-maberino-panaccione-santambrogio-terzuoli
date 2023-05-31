@@ -1,9 +1,11 @@
 package it.polimi.ingsw.client.view.FXML;
 import it.polimi.ingsw.model.ItemTile;
 import it.polimi.ingsw.model.ModelView.*;
+import it.polimi.ingsw.model.ScoringToken;
 import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.model.utils.SpaceType;
 import it.polimi.ingsw.model.utils.TileType;
+import it.polimi.ingsw.network.eventMessages.CommonGoalCardMessage;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
@@ -15,7 +17,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -25,49 +26,26 @@ import java.util.*;
 public class LivingBoardController {
     @FXML
     public GridPane board;
-
     @FXML
     public Group tilePack;
-
     @FXML
     public Group columnButtons;
-
     @FXML
     public GridPane bookshelf;
-
     @FXML
-    public ImageView First_2;
-
+    public ImageView tokenCommonCard1;
     @FXML
-    public ImageView First_4;
-
-    @FXML
-    public ImageView First_6;
-
-    @FXML
-    public ImageView First_8;
-
-    @FXML
-    public ImageView Second_2;
-    @FXML
-    public ImageView Second_4;
-
-    @FXML
-    public ImageView Second_6;
-
-    @FXML
-    public ImageView Second_8;
-
+    public ImageView tokenCommonCard2;
     @FXML
     public AnchorPane playerBookshelves;
-
     @FXML
     public ImageView personalCard;
-
     @FXML
     public ImageView commonGoalCard1;
     @FXML
     public ImageView commonGoalCard2;
+    @FXML
+    public ImageView seatToken;
     @FXML
     public GridPane otherBookshelf;
     @FXML
@@ -78,11 +56,14 @@ public class LivingBoardController {
     public Button playerBookshelf;
     @FXML
     public Label OtherPlayerTurnLabel;
+    @FXML
+    ImageView tokenCommonGoalCard1;
+    @FXML
+    ImageView tokenCommonGoalCard2;
 
-    private int columnForTheInsertion;
 
     @FXML
-    public AnchorPane AnchorPaneforTheCandPgoalcards;
+    public AnchorPane anchorPaneForTheCandPGoalCards;
 
     private boolean columnSelected = false;
     private String nickname;
@@ -107,7 +88,7 @@ public class LivingBoardController {
         this.gameView = gameView;
     }
 
-    private String tilePath(ItemTile itemTile){
+    private static String tilePath(ItemTile itemTile){
         String path = "src/main/resources/it/polimi/ingsw/client/view/itemtiles/";
         return path.concat(itemTile.getType().toString()).concat("1.").concat(itemTile.getImageIndex()).concat(".png");
     }
@@ -118,7 +99,14 @@ public class LivingBoardController {
         for (int i=0; i< gameView.getSubscribers().size(); i++){
             players.put(i, gameView.getSubscribers().get(i).getName());
         }
-
+        // set firstSeatToken
+        if (nickname.equals(gameView.getSubscribers().get(0).getName())){
+            try {
+                seatToken.setImage(new Image(new FileInputStream("src/main/resources/it/polimi/ingsw/client/view/misc/firstplayertoken.png")));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
         // INIT LIVING_ROOM_BOARD
 
         for (int r=0; r<9; r++){
@@ -141,18 +129,28 @@ public class LivingBoardController {
             }
         }
 
-        // INIT TILEPACK
+        // INIT TILE_PACK
         initTilePack();
         updateTilePack(gameView.getTilePack());
-
         // INIT BOOKSHELF
-
         initBookshelf(bookshelf);
         initBookshelf(otherBookshelf);
+        // INIT SCORING TOKENS
+        Stack<ScoringToken> stack = gameView.getLivingRoomBoard().getCommonGoalCards().get(0).getStack();
+        System.out.println(stack);
+        stack.forEach(System.out::println);
+        String resource = "src/main/resources/it/polimi/ingsw/client/view/scoring tokens/scoring_";
+        String initToken = resource.concat(String.valueOf(stack.pop().getValue()) + ".jpg");
+        try{
+            Image image = new Image(new FileInputStream(initToken));
+            tokenCommonCard1.setImage(image);
+            tokenCommonCard2.setImage(image);
+        } catch (FileNotFoundException e){
+            e.printStackTrace();
+        }
 
         // updateBookshelf(gameView.getPlayer(getPlayers().get(personalGameIndex)).getBookshelf(), bookshelf);
         // updateBookshelf(gameView.getPlayer(getPlayers().get(watchedPlayer)).getBookshelf(), otherBookshelf);
-
         if (gameView.getSubscribers().size() == 2){
             nextPlayer.setVisible(false);
             previousPlayer.setVisible(false);
@@ -180,7 +178,6 @@ public class LivingBoardController {
         }
 
         //init common goal card
-
         try {
             commonGoalCard1.setImage(new Image(new FileInputStream(getCommonGoalCardPic(gameView.getLivingRoomBoard().getCommonGoalCards().get(0)))));
             commonGoalCard2.setImage(new Image(new FileInputStream(getCommonGoalCardPic(gameView.getLivingRoomBoard().getCommonGoalCards().get(1)))));
@@ -190,6 +187,9 @@ public class LivingBoardController {
 
     }
 
+    public static void initCommonGoalCards(){
+
+    }
     private int getPersonalGameIndex(GameView gameView) {
         for(int i=0; i<gameView.getSubscribers().size(); i++){
             if(gameView.getSubscribers().get(i).getName().equals(nickname)){
@@ -206,7 +206,7 @@ public class LivingBoardController {
             imageView.setOnMouseClicked(null);
         }
     }
-    public void initBookshelf(GridPane bookshelfGrid){
+    public static void initBookshelf(GridPane bookshelfGrid){
         for(int r=0;r<bookshelfGrid.getRowCount(); r++){
             for (int c=0; c<bookshelfGrid.getColumnCount(); c++){
                 ImageView imageView = new ImageView();
@@ -219,7 +219,7 @@ public class LivingBoardController {
         }
     }
 
-    public void updateBookshelf(BookshelfView bookshelf, GridPane bookshelfGrid) {
+    public static void updateBookshelf(BookshelfView bookshelf, GridPane bookshelfGrid) {
         initBookshelf(bookshelfGrid);
         for(int r=0;r<bookshelfGrid.getRowCount(); r++){
             for (int c=0; c<bookshelfGrid.getColumnCount(); c++){
@@ -284,14 +284,6 @@ public class LivingBoardController {
                     gui.insertTileInColumn(i);
                 }
             }
-            /*
-            for(int r=bookshelf.getRowCount()-1; r>1; r--){
-                ImageView bookshelfImage = (ImageView) bookshelf.getChildren().get(r*5 + column); // TODO: PROVO A CAMBIARE CON column selected
-                if (bookshelfImage.getImage() == null) {
-                    bookshelfImage.setImage(sourceImageView.getImage());
-                    sourceImageView.setImage(null);
-                }
-            }*/
         }
     }
 
@@ -340,11 +332,6 @@ public class LivingBoardController {
             });
 
         }
-    }
-
-
-    public void scoringTokenClicked(MouseEvent event){
-        First_8.setVisible(false);
     }
 
     public void setGui(GUI gui){
@@ -396,36 +383,6 @@ public class LivingBoardController {
         }
     }
 
-    private boolean stopPickingTiles=false;
-    private boolean anotherTile=false;
-
-    public boolean WantStopPickingTiles(){
-        return stopPickingTiles;
-
-    }
-    public boolean WantPickAnotherTile(){
-        return anotherTile;
-
-    }
-
-    public void resetStopPickingTiles(){
-        this.stopPickingTiles=true;
-    }
-
-    public void resetAnotherTile(){
-        this.anotherTile=true;
-    }
-
-    public void StopTiles(MouseEvent mouseEvent) {
-        stopPickingTiles=true;
-    }
-
-    public void AnotherTile(MouseEvent mouseEvent) {
-        anotherTile=true;
-
-
-    }
-
     public void insertInColumn(MouseEvent event){
         Button column = (Button) event.getSource();
         int i = 0;
@@ -433,7 +390,6 @@ public class LivingBoardController {
             if (node.equals(column)){
                 columnSelected = true;
                 int j = i;
-                columnForTheInsertion=j;
                 Platform.runLater(()->this.gui.stopPickingTiles(j));
             }
             else {
@@ -459,5 +415,39 @@ public class LivingBoardController {
         }
         columnSelected = false;
     }
+
+    public void updateTokens(GameView gameView, int commonGoalCardIndex) {
+        Stack<ScoringToken> oldStack = gameView.getLivingRoomBoard().getCommonGoalCards().get(commonGoalCardIndex).getStack();
+        String path = "src/main/resources/it/polimi/ingsw/client/view/scoring tokens/scoring_";
+        String poppedTokenPath = path.concat(String.valueOf(oldStack.pop().getValue()) + ".jpg");
+        Image poppedToken = null;
+        Image nextToken = null;
+        try {
+            poppedToken = new Image(new FileInputStream(poppedTokenPath));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        if (oldStack.size()>0){
+            String nextTokenPath = path.concat(String.valueOf(oldStack.pop().getValue()) + ".jpg");
+            try {
+                nextToken = new Image(new FileInputStream(nextTokenPath));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        // todo: make a group
+        if (commonGoalCardIndex == 0) {
+            tokenCommonCard1.setImage(nextToken);
+            if (gameView.getCurrentPlayer().getName().equals(nickname)){
+                 tokenCommonGoalCard1.setImage(poppedToken);
+            }
+        } else if (commonGoalCardIndex == 1) {
+            tokenCommonCard2.setImage(nextToken);
+            if (gameView.getCurrentPlayer().getName().equals(nickname)){
+                    tokenCommonGoalCard2.setImage(poppedToken);
+            }
+        }
+    }
 }
+
 

@@ -14,9 +14,11 @@ public class CommonGoalCardView implements Serializable {
     private final String getType;
 
     public CommonGoalCardView(CommonGoalCard commonGoalCard){
-        this.stack = commonGoalCard.getStack();
+        Stack<ScoringToken> temp;
         this.toString = commonGoalCard.toString();
         this.getType = commonGoalCard.getType();
+        temp =  (Stack<ScoringToken>) commonGoalCard.getStack().clone();
+        this.stack = temp;
     }
 
 
@@ -26,4 +28,8 @@ public class CommonGoalCardView implements Serializable {
     }
 
     public String getType() {return this.getType;}
+
+    public Stack<ScoringToken> getStack() {
+        return this.stack;
+    }
 }
