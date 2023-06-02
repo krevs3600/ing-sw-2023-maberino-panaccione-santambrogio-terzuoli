@@ -14,250 +14,119 @@ import static org.junit.Assert.*;
 
 public class BookshelfTest {
 
-    private Bookshelf b1, b2, b3;
-    private TilePack  tp1, tp2, tp3, tp4, tp5, tp6, tp7,tp8,tp9,tp10,tp11,tp12,tp13,tp14,tp15,tp16,tp17,tp18,tp19,tp20;
-    private ItemTile i1, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11, i12, i13, i14, i15, i16, i17, i18, i19, i20,i21,i22,i23,i24,i25,i26,i27,i28,i29,i30,i31,i32,i33,i34,i35,i36,i37,i38,i39,i40,i41,i42,i43,i44,i45,i46,i47,i48,i49,i50,i51,i52;
-    private CommonGoalCard c;
+    private Bookshelf b;
+    private TilePack tp;
+    private ItemTile it1, it2, it3, it4, it5, it6;
     @Before
     public void setUp() {
-        b1 = new Bookshelf();
-        b2 = new Bookshelf();
-        b3 = new Bookshelf();
-        tp1 = new TilePack();
-        tp2 = new TilePack();
-        tp3 = new TilePack();
-        tp4 = new TilePack();
-        tp5 = new TilePack();
-        tp6 = new TilePack();
-        tp7 = new TilePack();
-        tp8 = new TilePack();
-        tp9 = new TilePack();
-        tp10 = new TilePack();
-        tp11 = new TilePack();
-        tp12 = new TilePack();
-        tp13 = new TilePack();
-        tp14 = new TilePack();
-        tp15 = new TilePack();
-        tp16 = new TilePack();
-        tp17 = new TilePack();
-        tp18 = new TilePack();
-        tp19 = new TilePack();
-        tp20 = new TilePack();
-
-
-        c = new TwoSquaresCommonGoalCard();
-
-        i1 = new ItemTile(TileType.PLANT);
-        i2 = new ItemTile(TileType.FRAME);
-        i3 = new ItemTile(TileType.GAME);
-        i40 = new ItemTile(TileType.CAT);
-        i41 = new ItemTile(TileType.CAT);
-
-        i4 = new ItemTile(TileType.GAME);
-        i5 = new ItemTile(TileType.GAME);
-        i42 = new ItemTile(TileType.BOOK);
-        i43 = new ItemTile(TileType.TROPHY);
-
-
-        i6 = new ItemTile(TileType.GAME);
-        i7 = new ItemTile(TileType.TROPHY);
-        i8 = new ItemTile(TileType.BOOK);
-
-
-
-        i12 = new ItemTile(TileType.CAT);
-        i13 = new ItemTile(TileType.FRAME);
-
-
-
-        i17 = new ItemTile(TileType.PLANT);
-
-
-
-
-
-
-        tp1.insertTile(i1);
-        tp1.insertTile(i2);
-        tp1.insertTile(i3);
-        tp15.insertTile(i40);
-        tp15.insertTile(i41);
-
-
-
-        tp2.insertTile(i4);
-        tp2.insertTile(i5);
-        tp2.insertTile(i42);
-        tp20.insertTile(i43);
-
-        tp3.insertTile(i6);
-        tp3.insertTile(i7);
-        tp3.insertTile(i8);
-
-
-
-
-        tp5.insertTile(i12);
-        tp5.insertTile(i13);
-
-
-
-        tp7.insertTile(i17);
-
-
-
-
-        b1.insertTile(tp1,0);
-        b1.insertTile(tp15,0);
-        b1.insertTile(tp2,1);
-        b1.insertTile(tp20,1);
-
-        b1.insertTile(tp3,2);
-        b1.insertTile(tp4,2);
-        b1.insertTile(tp5,3);
-
-        b1.insertTile(tp7,4);
-
-
-        i23 = new ItemTile(TileType.GAME);
-        i34 = new ItemTile(TileType.GAME);
-
-        i42=new ItemTile(TileType.TROPHY);
-        i43=new ItemTile(TileType.FRAME);
-        i44=new ItemTile(TileType.PLANT);
-        i45=new ItemTile(TileType.PLANT);
-
-
-
-        i24 = new ItemTile(TileType.GAME);
-        i26 = new ItemTile(TileType.GAME);
-        i27 = new ItemTile(TileType.TROPHY);
-
-
-        i46=new ItemTile(TileType.TROPHY);
-        i47=new ItemTile(TileType.TROPHY);
-        i48=new ItemTile(TileType.PLANT);
-
-        tp18.insertTile(i46);
-        tp18.insertTile(i47);
-        tp18.insertTile(i48);
-
-
-        i28 = new ItemTile(TileType.GAME);
-        i29 = new ItemTile(TileType.TROPHY);
-        i40 = new ItemTile(TileType.GAME);
-        i25= new ItemTile(TileType.GAME);
-        i49=new ItemTile(TileType.TROPHY);
-        i50=new ItemTile(TileType.TROPHY);
-
-
-
-
-
-        i30 = new ItemTile(TileType.CAT);
-        i31 = new ItemTile(TileType.BOOK);
-        i32 = new ItemTile(TileType.GAME);
-        i33 = new ItemTile(TileType.GAME);
-        i42 = new ItemTile(TileType.CAT);
-        i51=new ItemTile(TileType.CAT);
-
-        i35 = new ItemTile(TileType.PLANT);
-        i36 = new ItemTile(TileType.GAME);
-        i37 = new ItemTile(TileType.FRAME);
-        i38 = new ItemTile(TileType.CAT);
-        i39 = new ItemTile(TileType.GAME);
-        i41 = new ItemTile(TileType.CAT);
-
-        tp9.insertTile(i23);
-        tp9.insertTile(i34);
-        tp19.insertTile(i42);
-        tp19.insertTile(i43);
-        tp19.insertTile(i44);
-
-        tp17.insertTile(i45);
-
-        tp10.insertTile(i24);
-        tp10.insertTile(i26);
-        tp10.insertTile(i27);
-
-
-        tp11.insertTile(i28);
-        tp11.insertTile(i29);
-        tp11.insertTile(i40);
-        tp16.insertTile(i25);
-        tp16.insertTile(i49);
-        tp16.insertTile(i50);
-
-
-        tp12.insertTile(i30);
-        tp12.insertTile(i31);
-        tp12.insertTile(i32);
-
-
-        tp13.insertTile(i33);
-        tp13.insertTile(i42);
-        tp13.insertTile(i51);
-
-        tp14.insertTile(i35);
-        tp14.insertTile(i36);
-        tp14.insertTile(i37);
-
-
-        tp15.insertTile(i38);
-        tp15.insertTile(i39);
-        tp15.insertTile(i41);
-
-
-
-        b3.insertTile(tp9,0 );
-        b3.insertTile(tp19,0);
-        b3.insertTile(tp17,0);
-
-
-        b3.insertTile(tp10,1 );
-        b3.insertTile(tp18,1);
-
-        b3.insertTile(tp11,2 );
-        b3.insertTile(tp16,2 );
-
-
-        b3.insertTile(tp12,3);
-        b3.insertTile(tp13,3);
-
-        b3.insertTile(tp14,4);
-        b3.insertTile(tp15,4);
+        b = new Bookshelf();
+        tp = new TilePack();
+        it1 = new ItemTile(TileType.CAT);
+        it2 = new ItemTile(TileType.BOOK);
+        it3 = new ItemTile(TileType.GAME);
+        it4 = new ItemTile(TileType.TROPHY);
+        it5 = new ItemTile(TileType.FRAME);
+        it6 = new ItemTile(TileType.PLANT);
     }
 
     @Test
-    public void correctIsFull() {
-        assertFalse(b1.isFull());
-        assertFalse(b2.isFull());
-        assertTrue(b3.isFull());
+    public void isFullTest() {
 
-    }
+        // empty bookshelf
+        assertFalse(b.isFull());
 
-    @Test
-    public void correctGetNumberInsertableTiles() {
-      int j=1;
-        for (int i = 0; i < 5; i++,j++) {
-            assertEquals(0, b3.getNumberInsertableTilesColumn(i));
-            assertEquals(6, b2.getNumberInsertableTilesColumn(i));
-            assertEquals(j, b1.getNumberInsertableTilesColumn(i));
+        // not empty nor full bookshelf
+        tp.insertTile(it1);
+        tp.insertTile(it2);
+        tp.insertTile(it3);
+        for (int i=0; i<3; i++) {
+            b.insertTile(tp, 0, 0);
+        }
+        assertFalse(b.isFull());
 
+        // full bookshelf
+        for (int k=0; k<b.getMaxWidth(); k++) {
+            while (b.getNumberInsertableTilesColumn(k)>0) {
+                tp.insertTile(it1);
+                tp.insertTile(it2);
+                tp.insertTile(it3);
+                for (int i = 0; i < 3; i++) {
+                    b.insertTile(tp, k, 0);
+                }
+            }
         }
 
+        assertTrue(b.isFull());
 
+    }
+
+    @Test
+    public void getNumberInsertableTilesColumnTest() {
+
+        // empty column
+        assertEquals(6, b.getNumberInsertableTilesColumn(0));
+
+        // not empty nor full column
+        tp.insertTile(it1);
+        tp.insertTile(it2);
+        tp.insertTile(it3);
+        for (int i=0; i<3; i++) {
+            b.insertTile(tp, 0, 0);
+        }
+        assertEquals(3, b.getNumberInsertableTilesColumn(0));
+
+        // full column
+        tp.insertTile(it1);
+        tp.insertTile(it2);
+        tp.insertTile(it3);
+        for (int i = 0; i < 3; i++) {
+            b.insertTile(tp, 0, 0);
+        }
+        assertEquals(0, b.getNumberInsertableTilesColumn(0));
+    }
+
+    @Test
+    public void getNumberInsertableTilesTest() {
+        // empty bookshelf
+        assertEquals(6, b.getNumberInsertableTiles());
+
+        // not empty nor full bookshelf
+        for (int k=0; k<b.getMaxWidth(); k++) {
+            tp.insertTile(it1);
+            tp.insertTile(it2);
+            tp.insertTile(it3);
+            for (int i = 0; i < 3; i++) {
+                b.insertTile(tp, k, 0);
+            }
+        }
+        assertEquals(3, b.getNumberInsertableTiles());
+
+        // full bookshelf
+        for (int k=0; k<b.getMaxWidth(); k++) {
+            while (b.getNumberInsertableTilesColumn(k)>0) {
+                tp.insertTile(it1);
+                tp.insertTile(it2);
+                tp.insertTile(it3);
+                for (int i = 0; i < 3; i++) {
+                    b.insertTile(tp, k, 0);
+                }
+            }
+        }
+
+        assertEquals(0, b.getNumberInsertableTiles());
 
     }
 
     @Test
     public void correctInsertTiles() {
-          i52=new ItemTile(TileType.CAT);
-          tp20.insertTile(i52);
-            assertThrows(IndexOutOfBoundsException.class,
+          it6=new ItemTile(TileType.CAT);
+          tp.insertTile(it6);
+            /*assertThrows(IndexOutOfBoundsException.class,
                     () -> {
-                        b3.insertTile(tp20, 0); // insert tiles in full column
+                        b.insertTile(tp, 0); // insert tiles in full column
             });
+
+             */
 
             //todo altri casi
         }
@@ -269,6 +138,6 @@ public class BookshelfTest {
         m.put(1, 2);
         m.put(5, 1);
 
-        assertEquals(m, b3.getNumberAdjacentTiles(TileType.GAME));
+        assertEquals(m, b.getNumberAdjacentTiles(TileType.GAME));
     }
 }

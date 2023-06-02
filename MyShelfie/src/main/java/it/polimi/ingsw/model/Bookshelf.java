@@ -8,7 +8,7 @@ import java.util.Random;
 
 /**
  * <h1>Class Bookshelf</h1>
- * The class Bookshelf contains a matrix of item tiles owned by a Player
+ * This class contains a matrix of item tiles owned by a Player
  *
  * @author Francesca Pia Panaccione, Francesco Santambrogio
  * @version 1.0
@@ -17,18 +17,19 @@ import java.util.Random;
 
 public class Bookshelf {
 
-    private int NumberOfTiles;
+    private int numberOfTiles;
     private static final int MAX_WIDTH=5;
 
     private static final int MAX_HEIGHT=6;
 
-    private ItemTile[][] grid;
+    private final ItemTile[][] grid;
 
     /**
-     * Class constructor
+     * Class constructor:
+     * this method initializes an empty {@link Bookshelf}  setting the {@link Bookshelf#numberOfTiles} and the {@link Bookshelf#grid}
      */
     public Bookshelf() {
-        this.NumberOfTiles = 0;
+        this.numberOfTiles = 0;
         this.grid = new ItemTile[MAX_HEIGHT][MAX_WIDTH];
     }
 
@@ -37,7 +38,7 @@ public class Bookshelf {
      * This method is used to know the number of insertable tiles in a certain column,
      * that is, the number of item tiles that can be inserted before completely filling up the column
      * @param column the specified column from which the number of insertable tiles are checked
-     * @return int It returns the number of insertable tiles in the given column
+     * @return an {@code int} representing the number of insertable tiles in the given column
      * @exception IndexOutOfBoundsException The exception is thrown if the integer representing the column is not within the available range
      */
 
@@ -57,8 +58,8 @@ public class Bookshelf {
 
     /**
      * This method is used to know the number of insertable tiles in the bookshelf,
-     * that is, the maximum among the number of insertable tiles of all the columns
-     * @return int It returns the maximum number of insertable tiles in a bookshelf column
+     * that is, the maximum among the number of insertable tiles of all the columns, known by calling the {@link #getNumberInsertableTilesColumn(int)} method foor all the columns
+     * @return an {@code int} representing the maximum number of insertable tiles in a bookshelf column
      */
 
     public int getNumberInsertableTiles(){
@@ -72,8 +73,8 @@ public class Bookshelf {
 
     /**
      * This method is used to know if the bookshelf is full,
-     * that is, the item tiles can no longer be inserted
-     * @return boolean It returns true if the bookshelf is full, false otherwise
+     * that is, when the item tiles can no longer be inserted.
+     * @return {@code true} if the bookshelf is full, naemly when the {@link #getNumberInsertableTiles()} is 0, false otherwise
      */
 
     public boolean isFull(){
@@ -88,7 +89,7 @@ public class Bookshelf {
      * or if the selected column has not enough space to receive all the item tiles to insert
      */
 
-    // TODO: player must choose the order of the tiles. Insert tile should take just the tile, not the tilePack.
+    @Deprecated
     public void insertTile(TilePack tp, int column) throws IndexOutOfBoundsException{
         if (column >= 0 && column < MAX_WIDTH) {
             int insertableTiles = getNumberInsertableTilesColumn(column);
@@ -97,7 +98,7 @@ public class Bookshelf {
                 for (int j = 0; j < size; j++) { //
                     grid[insertableTiles - j - 1][column] = tp.getTiles().get(0);
                     tp.getTiles().remove(0);
-                    this.NumberOfTiles++;
+                    this.numberOfTiles++;
                 }
 
             } else {
@@ -109,13 +110,22 @@ public class Bookshelf {
         }
     }
 
+    /**
+     * This method is used to insert a {@link ItemTile} taken from a specific position of the {@link TilePack}
+     * @param tilePack the {@link TilePack} from which the item tile is inserted in the {@link Bookshelf}
+     * @param column the selected column where the item tile is inserted
+     * @param index the specified position of the {@link ItemTile} within the {@link TilePack} to insert
+     * @exception IndexOutOfBoundsException The exception is thrown if the selected column is not within the available range,
+     * or if the selected column has not enough space to receive the {@link ItemTile} to insert
+     */
+
     public void insertTile(TilePack tilePack, int column, int index) throws IndexOutOfBoundsException {
         if (column >= 0 && column < MAX_WIDTH) {
             int insertableTiles = getNumberInsertableTilesColumn(column);
             if (insertableTiles > 0) {
                     grid[insertableTiles - 1][column] = tilePack.getTiles().get(index);
                     tilePack.getTiles().remove(index);
-                    this.NumberOfTiles++;
+                    this.numberOfTiles++;
             } else {
                 throw new IndexOutOfBoundsException("Not enough space in this column, please select another column or remove some tiles from the tile pack");
             }
@@ -126,10 +136,11 @@ public class Bookshelf {
     }
 
     /**
-     * This method is used to know if and how many groups of adjacent item tiles of the same given type are there in the bookshelf
-     * @param type the type of adjacent item tiles
-     * @return Map<Integer, Integer> It returns a map where the keys are the number of adjacent tiles of a group
-     * and the values are the number of groups of the key type present in the bookshelf
+     * This method is used to know how many groups of adjacent {@link ItemTile}s of the same given type are there in the {@link Bookshelf}
+     * It is needed for the calculation of the score based on the adjacent tiles
+     * @param type the type of adjacent {@link ItemTile}s
+     * @return {@code Map<Integer, Integer>} where the keys are the number of adjacent tiles of a group
+     * and the values are the number of groups of the key type present in the {@link Bookshelf}
      */
 
     public Map<Integer, Integer> getNumberAdjacentTiles(TileType type) {
@@ -140,18 +151,29 @@ public class Bookshelf {
         boolean onefound = true;
         int[][] auxiliary = new int[MAX_HEIGHT][MAX_WIDTH];
 
+        //creation of the auxiliary matrix
+        //all the value are set as 0
         for (int i = 0; i < MAX_HEIGHT; i++) {
             for (int j = 0; j < MAX_WIDTH; j++) {
                 auxiliary[i][j] = 0;
             }
         }
 
+        // along the entire grid of the bookshelf, if a cell of the grid contains an item tile (it is not null),
+        // its type is equal to the one of an adjacent cell
+        // and the cell of the same position of the auxiliary is 0, meaning the position has not been visited yet
         for (int i = 0; i < MAX_HEIGHT; i++) {
             for (int j = 0; j < MAX_WIDTH; j++) {
                 if (grid[i][j]!=null && grid[i][j].getType().equals(type) && auxiliary[i][j] == 0) {
+                    // if the position of the auxiliary matrix is 1, it means that the position has been already visited
+                    // and has been counted in the counter
                     auxiliary[i][j] = 1;
                     counter++;
                     if (i < 5 && grid[i + 1][j] != null && grid[i + 1][j].getType().equals(type) && auxiliary[i + 1][j] == 0) {
+                        // if the adjacent position of the current one has an item tile of the same type,
+                        // it is marked with the value 2 in the auxiliary matrix,
+                        // meaning that it has the same type of the one currently in analysis
+                        // but has not been counted in the counter yet
                         auxiliary[i + 1][j] = 2;
 
                     }
@@ -226,42 +248,39 @@ public class Bookshelf {
     }
 
     /**
-     * This getter method gets the number of tiles present in the bookshelf
-     * @return int It returns the number of tiles present in the bookshelf
+     * Getter method
+     * @return the {@link Bookshelf#numberOfTiles} present in the {@link Bookshelf}
      */
     public int getNumberOfTiles(){
-        return this.NumberOfTiles;
+        return this.numberOfTiles;
     }
+
     /**
-     * This getter method gets the grid of the bookshelf
-     * @return ItemTile[][] It returns the matrix of item tiles representing the bookshelf
+     * Getter method
+     * @return the {@link Bookshelf#grid} representing the {@link Bookshelf} as a matrix of {@link ItemTile}s
      */
     public ItemTile[][] getGrid() {
         return this.grid;
     }
 
     /**
-     * This getter method gets the maximum width of the bookshelf
-     * @return int It returns teh number of columns
+     * Getter method
+     * @return {@link Bookshelf#MAX_WIDTH}, namely the number of columns
      */
     public int getMaxWidth () {
         return MAX_WIDTH;
     }
 
     /**
-     * This getter method gets the maximum height of the bookshelf
-     * @return int It returns teh number of rows
+     * Getter method
+     * @return {@link Bookshelf#MAX_HEIGHT}, namely the number of rows
      */
     public int getMaxHeight () {
         return MAX_HEIGHT;
     }
 
-    /**
-     * This method overrides the toString method of the Object class
-     * @return String It returns the textual representation of an object of the class
-     */
 
-
+    //TODO: da togliere
     public void insertTileTest() {
         for (int r=0; r<6; r++){
             for(int c=0; c<5;c++){
