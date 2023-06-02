@@ -40,8 +40,12 @@ public class LivingRoomBoard {
 
     /**
      * Class constructor
+     * This method initializes the board with the correct configuration according to the number of players,
+     * utilizing {@link #placeTilesRandomly()} to place the tiles over the board.
+     * Moreover, the two {@link CommonGoalCard}s for the game are picked.
      * @param numberOfPlayers the number of players on which the configuration of playable spaces depends
-     * @exception  IllegalArgumentException The exception is thrown if numberOfPlayers is not within the proper interval
+     * @exception  IllegalArgumentException The exception is thrown if {@link NumberOfPlayers} is not within the proper interval
+     *
      */
 
     public LivingRoomBoard(NumberOfPlayers numberOfPlayers) throws IllegalArgumentException {
@@ -58,7 +62,7 @@ public class LivingRoomBoard {
             JSONObject jsonObject = (JSONObject) jsonObj;
             // read config from json
             activeList = (ArrayList<ArrayList<Long>>) jsonObject.get(numberOfPlayers.name());
-
+            //initialization of the board
             int c = 0, r = 0;
             for (ArrayList<Long> list : activeList) {
                 // forbidden tiles
@@ -97,17 +101,17 @@ public class LivingRoomBoard {
     }
 
     /**
-     * This method returns the space of the given position
-     * @param position the position of the space of interest
-     * @return Space It returns the space of interest
+     * This method returns the {@link Space} of the given position
+     * @param position the {@link Position} of the space of interest
+     * @return the {@link Space} of interest
      */
     public Space getSpace(Position position) {
         return spaces[position.getRow()][position.getColumn()];
     }
 
     /**
-     * This method finds all the spaces from the LivingRoomBoard with all free spaces on their side
-     * @return List<Space> It returns a list with all the free spaces
+     * This method finds all the {@link Space}s from the {@link LivingRoomBoard} whose sides are all free
+     * @return a list containing all the free {@link Space}s
      */
     public List<Space> getAllFree() {
         List<Space> freeSidesTiles = new ArrayList<>();
@@ -130,8 +134,8 @@ public class LivingRoomBoard {
     }
 
     /**
-     * This method finds all the spaces from the LivingRoomBoard that have at least one free side.
-     * @return List<Space> It returns a list with all the spaces with one free side
+     * This method finds all the {@link Space}s from the {@link LivingRoomBoard} that have at least one free side.
+     * @return a list containing all the {@link Space}s which have at least one free side
      */
     public List<Space> getDrawableTiles() {
         List<Space> drawablesTiles = new ArrayList<>();
@@ -166,9 +170,9 @@ public class LivingRoomBoard {
     }
 
     /**
-     * This method refills the living room board with new ItemTiles.
-     * First, the item tiles left on the board without any other adjacent tile are put back in the bag
-     * Then, new ones are drawn and placed.
+     * This method refills the {@link LivingRoomBoard} with new {@link ItemTile}s.
+     * First, the item tiles left on the board without any other adjacent tile are put back in the {@link Bag}.
+     * Afterwards, new ones are drawn from the {@link Bag} and placed on the {@link LivingRoomBoard}.
      */
     public void refill() {
         if (getDrawableTiles().size() == getAllFree().size()) { // this condition will probably go in the controller
@@ -181,7 +185,7 @@ public class LivingRoomBoard {
     }
 
     /**
-     * This method draws the ItemTiles from the bag and places them randomly in the LivingRoomBoard on the playable spaces.
+     * This method draws the {@link ItemTile}s from the {@link Bag} and places them randomly in the {@link LivingRoomBoard} on the playable {@link Space}s.
      */
     private void placeTilesRandomly() {
         for (int i = 0; i < MAX_WIDTH; i++) {
@@ -192,19 +196,31 @@ public class LivingRoomBoard {
             }
         }
     }
-
+    @Deprecated
     public Space[][] getSpaces () {
         return spaces;
     }
 
+    /**
+     * Getter method
+     * @return {@link LivingRoomBoard#MAX_WIDTH}
+     */
     public int getMaxWidth(){
         return MAX_WIDTH;
     }
 
+    /**
+     * Getter method
+     * @return {@link LivingRoomBoard#MAX_HEIGHT} of the board
+     */
     public int getMaxHeight() {
         return MAX_HEIGHT;
     }
 
+    /**
+     * Getter method
+     * @return the {@link LivingRoomBoard#bag} linked to the board
+     */
     public Bag getBag () {
         return bag;
     }
