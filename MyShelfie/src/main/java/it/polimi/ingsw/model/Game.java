@@ -328,7 +328,7 @@ public class Game extends Observable<EventMessage> {
             notifyObservers(new PickingTilesMessage(getCurrentPlayer().getName()));
         }
         else if (turnPhase.equals(GamePhase.COLUMN_CHOICE)) {
-            BookshelfView bookshelfView = new BookshelfView(getCurrentPlayer().getBookshelf());
+            BookshelfView bookshelfView = new BookshelfView(getCurrentPlayer().getBookshelf(), getCurrentPlayer().getName());
             setChanged();
             notifyObservers(new BookshelfMessage(getCurrentPlayer().getName(), bookshelfView));
             setChanged();
@@ -343,7 +343,7 @@ public class Game extends Observable<EventMessage> {
         if (columnChoice >= 0 && columnChoice < getCurrentPlayer().getBookshelf().getMaxWidth()) this.columnChoice = columnChoice;
         else throw new IndexOutOfBoundsException("invalid column, please choose another one;");
         setChanged();
-        notifyObservers(new BookshelfMessage(getCurrentPlayer().getName(), new BookshelfView(getCurrentPlayer().getBookshelf())));
+        notifyObservers(new BookshelfMessage(getCurrentPlayer().getName(), new BookshelfView(getCurrentPlayer().getBookshelf(), getCurrentPlayer().getName())));
     }
 
     public int getColumnChoice() {

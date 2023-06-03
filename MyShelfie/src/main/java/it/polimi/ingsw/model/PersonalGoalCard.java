@@ -60,18 +60,17 @@ public class PersonalGoalCard extends GoalCard implements Serializable {
         for(int i=0; i<5; i++){
             number = number.concat("   " + String.valueOf(i));
         }
-        map.put(0, number);
+        map.put(0, number.concat("    "));
 
         String rows = "";
         Set<Integer> keys = scoringItem.keySet();
         int j = 0;
-        for(int i=0; i<29;i++){
+        for(int i=0; i<30;i++){
             // new row
             if (i%5 == 0){
                 j += 1;
                 rows = rows.concat(String.valueOf(5-i/5)+ " ");
             }
-
             if(keys.contains(i)){
                 TileType tileType = scoringItem.get(i);
                 rows = rows.concat(tileType.getColorBackground() + " " + tileType.getAbbreviation() + " " + "\033[0m ");
@@ -80,11 +79,8 @@ public class PersonalGoalCard extends GoalCard implements Serializable {
                 rows = rows.concat("    ");
             }
             if (i%5 == 4) {
-                map.put(j, rows);
+                map.put(j, rows.concat("  "));
                 rows = "";
-            }
-            if (i==28){
-                map.put(j, rows);
             }
         }
         return map;

@@ -18,7 +18,7 @@ public class PlayerView implements Serializable {
     public PlayerView (Player player) {
 
         this.nickName = player.getName();
-        this.bookshelfView  = new BookshelfView(player.getBookshelf());
+        this.bookshelfView  = new BookshelfView(player.getBookshelf(), player.getName());
         this.playerStatus = player.getStatus();
         this.score = player.getScore();
         this.personalGoalCard = player.getPersonalGoalCard();
