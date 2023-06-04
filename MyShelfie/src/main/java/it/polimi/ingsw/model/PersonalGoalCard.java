@@ -6,9 +6,8 @@ import java.util.*;
 
 /**
  * <h1>Class PersonalGoalCard</h1>
- * The class PersonalGoalCard represents the personal goal of a player to be achieved to gain extra scores
- * A personal goal basically consists of a specific configuration of tiles to have in the bookshelf
- *
+ * The class PersonalGoalCard is a goal card unique to a {@link Player} during a game.
+ * It can yield extra points to him if his {@link Bookshelf} satisfies the configuration on the personal goal card
  * @author Francesca Pia Panaccione, Francesco Santambrogio
  * @version 1.0
  * @since 4/8/2023
@@ -23,10 +22,10 @@ public class PersonalGoalCard extends GoalCard implements Serializable {
 
     /**
      * Class constructor
-     * @param configuration the map containing the specific configuration of item tiles to have in the bookshelf in order to achieve the personal goal
-     * the keys are the positions of the item tiles, while the values are the types of item tiles
+     * @param configuration the map containing the specific configuration of {@link ItemTile} to have in the {@link Bookshelf}
+     * the keys are the positions of the {@link ItemTile}s in the {@link Bookshelf}, while the values correspond to the type of {@link ItemTile}
      */
-    public PersonalGoalCard(HashMap<Integer,TileType> configuration, int path ){
+    public PersonalGoalCard(HashMap<Integer,TileType> configuration, int path){
         this.scoringItem = configuration;
         this.path = path;
     }
@@ -34,13 +33,17 @@ public class PersonalGoalCard extends GoalCard implements Serializable {
     public int getPath(){return path;}
 
     /**
-     * This getter method gets the scoring item
-     * @return Map<Position, TileType> It returns the map with the configuration of the personal goal
+     * Getter method for the scoring item
+     * @return The map with the configuration of the {@link PersonalGoalCard}
      */
     public Map<Integer, TileType> getScoringItem() {
         return scoringItem;
     }
 
+    /**
+     * To String method
+     * @return a String version of the {@link PersonalGoalCard}
+     */
     @Override
     public String toString() {
         String card = "";
@@ -54,6 +57,10 @@ public class PersonalGoalCard extends GoalCard implements Serializable {
         return card;
 
     }
+    /**
+     * To Dictionary method
+     * @return a dictionary version of the {@link PersonalGoalCard}
+     */
     public HashMap<Integer, String> toDict(){
         HashMap<Integer, String> map = new HashMap<>();
         String number = "";

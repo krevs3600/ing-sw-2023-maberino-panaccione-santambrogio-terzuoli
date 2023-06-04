@@ -25,6 +25,7 @@ public class Bag {
 
     /**
      * Class constructor
+     * It initializes the {@link Bag#bag} containing all the {@link ItemTile}s at the beginning of the game
      */
     public Bag(){
         for(TileType type: TileType.values()){
@@ -36,9 +37,9 @@ public class Bag {
     }
 
     /**
-     * This method is used to draw from the bag a random item tile that will be later placed on the board
-     * @return ItemTile It returns the item that was drawn from the bag
-     * @exception IndexOutOfBoundsException The exception is thrown if the method is called when there are no tiles inside the bag
+     * This method is used to draw a random {@link ItemTile} from the {@link Bag#bag}. It will be later placed on the {@link LivingRoomBoard}
+     * @return the {@link ItemTile} that was drawn from the {@link Bag#bag}
+     * @exception IndexOutOfBoundsException The exception is thrown if the method is called when there are no {@link ItemTile} left inside the {@link Bag#bag}
      */
     public ItemTile drawTile() throws IndexOutOfBoundsException{
         if(this.size > 0){
@@ -53,11 +54,10 @@ public class Bag {
     }
 
     /**
-     * This method is used to take from the bag a specific amount of random item tiles, that will later be
-     * placed on the board
-     * @param amount number of tiles to be drawn from the bag
-     * @return List<ItemTile> It returns the item tiles that were picked from the bag
-     * @exception IllegalArgumentException The exception is thrown if the amount of items to be drawn exceeds the size of the bag
+     * This method is used to draw at random a specific number of {@link ItemTile}s from the {@link Bag#bag}.
+     * @param amount number of {@link ItemTile}s to be drawn from the {@link Bag#bag}
+     * @return a list containing all the {@link ItemTile}s that were picked from the {@link Bag#bag}
+     * @exception IllegalArgumentException The exception is thrown if the amount of items to be drawn exceeds the {@link Bag#size} of the {@link Bag#bag}
      */
     public List<ItemTile> drawTile(int amount) throws IllegalArgumentException{
         if (amount >= 0 && amount <= this.getSize()) {
@@ -77,9 +77,9 @@ public class Bag {
     }
 
     /**
-     * This method inserts in the bag a list of item tiles
-     * @param leftovers list of item tiles to be inserted in the bag
-     * @exception IllegalArgumentException The exception is thrown if the number of item tiles to insert exceeds the available space of the bag
+     * This method inserts in the {@link Bag#bag} a list of {@link ItemTile}s
+     * @param leftovers a list of {@link ItemTile}s to be inserted in the {@link Bag#bag}
+     * @exception IllegalArgumentException The exception is thrown if the number of items to insert exceeds the available {@link Bag#size} of the {@link Bag#bag}
      */
     public void insertTiles(List<ItemTile> leftovers) throws IllegalArgumentException{
         if (this.getSize() + leftovers.size() < MAX_SIZE) {
@@ -94,13 +94,17 @@ public class Bag {
     }
 
     /**
-     * This getter method gets the size of the bag
-     * @return int It returns how many item tiles are left in the bag
+     * Getter method
+     * @return the {@link Bag#size} of the {@link Bag#bag}
      */
     public int getSize(){
         return size;
     }
 
+    /**
+     * Getter method
+     * @return the current {@link Bag#bag}
+     */
     public List<ItemTile> getBag () {
         return this.bag;
     }

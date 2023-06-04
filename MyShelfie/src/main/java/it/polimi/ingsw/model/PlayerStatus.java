@@ -2,7 +2,7 @@ package it.polimi.ingsw.model;
 
 /**
  * <h1>Enumeration PlayerStatus</h1>
- * The enumeration PlayerStatus represents the status of a player during his turn
+ * The enumeration PlayerStatus contains all the statuses that a {@link Player} can assume during his turn
  *
  * @author Carlo Terzuoli, Francesco Maberino
  * @version 1.0
@@ -11,5 +11,6 @@ package it.polimi.ingsw.model;
 public enum PlayerStatus {
     INACTIVE,
     PICKING_TILES,
+    @Deprecated
     INSERTING_TILES,
 }

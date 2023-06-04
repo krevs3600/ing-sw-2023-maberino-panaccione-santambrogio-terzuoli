@@ -16,7 +16,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * <h1>Class PersonalGoalCardDeck</h1>
- * The class PersonalGoalCardDeck contains a list of personal goal cards
+ * The class PersonalGoalCardDeck consists of a list of {@link PersonalGoalCard}s
  *
  * @author Francesca Pia Panaccione, Francesco Santambrogio
  * @version 1.0
@@ -30,6 +30,7 @@ public class PersonalGoalCardDeck implements Drawable {
 
     /**
      * Class constructor
+     * This method gets all the {@link PersonalGoalCard}s from the JSON file, parses them and puts in the list {@link PersonalGoalCardDeck#deck}
      */
 
     public PersonalGoalCardDeck () {
@@ -72,8 +73,8 @@ public class PersonalGoalCardDeck implements Drawable {
     }
 
     /**
-     * This method is used to draw a random personal goal card from the deck
-     * @return GoalCard the randomly drawn goal card
+     * This method can be used in order to draw a random {@link PersonalGoalCard}  from the {@link PersonalGoalCardDeck#deck}
+     * @return the randomly drawn {@link PersonalGoalCard}
      */
     @Override
     public GoalCard draw() {
@@ -85,12 +86,16 @@ public class PersonalGoalCardDeck implements Drawable {
     }
 
     /**
-     * This getter method gets the deck of personal goal cards
-     * @return List<PersonalGoalCard> It returns the deck
+     * Getter method
+     * @return {@link PersonalGoalCardDeck#deck}
      */
     public List<PersonalGoalCard> getDeck() {
         return deck;
     }
 
+    /**
+     * Getter method
+     * @return the {@code int} value of the {@link PersonalGoalCardDeck#size} of the {@link PersonalGoalCardDeck#deck}
+     */
     public int getSize () { return size;}
 }

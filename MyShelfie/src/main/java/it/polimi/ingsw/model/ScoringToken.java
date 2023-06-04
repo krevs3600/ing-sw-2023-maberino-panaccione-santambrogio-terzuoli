@@ -1,11 +1,13 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.CommonGoalCard.CommonGoalCard;
+
 import java.io.Serializable;
 
 /**
  * <h1>Class ScoringToken</h1>
- * The class ScoringToken represents the score obtained by the player that achieves a common goal card
- * on which the token is stacked
+ * The class ScoringToken represents the amount of points that gets added to a Player's score, when he achieves
+ * the {@link CommonGoalCard} on which the token is stacked
  *
  * @author Francesca Pia Panaccione, Francesco Santambrogio
  * @version 1.0
@@ -19,8 +21,8 @@ public class ScoringToken implements Serializable {
 
     /**
      * Class constructor
-     * @param rn the roman number on the back of the scoring item
-     * @param v the value of the scoring item
+     * @param rn the {@link ScoringToken#romanNumber} on the back of the scoring item
+     * @param v the {@link ScoringToken#value} in points of the scoring item
      */
     public ScoringToken(RomanNumber rn, int v) {
         this.romanNumber = rn;
@@ -28,16 +30,16 @@ public class ScoringToken implements Serializable {
     }
 
     /**
-     * This getter method gets the roman number of the scoring token
-     * @return RomanNumber It returns the identifying roman number
+     * Getter method
+     * @return the {@link ScoringToken#romanNumber} of the token
      */
     public RomanNumber getRomanNumber() {
         return romanNumber;
     }
 
     /**
-     * This getter method gets the value of the token
-     * @return int It returns the integer value of the token
+     * Getter method
+     * @return the {@code int} {@link ScoringToken#value} corresponding to the token
      */
     public int getValue() {
         return value;

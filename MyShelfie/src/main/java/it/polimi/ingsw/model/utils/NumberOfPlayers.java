@@ -1,10 +1,13 @@
 package it.polimi.ingsw.model.utils;
 
 
+import it.polimi.ingsw.model.LivingRoomBoard;
+
 /**
  * <h1>Enumeration NumberOfPlayers</h1>
- * The enumeration NumberOfPlayers represents the number of players that can be two, three or four
- * it is useful for the characterization of some objects that change according to the number of players
+ * NumberOfPlayers is the enumeration containing all the possible configurations of number of players that can play a game:
+ * two, three or four.
+ * It is useful for the characterization of some objects that change according to the number of players, e.g.: {@link LivingRoomBoard}
  *
  * @author Francesca Pia Panaccione, Francesco Santambrogio
  * @version 1.0

@@ -8,7 +8,7 @@ import java.util.Observer;
 
 /**
  * <h1>Class Space</h1>
- * The class Space represents the unit of which the living room board is composed
+ * The class Space represents the unit out of which the {@link LivingRoomBoard} is composed
  *
  * @author Carlo Terzuoli, Francesco Maberino
  * @version 1.0
@@ -25,7 +25,7 @@ public class Space extends Observable {
     /**
      * Class contructor
      * @param type the type of the space
-     * @param position the position of the space on the board
+     * @param position the {@link Space#position} of the space on the {@link LivingRoomBoard}
      */
     public Space(SpaceType type, Position position){
         this.type = type;
@@ -35,33 +35,33 @@ public class Space extends Observable {
     }
 
     /**
-     * This getter method gets the type of the space
-     * @return SpaceType It returns the type of the space
+     * Getter method
+     * @return the {@link Space#type} of the {@link Space}
      */
     public SpaceType getType(){
         return type;
     }
 
     /**
-     * This getter method gets the attribute free
-     * @return boolean It returns true if the space is free, false otherwise
+     * Getter method
+     * @return a {@code boolean} value, corresponding to {@code true} if the {@link Space} is currently free, and {@code false} otherwise
      */
     public boolean isFree(){
         return free;
     }
 
     /**
-     * This getter method gets the position of the space
-     * @return Position It returns the position of the space
+     * Getter method
+     * @return the {@link Space#position} of the {@link Space}
      */
     public Position getPosition(){
         return position;
     }
 
     /**
-     * This setter method places an ItemTile on the space
-     * @param tile the tile to be placed on the space
-     * @throws IllegalAccessError The exception is thrown if the space is not free
+     * Setter method places an {@link ItemTile} on the {@link Space}
+     * @param tile the {@link ItemTile}  to be placed on the {@link Space}
+     * @throws IllegalAccessError The exception is thrown if the {@link Space} is not free
      */
     public void setTile(ItemTile tile) throws IllegalAccessError{
         if (getType().equals(SpaceType.PLAYABLE) && this.isFree()) {
@@ -73,9 +73,9 @@ public class Space extends Observable {
     }
 
     /**
-     * This getter method gets the tile of the space
-     * @return ItemTile It returns the tile present on the space
-     * @exception IllegalAccessError The exception is thrown if the selected space is free or forbidden, namely not actually part of the living room board
+     * Getter method
+     * @return the {@link ItemTile} placed on the {@link Space} and {@code null} otherwise
+     * @exception IllegalAccessError The exception is thrown if the selected {@link Space} is free or forbidden, namely not actually part of the {@link LivingRoomBoard}
      */
     public ItemTile getTile() {
         if(this.getType().equals(SpaceType.FORBIDDEN) || this.isFree()){
@@ -87,9 +87,9 @@ public class Space extends Observable {
     }
 
     /**
-     * This method removes the ItemTile from the related space.
-     * @return ItemTile It returns the item tile upon the space
-     * @throws IllegalAccessError The exception is thrown if the space is free or not playable
+     * This method removes the {@link ItemTile} from the {@link Space}.
+     * @return the {@link ItemTile}  placed over the {@link Space}
+     * @throws IllegalAccessError The exception is thrown if the {@link Space} is free or not playable
      */
     public ItemTile drawTile() throws IllegalAccessError{
         if (!isFree() && this.getType().equals(SpaceType.PLAYABLE)){

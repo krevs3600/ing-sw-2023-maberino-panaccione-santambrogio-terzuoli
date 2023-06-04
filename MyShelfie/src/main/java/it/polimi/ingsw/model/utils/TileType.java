@@ -1,8 +1,12 @@
 package it.polimi.ingsw.model.utils;
 
+import it.polimi.ingsw.model.Bookshelf;
+import it.polimi.ingsw.model.ItemTile;
+import it.polimi.ingsw.model.LivingRoomBoard;
+
 /**
  * <h1>Enumeration TileType</h1>
- * The enumeration TileType represents the types of item tiles which are essential for the goal card achievement
+ * The enumeration TileType contains all the types of {@link ItemTile} that can be placed e.g. on the {@link LivingRoomBoard} or on the {@link Bookshelf}
  *
  * @author Carlo Terzuoli, Francesco Maberino
  * @version 1.0
@@ -25,6 +29,10 @@ public enum TileType {
         this.colorBackground = colorBackground;
     }
 
+    /**
+     * To String method
+     * @return the {@code String} version of {@link TileType}
+     */
     @Override
     public String toString() {
         switch (abbreviation){
@@ -52,10 +60,18 @@ public enum TileType {
         }
     }
 
+    /**
+     * Getter method
+     * @return the {@code String} representing the abbreviation of the {@link TileType}
+     */
     public String getAbbreviation() {
         return abbreviation;
     }
 
+    /**
+     * Getter method
+     * @return the {@code String} representing the abbreviation of the {@link TileType}
+     */
     public String getColorBackground() {
         return colorBackground;
     }
