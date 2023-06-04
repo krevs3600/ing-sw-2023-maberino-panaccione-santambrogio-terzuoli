@@ -132,7 +132,7 @@ public class GameView implements Serializable {
                 personal+=1;
                 game = game.concat(gameBoard.get(board).concat(DIVIDER)).concat("\n");
                 board+=1;
-            } else if (i<13) {
+            } else if (i<12) {
                 game = game.concat(getStringWithSpaces("", HEADER_PERSONAL_CARD.length())).concat(DIVIDER);
                 game = game.concat(gameBoard.get(board)).concat("\n");
                 board+=1;
@@ -166,5 +166,4 @@ public class GameView implements Serializable {
         GameView view = new GameView(game);
         System.out.println(view.toCLI("Carlo"));
     }
-
 }
