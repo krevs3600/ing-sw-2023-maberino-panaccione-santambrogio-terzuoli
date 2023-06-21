@@ -102,7 +102,7 @@ public class ThreeColumnsCommonGoalCard extends CommonGoalCard {
      * @param b the bookshelf to check if it meets the requirements of the common goal
      * @return boolean It returns true if the bookshelf has the disposition of item tiles described by the common goal, false otherwise
      */
-    public boolean CheckPattern (Bookshelf b) {
+    public boolean checkPattern(Bookshelf b) {
         int columns=0;
         if (toBeChecked(b)) {
             for (int j = 0; j < b.getMaxWidth(); j++) {

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -14,6 +15,7 @@ import java.io.Serializable;
 
 public class FirstPlayerSeat implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
     /**
      * Class constructor

@@ -9,175 +9,73 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class CrossCommonGoalCardTest {
-    private Bookshelf b1, b2, b3;
-    private TilePack  tp1, tp2, tp3, tp4, tp5, tp6, tp7,tp8,tp9,tp10,tp11,tp12,tp13,tp14,tp15,tp16,tp17,tp18,tp19,tp20;
-    private ItemTile i1, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11, i12, i13, i14, i15, i16, i17, i18, i19, i20,i21,i22,i23,i24,i25,i26,i27,i28,i29,i30,i31,i32,i33,i34,i35,i36,i37,i38,i39,i40;
-    private CommonGoalCard c;
 
+    private Bookshelf testBookshelf1;
+    private Bookshelf testBookshelf2;
+    private CommonGoalCard testCommonGoalCard;
+    private TilePack testTilePack;
     @Before
-    public void setUp() {
-        b1 = new Bookshelf();
-        b2 = new Bookshelf();
-        b3 = new Bookshelf();
-        tp1 = new TilePack();
-        tp2 = new TilePack();
-        tp3 = new TilePack();
-        tp4 = new TilePack();
-        tp5 = new TilePack();
-        tp6 = new TilePack();
-        tp7 = new TilePack();
-        tp8 = new TilePack();
-        tp9 = new TilePack();
-        tp10 = new TilePack();
-        tp11 = new TilePack();
-        tp12 = new TilePack();
-        tp13 = new TilePack();
-        tp14 = new TilePack();
-        tp15 = new TilePack();
-        tp16 = new TilePack();
-        tp17 = new TilePack();
-        tp18 = new TilePack();
-        tp19 = new TilePack();
-        tp20 = new TilePack();
-
-
-        c = new CrossCommonGoalCard();
-
-        i1 = new ItemTile(TileType.GAME);
-        i2 = new ItemTile(TileType.FRAME);
-        i3 = new ItemTile(TileType.GAME);
-
-
-        i4 = new ItemTile(TileType.GAME);
-        i5 = new ItemTile(TileType.GAME);
-
-
-        i6 = new ItemTile(TileType.GAME);
-        i7 = new ItemTile(TileType.TROPHY);
-        i8 = new ItemTile(TileType.GAME);
-        i9 = new ItemTile(TileType.CAT);
-        i10 = new ItemTile(TileType.PLANT);
-        i11 = new ItemTile(TileType.CAT);
-
-
-
-        i12 = new ItemTile(TileType.CAT);
-        i13 = new ItemTile(TileType.BOOK);
-        i14 = new ItemTile(TileType.TROPHY);
-        i15 = new ItemTile(TileType.TROPHY);
-        i16 = new ItemTile(TileType.CAT);
-
-
-        i17 = new ItemTile(TileType.PLANT);
-        i18 = new ItemTile(TileType.GAME);
-        i19 = new ItemTile(TileType.FRAME);
-        i20 = new ItemTile(TileType.CAT);
-        i21 = new ItemTile(TileType.GAME);
-        i22 = new ItemTile(TileType.CAT);
-
-
-
-        tp1.insertTile(i1);
-        tp1.insertTile(i2);
-        tp1.insertTile(i3);
-
-        tp2.insertTile(i4);
-        tp2.insertTile(i5);
-
-        tp3.insertTile(i6);
-        tp3.insertTile(i7);
-        tp3.insertTile(i8);
-        tp4.insertTile(i9);
-        tp4.insertTile(i10);
-        tp4.insertTile(i11);
-
-
-
-        tp5.insertTile(i12);
-        tp5.insertTile(i13);
-        tp5.insertTile(i14);
-        tp6.insertTile(i15);
-        tp6.insertTile(i16);
-
-
-        tp7.insertTile(i17);
-        tp7.insertTile(i18);
-        tp7.insertTile(i19);
-        tp8.insertTile(i20);
-        tp8.insertTile(i21);
-        tp8.insertTile(i22);
-
-
-        b1.insertTile(tp1,0);
-        b1.insertTile(tp2,1);
-        b1.insertTile(tp3,2);
-        b1.insertTile(tp4,2);
-        b1.insertTile(tp5,3);
-        b1.insertTile(tp6,3);
-        b1.insertTile(tp7,4);
-        b1.insertTile(tp8,4);
-
-        i23 = new ItemTile(TileType.GAME);
-        i24 = new ItemTile(TileType.FRAME);
-        i25 = new ItemTile(TileType.GAME);
-
-        i26 = new ItemTile(TileType.GAME);
-        i27 = new ItemTile(TileType.GAME);
-
-        i26 = new ItemTile(TileType.GAME);
-        i27 = new ItemTile(TileType.TROPHY);
-
-        i28 = new ItemTile(TileType.CAT);
-        i29 = new ItemTile(TileType.BOOK);
-        i30 = new ItemTile(TileType.TROPHY);
-        i31 = new ItemTile(TileType.TROPHY);
-        i32 = new ItemTile(TileType.CAT);
-
-        i34 = new ItemTile(TileType.PLANT);
-        i35 = new ItemTile(TileType.GAME);
-        i36 = new ItemTile(TileType.FRAME);
-        i37 = new ItemTile(TileType.CAT);
-        i38 = new ItemTile(TileType.GAME);
-        i39 = new ItemTile(TileType.CAT);
-
-        tp9.insertTile(i23);
-        tp9.insertTile(i24);
-        tp9.insertTile(i25);
-
-        tp10.insertTile(i26);
-        tp10.insertTile(i27);
-
-        tp11.insertTile(i28);
-        tp11.insertTile(i29);
-
-        tp12.insertTile(i30);
-        tp12.insertTile(i31);
-        tp12.insertTile(i32);
-        tp13.insertTile(i34);
-        tp13.insertTile(i35);
-
-        tp14.insertTile(i36);
-        tp14.insertTile(i37);
-        tp14.insertTile(i38);
-
-
-
-
-
-        b3.insertTile(tp9,0 );
-        b3.insertTile(tp10,1 );
-        b3.insertTile(tp11,2 );
-        b3.insertTile(tp12,3);
-        b3.insertTile(tp13,3);
-        b3.insertTile(tp13,4);
-        b3.insertTile(tp14,4);
-
+    public void setUp()  {
+        testBookshelf1 = new Bookshelf();
+        testBookshelf2 = new Bookshelf();
+        testCommonGoalCard = new CrossCommonGoalCard();
+        testTilePack = new TilePack();
     }
 
     @Test
-    public void correctCheckPattern() {
-        assertTrue(c.CheckPattern(b1)); // all conditions are true
-        assertFalse(c.CheckPattern(b2)); // toBeChecked condition false (empty bookshelf)
-        assertFalse(c.CheckPattern(b3));// toBeChecked condition true but checkPattern conditions false (no item tiles of the same type forming an X)
+    public void checkPatternTest(){
+
+        // empty bookshelf: toBeChecked false
+        assertFalse(testCommonGoalCard.checkPattern(testBookshelf1));
+
+        // not empty bookshelf: toBeChecked true but checkPattern false
+        for (int i = 0; i< 2; i++) {
+            testTilePack.insertTile(new ItemTile(TileType.CAT));
+            testTilePack.insertTile(new ItemTile(TileType.BOOK));
+            testTilePack.insertTile(new ItemTile(TileType.CAT));
+            for (int j = 0; j < 3; j++) {
+                testBookshelf1.insertTile(testTilePack, 0, 0);
+            }
+        }
+        for (int i = 0; i< 2; i++) {
+            testTilePack.insertTile(new ItemTile(TileType.CAT));
+            testTilePack.insertTile(new ItemTile(TileType.BOOK));
+            testTilePack.insertTile(new ItemTile(TileType.CAT));
+            for (int j = 0; j < 3; j++) {
+                testBookshelf1.insertTile(testTilePack, 2, 0);
+            }
+        }
+        assertFalse(testCommonGoalCard.checkPattern(testBookshelf1));
+
+        // five tiles forming an X but not all of the same tile type
+        testTilePack.insertTile(new ItemTile(TileType.CAT));
+        testTilePack.insertTile(new ItemTile(TileType.BOOK));
+        testTilePack.insertTile(new ItemTile(TileType.CAT));
+        for (int j = 0; j < 3; j++) {
+            testBookshelf1.insertTile(testTilePack, 1, 0);
+        }
+        assertFalse(testCommonGoalCard.checkPattern(testBookshelf1));
+
+        // common goal achieved: toBeChecked true and checkPattern true
+
+        testTilePack.insertTile(new ItemTile(TileType.CAT));
+        testTilePack.insertTile(new ItemTile(TileType.BOOK));
+        testTilePack.insertTile(new ItemTile(TileType.CAT));
+        for (int j = 0; j < 3; j++) {
+            testBookshelf2.insertTile(testTilePack, 0, 0);
+        }
+        testTilePack.insertTile(new ItemTile(TileType.BOOK));
+        testTilePack.insertTile(new ItemTile(TileType.CAT));
+        testTilePack.insertTile(new ItemTile(TileType.BOOK));
+        for (int j = 0; j < 3; j++) {
+            testBookshelf2.insertTile(testTilePack, 1, 0);
+        }
+        testTilePack.insertTile(new ItemTile(TileType.CAT));
+        testTilePack.insertTile(new ItemTile(TileType.BOOK));
+        testTilePack.insertTile(new ItemTile(TileType.CAT));
+        for (int j = 0; j < 3; j++) {
+            testBookshelf2.insertTile(testTilePack, 2, 0);
+        }
+        assertTrue(testCommonGoalCard.checkPattern(testBookshelf2));
     }
 }

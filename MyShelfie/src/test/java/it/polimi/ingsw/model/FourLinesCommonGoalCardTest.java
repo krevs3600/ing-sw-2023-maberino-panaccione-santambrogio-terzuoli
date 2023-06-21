@@ -190,8 +190,8 @@ public class FourLinesCommonGoalCardTest {
 
     @Test
     public  void correctCheckPattern(){
-        assertTrue(c.CheckPattern(b1));// check on a random configuration
-        assertFalse(c.CheckPattern(b2));
-        assertFalse(c.CheckPattern(b3));// check on an empty bookshelf
+        assertTrue(c.checkPattern(b1));// check on a random configuration
+        assertFalse(c.checkPattern(b2));
+        assertFalse(c.checkPattern(b3));// check on an empty bookshelf
     }
 }

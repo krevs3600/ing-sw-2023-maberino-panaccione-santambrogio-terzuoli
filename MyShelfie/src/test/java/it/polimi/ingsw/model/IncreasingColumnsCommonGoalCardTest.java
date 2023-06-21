@@ -191,9 +191,9 @@ public class IncreasingColumnsCommonGoalCardTest {
 
         @Test
         public  void correctCheckPattern(){
-            assertTrue(c.CheckPattern(b1));// diagonal
-            assertFalse(c.CheckPattern(b2));
-            assertTrue(c.CheckPattern(b3)); // antidiagonal increasing
+            assertTrue(c.checkPattern(b1));// diagonal
+            assertFalse(c.checkPattern(b2));
+            assertTrue(c.checkPattern(b3)); // antidiagonal increasing
         }
     }
 

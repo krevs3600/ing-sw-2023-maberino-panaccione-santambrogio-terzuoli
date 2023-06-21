@@ -2,16 +2,7 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.CommonGoalCard.CommonGoalCard;
 import it.polimi.ingsw.model.utils.Position;
-import it.polimi.ingsw.model.utils.TileType;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
 import java.util.*;
-import java.util.Map;
 
 /**
  * <h1>Class Player</h1>
@@ -21,13 +12,13 @@ import java.util.Map;
  * @since 3/28/2023
  */
 public class Player {
-    private String name;
+    private final String name;
     private PlayerStatus status;
 
-    private Bookshelf bookshelf;
+    private final Bookshelf bookshelf;
     private int score;
     private PersonalGoalCard personalGoalCard;
-    private List<ScoringToken> tokens;
+    private final List<ScoringToken> tokens;
 
     private boolean firstCommonGoalAchieved;
     private boolean secondCommonGoalAchieved;
@@ -63,6 +54,7 @@ public class Player {
      * @param column the column of the {@link Player#bookshelf} in which the {@link ItemTile} will then be placed
      * @throws IndexOutOfBoundsException The exception is thrown if the chosen column index is invalid
      */
+    @Deprecated
     public void insertTile(TilePack tilePack, int column) throws IndexOutOfBoundsException{
         try{
             bookshelf.insertTile(tilePack, column);

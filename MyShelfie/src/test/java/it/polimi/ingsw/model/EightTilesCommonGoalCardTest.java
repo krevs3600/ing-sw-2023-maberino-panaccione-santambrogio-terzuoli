@@ -101,9 +101,9 @@ public class EightTilesCommonGoalCardTest {
 
     @Test
     public void correctCheckPattern() {
-        assertTrue(c.CheckPattern(b1)); // all conditions are true
-        assertFalse(c.CheckPattern(b2));  // toBeChecked condition false (empty bookshelf)
-        assertFalse(c.CheckPattern(b3));// toBeChecked condition true but checkPattern conditions false (bookshelf with wight tiles but not of the same type)
+        assertTrue(c.checkPattern(b1)); // all conditions are true
+        assertFalse(c.checkPattern(b2));  // toBeChecked condition false (empty bookshelf)
+        assertFalse(c.checkPattern(b3));// toBeChecked condition true but checkPattern conditions false (bookshelf with wight tiles but not of the same type)
 
     }
 

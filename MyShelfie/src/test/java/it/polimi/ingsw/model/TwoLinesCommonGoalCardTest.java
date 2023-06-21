@@ -185,9 +185,9 @@ public class TwoLinesCommonGoalCardTest {
 
     @Test
     public  void correctCheckPattern(){
-          assertTrue(c.CheckPattern(b1));// diagonal
-         assertFalse(c.CheckPattern(b2));
-         assertFalse(c.CheckPattern(b3)); //antidiagonal (The method depicts correctly a wrong configuration as well, I try to change some cards but I didn't create
+          assertTrue(c.checkPattern(b1));// diagonal
+         assertFalse(c.checkPattern(b2));
+         assertFalse(c.checkPattern(b3)); //antidiagonal (The method depicts correctly a wrong configuration as well, I try to change some cards but I didn't create
         // another bookshelf otherwise the method would be too long
     }
 

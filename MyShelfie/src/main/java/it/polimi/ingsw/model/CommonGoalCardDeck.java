@@ -20,7 +20,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class CommonGoalCardDeck implements Drawable {
 
     private int size = 0;
-    private List<CommonGoalCard> deck;
+    private final List<CommonGoalCard> deck;
 
     /**
      * Class constructor
@@ -40,10 +40,10 @@ public class CommonGoalCardDeck implements Drawable {
         CommonGoalCard twoSquares =  new TwoSquaresCommonGoalCard();
         CommonGoalCard[] allCommonGoalCards = {corners, cross, diagonal, eightTiles, fourGroups, fourLines, increasingColumns, sixGroups, threeColumns, twoColumns, twoLines, twoSquares};
         this.deck = new ArrayList<>();
-            for(CommonGoalCard cgc: allCommonGoalCards) {
-                deck.add(cgc);
-                this.size++;
-            }
+        for(CommonGoalCard cgc: allCommonGoalCards) {
+            deck.add(cgc);
+            this.size++;
+        }
     }
 
     /**
@@ -60,12 +60,16 @@ public class CommonGoalCardDeck implements Drawable {
     }
 
     /**
-     * This getter method gets the deck of common goal cards
-     * @return List<CommonGoalCard> It returns the deck
+     * Getter method
+     * @return the {@link CommonGoalCardDeck#deck} of {@link CommonGoalCard}s}
      */
     public List<CommonGoalCard> getDeck() {
         return deck;
     }
 
+    /**
+     * Getter method
+     * @return the {@link CommonGoalCardDeck#size} of the deck
+     */
     public int getSize () { return size;}
 }

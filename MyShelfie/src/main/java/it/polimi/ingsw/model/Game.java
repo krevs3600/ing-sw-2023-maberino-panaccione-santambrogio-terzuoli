@@ -8,7 +8,6 @@ import it.polimi.ingsw.model.ModelView.TilePackView;
 import it.polimi.ingsw.model.utils.GamePhase;
 import it.polimi.ingsw.model.utils.NumberOfPlayers;
 import it.polimi.ingsw.model.utils.Position;
-import it.polimi.ingsw.network.eventMessages.ScoreMessage;
 import it.polimi.ingsw.network.eventMessages.EventMessage;
 import it.polimi.ingsw.network.eventMessages.*;
 import it.polimi.ingsw.observer_observable.Observable;
@@ -26,23 +25,21 @@ import java.util.*;
 public class Game extends Observable<EventMessage> {
 
     private String gameName;
-    private PersonalGoalCardDeck personalGoalCardDeck;
-    private List<Player> subscribers = new ArrayList<>();
+    private final PersonalGoalCardDeck personalGoalCardDeck;
+    private final List<Player> subscribers = new ArrayList<>();
     private LivingRoomBoard livingRoomBoard;
-    private NumberOfPlayers numberOfPlayers;
+    private final NumberOfPlayers numberOfPlayers;
     private int cursor;
 
     private Player firstPlayer;
     private GamePhase turnPhase;
     private List<Space> drawableTiles = new ArrayList<>();
 
-    private TilePack tilePack;
+    private final TilePack tilePack;
 
     private int columnChoice;
 
-    private int currentPlayerScore;
-
-    private List<Position> buffer;
+    private final List<Position> buffer;
     private boolean isFinalTurn;
     private boolean isEnded = false;
 
@@ -85,8 +82,7 @@ public class Game extends Observable<EventMessage> {
     }
 
     public ItemTile drawTile(Position position) throws IllegalArgumentException{
-        ItemTile itemTile = getLivingRoomBoard().getSpace(position).drawTile();
-        return itemTile;
+        return getLivingRoomBoard().getSpace(position).drawTile();
     }
 
     public void insertTileInTilePack (ItemTile itemTile) {
@@ -301,8 +297,8 @@ public class Game extends Observable<EventMessage> {
 
     }
     */
-    
-    public GamePhase getTurnPhase() {return this.turnPhase;};
+
+    public GamePhase getTurnPhase() {return this.turnPhase;}
     public void setTurnPhase(GamePhase turnPhase) {
         this.turnPhase = turnPhase;
         if (turnPhase.equals(GamePhase.PLACING_TILES)) {
@@ -350,12 +346,11 @@ public class Game extends Observable<EventMessage> {
         return columnChoice;
     }
 
-   //TODO
+    //TODO
     public void setPlayerScore(int score, Player player) {
 
         player.setScore(score);
     }
-    public int getCurrentPlayerScore () {return this.currentPlayerScore;}
 
     public List<Position> getBuffer(){
         return this.buffer;

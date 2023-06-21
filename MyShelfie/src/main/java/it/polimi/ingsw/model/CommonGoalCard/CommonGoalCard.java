@@ -8,7 +8,7 @@ import java.util.Stack;
 /**
  * <h1>Abstract Class CommonGoalCard</h1>
  * The class CommonGoalCard represents the common goal of a game to be achieved to gain extra scores
- * A Common goal basically consists of a specific groups of tiles to have in the bookshelf
+ * A Common goal basically consists of a specific configuration of tiles to have in the bookshelf
  *
  * @author Francesca Pia Panaccione, Francesco Santambrogio
  * @version 1.0
@@ -62,12 +62,7 @@ public abstract class CommonGoalCard extends GoalCard {
 
     public abstract boolean toBeChecked (Bookshelf b);
 
-    public abstract boolean CheckPattern (Bookshelf b);
-
-    @Override
-    public String toString(){
-        return "AbstractCommonGoalCard";
-    }
+    public abstract boolean checkPattern(Bookshelf b);
 
     public String getType() { return this.getClass().getName();}
 }

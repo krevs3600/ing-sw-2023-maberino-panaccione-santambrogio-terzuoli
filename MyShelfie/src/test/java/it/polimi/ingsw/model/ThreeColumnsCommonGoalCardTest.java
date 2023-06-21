@@ -190,9 +190,9 @@ public class ThreeColumnsCommonGoalCardTest {
 
     @Test
     public  void correctCheckPattern(){
-        assertTrue(c.CheckPattern(b3)); // right one
-        assertFalse(c.CheckPattern(b2));
-        assertFalse(c.CheckPattern(b1));// 4 types in one column
+        assertTrue(c.checkPattern(b3)); // right one
+        assertFalse(c.checkPattern(b2));
+        assertFalse(c.checkPattern(b1));// 4 types in one column
 
 
     }

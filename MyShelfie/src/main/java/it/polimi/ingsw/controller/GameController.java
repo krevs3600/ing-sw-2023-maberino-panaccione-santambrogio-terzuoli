@@ -6,13 +6,11 @@ import it.polimi.ingsw.model.utils.GamePhase;
 import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.model.utils.TileType;
 import it.polimi.ingsw.network.Client;
-import it.polimi.ingsw.network.MessagesToClient.requestMessage.FirstCommonGoalMessage;
 import it.polimi.ingsw.network.MessagesToClient.errorMessages.IllegalTilePositionErrorMessage;
 import it.polimi.ingsw.network.MessagesToClient.errorMessages.NotEnoughInsertableTilesErrorMessage;
 import it.polimi.ingsw.network.MessagesToClient.errorMessages.NotEnoughInsertableTilesInColumnErrorMessage;
 import it.polimi.ingsw.network.MessagesToClient.errorMessages.UpperBoundTilePackErrorMessage;
 import it.polimi.ingsw.network.MessagesToClient.requestMessage.PlayerJoinedLobbyMessage;
-import it.polimi.ingsw.network.MessagesToClient.requestMessage.SecondCommonGoalMessage;
 import it.polimi.ingsw.network.MessagesToClient.requestMessage.WaitingResponseMessage;
 import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.network.eventMessages.*;
@@ -239,7 +237,7 @@ public class GameController {
                 }
 
                 if (!game.isEnded()){
-                    if(game.getLivingRoomBoard().getAllFree().size()==game.getLivingRoomBoard().getDrawableTiles().size()) {
+                    if(game.getLivingRoomBoard().getAllFreeTiles().size()==game.getLivingRoomBoard().getDrawableTiles().size()) {
                         game.refillLivingRoomBoard();
                     }
                     game.setTurnPhase(GamePhase.INIT_TURN);
@@ -347,7 +345,7 @@ public class GameController {
         for(CommonGoalCard card : commonGoalCards) {
            Player currentPlayer = game.getCurrentPlayer();
             if (card.toBeChecked(currentPlayer.getBookshelf())) {
-                if(card.CheckPattern(currentPlayer.getBookshelf())){
+                if(card.checkPattern(currentPlayer.getBookshelf())){
                     //ScoringToken tempToken = card.getStack().pop();
                     //score+=tempToken.getValue();
                     if(card.equals(commonGoalCards.get(0)) && !currentPlayer.isFirstCommonGoalAchieved()) {

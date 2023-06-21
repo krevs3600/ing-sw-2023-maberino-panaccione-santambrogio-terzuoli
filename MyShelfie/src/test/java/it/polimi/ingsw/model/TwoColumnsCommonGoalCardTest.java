@@ -172,9 +172,9 @@ public class TwoColumnsCommonGoalCardTest {
 
     @Test
     public  void correctCheckPattern(){
-        assertTrue(c.CheckPattern(b1));
-        assertFalse(c.CheckPattern(b2));
-        assertFalse(c.CheckPattern(b3));
+        assertTrue(c.checkPattern(b1));
+        assertFalse(c.checkPattern(b2));
+        assertFalse(c.checkPattern(b3));
     }
 
 }

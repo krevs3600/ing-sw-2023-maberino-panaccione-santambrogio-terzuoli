@@ -2,9 +2,7 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.model.utils.SpaceType;
-
-import java.util.Observable;
-import java.util.Observer;
+import it.polimi.ingsw.observer_observable.Observable;
 
 /**
  * <h1>Class Space</h1>
@@ -18,12 +16,13 @@ import java.util.Observer;
 
 public class Space extends Observable {
     private boolean free;
-    private SpaceType type;
-    private Position position;
+    private final SpaceType type;
+    private final Position position;
     private ItemTile tile;
 
     /**
-     * Class contructor
+     * Class constructor:
+     * this method initializes a {@link Space} thanks to given parameters
      * @param type the type of the space
      * @param position the {@link Space#position} of the space on the {@link LivingRoomBoard}
      */
@@ -32,6 +31,27 @@ public class Space extends Observable {
         this.position = position;
         this.tile = null;
         this.free = this.getType() != SpaceType.FORBIDDEN;
+    }
+
+    /**
+     * This method removes the {@link ItemTile} from the {@link Space}.
+     * @return the {@link ItemTile}  placed over the {@link Space}
+     * @throws IllegalAccessError The exception is thrown if the {@link Space} is free or not playable
+     */
+    public ItemTile drawTile() throws IllegalAccessError{
+        if (!isFree() && this.getType().equals(SpaceType.PLAYABLE)){
+            ItemTile tempTile = this.tile;
+            this.tile = null;
+            this.free = true;
+            return tempTile;
+        }
+        else {
+            if (isFree()) {
+                throw new IllegalAccessError("The selected space is free");
+            }
+            else throw new IllegalAccessError("The selected space is not playable");
+        }
+
     }
 
     /**
@@ -59,7 +79,15 @@ public class Space extends Observable {
     }
 
     /**
-     * Setter method places an {@link ItemTile} on the {@link Space}
+     * Getter method
+     * @return the {@link ItemTile} placed on the {@link Space} or {@code null} otherwise
+     */
+    public ItemTile getTile() {
+        return this.tile;
+    }
+
+    /**
+     * This method places an {@link ItemTile} on the {@link Space}
      * @param tile the {@link ItemTile}  to be placed on the {@link Space}
      * @throws IllegalAccessError The exception is thrown if the {@link Space} is not free
      */
@@ -68,40 +96,9 @@ public class Space extends Observable {
             this.tile = tile;
             this.free = false;
         } else {
-            throw new IllegalAccessError("The space is not available, please choose another space to put the tile");
+            throw new IllegalAccessError("The space is not available, please choose another space to put the tile on");
         }
-    }
-
-    /**
-     * Getter method
-     * @return the {@link ItemTile} placed on the {@link Space} and {@code null} otherwise
-     * @exception IllegalAccessError The exception is thrown if the selected {@link Space} is free or forbidden, namely not actually part of the {@link LivingRoomBoard}
-     */
-    public ItemTile getTile() {
-        if(this.getType().equals(SpaceType.FORBIDDEN) || this.isFree()){
-            //throw new IllegalAccessError("The selected space is not playable or not free");
-            return null;
-        } else {
-            return this.tile;
-        }
-    }
-
-    /**
-     * This method removes the {@link ItemTile} from the {@link Space}.
-     * @return the {@link ItemTile}  placed over the {@link Space}
-     * @throws IllegalAccessError The exception is thrown if the {@link Space} is free or not playable
-     */
-    public ItemTile drawTile() throws IllegalAccessError{
-        if (!isFree() && this.getType().equals(SpaceType.PLAYABLE)){
-            ItemTile tempTile = this.tile;
-            this.tile = null;
-            this.free = true;
-            return tempTile;
-        }
-        else {
-            throw new IllegalAccessError("The selected space is not playable or not free");
-        }
-
     }
 
 }
+

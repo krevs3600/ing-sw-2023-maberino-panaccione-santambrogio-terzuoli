@@ -109,7 +109,7 @@ public class FourLinesCommonGoalCard extends CommonGoalCard  {
      * @param b the bookshelf to check if it meets the requirements of the common goal
      * @return boolean It returns true if the bookshelf has the disposition of item tiles described by the common goal, false otherwise
      */
-    public boolean CheckPattern (Bookshelf b) {
+    public boolean checkPattern(Bookshelf b) {
         int lines=0;
         if (toBeChecked(b)) {
             for (int i = 0; i < b.getMaxHeight(); i++) {

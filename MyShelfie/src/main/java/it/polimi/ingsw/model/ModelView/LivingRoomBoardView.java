@@ -5,18 +5,20 @@ import it.polimi.ingsw.model.LivingRoomBoard;
 import it.polimi.ingsw.model.utils.Position;
 
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class LivingRoomBoardView implements Serializable {
-    private int MAX_WIDTH;
-    private int MAX_HEIGHT;
-    private SpaceView[][] spaces;
-    private BagView bagView;
-    private List<CommonGoalCardView> commonGoalCards;
+    private final int MAX_WIDTH;
+    private final int MAX_HEIGHT;
+    private final SpaceView[][] spaces;
+    private final BagView bagView;
+    private final List<CommonGoalCardView> commonGoalCards;
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     public LivingRoomBoardView (LivingRoomBoard livingRoomBoard) {

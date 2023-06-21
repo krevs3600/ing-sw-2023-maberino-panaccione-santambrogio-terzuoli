@@ -1,4 +1,4 @@
-module PSP47{
+module PSP{
     requires javafx.fxml;
     requires javafx.controls;
     requires json.simple;
@@ -10,6 +10,9 @@ module PSP47{
     exports it.polimi.ingsw;
     exports it.polimi.ingsw.network.MessagesToClient;
     exports it.polimi.ingsw.model.ModelView;
+    exports it.polimi.ingsw.model;
+    exports it.polimi.ingsw.model.CommonGoalCard;
+    exports it.polimi.ingsw.model.utils;
     exports it.polimi.ingsw.network.eventMessages;
     exports it.polimi.ingsw.network.MessagesToClient.requestMessage;
     exports it.polimi.ingsw.client.view.FXML;

@@ -187,9 +187,9 @@ public class FourGroupsCommonGoalCardTest {
 
     @Test
     public void correctCheckPattern() {
-        assertFalse(c.CheckPattern(b1)); // check on a random configuration
-        assertFalse(c.CheckPattern(b2)); // check on a totally empty book ( the ifchecked is  false)
-       assertFalse(c.CheckPattern(b3));// check bookshelf with 8 tiles but not of the same type
+        assertFalse(c.checkPattern(b1)); // check on a random configuration
+        assertFalse(c.checkPattern(b2)); // check on a totally empty book ( the ifchecked is  false)
+       assertFalse(c.checkPattern(b3));// check bookshelf with 8 tiles but not of the same type
 
     }
 

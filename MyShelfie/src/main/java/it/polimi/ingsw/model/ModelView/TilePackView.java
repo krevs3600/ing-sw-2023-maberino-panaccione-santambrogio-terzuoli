@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.ItemTile;
 import it.polimi.ingsw.model.TilePack;
 
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 public class TilePackView implements Serializable {
 
     private final List<ItemTile> tilePack;
+    @Serial
     private static final long serialVersionUID = 1L;
 
     public TilePackView (TilePack tilePack) {

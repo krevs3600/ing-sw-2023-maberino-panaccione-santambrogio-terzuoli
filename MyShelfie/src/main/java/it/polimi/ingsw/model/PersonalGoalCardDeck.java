@@ -26,15 +26,14 @@ import java.util.concurrent.ThreadLocalRandom;
 public class PersonalGoalCardDeck implements Drawable {
 
     private int size = 0;
-    private List<PersonalGoalCard> deck;
+    private final List<PersonalGoalCard> deck;
 
     /**
      * Class constructor
      * This method gets all the {@link PersonalGoalCard}s from the JSON file, parses them and puts in the list {@link PersonalGoalCardDeck#deck}
      */
-
     public PersonalGoalCardDeck () {
-        this.deck = new ArrayList<PersonalGoalCard>();
+        this.deck = new ArrayList<>();
         try {
             String path = "src/main/java/it/polimi/ingsw/model/configs/PersonalGoalCards.json";
             //String path = "C:\\Users\\franc\\IdeaProjects\\ing-sw-2023-maberino-panaccione-santambrogio-terzuoli\\MyShelfie\\src\\main\\java\\it\\polimi\\ingsw\\model\\configs\\PersonalGoalCards.json";

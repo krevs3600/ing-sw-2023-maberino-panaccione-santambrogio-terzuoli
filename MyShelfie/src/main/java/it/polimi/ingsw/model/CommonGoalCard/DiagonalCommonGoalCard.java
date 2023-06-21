@@ -32,7 +32,7 @@ public class DiagonalCommonGoalCard extends CommonGoalCard{
      * @param b the bookshelf to check if it meets the requirements of the common goal
      * @return boolean It returns true if the bookshelf has the disposition of item tiles described by the common goal, false otherwise
      */
-    public boolean CheckPattern (Bookshelf b) {
+    public boolean checkPattern(Bookshelf b) {
        int diagonal1=0;
        int diagonal2=0;
         for (int i=0, j=0; i<4 && j<5 ; i++, j++) {

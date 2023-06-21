@@ -4,8 +4,7 @@ import it.polimi.ingsw.model.ItemTile;
 import it.polimi.ingsw.model.Space;
 import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.model.utils.SpaceType;
-import javafx.geometry.Pos;
-
+import java.io.Serial;
 import java.io.Serializable;
 
 public class SpaceView implements Serializable {
@@ -14,6 +13,7 @@ public class SpaceView implements Serializable {
     private final SpaceType type;
     private final ItemTile tile;
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     public SpaceView(Space space){

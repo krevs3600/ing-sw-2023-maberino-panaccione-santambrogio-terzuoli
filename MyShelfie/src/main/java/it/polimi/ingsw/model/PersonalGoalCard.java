@@ -1,13 +1,14 @@
 package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.utils.TileType;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.*;
 
 /**
  * <h1>Class PersonalGoalCard</h1>
- * The class PersonalGoalCard is a goal card unique to a {@link Player} during a game.
- * It can yield extra points to him if his {@link Bookshelf} satisfies the configuration on the personal goal card
+ * The class PersonalGoalCard is a {@link GoalCard} unique to a {@link Player} during a game.
+ * It can yield extra points to him if his/her {@link Bookshelf} satisfies the configuration on the {@link PersonalGoalCard}
  * @author Francesca Pia Panaccione, Francesco Santambrogio
  * @version 1.0
  * @since 4/8/2023
@@ -16,6 +17,7 @@ public class PersonalGoalCard extends GoalCard implements Serializable {
     private static final int DIMENSION=6;
     private final int[] scores = new int[]{1, 2, 4, 6, 9, 12};
     private final int path;
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private final HashMap<Integer, TileType> scoringItem;
@@ -30,11 +32,15 @@ public class PersonalGoalCard extends GoalCard implements Serializable {
         this.path = path;
     }
 
+    /**
+     * Getter method
+     * @return the {@link PersonalGoalCard#path}
+     */
     public int getPath(){return path;}
 
     /**
-     * Getter method for the scoring item
-     * @return The map with the configuration of the {@link PersonalGoalCard}
+     * Getter method
+     * @return the {@link PersonalGoalCard#scoringItem}, namely the map with the configuration of specific {@link TileType}s in specific positions
      */
     public Map<Integer, TileType> getScoringItem() {
         return scoringItem;
@@ -42,7 +48,7 @@ public class PersonalGoalCard extends GoalCard implements Serializable {
 
     /**
      * To String method
-     * @return a String version of the {@link PersonalGoalCard}
+     * @return a {@code String} version of the {@link PersonalGoalCard}
      */
     @Override
     public String toString() {

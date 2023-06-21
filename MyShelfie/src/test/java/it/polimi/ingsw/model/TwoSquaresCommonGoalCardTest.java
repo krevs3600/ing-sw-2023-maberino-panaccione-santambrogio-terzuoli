@@ -191,9 +191,9 @@ public class TwoSquaresCommonGoalCardTest {
 
     @Test
     public  void correctCheckPattern(){
-        assertFalse(c.CheckPattern(b1));
-        assertFalse(c.CheckPattern(b2));
-        assertTrue(c.CheckPattern(b3));
+        assertFalse(c.checkPattern(b1));
+        assertFalse(c.checkPattern(b2));
+        assertTrue(c.checkPattern(b3));
     }
 
 }

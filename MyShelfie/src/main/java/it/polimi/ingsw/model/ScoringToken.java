@@ -2,11 +2,12 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.CommonGoalCard.CommonGoalCard;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
  * <h1>Class ScoringToken</h1>
- * The class ScoringToken represents the amount of points that gets added to a Player's score, when he achieves
+ * The class ScoringToken represents the amount of points that gets added to a Player's score, when it is achieved
  * the {@link CommonGoalCard} on which the token is stacked
  *
  * @author Francesca Pia Panaccione, Francesco Santambrogio
@@ -17,10 +18,12 @@ public class ScoringToken implements Serializable {
 
     private final RomanNumber romanNumber;
     private final int value;
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**
-     * Class constructor
+     * Class constructor:
+     * this method initializes a {@link ScoringToken} thanks to given parameters
      * @param rn the {@link ScoringToken#romanNumber} on the back of the scoring item
      * @param v the {@link ScoringToken#value} in points of the scoring item
      */

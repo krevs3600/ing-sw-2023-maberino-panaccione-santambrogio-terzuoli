@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.ItemTile;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.utils.NumberOfPlayers;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -16,6 +17,7 @@ public class BookshelfView implements Serializable {
     private final ItemTile[][] bookshelf;
     private final int MAX_WIDTH;
     private final int MAX_HEIGHT;
+    @Serial
     private static final long  serialVersionUID = 1L;
 
     private final String playerName;
@@ -56,20 +58,20 @@ public class BookshelfView implements Serializable {
         int WIDTH = 24;
         HashMap<Integer, String> map = new HashMap<>();
         // title playerName's bookshelf
-        String title = "";
+        String title;
         title = getPlayerName().toUpperCase().concat("'s bookshelf");
         title = titleGenerator(WIDTH, title);
         map.put(0, title);
         // columns' indexes
         String number = "";
         for(int i=0; i<getMaxWidth(); i++){
-            number = number.concat("   " + String.valueOf(i));
+            number = number.concat("   " + i);
         }
         map.put(1, number.concat("    "));
         // rows generation
         String rows = "";
         for(int i=0; i<getMaxHeight();i++){
-            rows = rows.concat(String.valueOf(getMaxHeight()-1-i) + " ");
+            rows = rows.concat(getMaxHeight() - 1 - i + " ");
             for(int j=0; j<getMaxWidth();j++){
                 rows = rows.concat(getGrid()[i][j] != null ? getGrid()[i][j].toString() + " " : "    ");
             }
@@ -107,6 +109,6 @@ public class BookshelfView implements Serializable {
         game.subscribe(new Player("carlo"));
         game.subscribe(new Player("jack"));
         BookshelfView view = new BookshelfView(game.getSubscribers().get(0).getBookshelf(), game.getSubscribers().get(0).getName());
-        System.out.println(view.toString());
+        System.out.println(view);
     }
 }

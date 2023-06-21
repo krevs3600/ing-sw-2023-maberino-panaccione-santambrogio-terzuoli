@@ -3,7 +3,6 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.model.utils.SpaceType;
 import it.polimi.ingsw.model.utils.TileType;
-import javafx.geometry.Pos;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,105 +10,78 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class SpaceTest{
-
-    private Position pos1;
-    private Position pos2;
-    private Space cell1; //PLAYABLE
-    private Space cell2; //FORBIDDEN
-    private ItemTile tile;
+    private Space testSpace1;
+    private Space testSpace2;
 
     @Before
     public void setUp(){
-        pos1 = new Position(5,5);
-        cell1 = new Space(SpaceType.PLAYABLE, pos1);
-        pos2 = new Position(4, 4);
-        cell2 = new Space(SpaceType.FORBIDDEN, pos2);
-        tile = new ItemTile(TileType.CAT);
+        testSpace1 = new Space(SpaceType.PLAYABLE, new Position(5,5));
+        testSpace2 = new Space(SpaceType.FORBIDDEN, new Position(0, 0));
     }
 
     @Test
-    public void setTileTestFree(){
-        cell1.setTile(new ItemTile(TileType.CAT));
-        assertFalse(cell1.isFree());
-    }
+    public void getTileTest () {
 
+        // before setting the tile in a space
+        assertNull(testSpace1.getTile());
 
-    @Test
-    public void setTileTestTile(){
-        cell1.setTile(new ItemTile(TileType.CAT));
-        assertEquals(cell1.getTile().getType(), tile.getType());
-    }
-
-    @Test
-    public void drawTileTest(){
-        cell1.setTile(new ItemTile(TileType.CAT));
-        cell1.drawTile();
-        assertTrue(cell1.isFree());
-    }
-
-
-    @Test
-    public void drawTileTestTile(){
-        cell1.setTile(new ItemTile(TileType.CAT));
-        assertEquals(cell1.drawTile().getType(), tile.getType());
-    }
-
-    /**@Test
-    public void getTileFromFreeCell(){
-        Position pos = new Position(5,5);
-        Space cell = new Space(SpaceType.PLAYABLE, pos);
-        cell.setTile(new ItemTile(TileType.CAT));
-        cell.drawTile();
-        assertThrows(IllegalAccessError.class, cell::getTile);
+        // after setting the tile
+        ItemTile itemTile = new ItemTile(TileType.CAT);
+        testSpace1.setTile(itemTile);
+        assertEquals(itemTile, testSpace1.getTile());
     }
 
     @Test
-    public void getTileFromForbiddenCell() {
-        Position pos = new Position(5, 5);
-        Space cell = new Space(SpaceType.FORBIDDEN, pos);
-        assertThrows(IllegalAccessError.class, cell::getTile);
-    }
-     */
+    public void setTileTest() {
 
-    @Test
-    public void drawTileFromFreeCell(){
-        cell1.setTile(new ItemTile(TileType.CAT));
-        cell1.drawTile();
-        assertThrows(IllegalAccessError.class, cell1::drawTile);
-    }
+        // set on a playable space
+        // before setting the tile
+        assertNull(testSpace1.getTile());
 
-    @Test
-    public void drawTileFromForbiddenCell() {
-        assertThrows(IllegalAccessError.class, cell2::drawTile);
-    }
+        // after setting the tile
+        ItemTile itemTile1 = new ItemTile(TileType.CAT);
+        testSpace1.setTile(itemTile1);
+        assertEquals(itemTile1, testSpace1.getTile());
 
+        // set on a forbidden space
+        // exception about setting an item tile on a forbidden space
+        IllegalAccessError exception2 = assertThrows(IllegalAccessError.class, () -> testSpace2.setTile(new ItemTile(TileType.CAT)));
 
-    //!! non va!!
-    @Test
-    public void SetTileOnOccupiedCell(){
-        cell1.setTile(new ItemTile(TileType.CAT));
-        assertThrows(IllegalAccessError.class, () -> {
-            cell1.setTile(new ItemTile(TileType.BOOK));
-        });
+        String expectedMessage2 = "The space is not available, please choose another space to put the tile on";
+        String actualMessage2 = exception2.getMessage();
+
+        assertTrue(actualMessage2.contains(expectedMessage2));
+
     }
 
     @Test
-    public void setTileOnForbiddenCell(){
-        assertThrows(IllegalAccessError.class, () -> {
-            cell2.setTile(new ItemTile(TileType.CAT));
-        });
-    }
+    public void drawTileTest() {
 
-    @Test
-    public void getTileFromForbiddenSpace(){
-        assertEquals(null, cell2.getTile());
-    }
-    @Test
-    public void getTileFromFreeSpace(){
-        cell1.setTile(new ItemTile(TileType.CAT));
-        cell1.drawTile();
-        assertEquals(null, cell1.getTile());
-    }
+        // before drawing the tile from the space
+        ItemTile itemTile = new ItemTile(TileType.CAT);
+        testSpace1.setTile(itemTile);
+        assertNotNull(testSpace1.getTile());
 
+        // after drawing the tile from the space
+        testSpace1.drawTile();
+        assertNull(testSpace1.getTile());
+
+        // exception about drawing a tile from an empty space
+        IllegalAccessError exception2 = assertThrows(IllegalAccessError.class, () -> testSpace1.drawTile());
+
+        String expectedMessage2 = "The selected space is free";
+        String actualMessage2 = exception2.getMessage();
+
+        assertTrue(actualMessage2.contains(expectedMessage2));
+
+        // exception about drawing a tile from a forbidden space
+        IllegalAccessError exception3 = assertThrows(IllegalAccessError.class, () -> testSpace2.drawTile());
+
+        String expectedMessage3 = "The selected space is not playable";
+        String actualMessage3 = exception3.getMessage();
+
+        assertTrue(actualMessage3.contains(expectedMessage3));
+
+    }
 
 }

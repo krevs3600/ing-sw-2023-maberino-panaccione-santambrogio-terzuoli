@@ -23,7 +23,7 @@ public class CrossCommonGoalCard extends CommonGoalCard{
      * @return boolean It returns true if the bookshelf has enough number of item tiles, and it is worth checking, false otherwise
      */
     public boolean toBeChecked (Bookshelf b) {
-        return b.getNumberOfTiles()>=5;
+        return b.getNumberOfTiles()>=8;
     }
 
     /**
@@ -33,7 +33,7 @@ public class CrossCommonGoalCard extends CommonGoalCard{
      * @param b the bookshelf to check if it meets the requirements of the common goal
      * @return boolean It returns true if the bookshelf has the disposition of item tiles described by the common goal, false otherwise
      */
-    public boolean CheckPattern (Bookshelf b) {
+    public boolean checkPattern(Bookshelf b) {
         if(toBeChecked(b)){
         for(int i=0;i<b.getMaxHeight()-2;i++){
             for(int j=0;j<b.getMaxWidth()-2 ;j++){

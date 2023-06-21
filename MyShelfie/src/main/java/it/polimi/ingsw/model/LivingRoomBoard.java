@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 import java.util.stream.Collectors;
 
 /**
@@ -30,20 +29,20 @@ import java.util.stream.Collectors;
 public class LivingRoomBoard {
     private static final int MAX_WIDTH = 9;
     private static final int MAX_HEIGHT = 9;
-    private Space[][] spaces = new Space[MAX_WIDTH][MAX_HEIGHT];
+    private final Space[][] spaces = new Space[MAX_WIDTH][MAX_HEIGHT];
 
-    private List<CommonGoalCard> commonGoalCards = new ArrayList<>();
+    private final List<CommonGoalCard> commonGoalCards = new ArrayList<>();
 
     //private Stack<EndGameToken> endGameToken;
 
-    private Bag bag = new Bag();
+    private final Bag bag = new Bag();
 
     /**
      * Class constructor
      * This method initializes the board with the correct configuration according to the number of players,
      * utilizing {@link #placeTilesRandomly()} to place the tiles over the board.
      * Moreover, the two {@link CommonGoalCard}s for the game are picked.
-     * @param numberOfPlayers the number of players on which the configuration of playable spaces depends
+     * @param numberOfPlayers the number of players on which the configuration of playable {@link Space}s depends
      * @exception  IllegalArgumentException The exception is thrown if {@link NumberOfPlayers} is not within the proper interval
      *
      */
@@ -68,19 +67,19 @@ public class LivingRoomBoard {
                 // forbidden tiles
                 for (int i = 0; i < list.get(0); i++) {
                     Position position = new Position(r, c);
-                    spaces[r][c] = new Space(SpaceType.FORBIDDEN, position);
+                    getSpaces()[r][c] = new Space(SpaceType.FORBIDDEN, position);
                     c++;
                 }
                 // active tiles
                 for (int i = 0; i < list.get(1); i++) {
                     Position position = new Position(r, c);
-                    spaces[r][c] = new Space(SpaceType.PLAYABLE, position);
+                    getSpaces()[r][c] = new Space(SpaceType.PLAYABLE, position);
                     c++;
                 }
                 // forbidden tiles
                 for (int i = 0; i < list.get(2); i++) {
                     Position position = new Position(r, c);
-                    spaces[r][c] = new Space(SpaceType.FORBIDDEN, position);
+                    getSpaces()[r][c] = new Space(SpaceType.FORBIDDEN, position);
                     c++;
                 }
                 c=0;
@@ -113,7 +112,7 @@ public class LivingRoomBoard {
      * This method finds all the {@link Space}s from the {@link LivingRoomBoard} whose sides are all free
      * @return a list containing all the free {@link Space}s
      */
-    public List<Space> getAllFree() {
+    public List<Space> getAllFreeTiles() {
         List<Space> freeSidesTiles = new ArrayList<>();
 
         for (int i = 1; i < MAX_WIDTH - 1; i++) {
@@ -165,23 +164,18 @@ public class LivingRoomBoard {
 
     }
 
-    public List<CommonGoalCard> getCommonGoalCards() {
-        return commonGoalCards;
-    }
-
     /**
      * This method refills the {@link LivingRoomBoard} with new {@link ItemTile}s.
      * First, the item tiles left on the board without any other adjacent tile are put back in the {@link Bag}.
      * Afterwards, new ones are drawn from the {@link Bag} and placed on the {@link LivingRoomBoard}.
      */
     public void refill() {
-        if (getDrawableTiles().size() == getAllFree().size()) { // this condition will probably go in the controller
-            bag.insertTiles(getAllFree().stream().map(Space::getTile).collect(Collectors.toList()));
-            for (Space space : getAllFree()) {
-                space.drawTile();
-            }
-            placeTilesRandomly();
+        // TODO spostare la condizione in cui fare refill nel controller
+        getBag().insertTiles(getAllFreeTiles().stream().map(Space::getTile).collect(Collectors.toList()));
+        for (Space space : getAllFreeTiles()) {
+            space.drawTile();
         }
+        placeTilesRandomly();
     }
 
     /**
@@ -191,14 +185,26 @@ public class LivingRoomBoard {
         for (int i = 0; i < MAX_WIDTH; i++) {
             for (int j = 0; j < MAX_HEIGHT; j++) {
                 if (getSpace(new Position(i, j)).getType() == SpaceType.PLAYABLE) {
-                    getSpace(new Position(i, j)).setTile(bag.drawTile());
+                    getSpace(new Position(i, j)).setTile(getBag().drawTile());
                 }
             }
         }
     }
-    @Deprecated
+
+    /**
+     * Getter method
+     * @return {@link LivingRoomBoard#spaces}, namely the matrix of {@link Space}s representing the central board
+     */
     public Space[][] getSpaces () {
         return spaces;
+    }
+
+    /**
+     * Getter method
+     * @return {@link LivingRoomBoard#commonGoalCards}, namely the two {@link CommonGoalCard}s active during the game
+     */
+    public List<CommonGoalCard> getCommonGoalCards() {
+        return commonGoalCards;
     }
 
     /**

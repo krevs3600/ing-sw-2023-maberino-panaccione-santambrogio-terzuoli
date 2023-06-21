@@ -37,7 +37,7 @@ public class SixGroupsCommonGoalCard extends CommonGoalCard {
      * @param b the bookshelf to check if it meets the requirements of the common goal
      * @return boolean It returns true if the bookshelf has the disposition of item tiles described by the common goal, false otherwise
      */
-    public boolean CheckPattern(Bookshelf b) {
+    public boolean checkPattern(Bookshelf b) {
         TileType[] tts = {TileType.CAT, TileType.BOOK, TileType.GAME, TileType.FRAME, TileType.TROPHY, TileType.PLANT};
         int counter = 0;
         if (this.toBeChecked(b)) {

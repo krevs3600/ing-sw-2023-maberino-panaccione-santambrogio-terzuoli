@@ -18,14 +18,12 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Bag {
     private static final int MAX_SIZE = 132;
     private static final int MAX_SIZE_PER_TYPE = 22;
-
-    //private Bag bag = new Bag();
     private int size = 0;
-    private final List<ItemTile> bag = new ArrayList<ItemTile>();
+    private final List<ItemTile> bag = new ArrayList<>();
 
     /**
-     * Class constructor
-     * It initializes the {@link Bag#bag} containing all the {@link ItemTile}s at the beginning of the game
+     * Class constructor:
+     * this method initializes the {@link Bag#bag} containing all the {@link ItemTile}s at the beginning of the game
      */
     public Bag(){
         for(TileType type: TileType.values()){
@@ -39,7 +37,7 @@ public class Bag {
     /**
      * This method is used to draw a random {@link ItemTile} from the {@link Bag#bag}. It will be later placed on the {@link LivingRoomBoard}
      * @return the {@link ItemTile} that was drawn from the {@link Bag#bag}
-     * @exception IndexOutOfBoundsException The exception is thrown if the method is called when there are no {@link ItemTile} left inside the {@link Bag#bag}
+     * @exception IndexOutOfBoundsException The exception is thrown if the method is called when there are no {@link ItemTile}s left inside the {@link Bag#bag}
      */
     public ItemTile drawTile() throws IndexOutOfBoundsException{
         if(this.size > 0){
@@ -49,7 +47,7 @@ public class Bag {
             size--;
             return toBeDrawn;
         } else {
-            throw new IndexOutOfBoundsException("The bag is empty ");
+            throw new IndexOutOfBoundsException("The bag is empty");
         }
     }
 
@@ -72,7 +70,10 @@ public class Bag {
             }
             return toBeDrawn;
         } else {
-            throw new IllegalArgumentException("You're taking too main items. Bag size is: " + this.getSize());
+            if (amount >= 0) {
+                throw new IllegalArgumentException("You're taking too main items. Bag size is: " + this.getSize());
+            }
+            else throw new IllegalArgumentException("The selected amount of tiles to draw is non-positive!");
         }
     }
 
@@ -82,7 +83,7 @@ public class Bag {
      * @exception IllegalArgumentException The exception is thrown if the number of items to insert exceeds the available {@link Bag#size} of the {@link Bag#bag}
      */
     public void insertTiles(List<ItemTile> leftovers) throws IllegalArgumentException{
-        if (this.getSize() + leftovers.size() < MAX_SIZE) {
+        if (this.getSize() + leftovers.size() <= MAX_SIZE) {
             for(ItemTile item: leftovers){
                 bag.add(item);
                 size++;
@@ -107,5 +108,13 @@ public class Bag {
      */
     public List<ItemTile> getBag () {
         return this.bag;
+    }
+
+    /**
+     * Getter method
+     * @return the {@link Bag#MAX_SIZE}
+     */
+    public int getMaxSize() {
+        return MAX_SIZE;
     }
 }

@@ -37,7 +37,7 @@ public class CornersCommonGoalCard extends CommonGoalCard {
      * @return boolean It returns true if the bookshelf has the disposition of item tiles described by the common goal, false otherwise
      */
     @Override
-    public boolean CheckPattern(Bookshelf b) {
+    public boolean checkPattern(Bookshelf b) {
         if (toBeChecked(b)) {
             return b.getGrid()[0][0].getType().equals(b.getGrid()[b.getMaxHeight() - 1][0].getType()) &&
                     b.getGrid()[0][0].getType().equals(b.getGrid()[0][b.getMaxWidth() - 1].getType()) &&

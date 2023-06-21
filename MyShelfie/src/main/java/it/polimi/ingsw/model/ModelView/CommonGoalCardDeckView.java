@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.CommonGoalCard.CommonGoalCard;
 import it.polimi.ingsw.model.CommonGoalCardDeck;
 
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 public class CommonGoalCardDeckView implements Serializable {
 
     private final List<CommonGoalCardView> commonGoalCardDeck;
+    @Serial
     private static final long serialVersionUID = 1L;
 
     public CommonGoalCardDeckView (CommonGoalCardDeck deck) {

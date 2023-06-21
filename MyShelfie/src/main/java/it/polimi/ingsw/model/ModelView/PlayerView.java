@@ -3,17 +3,19 @@ package it.polimi.ingsw.model.ModelView;
 import it.polimi.ingsw.model.*;
 
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
 public class PlayerView implements Serializable {
 
-    private String nickName;
-    private BookshelfView bookshelfView;
-    private PlayerStatus playerStatus;
-    private int score;
-    private PersonalGoalCard personalGoalCard;
-    private List<ScoringToken> scoringTokens;
+    private final String nickName;
+    private final BookshelfView bookshelfView;
+    private final PlayerStatus playerStatus;
+    private final int score;
+    private final PersonalGoalCard personalGoalCard;
+    private final List<ScoringToken> scoringTokens;
+    @Serial
     private static final long serialVersionUID = 1L;
     public PlayerView (Player player) {
 

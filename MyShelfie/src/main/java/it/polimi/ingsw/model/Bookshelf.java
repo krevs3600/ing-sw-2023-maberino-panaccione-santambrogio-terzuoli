@@ -30,7 +30,7 @@ public class Bookshelf {
      */
     public Bookshelf() {
         this.numberOfTiles = 0;
-        this.grid = new ItemTile[MAX_HEIGHT][MAX_WIDTH];
+        this.grid = new ItemTile[getMaxHeight()][getMaxWidth()];
     }
 
 
@@ -45,14 +45,14 @@ public class Bookshelf {
     public int getNumberInsertableTilesColumn(int column) throws IndexOutOfBoundsException {
         if (column >= 0 && column < MAX_WIDTH) {
             int number = 0;
-            for (int i = 0; i < MAX_HEIGHT; i++) {
+            for (int i = 0; i < getMaxHeight(); i++) {
                 if ((grid[i][column] == null)) {
                     number++;
                 }
             }
             return number;
         } else {
-            throw new IndexOutOfBoundsException("Invalid column, please select a column ranging from 0 to " + (MAX_WIDTH-1));
+            throw new IndexOutOfBoundsException("Invalid column, please select a column ranging from 0 to " + (getMaxWidth()-1));
         }
     }
 
@@ -64,7 +64,7 @@ public class Bookshelf {
 
     public int getNumberInsertableTiles(){
         int count,max=0;
-        for(int j=0;j<MAX_WIDTH;j++){
+        for(int j=0;j<getMaxWidth();j++){
             count=getNumberInsertableTilesColumn(j);
             if(count>max) max=count;
         }
@@ -74,7 +74,7 @@ public class Bookshelf {
     /**
      * This method is used to know if the bookshelf is full,
      * that is, when the item tiles can no longer be inserted.
-     * @return {@code true} if the bookshelf is full, naemly when the {@link #getNumberInsertableTiles()} is 0, false otherwise
+     * @return {@code true} if the bookshelf is full, namely when the {@link #getNumberInsertableTiles()} is 0, false otherwise
      */
 
     public boolean isFull(){
@@ -89,9 +89,10 @@ public class Bookshelf {
      * or if the selected column has not enough space to receive all the item tiles to insert
      */
 
+    //TODO: da togliere
     @Deprecated
     public void insertTile(TilePack tp, int column) throws IndexOutOfBoundsException{
-        if (column >= 0 && column < MAX_WIDTH) {
+        if (column >= 0 && column < getMaxWidth()) {
             int insertableTiles = getNumberInsertableTilesColumn(column);
             if (insertableTiles >= tp.getTiles().size()) {
                 int size = tp.getTiles().size();
@@ -106,7 +107,7 @@ public class Bookshelf {
             }
         }
         else {
-            throw new IndexOutOfBoundsException("Invalid column, please select a column ranging from 0 to " + (MAX_WIDTH-1));
+            throw new IndexOutOfBoundsException("Invalid column, please select a column ranging from 0 to " + (getMaxWidth()-1));
         }
     }
 
@@ -120,18 +121,18 @@ public class Bookshelf {
      */
 
     public void insertTile(TilePack tilePack, int column, int index) throws IndexOutOfBoundsException {
-        if (column >= 0 && column < MAX_WIDTH) {
+        if (column >= 0 && column < getMaxWidth()) {
             int insertableTiles = getNumberInsertableTilesColumn(column);
             if (insertableTiles > 0) {
-                    grid[insertableTiles - 1][column] = tilePack.getTiles().get(index);
-                    tilePack.getTiles().remove(index);
-                    this.numberOfTiles++;
+                grid[insertableTiles - 1][column] = tilePack.getTiles().get(index);
+                tilePack.getTiles().remove(index);
+                this.numberOfTiles++;
             } else {
                 throw new IndexOutOfBoundsException("Not enough space in this column, please select another column or remove some tiles from the tile pack");
             }
         }
         else {
-            throw new IndexOutOfBoundsException("Invalid column, please select a column ranging from 0 to " + (MAX_WIDTH-1));
+            throw new IndexOutOfBoundsException("Invalid column, please select a column ranging from 0 to " + (getMaxWidth()-1));
         }
     }
 
@@ -149,12 +150,12 @@ public class Bookshelf {
         boolean due = false;
         int counter = 0;
         boolean onefound = true;
-        int[][] auxiliary = new int[MAX_HEIGHT][MAX_WIDTH];
+        int[][] auxiliary = new int[getMaxHeight()][getMaxWidth()];
 
         //creation of the auxiliary matrix
         //all the value are set as 0
-        for (int i = 0; i < MAX_HEIGHT; i++) {
-            for (int j = 0; j < MAX_WIDTH; j++) {
+        for (int i = 0; i < getMaxHeight(); i++) {
+            for (int j = 0; j < getMaxWidth(); j++) {
                 auxiliary[i][j] = 0;
             }
         }
@@ -162,8 +163,8 @@ public class Bookshelf {
         // along the entire grid of the bookshelf, if a cell of the grid contains an item tile (it is not null),
         // its type is equal to the one of an adjacent cell
         // and the cell of the same position of the auxiliary is 0, meaning the position has not been visited yet
-        for (int i = 0; i < MAX_HEIGHT; i++) {
-            for (int j = 0; j < MAX_WIDTH; j++) {
+        for (int i = 0; i < getMaxHeight(); i++) {
+            for (int j = 0; j < getMaxWidth(); j++) {
                 if (grid[i][j]!=null && grid[i][j].getType().equals(type) && auxiliary[i][j] == 0) {
                     // if the position of the auxiliary matrix is 1, it means that the position has been already visited
                     // and has been counted in the counter
@@ -191,8 +192,8 @@ public class Bookshelf {
 
                     }
 
-                    while (i < MAX_HEIGHT && onefound) {
-                        while (j < MAX_WIDTH) {
+                    while (i < getMaxHeight() && onefound) {
+                        while (j < getMaxWidth()) {
                             if (auxiliary[i][j] == 2) {
                                 auxiliary[i][j] = 1;
                                 counter++;
@@ -218,13 +219,15 @@ public class Bookshelf {
                         }
 
                         onefound=false;
-                        for (int k = 0; k < MAX_WIDTH && !onefound; k++) {
-                            if (auxiliary[i][k] == 1)
+                        for (int k = 0; k < getMaxWidth(); k++) {
+                            if (auxiliary[i][k] == 1) {
                                 onefound = true;
+                                break;
+                            }
                         }
 
                         if (onefound) {
-                            for (int k = 0; k <MAX_WIDTH && !due; k++) {
+                            for (int k = 0; k <getMaxWidth() && !due; k++) {
                                 if (auxiliary[i][k] == 2) {
                                     due = true;
                                     i--;
@@ -279,8 +282,7 @@ public class Bookshelf {
         return MAX_HEIGHT;
     }
 
-
-    //TODO: da togliere
+    //TODO: da togliere alla fine
     public void insertTileTest() {
         for (int r=0; r<6; r++){
             for(int c=0; c<5;c++){
