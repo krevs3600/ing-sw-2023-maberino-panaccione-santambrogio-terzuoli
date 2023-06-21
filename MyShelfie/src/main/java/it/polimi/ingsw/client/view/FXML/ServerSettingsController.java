@@ -19,6 +19,16 @@ import java.rmi.NotBoundException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
+/**
+ * <h1>Class ServerSettingController</h1>
+ *this class represents the controller of the fxml scene where
+ * the player inserts the IPaddress and the port
+ *
+ * @author Francesca Pia Panaccione, Carlo Terzuoli
+ * @version 1.0
+ * @since 5/14/2023
+ */
+
 public class ServerSettingsController {
     @FXML
     public AnchorPane PaneforParquet;
@@ -38,6 +48,10 @@ public class ServerSettingsController {
 
     private ClientImplementation clientImplementation = null;
 
+    /**
+     * Setter to have a reference to the view
+     * @param gui reference to the view
+     */
 
     public void setGui(GUI gui) {
     this.gui=gui;
@@ -45,6 +59,13 @@ public class ServerSettingsController {
 
     private String address;
     private int chosenPort;
+
+
+    /**
+     *
+     This method is used to connect the user as soon as he confirms his choice by pressing the {@link ServerSettingsController tryToConnectButton}
+     * @param event the click on the {@link ServerSettingsController tryToConnectButton}
+     */
 
     public void connect(MouseEvent event) throws IOException, NotBoundException {
 
@@ -66,6 +87,13 @@ public class ServerSettingsController {
             WrongValueInputs.setVisible(true);
         }
     }
+    /**
+     *
+     This method is used to check the validity of a specific port
+
+     * @param chosenPort the port chosen by the player to get access to the game
+     */
+
 
 
     private boolean isValidPort(int chosenPort) {
@@ -76,6 +104,12 @@ public class ServerSettingsController {
         }
     }
 
+    /**
+     *
+     This method is used to check the validity of an IPAddress
+
+     * @param address the address chosen by the player to get access to the game
+     */
     private boolean isValidIPAddress(String address) {
         String regExp = "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
                 "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +

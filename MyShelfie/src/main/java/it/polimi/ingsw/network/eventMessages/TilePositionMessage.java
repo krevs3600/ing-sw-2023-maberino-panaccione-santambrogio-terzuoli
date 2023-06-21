@@ -15,6 +15,6 @@ public class TilePositionMessage extends EventMessage {
 
     @Override
     public String toString(){
-        return getNickname() + " sends position of tile " + getPosition().toString();
+        return getNickname()+ " sends position of tile " + getPosition().toString();
     }
 }
