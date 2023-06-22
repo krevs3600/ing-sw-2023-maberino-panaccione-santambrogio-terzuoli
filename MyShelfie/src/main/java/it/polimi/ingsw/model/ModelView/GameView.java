@@ -63,9 +63,9 @@ public class GameView implements Serializable {
     }
 
     public List<PlayerView> otherPlayersList(PlayerView player) {
-        for (PlayerView oplayer : subscribers) {
-            if(!oplayer.getName().equals(player.getName())){
-                subscribersWithoutCurrent.add(oplayer);
+        for (PlayerView otherPlayer : subscribers) {
+            if(!otherPlayer.getName().equals(player.getName())){
+                subscribersWithoutCurrent.add(otherPlayer);
             }
 
         }
@@ -86,6 +86,9 @@ public class GameView implements Serializable {
     public GamePhase getTurnPhase(){
         return this.turnPhase;
     }
+    public List<CommonGoalCardView> getCommonGoalCards(){
+        return this.getLivingRoomBoard().getCommonGoalCards();
+    }
 
 
     /**public void update(Observable o, Object arg) {
@@ -105,30 +108,112 @@ public class GameView implements Serializable {
 
     }
      */
-    public String toCLI() {
-        // out.flush
+
+    /**
+     * Method to calculate the index of the player wrt the list of subscribers of the game
+     * @param nickname name of the player
+     * @return int the index of the player otherwise -1
+     */
+    public int getPersonalGameIndex(String nickname) {
+        int personalGameIndex;
+        for(int i=0; i<this.getSubscribers().size(); i++){
+            if(this.getSubscribers().get(i).getName().equals(nickname)){
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private int getNextPlayerIndex(String nickname) {
+        int index = getPersonalGameIndex(nickname);
+        if (index != -1) {
+            return (index + 1 < numberOfPlayers.getValue()) ? index + 1 : 0;
+        }
+        return -1;
+    }
+
+    private List<Integer> orderedIndexes(String nickname){
+        List<String> subscriberNames = new ArrayList<>(getSubscribers().stream().map(PlayerView::getName).toList());
+        List<Integer> subscribersIndex = new ArrayList<>();
+
+        String name = "";
+        int clientIndex;
+        for (int i = 0; i < getNumberOfPlayers().getValue(); i++){
+            if (i == 0) {
+                clientIndex = getPersonalGameIndex(nickname);
+                subscribersIndex.add(clientIndex);
+                name = subscriberNames.get(getNextPlayerIndex(nickname));
+            } else {
+                clientIndex = getPersonalGameIndex(name);
+                subscribersIndex.add(clientIndex);
+                name = subscriberNames.get(getNextPlayerIndex(name));
+            }
+
+        }
+        return subscribersIndex;
+    }
+
+
+
+
+    public String toCLI(String nickname) {
+        // todo optimization can be made
+        List<Integer> indexes = orderedIndexes(nickname);
+
         String game = "";
         String DIVIDER = "      ";
-        String UP_MARGIN = "\n\n\n";
+        String UP_MARGIN = "\n\n";
         String HEADER_PERSONAL_CARD = "YOUR PERSONAL GOAL CARD:";
 
         HashMap<Integer, String> personalCard =  this.getSubscribers().get(0).getPersonalGoalCard().toDict();
         HashMap<Integer, String> gameBoard = this.getLivingRoomBoard().toDict();
-        HashMap<Integer, String> bookshelf = this.getSubscribers().get(0).getBookshelf().toDict();
+        HashMap<Integer, String> bookshelf = this.getSubscribers().get(getPersonalGameIndex(nickname)).getBookshelf().toDict();
+
+        game = game.concat(UP_MARGIN);
+        game = game.concat(getCommonGoalCards().get(0).toString() + "\n\n" + getCommonGoalCards().get(1).toString() + "\n\n");
+
         int personal = 0;
         int board = 0;
         int book = 0;
-        game = game.concat(UP_MARGIN);
+        int book_1 = 0;
+        int book_2 = 0;
+        int book_3 = 0;
+
         for (int i=0; i<20; i++){
             if (i==0){
+                // print board lines
                 game = game.concat("YOUR PERSONAL GOAL CARD:").concat(DIVIDER);
-                game = game.concat(gameBoard.get(board)).concat("\n");
+                game = game.concat(gameBoard.get(board));
                 board += 1;
+                // print bookshelf 1 (game has at least two players)
+                game = game.concat(DIVIDER);
+                game = game.concat(getSubscribers().get(indexes.get(1)).getBookshelf().toDict().get(book_1));
+                book_1 += 1;
+                // with 4 players
+                if (getNumberOfPlayers().getValue() == 4){
+                    game = game.concat(DIVIDER);
+                    game = game.concat(getSubscribers().get(indexes.get(2)).getBookshelf().toDict().get(book_2)).concat("\n");
+                    book_2 += 1;
+                } else {
+                    game = game.concat("\n");
+                }
             } else if (i<8){
                 game = game.concat(personalCard.get(personal)).concat(DIVIDER);
                 personal+=1;
-                game = game.concat(gameBoard.get(board).concat(DIVIDER)).concat("\n");
+                game = game.concat(gameBoard.get(board).concat(DIVIDER));
                 board+=1;
+                // print bookshelf 1 (game has at least two players)
+                game = game.concat(DIVIDER);
+                game = game.concat(getSubscribers().get(indexes.get(1)).getBookshelf().toDict().get(book_1));
+                book_1 += 1;
+                // with 4 players
+                if (getNumberOfPlayers().getValue() == 4){
+                    game = game.concat(DIVIDER);
+                    game = game.concat(getSubscribers().get(indexes.get(2)).getBookshelf().toDict().get(book_2) + "\n");
+                    book_2 += 1;
+                } else {
+                    game = game.concat("\n");
+                }
             } else if (i<12) {
                 game = game.concat(getStringWithSpaces(HEADER_PERSONAL_CARD.length())).concat(DIVIDER);
                 game = game.concat(gameBoard.get(board)).concat("\n");
@@ -136,12 +221,29 @@ public class GameView implements Serializable {
             } else {
                 game = game.concat(bookshelf.get(book)).concat(DIVIDER);
                 book+=1;
-                game = game.concat(gameBoard.get(board).concat(DIVIDER)).concat("\n");
+                game = game.concat(gameBoard.get(board).concat(DIVIDER));
                 board+=1;
+                if (getNumberOfPlayers().getValue() > 2){
+                    if (getNumberOfPlayers().getValue() == 4){
+                        game = game.concat(DIVIDER);
+                        game = game.concat(getSubscribers().get(indexes.get(3)).getBookshelf().toDict().get(book_3) + "\n");
+                        book_3 += 1;
+                    } else {
+                        game = game.concat(DIVIDER);
+                        game = game.concat(getSubscribers().get(indexes.get(2)).getBookshelf().toDict().get(book_2) + "\n");
+                        book_2 += 1;
+                    }
+
+                } else {
+                    game = game.concat("\n");
+                }
             }
         }
+        game = game.concat(getTilePack().toDict().get(0) + "\n" + getTilePack().toDict().get(1));
+
         return game;
     }
+
     private static String getStringWithSpaces(int rowLength) {
         int spaces = rowLength - "".length();
         String result = "";
@@ -153,14 +255,19 @@ public class GameView implements Serializable {
     }
 
     public static void main(String[] args){
-        Game game = new Game(NumberOfPlayers.TWO_PLAYERS, "Zo");
+        Game game = new Game(NumberOfPlayers.FOUR_PLAYERS, "Zo");
         game.subscribe(new Player("Carlo"));
         game.subscribe(new Player("Fra"));
+        game.subscribe(new Player("Pi"));
+        game.subscribe(new Player("Mabe"));
         game.initLivingRoomBoard();
         PersonalGoalCardDeck deck = new PersonalGoalCardDeck();
         game.getSubscribers().get(0).setPersonalGoalCard(deck.draw());
         game.getSubscribers().get(1).setPersonalGoalCard(deck.draw());
         GameView view = new GameView(game);
-        System.out.println(view.toCLI());
+        // clear terminal screen, in a real terminal it should be working
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+        System.out.println(view.toCLI("Carlo"));
     }
 }

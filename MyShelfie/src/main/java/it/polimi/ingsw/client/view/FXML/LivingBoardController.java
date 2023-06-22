@@ -183,7 +183,7 @@ public class LivingBoardController {
     public void initialize(GameView gameView, String nickname) {
         setGameView(gameView);
         this.nickname = nickname;
-        personalGameIndex = getPersonalGameIndex(gameView);
+        personalGameIndex = gameView.getPersonalGameIndex(nickname);
         for (int i=0; i< gameView.getSubscribers().size(); i++){
             players.put(i, gameView.getSubscribers().get(i).getName());
         }
@@ -275,20 +275,7 @@ public class LivingBoardController {
 
     }
 
-    /**
-     * Method to calculate the index of the player wrt the list of subscribers of the game
-     * @param gameView gameView
-     * @return int the index of the player
-     */
-    private int getPersonalGameIndex(GameView gameView) {
-        for(int i=0; i<gameView.getSubscribers().size(); i++){
-            if(gameView.getSubscribers().get(i).getName().equals(nickname)){
-                personalGameIndex = i;
-                break;
-            }
-        }
-        return personalGameIndex;
-    }
+
 
     /**
      * Initialize ImageViews of the tilePack in the tilePack group

@@ -75,7 +75,7 @@ public class LivingRoomBoardView implements Serializable {
 
     public HashMap<Integer, String> toDict(){
         HashMap<Integer, String> map = new HashMap<>();
-        map.put(0, cliHorizontalNums());
+        map.put(0, cliHorizontalNums() + "      ");
         map.put(1, cliLine());
         String board = "";
         for (int i=0; i < MAX_HEIGHT*2; i+=2){
