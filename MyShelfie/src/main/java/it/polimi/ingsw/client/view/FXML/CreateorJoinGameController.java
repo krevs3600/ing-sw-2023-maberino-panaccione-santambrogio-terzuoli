@@ -94,6 +94,6 @@ public class CreateorJoinGameController {
      * @param mouseEvent  the click on the {@link CreateorJoinGameController#joinGame}  button
      */
     public void ExitGame(MouseEvent mouseEvent) {
-// TODO: gestire chiusura stage
+// //TODO: gestire chiusura stage
     }
 }

@@ -35,12 +35,7 @@ public class StartController extends Observable{
     @FXML
     public Button quitBtn1;
 
-  /*  public ServerSettingsController serverSettingsController;
 
-    private Stage stage;
-    private Scene scene;
-    private Parent root;
-*/
     private GUI gui;
     /**
      * Setter to have a reference to the view
@@ -68,11 +63,6 @@ public class StartController extends Observable{
         gui.askTypeofConnection(gui.getStage());
     }
 
-/*
-    public void JoinGame(MouseEvent event) throws IOException{
-        gui.askNickname();
-    }
-    */
 
 }
 

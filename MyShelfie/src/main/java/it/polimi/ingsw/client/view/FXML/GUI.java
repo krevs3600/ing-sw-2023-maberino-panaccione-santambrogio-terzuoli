@@ -40,14 +40,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-
+/**
+ * <h1>Class GUI</h1>
+ * The class GUI extends the Observable abstract class and implements all the methods of the View interface.
+ * This class is used to manage the graphical user interface
+ *
+ * @author Francesca Pia Panaccione, Carlo Terzuoli
+ * @version 1.0
+ * @since 5/21/2023
+ */
 public class GUI extends Observable implements View {
 
     private Stage stage;
     private Scene scene;
     private Parent root;
     private static Stage window;
-    private static Scene activeScene;
     private static double width;
     private static double height;
     private NicknameController nicknameController;
@@ -66,19 +73,36 @@ public class GUI extends Observable implements View {
 
     private GameView game; // aggiunto referenza al game
 
-    private String nicknameForPlacingTiles;
+
+    /**
+     * Getter method
+     * @return the current stage of the game
+     */
 
     public Stage getStage() {
         return stage;
     }
 
 
+    /**
+     * This method is used to set the {@link GUI client} that decided to start
+     * the game via the graphical interface and to which response messages are sent from the server
+     * @param client the client instance
+     */
 
 
     public void setClient(ClientImplementation client) {
         this.client = client;
     }
 
+
+
+    /**
+     * This method is used to instantiate the first fxml scene : the {@code start_scene} and its controller:
+     * {@code StartController}
+     * where the player can decide whether to exit the application or start the game
+     * @param stage where to set the scene
+     */
     public void gameMenuGUI(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("start_scene.fxml"));
         Scene scene = null;
@@ -97,14 +121,28 @@ public class GUI extends Observable implements View {
         startController.setGui(this);
     }
 
+    /**
+     * Getter method
+     * @return the instance of the {@link GUI#client}
+     */
+
+
     public ClientImplementation getClient() {
         return this.client;
     }
+
+
+    /**
+     * This method is used to notify the server
+     * about the client's choice to enter a game after pressing the {@link CreateorJoinGameController#joinGame} button
+     * in the fxml {@code CreateOrJoinGame_scene}.
+     */
 
     public void joinGame() {
         setChanged();
         notifyObservers(new JoinGameMessage(this.client.getNickname()));
     }
+
 
 
     @Override
@@ -113,16 +151,26 @@ public class GUI extends Observable implements View {
         return null;
     }
 
+    /**
+     *This method is used to notify the server about the client's choice to
+     * start inserting tiles after clicking one of the {@link LivingBoardController ColumnnButtons} in
+     * the {@code livingBoard_scene},
+     * this method also disables the board of the same client so that he cannot take more tiles.
+     *@param column the column number chosen by the client to insert all the tiles it has just taken from the board
+     */
     public void stopPickingTiles(int column) {
-        // Non devo fare il controllo che il turno sia attivo perche altrmenti i pulsanti sono disabilitati
-        // quindi anche nel caso in cui sbaglia se si toglie il pop up non c'è problema, l'unica cosa da estire è
-        // il caso in cui sceglie 3 tiles
 
         livingBoardController.board.setDisable(true);
         setChanged();
         notifyObservers(new BookshelfColumnMessage(this.nickname, column)); // dopo questo entra nel placing tile case
     }
 
+    /**
+     *This method is used to set the fxml scene {@code RMIorSocket_scene } after pressing the {@link StartController playBtn} in the
+     * {@code start_scene}.
+     * The player can now decide whether to connect via RMI or Socket.
+     *@param stage where to set the scene
+     */
 
     public void askTypeofConnection(Stage stage) throws IOException {
         URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/RMIorSocket_scene.fxml/").toURI().toURL();
@@ -134,7 +182,7 @@ public class GUI extends Observable implements View {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        window = stage; // gor
+        window = stage;
         scene = new Scene(fxmlLoader.load());
         this.stage = stage;
         Platform.runLater(() -> stage.setScene(scene));
@@ -165,6 +213,14 @@ public class GUI extends Observable implements View {
         notifyObservers(new NicknameMessage(this.nicknameController.getNickname()));
     }
 
+
+    /**
+     * This method is used to create a socket or an RMI connection based on the player's choice after clicking either the {@link RMIorSocketController RMIbutton} or
+     * the {@link  RMIorSocketController TCPbutton} in the {@code RMIorSocket_scene}.
+     * In particular, if the connection is made, a new client is instantiated with the chosen IP address and port.
+     *@param address the ip address chosen by the player for the connection, which was already syntactically checked in the {@link ServerSettingsController}
+     * @param port the port chosen by the player for the connection, which was already syntactically checked in the {@link ServerSettingsController}
+     */
 
     public void createConnection(String address, int port) throws IOException, NotBoundException {
         if (rmIorSocketController.isRMI()) {
@@ -223,13 +279,32 @@ public class GUI extends Observable implements View {
         return 0;
     }
 
+    /**
+     * This method is used to notify the server of the tile chosen by the player
+     * by sending a message with the row and column of the chosen tile after the player has clicked on one tile in the {@code livingBoard_scene.fxml}.
+     * In this way, the server can check the validity of the chosen position and
+     * in case allow the client to take the tile,
+     * or display a warning if the position is not valid.
+     *
+     *@param r the row of the tile clicked by the player
+     * @param c the column of the tile clicked by the player
+     */
+
     public void chosenPosition(int r, int c) {
-        System.out.println(this.client.getNickname() + " ha scelto la tile nella posizione " + r + " " + c); // prova per vedere se sono uguali ma dovrebbe essere cosi perche sono disabilitati
+       // System.out.println(this.client.getNickname() + " ha scelto la tile nella posizione " + r + " " + c);
         setChanged();
         notifyObservers(new TilePositionMessage(this.client.getNickname(), new Position(r, c)));
 
     }
 
+
+    /**
+     *This method is used to notify the server
+     *  of the name chosen by the game creator for the game he has just created.
+     * The server will check if there are no other active games with the same name,
+     * otherwise a warning message will be displayed.
+     *
+     */
     //TODO: askgamespecs
     public void askGameName() {
         String gameName = this.gameNameController.getTextField();
@@ -247,22 +322,14 @@ public class GUI extends Observable implements View {
     }
 
     //todo secondo me si può fare lo stesso metodo nell'interfaccia view e poi implementarlo
-    //public void chosenGame(String gameChoice) {
-    //
-    //}
-    public void askGameName(String GameName) {
 
-    }
 
+    //todo penso si possa togliere
     public void askGameSpecs() {
 
     }
 
-    // @Override
-    // public void showGameNamesList(Set<String> availableGameNames) {
-    //     setChanged();
-    //     notifyObservers(new GameNameChoiceMessage(this.client.getNickname(),gameNameListController.);
-    // }
+
 
     @Override
     public void showMessage(MessageToClient message) {
@@ -395,28 +462,7 @@ public class GUI extends Observable implements View {
                     ErrorMessage errorMessage = (ErrorMessage) message;
                     this.showPopup(errorMessage.getErrorMessage());
                     String answer = "";
-                    /*while(!livingBoardController.WantStopPickingTiles() && !livingBoardController.WantPickAnotherTile()) {
-                        if (livingBoardController.WantStopPickingTiles()) {
-                            setChanged();
-                            notifyObservers(new SwitchPhaseMessage(client.getNickname(), GamePhase.PLACING_TILES));
-                        }
-                    }*/
-                    //if(livingBoardController.WantPickAnotherTile()){
-                    //    case "" -> {
-                    //        out.print("r: ");
-                    //        int r = in.nextInt();
-                    //        in.nextLine();
-                    //        System.out.print("c: ");
-                    //        int c = in.nextInt();
-                    //        in.nextLine();
-                    //        setChanged();
-                    //        notifyObservers(new TilePositionMessage(((ErrorMessage) message).getNickName(), new Position(r, c)));
-                    //    }
-/*
-                    livingBoardController.stopPickingT.setVisible(false);
-                    livingBoardController.ContinuepickingT.setVisible(false);
-                    livingBoardController.resetAnotherTile();
-                    livingBoardController.resetStopPickingTiles();*/
+
                 }
             }
 
@@ -433,11 +479,17 @@ public class GUI extends Observable implements View {
 
     }
 
+    /**
+     *This method is used to notify the server with the number of players chosen by the player for the newly created game.
+     * At this point, the game is created and the creator waits for the other participants to connect to start playing.
+     * @param gameName the name chosen for the game by the creator.
+     */
 
     public void askNumberOfPlayers(String gameName) {
         setChanged();
         notifyObservers(new GameCreationMessage(this.client.getNickname(), this.numberOfPlayersController.getNumberOfPlayersChosen(), gameName));
     }
+// todo : questi due metodi ora possono essere tolti perche il check lo facciamo direttamente nel controller della scena, però da errore perche altrimenti non implementiamo tutti i metodi dell'interfaccia.. è un problema?
 
     @Override
     public boolean isValidPort(String serverPort) {
@@ -545,8 +597,7 @@ public class GUI extends Observable implements View {
                 }
             }
 
-            // va in questo case se nella colonna inserita c'è abbastanza spazio per inserire le tiles.
-            case PLACING_TILES -> { // poi ogni volta che seleziona una carta il Item tile indexMessage lo riporta qui
+            case PLACING_TILES -> {
                 livingBoardController.tilePack.setDisable(false);
                 if (this.client.getNickname().equals(game.getCurrentPlayer().getName())) {
                     Platform.runLater(() -> {
@@ -624,7 +675,7 @@ public class GUI extends Observable implements View {
                         break;
                     }
                 }
-                // setto il punteggio di tutti tanto arriva a tutti il messaggio
+
                 winController.myscoretext.setText("YOUR  FINAL SCORE IS           " + scoreOfThisClient);
 
                 if (eventMessage.getNickname().equals(this.client.getNickname())) {
@@ -635,7 +686,7 @@ public class GUI extends Observable implements View {
                     winController.congratulations.setText("Congratulations "+ eventMessage.getNickname() +"!");
 
 
-                    // Platform.runLater(() -> showPopup("You won"));
+
                     System.out.println(eventMessage.getNickname() + "win the game");
                 } else {
                     winController.bestplayer.setVisible(false);
@@ -693,6 +744,11 @@ public class GUI extends Observable implements View {
 
 
 
+    /**
+     *This method is used to display a generic pop-up warning in all game scenes
+     * @param text the message that appears in the popup
+     */
+
 
 
     public void showPopup(String text){
@@ -706,17 +762,40 @@ public class GUI extends Observable implements View {
         }
     }
 
+
+    /**
+     *This method is used to notify the server of the specific tile to be placed in the bookshelf after the player
+     * has selected it from the tilepack by clicking an image in the {@link LivingBoardController tilePack} present in the
+     * {@code livingBoard_scene}
+     * @param itemTileIndex the index of the tilepack that contains the chosen tile to be placed in the column.Since there are at most 3 tiles in the tilepack,
+     * this index will have a value between 0 and 2.
+     */
+
+
     public void insertTileInColumn(int itemTileIndex){
         setChanged();
         notifyObservers(new ItemTileIndexMessage(nickname, itemTileIndex));
     }
 
-    public static Stage getWindow(){
+   /* public static Stage getWindow(){
         return window;
     }
     public static Scene getActiveScene() {return activeScene;}
     public static double getWidth() {return width;}
     public static double getHeight() {return height;}
+
+
+    */
+
+
+
+
+    /**
+     *This method is used to set the {@code computeScore_scene.fxml } and instantiate his scene controller in the GUI.
+     * In that scene the player can see the details of his score.
+     * The switch to this scene comes after the player has clicked the {@link WinController MyScoreDetail} button
+     * in the scene {@code win_scene}.
+     */
 
     public void showThisClientScores() {
         try {

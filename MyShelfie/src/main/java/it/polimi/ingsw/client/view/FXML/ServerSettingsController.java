@@ -75,12 +75,6 @@ public class ServerSettingsController {
         //TODO: check for empty value and for string instead of integer v
         // alue
         if(isValidIPAddress(address) && isValidPort(chosenPort)) {
-        //  try {
-        //      Registry registry = LocateRegistry.getRegistry(address, chosenport);
-        //      AppServer server = (AppServer) registry.lookup("MyShelfieServer");
-        //      this.client = new ClientImplementation(gui, server.connect());
-        //      gui.setClient(client);
-        //  }
             gui.createConnection(address, chosenPort);
         }
         else if (!isValidIPAddress(address) || !isValidPort(chosenPort) || isValidIPAddress("")|| isValidIPAddress(" ")){

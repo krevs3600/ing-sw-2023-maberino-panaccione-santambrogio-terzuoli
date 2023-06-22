@@ -38,7 +38,7 @@
                     </font>
                 </Label>
                 <Separator fx:id="linetwo" layoutX="88.0" layoutY="328.0" prefHeight="8.0" prefWidth="1233.0" visible="false" />
-                <Button fx:id="viewD_secondPlayer" layoutX="550.0" layoutY="109.0" mnemonicParsing="false" onMouseClicked="#second_p_score" prefHeight="60.0" prefWidth="319.0" text="view detail" textFill="WHITE">
+                <Button fx:id="viewD_2player" layoutX="550.0" layoutY="109.0" mnemonicParsing="false" onMouseClicked="#second_p_score" prefHeight="60.0" prefWidth="319.0" text="view detail" textFill="WHITE">
                     <font>
                         <Font name="Libian SC Regular" size="26.0" />
                     </font>

@@ -46,7 +46,7 @@ public class GameNameListController {
     ScrollPane scrollPane;
     private String gameToJoin;
 
-    // quando cambio scena setto questo set di stringhe in modo che poi lo passo anche al parametro della funzione, cosi da poter fare override
+
     private Set<String> currentLobbyGameNames = new HashSet<>();
 
 
@@ -71,7 +71,6 @@ public class GameNameListController {
     public void setGui(GUI gui) {
         this.gui = gui;
     }
-    // metodo per confrontare la stringa del gioco inserita con quelle presenti nella lobby
 
 
     /**

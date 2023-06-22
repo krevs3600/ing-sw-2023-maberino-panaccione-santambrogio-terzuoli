@@ -56,9 +56,6 @@ public class GuiApp extends Application {
     public static Stage getWindow(){
         return window;
     }
-    public static Scene getActiveScene() {return activeScene;}
-    public static double getWidth() {return width;}
-    public static double getHeight() {return height;}
 
 
 
