@@ -99,7 +99,7 @@
                   </LinearGradient>
                </textFill>
             </Button>
-            <Button fx:id="EXIT" contentDisplay="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#ExitGame" prefHeight="50.0" prefWidth="279.0" text="EXIT">
+            <Button fx:id="EXIT" contentDisplay="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#ExitGame" prefHeight="40.0" prefWidth="279.0" text="EXIT">
                <font>
                   <Font size="20.0" />
                </font>
@@ -120,12 +120,12 @@
                   </LinearGradient>
                </textFill>
             </Button>
-                <VBox alignment="CENTER" prefHeight="397.0" prefWidth="1257.0">
+                <VBox alignment="CENTER" prefHeight="265.0" prefWidth="1510.0">
                <VBox.margin>
                   <Insets bottom="20.0" />
                </VBox.margin>
                <children>
-                  <Button fx:id="ResumeGameButton" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#ResumeOldGame" prefHeight="53.0" prefWidth="279.0" text="RESUME GAME" textOverrun="CLIP">
+                  <Button fx:id="ResumeGameButton" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#ResumeOldGame" prefHeight="50.0" prefWidth="279.0" text="RESUME GAME" textOverrun="CLIP">
                      <font>
                         <Font size="20.0" />
                      </font>
