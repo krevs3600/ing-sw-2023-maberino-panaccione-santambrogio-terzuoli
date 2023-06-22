@@ -6,9 +6,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,8 +21,10 @@ import java.util.concurrent.ThreadLocalRandom;
  * @since 3/28/2023
  */
 
-public class PersonalGoalCardDeck implements Drawable {
+public class PersonalGoalCardDeck implements Drawable, Serializable {
 
+    @Serial
+    private static final long serialVersionUID = 1L;
     private int size = 0;
     private final List<PersonalGoalCard> deck;
 

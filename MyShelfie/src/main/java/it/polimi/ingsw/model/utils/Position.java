@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.utils;
 import it.polimi.ingsw.model.LivingRoomBoard;
 import it.polimi.ingsw.model.Space;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -15,6 +16,7 @@ import java.io.Serializable;
  */
 
 public class Position implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
     private static final int MAX_WIDTH = 9;
     private static final int MAX_HEIGHT = 9;

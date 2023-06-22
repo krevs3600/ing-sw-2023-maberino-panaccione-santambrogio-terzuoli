@@ -9,9 +9,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,7 +24,10 @@ import java.util.stream.Collectors;
  * @since 3/21/2023
  */
 
-public class LivingRoomBoard {
+public class LivingRoomBoard  implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
     private static final int MAX_WIDTH = 9;
     private static final int MAX_HEIGHT = 9;
     private final Space[][] spaces = new Space[MAX_WIDTH][MAX_HEIGHT];

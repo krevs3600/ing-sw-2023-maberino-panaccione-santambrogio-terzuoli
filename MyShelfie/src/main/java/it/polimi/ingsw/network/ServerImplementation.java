@@ -6,8 +6,10 @@ import it.polimi.ingsw.model.ModelView.GameView;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.utils.NumberOfPlayers;
 import it.polimi.ingsw.network.MessagesToClient.errorMessages.JoinErrorMessage;
+import it.polimi.ingsw.network.MessagesToClient.errorMessages.ResumeGameErrorMessage;
 import it.polimi.ingsw.network.MessagesToClient.requestMessage.*;
 import it.polimi.ingsw.network.eventMessages.*;
+import it.polimi.ingsw.persistence.Storage;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
@@ -21,11 +23,11 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
    // private Map<GameController, Game> currentGames = new HashMap<>();
 
 
-    private Map<String,GameController> currentGames = new HashMap<>();
-    private Set<String> currentPlayersNicknames = new HashSet<>();
-    private Set<String> currentLobbyGameNames = new HashSet<>();
-    private Map<String, Client> connectedClients = new HashMap<>();
-    private Map<Client, GameController> playerGame = new HashMap<>();
+    private final Map<String,GameController> currentGames = new HashMap<>();
+    private final Set<String> currentPlayersNicknames = new HashSet<>();
+    private final Set<String> currentLobbyGameNames = new HashSet<>();
+    private final Map<String, Client> connectedClients = new HashMap<>();
+    private final Map<Client, GameController> playerGame = new HashMap<>();
 
     public ServerImplementation() throws RemoteException {
         super();
@@ -54,6 +56,10 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                 }
 
                  */
+                if (eventMessage instanceof WinGameMessage) {
+                    Storage storage = new Storage();
+                    storage.delete();
+                }
                 client.update(new GameView(game), (EventMessage) eventMessage);
             } catch (RemoteException e) {
                 System.err.println("Unable to update the client: " + e.getMessage() + ". Skipping the update");
@@ -68,7 +74,7 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
             case NICKNAME -> {
                 if (!currentPlayersNicknames.contains(eventMessage.getNickname())) {                                                              //case CREATOR_NICKNAME -> {
                     currentPlayersNicknames.add(eventMessage.getNickname());                                                                      //    boolean validNickname = false;
-                    connectedClients.put(eventMessage.getNickname(), client);                                                                     //    if (!currentPlayersNicknames.contains(eventMessage.getNickName())) {
+                    getConnectedClients().put(eventMessage.getNickname(), client);                                                                     //    if (!currentPlayersNicknames.contains(eventMessage.getNickName())) {
                     //  Set<String> availableGames = new HashSet<>(currentLobbyGameNames);                                                            //        validNickname = true;
                     //  if(currentLobbyGameNames.size()==0){                                                                                          //        currentPlayersNicknames.add(eventMessage.getNickName());
                     //      client.onMessage(new LoginResponseMessage(true,false, eventMessage.getNickName()));                                       //        connectedClients.put(eventMessage.getNickName(), client);
@@ -94,12 +100,11 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                 boolean isValid = false;
                 if (gameCreationMessage.getNumOfPlayers() > 1 && gameCreationMessage.getNumOfPlayers() < 5) {
                     Game game = new Game(Arrays.stream(NumberOfPlayers.values()).filter(x -> x.getValue() == gameCreationMessage.getNumOfPlayers()).toList().get(0), gameCreationMessage.getGameName());
-                    GameController gameController = new GameController(this, game);
+                    GameController gameController = new GameController(game);
                     playerGame.put(client, gameController);
                     register(client);
                     currentGames.put(gameCreationMessage.getGameName(), gameController);
                     // first player is directly added
-                    gameController.getClients().add(client);
                     gameController.update(client, gameCreationMessage);
                     isValid = true;
                 }
@@ -115,12 +120,11 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                     isValidGameName = true;
                     if(gameSpecsMessage.getNumOfPlayers() > 1 && gameSpecsMessage.getNumOfPlayers() < 5){
                         Game game = new Game(Arrays.stream(NumberOfPlayers.values()).filter(x -> x.getValue() == gameSpecsMessage.getNumOfPlayers()).toList().get(0), gameSpecsMessage.getGameName());
-                        GameController gameController = new GameController(this, game);
+                        GameController gameController = new GameController(game);
                         playerGame.put(client, gameController);
                         register(client);
                         currentGames.put(gameSpecsMessage.getGameName(), gameController);
                         // first player is directly added
-                        gameController.getClients().add(client);
                         gameController.update(client, gameSpecsMessage);
                         isValidNumOfPlayers = true;
                     }
@@ -129,25 +133,86 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
             }
 
             case JOIN_GAME_REQUEST -> {
-                JoinGameMessage joinGameMessage = (JoinGameMessage) eventMessage;
                 Set<String> availableGames = new HashSet<>(currentLobbyGameNames);
                 if (currentLobbyGameNames.isEmpty()) {
-                    client.onMessage(new JoinErrorMessage(joinGameMessage.getNickname(), "no available games in lobby"));
+                    client.onMessage(new JoinErrorMessage(eventMessage.getNickname(), "no available games in lobby"));
                 } else {
                     client.onMessage(new JoinGameResponseMessage(eventMessage.getNickname(), true, availableGames));
 
                 }
             }
+
+            case RESUME_GAME_REQUEST -> {
+                boolean validation = false;
+                Storage storage = new Storage();
+                GameController savedGameController = storage.restore();
+                for (Player player: savedGameController.getGame().getSubscribers()) {
+                    if (player.getName().equals(eventMessage.getNickname())) {
+                        validation = true;
+                        break;
+                    }
+                }
+                if (validation) {
+
+                    if (!currentGames.containsKey(savedGameController.getGame().getGameName())) {
+                        currentGames.put(savedGameController.getGame().getGameName(), savedGameController);
+                    }
+                    if (!playerGame.containsKey(client)) {
+                        playerGame.put(client, savedGameController);
+                        register(client);
+                    }
+                    boolean allClientsResumed = true;
+                    int missingPlayers = 0;
+                    for (Player checkPlayer: savedGameController.getGame().getSubscribers()) {
+                        if (!getConnectedClients().containsKey(checkPlayer.getName())) {
+                            allClientsResumed = false;
+                            missingPlayers ++;
+                        }
+                    }
+                    if (allClientsResumed) {
+                        savedGameController.update(client, new EndTurnMessage(eventMessage.getNickname()));
+                    }
+                    else {
+                        for (Player waitingPlayer : savedGameController.getGame().getSubscribers()) {
+                            if (getConnectedClients().containsKey(waitingPlayer.getName())) {
+                                getConnectedClients().get(waitingPlayer.getName()).onMessage(new WaitingResponseMessage(eventMessage.getNickname(),missingPlayers));
+                            }
+                        }
+                    }
+                }
+                else {
+                    client.onMessage(new ResumeGameErrorMessage(eventMessage.getNickname(), "there is no game to resume"));
+                }
+            }
             // TODO check if game has been created
             case GAME_CHOICE -> {
                 GameNameChoiceMessage gameNameChoiceMessage=(GameNameChoiceMessage) eventMessage;
-                playerGame.put(client, currentGames.get(gameNameChoiceMessage.getGameChoice()));
+                GameController gameController = currentGames.get(gameNameChoiceMessage.getGameChoice());
+                playerGame.put(client, gameController);
                 register(client);
-                currentGames.get(gameNameChoiceMessage.getGameChoice()).getClients().add(client);
-                currentGames.get(gameNameChoiceMessage.getGameChoice()).update(client,gameNameChoiceMessage);
+                gameController.update(client,gameNameChoiceMessage);
+                if (gameController.getGame().getSubscribers().size() < gameController.getGame().getNumberOfPlayers().getValue()-1){
+                    client.onMessage(new WaitingResponseMessage(eventMessage.getNickname(), gameController.getGame().getNumberOfPlayers().getValue()-gameController.getGame().getSubscribers().size()));
+                }
+                for (Player player : gameController.getGame().getSubscribers()){
+                    // notify other clients that a new player has joined the game
+                    if (!player.getName().equals(eventMessage.getNickname())){
+                        getConnectedClients().get(player.getName()).onMessage(new PlayerJoinedLobbyMessage(eventMessage.getNickname()));
+                    }
+
+                    if (gameController.getGame().getSubscribers().size() < gameController.getGame().getNumberOfPlayers().getValue()){
+                        getConnectedClients().get(player.getName()).onMessage(new WaitingResponseMessage(eventMessage.getNickname(), gameController.getGame().getNumberOfPlayers().getValue()-gameController.getGame().getSubscribers().size()));
+
+                    }
+                }
+
+                if (gameController.getGame().getSubscribers().size() == gameController.getGame().getNumberOfPlayers().getValue()) {
+                    removeGameFromLobby(gameNameChoiceMessage.getGameChoice());
+                    gameController.update(client, new StartGameMessage(eventMessage.getNickname()));
+                }
             }
 
-            case TILE_POSITION, BOOKSHELF_COLUMN, ITEM_TILE_INDEX, END_TURN, FILL_BOOKSHELF, SWITCH_PHASE -> {
+            case TILE_POSITION, BOOKSHELF_COLUMN, ITEM_TILE_INDEX, FILL_BOOKSHELF, SWITCH_PHASE, END_TURN -> {
                 playerGame.get(client).update(client, eventMessage); //prendo il controller associato al client e su di questo chiamo l'update passando
                                                                     // il client e l'event message che non deve essere castato ed il tipo di messaggio che
                                                                     // mando è di tipo TilePack message
@@ -156,13 +221,11 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
             }
 
             case DISCONNECT_CLIENT -> {
-                DisconnectClientMessage disconnectMessage = (DisconnectClientMessage) eventMessage;
                 // if client is not in any game
                 if (!playerGame.containsKey(client)){
                     currentPlayersNicknames.remove(eventMessage.getNickname());
-                    connectedClients.remove(eventMessage.getNickname());
+                    getConnectedClients().remove(eventMessage.getNickname());
                 } else {
-                    playerGame.get(client).getClients().remove(client);
                     String gameName = playerGame.get(client).getGame().getGameName();
                     GameController controller = currentGames.get(gameName);
                     Game game = controller.getGame();
@@ -172,7 +235,7 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                     // if game has not started yet
                     if (currentLobbyGameNames.contains(gameName)){
                         currentPlayersNicknames.remove(eventMessage.getNickname());
-                        connectedClients.remove(eventMessage.getNickname());
+                        getConnectedClients().remove(eventMessage.getNickname());
                         Player unsubscribed = game.getSubscribers().stream().filter(x->x.getName().equals(eventMessage.getNickname())).toList().get(0);
                         game.getSubscribers().remove(unsubscribed);
 
@@ -203,7 +266,7 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
 
                         }
                         for (Player player : game.getSubscribers()){
-                            connectedClients.remove(player.getName());
+                            getConnectedClients().remove(player.getName());
                         }
                     }
                 }

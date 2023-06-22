@@ -29,6 +29,9 @@ public enum EventMessageType {
     DISCONNECT_CLIENT,
     PICKING_TILES,
     PLACING_TILES,
+
+    START_GAME,
+    RESUME_GAME_REQUEST,
     // error
     GAME_SPECS, COLUMN_CHOICE;
 

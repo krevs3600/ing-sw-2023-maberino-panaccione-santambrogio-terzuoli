@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -12,7 +14,10 @@ import java.util.*;
  * @since 3/28/2023
  */
 
-public class TilePack {
+public class TilePack  implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
     private final List<ItemTile> tiles;
 
     private static final int MAX_LENGTH = 3;

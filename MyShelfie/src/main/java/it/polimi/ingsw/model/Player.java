@@ -2,6 +2,9 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.CommonGoalCard.CommonGoalCard;
 import it.polimi.ingsw.model.utils.Position;
+
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -11,7 +14,10 @@ import java.util.*;
  * @version 1.0
  * @since 3/28/2023
  */
-public class Player {
+public class Player  implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
     private final String name;
     private PlayerStatus status;
 

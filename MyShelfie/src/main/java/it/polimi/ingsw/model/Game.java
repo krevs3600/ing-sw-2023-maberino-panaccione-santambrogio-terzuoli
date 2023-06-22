@@ -12,6 +12,8 @@ import it.polimi.ingsw.network.eventMessages.EventMessage;
 import it.polimi.ingsw.network.eventMessages.*;
 import it.polimi.ingsw.observer_observable.Observable;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -22,8 +24,10 @@ import java.util.*;
  * @version 1.0
  * @since 4/30/2023
  */
-public class Game extends Observable<EventMessage> {
+public class Game extends Observable<EventMessage>  implements Serializable {
 
+    @Serial
+    private static final long serialVersionUID = 1L;
     private String gameName;
     private final PersonalGoalCardDeck personalGoalCardDeck;
     private final List<Player> subscribers = new ArrayList<>();

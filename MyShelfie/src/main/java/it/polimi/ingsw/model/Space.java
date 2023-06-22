@@ -4,6 +4,9 @@ import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.model.utils.SpaceType;
 import it.polimi.ingsw.observer_observable.Observable;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 /**
  * <h1>Class Space</h1>
  * The class Space represents the unit out of which the {@link LivingRoomBoard} is composed
@@ -14,7 +17,10 @@ import it.polimi.ingsw.observer_observable.Observable;
  */
 
 
-public class Space extends Observable {
+public class Space extends Observable  implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
     private boolean free;
     private final SpaceType type;
     private final Position position;

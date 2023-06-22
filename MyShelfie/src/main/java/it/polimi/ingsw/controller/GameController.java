@@ -10,80 +10,41 @@ import it.polimi.ingsw.network.MessagesToClient.errorMessages.IllegalTilePositio
 import it.polimi.ingsw.network.MessagesToClient.errorMessages.NotEnoughInsertableTilesErrorMessage;
 import it.polimi.ingsw.network.MessagesToClient.errorMessages.NotEnoughInsertableTilesInColumnErrorMessage;
 import it.polimi.ingsw.network.MessagesToClient.errorMessages.UpperBoundTilePackErrorMessage;
-import it.polimi.ingsw.network.MessagesToClient.requestMessage.PlayerJoinedLobbyMessage;
-import it.polimi.ingsw.network.MessagesToClient.requestMessage.WaitingResponseMessage;
-import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.network.eventMessages.*;
+import it.polimi.ingsw.persistence.Storage;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
+import java.io.*;
 import java.util.*;
 
-public class GameController {
+public class GameController implements Serializable {
 
-    private Server server;
-    private Game game;
+    @Serial
+    private static final long serialVersionUID = 1L;
 
-    private Object lock= new Object();
+    private final Game game;
 
-    private List<Client> clients = new ArrayList<>();
 
-    public GameController(Server server, Game game){
-        this.server = server;
+    public static final String savedGameFile = "memoryCard";
+
+    public GameController( Game game){
         this.game = game;
     }
 
     public Game getGame () {
         return game;
     }
-    public List<Client> getClients () {
-        return this.clients;
-    }
 
 
     public void update(Client client, EventMessage eventMessage) throws IllegalArgumentException, IOException {
-        if (!clients.contains(client)) {
-            System.err.println("Discarding event from " + client);
-            return;
-        }
-
 
         switch (eventMessage.getType()) {
 
             case GAME_CHOICE -> {
-                GameNameChoiceMessage gameNameChoiceMessage = (GameNameChoiceMessage) eventMessage;
-                //clients.add(client);
                 Player newPlayer = new Player(eventMessage.getNickname());
                 game.subscribe(newPlayer);
-                // if players are still missing a wait message is sent to the new player
-                if (game.getSubscribers().size() < game.getNumberOfPlayers().getValue()-1){
-                    client.onMessage(new WaitingResponseMessage(eventMessage.getNickname(), game.getNumberOfPlayers().getValue()-game.getSubscribers().size()));
-                }
-                for (Client player : this.getClients()){
-                    // notify other clients that a new player has joined the game
-                    if (!player.equals(client)){
-                        player.onMessage(new PlayerJoinedLobbyMessage(eventMessage.getNickname()));
-                    }
-
-                    if (game.getSubscribers().size() < game.getNumberOfPlayers().getValue()){
-                        player.onMessage(new WaitingResponseMessage(eventMessage.getNickname(), game.getNumberOfPlayers().getValue()-game.getSubscribers().size()));
-
-                    }
-                }
-
-                if (game.getSubscribers().size() == game.getNumberOfPlayers().getValue()) {
-                    server.removeGameFromLobby(gameNameChoiceMessage.getGameChoice());
-                    game.initLivingRoomBoard();
-                    for (Player player : game.getSubscribers()){
-                        game.setPersonalGoalCard(player, game.getPersonalGoalCardDeck().draw());
-                    }
-                    game.setDrawableTiles();
-                    game.startGame();
-                }
             }
 
             case GAME_CREATION -> {
@@ -98,6 +59,14 @@ public class GameController {
                 game.setGameName(gameSpecsMessage.getGameName());
                 Player newPlayer = new Player(eventMessage.getNickname());
                 game.subscribe(newPlayer);
+            }
+            case START_GAME -> {
+                game.initLivingRoomBoard();
+                for (Player player : game.getSubscribers()){
+                    game.setPersonalGoalCard(player, game.getPersonalGoalCardDeck().draw());
+                }
+                game.setDrawableTiles();
+                game.startGame();
             }
 
             case TILE_POSITION -> {
@@ -210,9 +179,10 @@ public class GameController {
             }
 
             case END_TURN -> {
-                computeScoreMidGame(client);
+                Storage storage = new Storage();
+                storage.store(this);
 
-
+                computeScoreMidGame();
 
                 if(game.isFinalTurn()) {
                     // game is ended
@@ -296,9 +266,7 @@ public class GameController {
             JSONObject jsonObject = (JSONObject) jsonObj;
             // read points from json
             points = new ArrayList<>(((ArrayList<Long>)jsonObject.get("points")).stream().map(Long::intValue).toList());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ParseException e) {
+        } catch (IOException | ParseException e) {
             throw new RuntimeException(e);
         }
 
@@ -326,21 +294,12 @@ public class GameController {
         return score;
     }
 
-/*
- //@TODO iterare sui giocatori, non get(0)
- public void addNewGame(int numOfPlayers) {
- Game game = new Game(Arrays.stream(NumberOfPlayers.values()).filter(x -> x.getValue() == numOfPlayers).toList().get(0));
- }
-
-
-*/
 
     /**
      * This method is used to keep track of score changes of a player during the game.
      * In particular, the score is updated every time the player receives a scoring token
-     * @return int It returns the updated score of the player
      */
-    private void computeScoreMidGame(Client client) throws IOException {
+    private void computeScoreMidGame() {
         List<CommonGoalCard> commonGoalCards = game.getLivingRoomBoard().getCommonGoalCards();
         for(CommonGoalCard card : commonGoalCards) {
            Player currentPlayer = game.getCurrentPlayer();
@@ -349,7 +308,7 @@ public class GameController {
                     //ScoringToken tempToken = card.getStack().pop();
                     //score+=tempToken.getValue();
                     if(card.equals(commonGoalCards.get(0)) && !currentPlayer.isFirstCommonGoalAchieved()) {
-                        Stack<ScoringToken> oldStack = commonGoalCards.get(0).getStack();
+                        //Stack<ScoringToken> oldStack = commonGoalCards.get(0).getStack();
                         int value = game.popCommonGoalCardStack(0);
                         game.setPlayerScore(value, currentPlayer);
                         currentPlayer.hasAchievedFirstGoal();

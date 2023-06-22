@@ -48,9 +48,10 @@ public enum MessageCLI {
                         """
 
                                  Please choose what you'd like to do
-                                 - 1) create game
-                                 - 2) join game
-                                 - 3) exit\
+                                 - 1) resume game
+                                 - 2) create game
+                                 - 3) join game
+                                 - 4) exit\
                                 """;
             }
             default -> {

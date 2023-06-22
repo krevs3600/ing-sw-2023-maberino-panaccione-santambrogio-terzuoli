@@ -3,6 +3,8 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.utils.TileType;
 
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -15,7 +17,10 @@ import java.util.concurrent.ThreadLocalRandom;
  * @version 1.0
  * @since 3/28/2023
  */
-public class Bag {
+public class Bag implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
     private static final int MAX_SIZE = 132;
     private static final int MAX_SIZE_PER_TYPE = 22;
     private int size = 0;

@@ -21,6 +21,7 @@ public enum MessageToClientType {
 
     // error messages types
     JOIN_GAME_ERROR,
+    RESUME_GAME_ERROR,
     NOT_ENOUGH_INSERTABLE_TILES,
     NOT_ENOUGH_INSERTABLE_TILES_IN_COLUMN,
     UPPER_BOUND_TILEPACK,

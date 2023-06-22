@@ -3,6 +3,8 @@ package it.polimi.ingsw.model.CommonGoalCard;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.utils.NumberOfPlayers;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Stack;
 
 /**
@@ -14,7 +16,10 @@ import java.util.Stack;
  * @version 1.0
  * @since 4/8/2023
  */
-public abstract class CommonGoalCard extends GoalCard {
+public abstract class CommonGoalCard extends GoalCard  implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
     private final Stack<ScoringToken> stack = new Stack<>();
 
     /**

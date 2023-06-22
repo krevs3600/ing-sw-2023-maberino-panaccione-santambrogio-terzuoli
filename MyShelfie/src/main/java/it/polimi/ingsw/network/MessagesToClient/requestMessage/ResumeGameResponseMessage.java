@@ -1,13 +1,14 @@
 package it.polimi.ingsw.network.MessagesToClient.requestMessage;
 
+
 import it.polimi.ingsw.network.MessagesToClient.MessageToClientType;
 
 import java.util.Set;
 
-public class JoinGameResponseMessage extends RequestMessage {
+public class ResumeGameResponseMessage extends RequestMessage {
     private final long serialVersionUID = 1L;
     private final Set<String> AvailableGamesInLobby;
-    public JoinGameResponseMessage(String nickname, boolean validJoin,Set<String> availableGamesInLobby) {
+    public ResumeGameResponseMessage(String nickname, boolean validJoin,Set<String> availableGamesInLobby) {
         super(nickname, MessageToClientType.JOIN_GAME_RESPONSE);
         this.AvailableGamesInLobby=availableGamesInLobby;
     }

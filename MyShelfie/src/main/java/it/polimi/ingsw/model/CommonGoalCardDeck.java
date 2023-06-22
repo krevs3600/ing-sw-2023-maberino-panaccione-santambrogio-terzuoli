@@ -3,6 +3,8 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.CommonGoalCard.*;
 import it.polimi.ingsw.model.utils.Drawable;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -17,8 +19,10 @@ import java.util.concurrent.ThreadLocalRandom;
  * @since 3/28/2023
  */
 
-public class CommonGoalCardDeck implements Drawable {
+public class CommonGoalCardDeck implements Drawable, Serializable {
 
+    @Serial
+    private static final long serialVersionUID = 1L;
     private int size = 0;
     private final List<CommonGoalCard> deck;
 

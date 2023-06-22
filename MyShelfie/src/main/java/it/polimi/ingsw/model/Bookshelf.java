@@ -2,6 +2,8 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.utils.TileType;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -15,7 +17,10 @@ import java.util.Random;
  * @since 4/8/2023
  */
 
-public class Bookshelf {
+public class Bookshelf  implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     private int numberOfTiles;
     private static final int MAX_WIDTH=5;
