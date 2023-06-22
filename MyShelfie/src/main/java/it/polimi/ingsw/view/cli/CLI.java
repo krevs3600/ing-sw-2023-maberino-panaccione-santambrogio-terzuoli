@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.ModelView.GameView;
 import it.polimi.ingsw.model.ModelView.PlayerView;
 import it.polimi.ingsw.model.utils.GamePhase;
 import it.polimi.ingsw.model.utils.Position;
+import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.ClientImplementation;
 import it.polimi.ingsw.network.MessagesToClient.MessageToClient;
 import it.polimi.ingsw.network.MessagesToClient.errorMessages.ErrorMessage;
@@ -26,17 +27,10 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class CLI extends Observable implements View {
+
+    private String nickname;
     private final PrintStream out = System.out;
     private final Scanner in = new Scanner(System.in);
-
-    private ClientImplementation client = null;
-
-    public ClientImplementation getClient() {
-        return this.client;
-    }
-
-
-    public void resetClient(){this.client=null;}
 
 
     public void run() {
@@ -65,7 +59,7 @@ public class CLI extends Observable implements View {
                     Registry registry = LocateRegistry.getRegistry(address, port);
                     AppServer server = (AppServer) registry.lookup("MyShelfieServer");
 
-                    client = new ClientImplementation(this, server.connect());
+                    Client client = new ClientImplementation(this, server.connect());
                     askNickname();
                 } catch (NotBoundException e) {
                     System.err.println("not bound exception registry");
@@ -74,7 +68,7 @@ public class CLI extends Observable implements View {
             case "s" -> {
                 port = (port == 1243) ? 1244 : port;
                 ServerStub serverStub = new ServerStub(address, port);
-                client = new ClientImplementation(this, serverStub);
+                Client client = new ClientImplementation(this, serverStub);
                 serverStub.register(client);
                 new Thread(() -> {
                     while(true) {
@@ -175,7 +169,7 @@ public class CLI extends Observable implements View {
             case 4 -> {
                 out.println("Closing game...");
                 setChanged();
-                notifyObservers(new DisconnectClientMessage( this.client.getNickname()));
+                notifyObservers(new DisconnectClientMessage(getNickname()));
 
             }
             default -> {
@@ -187,7 +181,7 @@ public class CLI extends Observable implements View {
 
     private void resumeGame() {
         setChanged();
-        notifyObservers(new ResumeGameMessage(this.client.getNickname()));
+        notifyObservers(new ResumeGameMessage(getNickname()));
     }
 
     private void createGame() {
@@ -196,7 +190,7 @@ public class CLI extends Observable implements View {
 
     private void joinGame(){
         setChanged();
-        notifyObservers(new JoinGameMessage(this.client.getNickname()));
+        notifyObservers(new JoinGameMessage(getNickname()));
 
     }
 
@@ -208,7 +202,7 @@ public class CLI extends Observable implements View {
                 in.nextLine();
             }
             setChanged();
-            notifyObservers(new GameCreationMessage(this.client.getNickname(), numOfPlayers, gameName));
+            notifyObservers(new GameCreationMessage(getNickname(), numOfPlayers, gameName));
     }
 
 
@@ -217,7 +211,7 @@ public class CLI extends Observable implements View {
         String gameName = "";
 
         while (gameName.length() < 1 || numOfPlayers <= 0) {
-            out.print("\n" + this.client.getNickname() + " choose your game's name: ");
+            out.print("\n" + getNickname() + " choose your game's name: ");
             gameName = in.nextLine();
             out.print("\nPlease insert the number of players: ");
             numOfPlayers = in.nextInt();
@@ -225,17 +219,17 @@ public class CLI extends Observable implements View {
         }
 
         setChanged();
-        notifyObservers(new GameSpecsMessage(this.client.getNickname(),gameName, numOfPlayers));
+        notifyObservers(new GameSpecsMessage(getNickname(),gameName, numOfPlayers));
     }
     public void askGameName() {
 
         String gameName = "";
         while (gameName.length() < 1) {
-            out.print("\n" + this.client.getNickname() + " choose your game's name: ");
+            out.print("\n" + getNickname() + " choose your game's name: ");
             gameName = in.nextLine();
         }
         setChanged();
-        notifyObservers(new GameNameMessage(this.client.getNickname(),gameName));
+        notifyObservers(new GameNameMessage(getNickname(),gameName));
 
     }
 
@@ -245,8 +239,8 @@ public class CLI extends Observable implements View {
         while (nickName.length() < 1) {
             out.print("\nPlease insert your name: ");
             nickName = in.nextLine();
+            this.nickname = nickName;
         }
-      //  return nickName;
         setChanged();
         notifyObservers(new NicknameMessage(nickName));
     }
@@ -271,7 +265,7 @@ public class CLI extends Observable implements View {
         }while(!availableGameNames.contains(gameChoice));
 
         setChanged();
-        notifyObservers(new GameNameChoiceMessage(this.client.getNickname(), gameChoice));
+        notifyObservers(new GameNameChoiceMessage(getNickname(), gameChoice));
     }
 
     public void printTitle() {
@@ -280,6 +274,10 @@ public class CLI extends Observable implements View {
 
     public void printMenu() {
         out.println(MessageCLI.MENU);
+    }
+
+    public String getNickname () {
+        return this.nickname;
     }
 
     public void showMessage(MessageToClient message) {
@@ -306,7 +304,7 @@ public class CLI extends Observable implements View {
             case LOGIN_RESPONSE -> {
                 LoginResponseMessage loginResponseMessage = (LoginResponseMessage) message;
                 if (loginResponseMessage.isValidNickname()) {
-                    System.out.println("\nAvailable nickname " + this.client.getNickname() + " 😊");
+                    System.out.println("\nAvailable nickname " + loginResponseMessage.getNickname() + " 😊");
                     gameMenu();
 
                 } else {
@@ -357,7 +355,7 @@ public class CLI extends Observable implements View {
                         switch (answer) {
                             case "stop" -> {
                                 setChanged();
-                                notifyObservers(new SwitchPhaseMessage(client.getNickname(), GamePhase.COLUMN_CHOICE));
+                                notifyObservers(new SwitchPhaseMessage(errorMessage.getNickname(), GamePhase.COLUMN_CHOICE));
                             }
                             case "" -> {
                                 out.print("r: ");
@@ -399,7 +397,6 @@ public class CLI extends Observable implements View {
             }
 
             case DISCONNECTION_RESPONSE -> {
-                this.client = null;
                 out.println("\nYou lost the connection to the server, and can no longer play");
                 try {
                     createConnection();
@@ -413,7 +410,7 @@ public class CLI extends Observable implements View {
         switch (eventMessage.getType()) {
 
             case PLAYER_TURN -> {
-                if (this.client.getNickname().equals(game.getCurrentPlayer().getName())) {
+                if (this.nickname.equals(game.getCurrentPlayer().getName())) {
                     out.println("\n" + eventMessage.getNickname() + " it's your turn!");
                     out.println("\nPlease enter a position: ");
                     out.print("r: ");
@@ -429,7 +426,7 @@ public class CLI extends Observable implements View {
 
             case BOARD -> {
                 // to check if it works
-                out.println(game.toCLI(client.getNickname()));
+                out.println(game.toCLI(getNickname()));
                 /*out.println("\n-----------------------------------------------------------------------\n");
                 System.out.println("--- NEW TURN ---");
                 out.println("\nLIVING ROOM BOARD:");
@@ -453,7 +450,7 @@ public class CLI extends Observable implements View {
                 }
                  */
 
-                if (!this.client.getNickname().equals(game.getCurrentPlayer().getName())) {
+                if (!this.nickname.equals(game.getCurrentPlayer().getName())) {
                     out.println("\nIt's " + eventMessage.getNickname() + "'s turn\n");
                 }
             }
@@ -462,14 +459,14 @@ public class CLI extends Observable implements View {
             case TILE_PACK -> {
                 /*out.println("\n-----------------------------------------------------------------------\n LIVING ROOM BOARD:");
                 out.println(game.getLivingRoomBoard().toString());*/
-                out.println(game.toCLI(client.getNickname()));
+                out.println(game.toCLI(getNickname()));
             }
 
             case PICKING_TILES -> {
-                if (this.client.getNickname().equals(game.getCurrentPlayer().getName())) {
+                if (this.nickname.equals(game.getCurrentPlayer().getName())) {
                     /*out.println("\n-----------------------------------------------------------------------\n TILE PACK:");
                     out.println(game.getTilePack().toString());*/
-                    out.println(game.toCLI(client.getNickname()));
+                    out.println(game.toCLI(getNickname()));
                     String answer = "";
                     do {
                         out.println("\nIf you wish to stop picking tiles type 'stop', otherwise press ENTER");
@@ -478,7 +475,7 @@ public class CLI extends Observable implements View {
                         switch (answer) {
                             case "stop" -> {
                                 setChanged();
-                                notifyObservers(new SwitchPhaseMessage(client.getNickname(), GamePhase.COLUMN_CHOICE));
+                                notifyObservers(new SwitchPhaseMessage(getNickname(), GamePhase.COLUMN_CHOICE));
                             }
                             case "" -> {
                                 out.println("\nPlease enter a position: ");
@@ -501,7 +498,7 @@ public class CLI extends Observable implements View {
             }
 
             case COLUMN_CHOICE -> {
-                if (this.client.getNickname().equals(game.getCurrentPlayer().getName())) {
+                if (getNickname().equals(game.getCurrentPlayer().getName())) {
                     out.print("In which column you want to insert your item tiles?\n");
                     int column = in.nextInt();
                     in.nextLine();
@@ -516,14 +513,14 @@ public class CLI extends Observable implements View {
                 out.println("\n-----------------------------------------------------------------------\n" + game.getCurrentPlayer().getName() + "'s TILE PACK:");
                 out.println(game.getTilePack().toString());
                  */
-                out.println(game.toCLI(client.getNickname()));
-                if (!this.client.getNickname().equals(game.getCurrentPlayer().getName())) {
+                out.println(game.toCLI(getNickname()));
+                if (!getNickname().equals(game.getCurrentPlayer().getName())) {
                     out.println("\n" + eventMessage.getNickname() + " is inserting tiles in the bookshelf\n");
                 }
             }
 
             case PLACING_TILES -> {
-                if (this.client.getNickname().equals(game.getCurrentPlayer().getName())) {
+                if (getNickname().equals(game.getCurrentPlayer().getName())) {
                     if (game.getTilePack().getTiles().size() > 0) {
                         out.print("Choose an item tile to insert from the tile pack into the selected column\n");
                         int itemTileIndex = in.nextInt();
@@ -538,7 +535,7 @@ public class CLI extends Observable implements View {
             }
 
             case LAST_TURN -> {
-                if (this.client.getNickname().equals(game.getCurrentPlayer().getName())) {
+                if (getNickname().equals(game.getCurrentPlayer().getName())) {
                     out.println("\nCongrats, you filled your bookshelf! You have an extra point!");
                 } else {
                     out.println("\n" + eventMessage.getNickname() + " filled his bookshelf...");
@@ -550,7 +547,7 @@ public class CLI extends Observable implements View {
                 for (PlayerView playerView : game.getSubscribers()) {
                     out.println(playerView.getName() + "'s score is " + playerView.getScore() + " points");
                 }
-                if (eventMessage.getNickname().equals(this.client.getNickname())) {
+                if (eventMessage.getNickname().equals(getNickname())) {
                     out.println("\nCongratulations, you won!");
                 }
                 out.println("\nGame has ended... Hope you had fun!");

@@ -13,15 +13,9 @@ public class ClientApp {
         cli.run();
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
-                if (cli.getClient()!= null) {
-                    cli.setChanged();
-                    cli.notifyObservers(new DisconnectClientMessage( cli.getClient().getNickname()));
-                    cli.resetClient();
-                    System.out.println("Dropping connection and quitting...");
-                } else {
-                    System.out.println("Quitting...");
-                }
-
+                cli.setChanged();
+                cli.notifyObservers(new DisconnectClientMessage(cli.getNickname()));
+                System.out.println("Dropping connection and quitting...");
             }
         });
     }
