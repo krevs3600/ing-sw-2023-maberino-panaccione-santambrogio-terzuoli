@@ -8,10 +8,12 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.utils.GamePhase;
 import it.polimi.ingsw.model.utils.NumberOfPlayers;
 import it.polimi.ingsw.model.utils.Position;
+import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.ClientImplementation;
 import it.polimi.ingsw.network.MessagesToClient.MessageToClient;
 import it.polimi.ingsw.network.MessagesToClient.errorMessages.ErrorMessage;
 import it.polimi.ingsw.network.MessagesToClient.errorMessages.JoinErrorMessage;
+import it.polimi.ingsw.network.MessagesToClient.errorMessages.ResumeGameErrorMessage;
 import it.polimi.ingsw.network.MessagesToClient.requestMessage.*;
 import it.polimi.ingsw.network.Socket.ServerStub;
 import it.polimi.ingsw.network.eventMessages.*;
@@ -65,7 +67,7 @@ public class GUI extends Observable implements View {
     private StartController startController;
     private WinController winController;
     private LivingBoardController livingBoardController;
-    private ClientImplementation client;
+   // private ClientImplementation client;
     private GameNameController gameNameController;
     private NumberOfPlayersController numberOfPlayersController;
     private GameNameListController gameNameListController;
@@ -84,17 +86,17 @@ public class GUI extends Observable implements View {
     }
 
 
-    /**
+    /*
      * This method is used to set the {@link GUI client} that decided to start
      * the game via the graphical interface and to which response messages are sent from the server
      * @param client the client instance
-     */
+
 
 
     public void setClient(ClientImplementation client) {
         this.client = client;
     }
-
+ */
 
 
     /**
@@ -121,16 +123,16 @@ public class GUI extends Observable implements View {
         startController.setGui(this);
     }
 
-    /**
+    /*
      * Getter method
      * @return the instance of the {@link GUI#client}
-     */
+
 
 
     public ClientImplementation getClient() {
         return this.client;
     }
-
+*/
 
     /**
      * This method is used to notify the server
@@ -140,7 +142,7 @@ public class GUI extends Observable implements View {
 
     public void joinGame() {
         setChanged();
-        notifyObservers(new JoinGameMessage(this.client.getNickname()));
+        notifyObservers(new JoinGameMessage(getNickname()));
     }
 
 
@@ -209,8 +211,11 @@ public class GUI extends Observable implements View {
 
     @Override
     public void askNickname() {
+      //  this.nickname=this.nicknameController.getNickname();
+        // todo: ho settato il nickname dopo che arriva la risposta dal server invece che qui , vedere se funziona
         setChanged();
         notifyObservers(new NicknameMessage(this.nicknameController.getNickname()));
+
     }
 
 
@@ -227,7 +232,9 @@ public class GUI extends Observable implements View {
             try {
                 Registry registry = LocateRegistry.getRegistry(address, port);
                 AppServer server = (AppServer) registry.lookup("MyShelfieServer");
-                this.client = new ClientImplementation(this, server.connect());
+              //  this.client = new ClientImplementation(this, server.connect()); //todo eliminare
+                Client client= new ClientImplementation(this,server.connect());
+
 
             } catch (NotBoundException e) {
                 System.err.println("not bound exception registry");
@@ -235,7 +242,8 @@ public class GUI extends Observable implements View {
         } else if (rmIorSocketController.isSocket()) {
             if (port == 1099) port = 1244;
             ServerStub serverStub = new ServerStub(address, port);
-            client = new ClientImplementation(this, serverStub);
+           // client = new ClientImplementation(this, serverStub); // todo eliminare
+            Client client=new ClientImplementation(this, serverStub);
             serverStub.register(client);
             new Thread(() -> {
                 while (true) {
@@ -269,6 +277,11 @@ public class GUI extends Observable implements View {
         }
     }
 
+    public String getNickname () {
+        return this.nickname;
+    }
+
+
     @Override
     public String askServerAddress() {
         return null;
@@ -293,7 +306,7 @@ public class GUI extends Observable implements View {
     public void chosenPosition(int r, int c) {
        // System.out.println(this.client.getNickname() + " ha scelto la tile nella posizione " + r + " " + c);
         setChanged();
-        notifyObservers(new TilePositionMessage(this.client.getNickname(), new Position(r, c)));
+        notifyObservers(new TilePositionMessage(getNickname(), new Position(r, c)));
 
     }
 
@@ -309,15 +322,15 @@ public class GUI extends Observable implements View {
     public void askGameName() {
         String gameName = this.gameNameController.getTextField();
         setChanged();
-        notifyObservers(new GameNameMessage(this.client.getNickname(), gameName));
+        notifyObservers(new GameNameMessage(getNickname(), gameName));
     }
 
     @Override
     public void showGameNamesList(Set<String> availableGameNames) {
         System.out.println(" il gioco da joinare si chiama " + this.gameNameListController.getGameToJoin());
-        System.out.println("il client è " + this.client.getNickname());
+        System.out.println("il client è " + getNickname());
         setChanged();
-        notifyObservers(new GameNameChoiceMessage(this.client.getNickname(), this.gameNameListController.getGameToJoin()));
+        notifyObservers(new GameNameChoiceMessage(getNickname(), this.gameNameListController.getGameToJoin()));
 
     }
 
@@ -427,7 +440,10 @@ public class GUI extends Observable implements View {
                 // pop up not available games in the lobby
                 showPopup("No available games in the lobby");
             }
-
+            case RESUME_GAME_ERROR -> {
+                ResumeGameErrorMessage resumeGameErrorMessage = (ResumeGameErrorMessage) message;
+                showPopup(resumeGameErrorMessage.getErrorMessage());
+            }
 
             case WAIT_PLAYERS -> {
                 WaitingResponseMessage waitingResponseMessage = (WaitingResponseMessage) message;
@@ -458,7 +474,7 @@ public class GUI extends Observable implements View {
             }
 
             case ILLEGAL_POSITION, UPPER_BOUND_TILEPACK, NOT_ENOUGH_INSERTABLE_TILES -> {
-                if (this.client.getNickname().equals(message.getNickname())) {
+                if (getNickname().equals(message.getNickname())) {
                     ErrorMessage errorMessage = (ErrorMessage) message;
                     this.showPopup(errorMessage.getErrorMessage());
                     String answer = "";
@@ -487,7 +503,7 @@ public class GUI extends Observable implements View {
 
     public void askNumberOfPlayers(String gameName) {
         setChanged();
-        notifyObservers(new GameCreationMessage(this.client.getNickname(), this.numberOfPlayersController.getNumberOfPlayersChosen(), gameName));
+        notifyObservers(new GameCreationMessage(getNickname(), this.numberOfPlayersController.getNumberOfPlayersChosen(), gameName));
     }
 // todo : questi due metodi ora possono essere tolti perche il check lo facciamo direttamente nel controller della scena, però da errore perche altrimenti non implementiamo tutti i metodi dell'interfaccia.. è un problema?
 
@@ -495,6 +511,8 @@ public class GUI extends Observable implements View {
     public boolean isValidPort(String serverPort) {
         return false;
     }
+
+
 
     @Override
     public boolean isValidIPAddress(String address) {
@@ -516,6 +534,11 @@ public class GUI extends Observable implements View {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    public void resumeGame() {
+        setChanged();
+        notifyObservers(new ResumeGameMessage(getNickname()));
     }
 
     // booleano per distinguere la prima volta del gioco e le altre
@@ -570,9 +593,9 @@ public class GUI extends Observable implements View {
             }
 
             case PLAYER_TURN -> {
-                System.out.println(client.getNickname() + " " + eventMessage.getNickname() + " " + game.getCurrentPlayer().getName());
+                System.out.println(getNickname() + " " + eventMessage.getNickname() + " " + game.getCurrentPlayer().getName());
                 System.out.println("it's " + game.getCurrentPlayer().getName() + " turn");
-                if (this.client.getNickname().equals(game.getCurrentPlayer().getName())) {
+                if (this.nickname.equals(game.getCurrentPlayer().getName())) {
                     Platform.runLater(() -> {
                         livingBoardController.board.setDisable(false);
                         showPopup("it's your turn"); // todo ricontrollare questo pop up non mi sembra che compaia
@@ -599,7 +622,7 @@ public class GUI extends Observable implements View {
 
             case PLACING_TILES -> {
                 livingBoardController.tilePack.setDisable(false);
-                if (this.client.getNickname().equals(game.getCurrentPlayer().getName())) {
+                if (this.nickname.equals(game.getCurrentPlayer().getName())) {
                     Platform.runLater(() -> {
                         livingBoardController.updateTilePack(game.getTilePack());
                         LivingBoardController.updateBookshelf(game.getCurrentPlayer().getBookshelf(), livingBoardController.bookshelf);
@@ -620,8 +643,8 @@ public class GUI extends Observable implements View {
             }
 
             case PICKING_TILES -> {
-                if (this.client.getNickname().equals(game.getCurrentPlayer().getName())) {
-                    System.out.println("arrivato a " + this.client.getNickname());
+                if (this.nickname.equals(game.getCurrentPlayer().getName())) {
+                    System.out.println("arrivato a " + this.getNickname());
                     Platform.runLater(() -> {
                         livingBoardController.updateLivingRoomBoard(game.getLivingRoomBoard());
                         livingBoardController.updateTilePack(game.getTilePack());
@@ -650,7 +673,7 @@ public class GUI extends Observable implements View {
                 });
             }
             case LAST_TURN -> {
-                if (this.client.getNickname().equals(game.getCurrentPlayer().getName())) {
+                if (this.nickname.equals(game.getCurrentPlayer().getName())) {
                     showPopup("\nCongrats, you filled your bookshelf! You have an extra point!");
                 } else {
                     showPopup("\n" + eventMessage.getNickname() + " filled his bookshelf...");
@@ -670,7 +693,7 @@ public class GUI extends Observable implements View {
                 }
                 int scoreOfThisClient=0;
                 for(PlayerView player:game.getSubscribers()){
-                    if(player.getName().equals(this.client.getNickname())){
+                    if(player.getName().equals(this.nickname)){
                         scoreOfThisClient= player.getScore();
                         break;
                     }
@@ -678,7 +701,7 @@ public class GUI extends Observable implements View {
 
                 winController.myscoretext.setText("YOUR  FINAL SCORE IS           " + scoreOfThisClient);
 
-                if (eventMessage.getNickname().equals(this.client.getNickname())) {
+                if (eventMessage.getNickname().equals(this.nickname)) {
                     winController.fail_1.setVisible(false);
                     winController.fail_2.setVisible(false);
                     winController.fail_3.setVisible(false);
@@ -693,7 +716,7 @@ public class GUI extends Observable implements View {
                     winController.congratulations.setVisible(false);
                     winController.YouWonTheGame.setVisible(false);
                     winController.lost.setVisible(true);
-                    winController.lost.setText("Sorry " +client.getNickname()+"...... you lost");
+                    winController.lost.setText("Sorry " +this.nickname+"...... you lost");
                     winController.DontGiveUp.setVisible(true);
                     winController.willBeBetter.setVisible(true);
                     Platform.runLater(() -> showPopup(eventMessage.getNickname() + " won"));
@@ -715,7 +738,7 @@ public class GUI extends Observable implements View {
 
 
                 for (PlayerView player : game.getSubscribers()) {
-                    if (this.client.getNickname().equals(player.getName())) {
+                    if (this.nickname.equals(player.getName())) {
                         playerreal=player;
                         break; // quindi metodo che mi ritorna il giocatore associato a questo client e poi costruisco una lista senza quel giocatore.
 

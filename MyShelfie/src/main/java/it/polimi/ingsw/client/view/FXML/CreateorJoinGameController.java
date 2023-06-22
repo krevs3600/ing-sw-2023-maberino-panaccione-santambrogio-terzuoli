@@ -31,6 +31,9 @@ public class CreateorJoinGameController {
     @FXML
     public Button EXIT;
 
+    @FXML
+    public Button ResumeGameButton;
+
     private boolean joinGameb = false;
     private boolean createGame = false;
 
@@ -95,5 +98,9 @@ public class CreateorJoinGameController {
      */
     public void ExitGame(MouseEvent mouseEvent) {
 // //TODO: gestire chiusura stage
+    }
+
+    public void ResumeOldGame(MouseEvent mouseEvent) {
+        gui.resumeGame();
     }
 }

@@ -105,7 +105,7 @@ public class AppServerImpl extends UnicastRemoteObject implements AppServer
     @Override
     public Server connect() throws RemoteException {
         if (server == null) {
-            server = new ServerImplementation(1243);
+            server = new ServerImplementation(1099);
         }
         return server;
     }

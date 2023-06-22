@@ -70,7 +70,7 @@ public class ServerSettingsController {
     public void connect(MouseEvent event) throws IOException, NotBoundException {
 
         address = ipAddress.getText().isEmpty() ? "127.0.0.1" : ipAddress.getText();
-        chosenPort = port.getText().isEmpty() ? 1243 : Integer.parseInt(port.getText());
+        chosenPort = port.getText().isEmpty() ? 1099 : Integer.parseInt(port.getText());
 
         //TODO: check for empty value and for string instead of integer v
         // alue

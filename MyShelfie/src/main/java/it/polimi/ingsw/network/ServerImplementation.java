@@ -170,6 +170,7 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                         }
                     }
                     if (allClientsResumed) {
+
                         savedGameController.update(client, new EndTurnMessage(eventMessage.getNickname()));
                     }
                     else {
