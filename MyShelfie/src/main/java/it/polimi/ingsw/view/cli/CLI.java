@@ -63,10 +63,12 @@ public class CLI extends Observable implements View {
                     askNickname();
                 } catch (NotBoundException e) {
                     System.err.println("not bound exception registry");
+                } catch (RemoteException re) {
+                    re.printStackTrace();
                 }
             }
             case "s" -> {
-                port = (port == 1243) ? 1244 : port;
+                port = (port == 1099) ? 1244 : port;
                 ServerStub serverStub = new ServerStub(address, port);
                 Client client = new ClientImplementation(this, serverStub);
                 serverStub.register(client);
@@ -123,7 +125,7 @@ public class CLI extends Observable implements View {
             serverPort = in.nextLine();
             if (serverPort.equals("")){
                 out.println("\nUsing default port...");
-                return 1243;
+                return 1099;
             }
         } while (!isValidPort(serverPort));
 

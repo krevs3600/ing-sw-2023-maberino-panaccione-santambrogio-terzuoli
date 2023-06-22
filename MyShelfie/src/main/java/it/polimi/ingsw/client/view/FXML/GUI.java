@@ -233,7 +233,7 @@ public class GUI extends Observable implements View {
                 System.err.println("not bound exception registry");
             }
         } else if (rmIorSocketController.isSocket()) {
-            if (port == 1243) port = 1244;
+            if (port == 1099) port = 1244;
             ServerStub serverStub = new ServerStub(address, port);
             client = new ClientImplementation(this, serverStub);
             serverStub.register(client);

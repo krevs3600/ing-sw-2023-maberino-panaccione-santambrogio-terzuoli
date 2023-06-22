@@ -29,10 +29,6 @@ public class BookshelfView implements Serializable {
         this.playerName = playerName;
     }
 
-    //public int getNumberOfTiles () {
-    //    return bookshelf.getNumberOfTiles();
-    //}
-
     public ItemTile[][] getGrid () {
         return bookshelf;
     }
@@ -101,14 +97,5 @@ public class BookshelfView implements Serializable {
             result = Arrays.toString(chopped);
         }
         return result;
-    }
-
-    public static void main(String[] args){
-        Game game = new Game(NumberOfPlayers.TWO_PLAYERS, "game");
-        game.initLivingRoomBoard();
-        game.subscribe(new Player("carlo"));
-        game.subscribe(new Player("jack"));
-        BookshelfView view = new BookshelfView(game.getSubscribers().get(0).getBookshelf(), game.getSubscribers().get(0).getName());
-        System.out.println(view);
     }
 }
