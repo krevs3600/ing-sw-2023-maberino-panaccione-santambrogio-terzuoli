@@ -7,7 +7,7 @@ public abstract class Observable<EventMessage> {
 
 
     private boolean changed = false;
-    private List<Observer> observers;
+    private final List<Observer> observers;
 
 
 

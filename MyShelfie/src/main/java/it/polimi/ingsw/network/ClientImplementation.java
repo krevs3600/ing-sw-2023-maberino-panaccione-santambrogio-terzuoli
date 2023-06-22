@@ -4,7 +4,6 @@ import it.polimi.ingsw.client.view.FXML.GUI;
 import it.polimi.ingsw.client.view.FXML.View;
 import it.polimi.ingsw.model.ModelView.GameView;
 import it.polimi.ingsw.network.MessagesToClient.MessageToClient;
-import it.polimi.ingsw.network.MessagesToClient.errorMessages.ErrorMessage;
 import it.polimi.ingsw.network.MessagesToClient.requestMessage.CreatorLoginResponseMessage;
 import it.polimi.ingsw.network.MessagesToClient.requestMessage.GameNameResponseMessage;
 import it.polimi.ingsw.network.MessagesToClient.requestMessage.LoginResponseMessage;
@@ -87,7 +86,6 @@ public class ClientImplementation extends UnicastRemoteObject implements Client 
 
 
             }
-        } else if (message instanceof ErrorMessage) {
         }
         view.showMessage(message);
 

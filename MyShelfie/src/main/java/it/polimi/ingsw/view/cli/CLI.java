@@ -2,7 +2,6 @@ package it.polimi.ingsw.view.cli;
 
 import it.polimi.ingsw.AppServer;
 import it.polimi.ingsw.client.view.FXML.View;
-import it.polimi.ingsw.model.ModelView.CommonGoalCardView;
 import it.polimi.ingsw.model.ModelView.GameView;
 import it.polimi.ingsw.model.ModelView.PlayerView;
 import it.polimi.ingsw.model.utils.GamePhase;
@@ -29,7 +28,6 @@ import java.util.Set;
 public class CLI extends Observable implements View {
     private final PrintStream out = System.out;
     private final Scanner in = new Scanner(System.in);
-    private final Object lock = new Object();
 
     private ClientImplementation client = null;
 
@@ -431,7 +429,7 @@ public class CLI extends Observable implements View {
 
             case BOARD -> {
                 // to check if it works
-                out.println(game.toCLI());
+                out.println(game.toCLI(client.getNickname()));
                 /*out.println("\n-----------------------------------------------------------------------\n");
                 System.out.println("--- NEW TURN ---");
                 out.println("\nLIVING ROOM BOARD:");
@@ -464,14 +462,14 @@ public class CLI extends Observable implements View {
             case TILE_PACK -> {
                 /*out.println("\n-----------------------------------------------------------------------\n LIVING ROOM BOARD:");
                 out.println(game.getLivingRoomBoard().toString());*/
-                out.println(game.toCLI());
+                out.println(game.toCLI(client.getNickname()));
             }
 
             case PICKING_TILES -> {
                 if (this.client.getNickname().equals(game.getCurrentPlayer().getName())) {
                     /*out.println("\n-----------------------------------------------------------------------\n TILE PACK:");
                     out.println(game.getTilePack().toString());*/
-                    out.println(game.toCLI());
+                    out.println(game.toCLI(client.getNickname()));
                     String answer = "";
                     do {
                         out.println("\nIf you wish to stop picking tiles type 'stop', otherwise press ENTER");
@@ -518,7 +516,7 @@ public class CLI extends Observable implements View {
                 out.println("\n-----------------------------------------------------------------------\n" + game.getCurrentPlayer().getName() + "'s TILE PACK:");
                 out.println(game.getTilePack().toString());
                  */
-                out.println(game.toCLI());
+                out.println(game.toCLI(client.getNickname()));
                 if (!this.client.getNickname().equals(game.getCurrentPlayer().getName())) {
                     out.println("\n" + eventMessage.getNickname() + " is inserting tiles in the bookshelf\n");
                 }
