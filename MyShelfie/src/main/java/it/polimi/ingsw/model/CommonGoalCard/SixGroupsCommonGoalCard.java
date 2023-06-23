@@ -45,7 +45,6 @@ public class SixGroupsCommonGoalCard extends CommonGoalCard {
                 Map<Integer, Integer> m = b.getNumberAdjacentTiles(tt);
                 for (int i = 2; i < b.getNumberOfTiles(); i++) {
                     if (m.containsKey(i)) {
-                        counter += (int) m.get(i); // casting!!!
                         counter += m.get(i);
                     }
                 }

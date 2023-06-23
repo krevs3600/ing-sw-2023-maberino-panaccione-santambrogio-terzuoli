@@ -2,6 +2,7 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.CommonGoalCard.CommonGoalCard;
 import it.polimi.ingsw.model.CommonGoalCard.FourLinesCommonGoalCard;
+import it.polimi.ingsw.model.ModelView.BookshelfView;
 import it.polimi.ingsw.model.utils.TileType;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,189 +10,165 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class FourLinesCommonGoalCardTest {
-    private Bookshelf b1, b2, b3;
-    private TilePack tp1, tp2, tp3, tp4, tp5, tp6, tp7,tp8,tp9,tp10,tp11,tp12,tp13,tp14,tp15,tp16,tp17,tp18,tp19,tp20;
-    private ItemTile i1, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11, i12,i13,i14,i15,i16,i17,i18,i19,i20,i21,i22,i23,i24,i25,i26,i27,i28,i29,i30,i31,i32,i33,i34,i35,i36,i37,i38,i39,i40,i41;
-    private CommonGoalCard c;
-
+    private Bookshelf testBookshelf1;
+    private Bookshelf testBookshelf2;
+    private Bookshelf testBookshelf3;
+    private CommonGoalCard testCommonGoalCard;
+    private TilePack testTilePack;
     @Before
-    public void setUp() {
-        b1 = new Bookshelf();
-        b2 = new Bookshelf();
-        b3 = new Bookshelf();
-        tp1 = new TilePack();
-        tp2 = new TilePack();
-        tp3 = new TilePack();
-        tp4 = new TilePack();
-        tp5 = new TilePack();
-        tp6 = new TilePack();
-        tp7 = new TilePack();
-        tp8 = new TilePack();
-        tp9 = new TilePack();
-        tp10 = new TilePack();
-        tp11 = new TilePack();
-        tp12 = new TilePack();
-        tp13 = new TilePack();
-        tp14 = new TilePack();
-        tp15 = new TilePack();
-        tp16 = new TilePack();
-        tp17 = new TilePack();
-        tp18 = new TilePack();
-        tp19 = new TilePack();
-        tp20 = new TilePack();
-
-
-        c = new FourLinesCommonGoalCard();
-        i1 = new ItemTile(TileType.CAT);
-        i2 = new ItemTile(TileType.BOOK);
-        i3 = new ItemTile(TileType.BOOK);
-        i4 = new ItemTile(TileType.PLANT);
-        i5 = new ItemTile(TileType.TROPHY);
-        i6 = new ItemTile(TileType.BOOK);
-        i7 = new ItemTile(TileType.GAME);
-        i8 = new ItemTile(TileType.BOOK);
-        i9 = new ItemTile(TileType.BOOK);
-        i10 = new ItemTile(TileType.BOOK);
-        i11 = new ItemTile(TileType.BOOK);
-        i12 = new ItemTile(TileType.BOOK);
-        i13 = new ItemTile(TileType.PLANT);
-        i14 = new ItemTile(TileType.BOOK);
-        i15 = new ItemTile(TileType.FRAME);
-        i16 = new ItemTile(TileType.GAME);
-        i17 = new ItemTile(TileType.FRAME);
-        i18 = new ItemTile(TileType.GAME);
-        i19 = new ItemTile(TileType.TROPHY);
-        i20 = new ItemTile(TileType.BOOK);
-        i21 = new ItemTile(TileType.TROPHY);
-        i22 = new ItemTile(TileType.TROPHY);
-        i23 = new ItemTile(TileType.TROPHY);
-
-
-        tp1.insertTile(i1);//tp1--> CAT BOOK BOOK
-        tp1.insertTile(i2);
-        tp1.insertTile(i3);
-
-        tp2.insertTile(i4); //Plant trophy BOOK
-        tp2.insertTile(i5);
-        tp2.insertTile(i6);
-
-        tp3.insertTile(i8); //BOOK GAME BOOK
-        tp3.insertTile(i7);
-        tp3.insertTile(i9);
-
-        tp6.insertTile(i10); //book
-
-        tp7.insertTile(i11); //book book
-        tp7.insertTile(i12);
-
-        tp8.insertTile(i13); // plant book  frame
-        tp8.insertTile(i14);
-        tp8.insertTile(i15);
-
-        tp9.insertTile(i16); // game frame game
-        tp9.insertTile(i17);
-        tp9.insertTile(i18);
-
-        tp10.insertTile(i19); // trophy book
-        tp10.insertTile(i20);
-
-        tp11.insertTile(i21); //trophy trophy
-        tp11.insertTile(i22);
-
-        tp12.insertTile(i23); //trophy
-        // random bookshelf
-
-        b1.insertTile(tp1, 0);
-        b1.insertTile(tp6, 0);
-
-        b1.insertTile(tp8, 1);
-        b1.insertTile(tp12, 1);
-
-
-        b1.insertTile(tp7, 2);
-        b1.insertTile(tp9, 2);
-
-        b1.insertTile(tp2, 3);
-        b1.insertTile(tp11, 3);
-
-        b1.insertTile(tp3, 4);
-        b1.insertTile(tp10, 4);
-
-
-
-        i24 = new ItemTile(TileType.CAT);
-        i25 = new ItemTile(TileType.BOOK);
-        i26 = new ItemTile(TileType.BOOK);
-        i27 = new ItemTile(TileType.BOOK );
-
-
-        i28 = new ItemTile(TileType.GAME);
-        i29 = new ItemTile(TileType.BOOK);
-        i30 = new ItemTile(TileType.FRAME);
-
-
-
-        i31 = new ItemTile(TileType.FRAME);
-        i32 = new ItemTile(TileType.BOOK);
-        i33 = new ItemTile(TileType.GAME);
-
-
-        i34 = new ItemTile(TileType.PLANT);
-        i35 = new ItemTile(TileType.TROPHY);
-        i36 = new ItemTile(TileType.BOOK);
-        i37= new ItemTile(TileType.TROPHY);
-
-        i38 = new ItemTile(TileType.BOOK);
-        i39 = new ItemTile(TileType.GAME);
-        i40 = new ItemTile(TileType.BOOK);
-        i41= new ItemTile(TileType.TROPHY);
-
-        tp13.insertTile(i24);
-        tp13.insertTile(i25);
-        tp13.insertTile(i26);
-
-        tp14.insertTile(i27);
-
-        tp15.insertTile(i28);
-        tp15.insertTile(i29);
-        tp15.insertTile(i30);
-
-        tp16.insertTile(i31);
-        tp16.insertTile(i32);
-        tp16.insertTile(i33);
-
-        tp17.insertTile(i34);
-        tp17.insertTile(i35);
-        tp17.insertTile(i36);
-
-        tp18.insertTile(i37);
-
-        tp19.insertTile(i38);
-        tp19.insertTile(i39);
-        tp19.insertTile(i40);
-
-        tp20.insertTile(i41);
-
-
-        b3.insertTile(tp13,0);
-        b3.insertTile(tp14,0);
-
-        b3.insertTile(tp15,1);
-
-        b3.insertTile(tp16,2);
-
-        b3.insertTile(tp17,3);
-        b3.insertTile(tp18,3);
-
-        b3.insertTile(tp19,4);
-        b3.insertTile(tp20,4);
+    public void setUp()  {
+        testBookshelf1 = new Bookshelf();
+        testBookshelf2 = new Bookshelf();
+        testBookshelf3 = new Bookshelf();
+        testCommonGoalCard = new FourLinesCommonGoalCard();
+        testTilePack = new TilePack();
     }
-    // bookshelf with 8 tiles but not 8 tiles of the same type
 
     @Test
-    public  void correctCheckPattern(){
-        assertTrue(c.checkPattern(b1));// check on a random configuration
-        assertFalse(c.checkPattern(b2));
-        assertFalse(c.checkPattern(b3));// check on an empty bookshelf
+    public void checkPatternTest(){
+
+        // empty bookshelf: toBeChecked false
+        System.out.println(new BookshelfView(testBookshelf1, "test"));
+        assertFalse(testCommonGoalCard.checkPattern(testBookshelf1));
+
+        // not empty bookshelf: toBeChecked true but checkPattern false
+        for (int i = 0; i< 2; i++) {
+            testTilePack.insertTile(new ItemTile(TileType.CAT));
+            testTilePack.insertTile(new ItemTile(TileType.FRAME));
+            testTilePack.insertTile(new ItemTile(TileType.BOOK));
+
+            for (int j = 0; j < 3; j++) {
+                testBookshelf1.insertTile(testTilePack, 0, 0);
+            }
+        }
+        for (int i = 0; i< 2; i++) {
+            testTilePack.insertTile(new ItemTile(TileType.CAT));
+            testTilePack.insertTile(new ItemTile(TileType.FRAME));
+            testTilePack.insertTile(new ItemTile(TileType.BOOK));
+            for (int j = 0; j < 3; j++) {
+                testBookshelf1.insertTile(testTilePack, 1, 0);
+            }
+        }
+        for (int i = 0; i< 2; i++) {
+            testTilePack.insertTile(new ItemTile(TileType.GAME));
+            testTilePack.insertTile(new ItemTile(TileType.GAME));
+            testTilePack.insertTile(new ItemTile(TileType.GAME));
+            for (int j = 0; j < 3; j++) {
+                testBookshelf1.insertTile(testTilePack, 2, 0);
+            }
+        }
+        testTilePack.insertTile(new ItemTile(TileType.TROPHY));
+        testTilePack.insertTile(new ItemTile(TileType.TROPHY));
+        testTilePack.insertTile(new ItemTile(TileType.TROPHY));
+        for (int j = 0; j < 3; j++) {
+            testBookshelf1.insertTile(testTilePack, 3, 0);
+        }
+        System.out.println(new BookshelfView(testBookshelf1, "test"));
+        assertFalse(testCommonGoalCard.checkPattern(testBookshelf1));
+
+        // three lines each formed by five tiles of maximum three different types
+        testTilePack.insertTile(new ItemTile(TileType.TROPHY));
+        testTilePack.insertTile(new ItemTile(TileType.TROPHY));
+        testTilePack.insertTile(new ItemTile(TileType.TROPHY));
+        for (int j = 0; j < 3; j++) {
+            testBookshelf1.insertTile(testTilePack, 4, 0);
+        }
+
+        System.out.println(new BookshelfView(testBookshelf1, "test"));
+        assertFalse(testCommonGoalCard.checkPattern(testBookshelf1));
+
+        // four lines each formed by five tiles of more than three different tiles
+        for (int i = 0; i< 2; i++) {
+            testTilePack.insertTile(new ItemTile(TileType.CAT));
+            testTilePack.insertTile(new ItemTile(TileType.FRAME));
+            testTilePack.insertTile(new ItemTile(TileType.BOOK));
+
+            for (int j = 0; j < 3; j++) {
+                testBookshelf2.insertTile(testTilePack, 0, 0);
+            }
+        }
+        for (int i = 0; i< 2; i++) {
+            testTilePack.insertTile(new ItemTile(TileType.CAT));
+            testTilePack.insertTile(new ItemTile(TileType.FRAME));
+            testTilePack.insertTile(new ItemTile(TileType.BOOK));
+            for (int j = 0; j < 3; j++) {
+                testBookshelf2.insertTile(testTilePack, 1, 0);
+            }
+        }
+        for (int i = 0; i< 2; i++) {
+            testTilePack.insertTile(new ItemTile(TileType.GAME));
+            testTilePack.insertTile(new ItemTile(TileType.GAME));
+            testTilePack.insertTile(new ItemTile(TileType.GAME));
+            for (int j = 0; j < 3; j++) {
+                testBookshelf2.insertTile(testTilePack, 2, 0);
+            }
+        }
+        testTilePack.insertTile(new ItemTile(TileType.TROPHY));
+        testTilePack.insertTile(new ItemTile(TileType.TROPHY));
+        testTilePack.insertTile(new ItemTile(TileType.TROPHY));
+        for (int j = 0; j < 3; j++) {
+            testBookshelf2.insertTile(testTilePack, 3, 0);
+        }
+        testTilePack.insertTile(new ItemTile(TileType.TROPHY));
+        testBookshelf2.insertTile(testTilePack, 3, 0);
+
+        testTilePack.insertTile(new ItemTile(TileType.PLANT));
+        testTilePack.insertTile(new ItemTile(TileType.PLANT));
+        testTilePack.insertTile(new ItemTile(TileType.PLANT));
+        for (int j = 0; j < 3; j++) {
+            testBookshelf2.insertTile(testTilePack, 4, 0);
+        }
+        testTilePack.insertTile(new ItemTile(TileType.PLANT));
+        testBookshelf2.insertTile(testTilePack, 4, 0);
+
+        System.out.println(new BookshelfView(testBookshelf2, "test"));
+        assertFalse(testCommonGoalCard.checkPattern(testBookshelf2));
+
+        // common goal achieved: toBeChecked true and checkPattern true
+        for (int i = 0; i< 2; i++) {
+            testTilePack.insertTile(new ItemTile(TileType.CAT));
+            testTilePack.insertTile(new ItemTile(TileType.FRAME));
+            testTilePack.insertTile(new ItemTile(TileType.BOOK));
+
+            for (int j = 0; j < 3; j++) {
+                testBookshelf3.insertTile(testTilePack, 0, 0);
+            }
+        }
+        for (int i = 0; i< 2; i++) {
+            testTilePack.insertTile(new ItemTile(TileType.CAT));
+            testTilePack.insertTile(new ItemTile(TileType.FRAME));
+            testTilePack.insertTile(new ItemTile(TileType.BOOK));
+            for (int j = 0; j < 3; j++) {
+                testBookshelf3.insertTile(testTilePack, 1, 0);
+            }
+        }
+        for (int i = 0; i< 2; i++) {
+            testTilePack.insertTile(new ItemTile(TileType.GAME));
+            testTilePack.insertTile(new ItemTile(TileType.GAME));
+            testTilePack.insertTile(new ItemTile(TileType.GAME));
+            for (int j = 0; j < 3; j++) {
+                testBookshelf3.insertTile(testTilePack, 2, 0);
+            }
+        }
+        testTilePack.insertTile(new ItemTile(TileType.TROPHY));
+        testTilePack.insertTile(new ItemTile(TileType.TROPHY));
+        testTilePack.insertTile(new ItemTile(TileType.TROPHY));
+        for (int j = 0; j < 3; j++) {
+            testBookshelf3.insertTile(testTilePack, 3, 0);
+        }
+        testTilePack.insertTile(new ItemTile(TileType.TROPHY));
+        testBookshelf3.insertTile(testTilePack, 3, 0);
+
+        testTilePack.insertTile(new ItemTile(TileType.GAME));
+        testTilePack.insertTile(new ItemTile(TileType.GAME));
+        testTilePack.insertTile(new ItemTile(TileType.GAME));
+        for (int j = 0; j < 3; j++) {
+            testBookshelf3.insertTile(testTilePack, 4, 0);
+        }
+        testTilePack.insertTile(new ItemTile(TileType.GAME));
+        testBookshelf3.insertTile(testTilePack, 4, 0);
+
+        System.out.println(new BookshelfView(testBookshelf3, "test"));
+        assertTrue(testCommonGoalCard.checkPattern(testBookshelf3));
     }
 }

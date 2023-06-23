@@ -34,66 +34,23 @@ public class FourLinesCommonGoalCard extends CommonGoalCard  {
      * @return boolean It returns true if the row has at most three different types, false otherwise
      */
     private boolean AtMostThreeDifferentTypesInOneRow(Bookshelf b, int i) {
-        boolean found = false;
-        boolean empty=false;
+        boolean found;
+        boolean fullRow=true;
         int counter = 0;
-        for(int j=0;j<b.getMaxWidth() && !empty;j++){
+        for(int j=0;j<b.getMaxWidth() && fullRow;j++){
             if(b.getGrid()[i][j]==null){
-                empty=true;
+                fullRow=false;
             }
 
         }
-        if(!empty) {
-            for (int j = 0; j < b.getMaxWidth() && !found; j++) {
-                if (b.getGrid()[i][j].getType().equals(TileType.CAT)) {
-                    counter++;
-                    found = true;
-
-                }
-            }
-
-            found = false;
-            for (int j = 0; j < b.getMaxWidth() && !found; j++) {
-                if (b.getGrid()[i][j].getType().equals(TileType.BOOK)) {
-                    counter++;
-                    found = true;
-
-                }
-            }
-
-            found = false;
-            for (int j = 0; j < b.getMaxWidth() && !found; j++) {
-                if (b.getGrid()[i][j].getType().equals(TileType.GAME)) {
-                    counter++;
-                    found = true;
-
-                }
-            }
-
-            found = false;
-            for (int j = 0; j < b.getMaxWidth() && !found; j++) {
-                if (b.getGrid()[i][j].getType().equals(TileType.FRAME)) {
-                    counter++;
-                    found = true;
-
-                }
-            }
-
-            found = false;
-            for (int j = 0; j < b.getMaxWidth() && !found; j++) {
-                if (b.getGrid()[i][j].getType().equals(TileType.TROPHY)) {
-                    counter++;
-                    found = true;
-
-                }
-            }
-
-            found = false;
-            for (int j = 0; j < b.getMaxWidth() && !found; j++) {
-                if (b.getGrid()[i][j].getType().equals(TileType.PLANT)) {
-                    counter++;
-                    found = true;
-
+        if(fullRow) {
+            for (TileType tileType: TileType.values()) {
+                found = false;
+                for (int j = 0; j < b.getMaxWidth() && !found; j++) {
+                    if (b.getGrid()[i][j].getType().equals(tileType)) {
+                        counter++;
+                        found = true;
+                    }
                 }
             }
             return counter <= 3;

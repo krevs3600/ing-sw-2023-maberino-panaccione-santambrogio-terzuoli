@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.CommonGoalCard;
 
 import it.polimi.ingsw.model.Bookshelf;
+import it.polimi.ingsw.model.utils.TileType;
 
 /**
  * <h1>Class TwoColumnsCommonGoalCard</h1>
@@ -32,18 +33,19 @@ public class TwoColumnsCommonGoalCard extends CommonGoalCard{
      * @return boolean It returns true if the column has all six different types
      */
     private boolean differentTypesInOneColumn(Bookshelf b,int j) {
-        boolean found = false;
-        if(b.getNumberInsertableTilesColumn(j)==0) {
-            found=true;
-            for (int i = 0; i < b.getMaxHeight() && found; i++) {
-                for (int k = i + 1; k < b.getMaxHeight() && found; k++) {
-                    if (b.getGrid()[i][j].equals(b.getGrid()[k][j])) {
-                        found = false;
-                    }
+        boolean found;
+        int counter = 0;
+        for (TileType tileType: TileType.values()) {
+            found = false;
+            for (int i = 0; i < b.getMaxHeight() && !found; i++) {
+                if (b.getGrid()[i][j] != null && b.getGrid()[i][j].getType().equals(tileType)) {
+                    counter++;
+                    found = true;
                 }
             }
         }
-        return found;
+
+        return counter==6;
     }
 
     /**

@@ -33,65 +33,19 @@ public class ThreeColumnsCommonGoalCard extends CommonGoalCard {
      * @return boolean It returns true if the column has at most three different types, false otherwise
      */
     private boolean AtMostThreeDifferentTypesInOneColumn(Bookshelf b, int j) {
-        boolean found = false;
+        boolean found;
         int counter = 0;
-        for (int i = 0; i < b.getMaxHeight() && !found; i++) {
-            if (b.getGrid()[i][j]!=null && b.getGrid()[i][j].getType().equals(TileType.CAT)) {
-                counter++;
-                found = true;
-
+        for (TileType tileType: TileType.values()) {
+            found = false;
+            for (int i = 0; i < b.getMaxHeight() && !found; i++) {
+                if (b.getGrid()[i][j] != null && b.getGrid()[i][j].getType().equals(tileType)) {
+                    counter++;
+                    found = true;
+                }
             }
         }
-
-        found = false;
-        for (int i = 0; i < b.getMaxHeight() && !found; i++) {
-            if (b.getGrid()[i][j]!=null && b.getGrid()[i][j].getType().equals(TileType.BOOK)) {
-                counter++;
-                found = true;
-
-            }
-        }
-
-        found = false;
-        for (int i = 0; i < b.getMaxHeight() && !found; i++) {
-            if (b.getGrid()[i][j]!=null && b.getGrid()[i][j].getType().equals(TileType.GAME)) {
-                counter++;
-                found = true;
-
-            }
-        }
-
-        found = false;
-        for (int i = 0; i < b.getMaxHeight() && !found; i++) {
-            if (b.getGrid()[i][j]!=null && b.getGrid()[i][j].getType().equals(TileType.FRAME)) {
-                counter++;
-                found = true;
-
-            }
-        }
-
-        found = false;
-        for (int i = 0; i < b.getMaxHeight() && !found; i++) {
-            if (b.getGrid()[i][j]!=null && b.getGrid()[i][j].getType().equals(TileType.TROPHY)) {
-                counter++;
-                found = true;
-
-            }
-        }
-
-        found = false;
-        for (int i = 0; i < b.getMaxHeight() && !found; i++) {
-            if (b.getGrid()[i][j]!=null && b.getGrid()[i][j].getType().equals(TileType.PLANT)) {
-                counter++;
-                found = true;
-
-            }
-        }
-
 
         return (counter >= 1) && (counter <= 3);
-
-
     }
 
     /**
@@ -106,7 +60,7 @@ public class ThreeColumnsCommonGoalCard extends CommonGoalCard {
         int columns=0;
         if (toBeChecked(b)) {
             for (int j = 0; j < b.getMaxWidth(); j++) {
-                if(AtMostThreeDifferentTypesInOneColumn(b,j)){
+                if(AtMostThreeDifferentTypesInOneColumn(b,j) && b.getNumberInsertableTilesColumn(j)==0){
                    columns++;
                 }
             }
