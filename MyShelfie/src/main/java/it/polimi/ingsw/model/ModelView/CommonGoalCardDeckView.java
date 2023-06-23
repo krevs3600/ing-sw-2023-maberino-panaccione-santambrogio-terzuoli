@@ -50,7 +50,7 @@ public class CommonGoalCardDeckView implements Serializable {
 
     /**
      * Getter method for the list of CommonGoalCards in the deck
-     * @return the a new list of CommonGoalCards of the deck
+     * @return a new list of CommonGoalCards of the deck
      */
     public List<CommonGoalCardView> getDeck () {
         return new ArrayList<>(this.commonGoalCardDeck);
