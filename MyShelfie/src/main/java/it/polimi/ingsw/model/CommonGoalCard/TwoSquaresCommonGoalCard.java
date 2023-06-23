@@ -35,7 +35,6 @@ public class TwoSquaresCommonGoalCard extends CommonGoalCard{
      * @return boolean It returns true if the bookshelf has the disposition of item tiles described by the common goal, false otherwise
      */
     public boolean checkPattern(Bookshelf b) {
-        TileType tipeFound = TileType.CAT;
         int squares = 0;
         int[][] auxiliary = new int[b.getMaxHeight()][b.getMaxWidth()];
         for (int i = 0; i < b.getMaxHeight(); i++) {
@@ -45,23 +44,17 @@ public class TwoSquaresCommonGoalCard extends CommonGoalCard{
         }
 
         if (toBeChecked(b)) {
-            for (int i = 0; i < b.getMaxHeight() - 1 && squares < 2; i++) {
-                for (int j = 0; j < b.getMaxWidth() - 1 && squares < 2; j++) {
+            for (int i = 0; i < b.getMaxHeight() - 1; i++) {
+                for (int j = 0; j < b.getMaxWidth() - 1; j++) {
                     if (b.getGrid()[i][j] != null && b.getGrid()[i + 1][j] != null
                             && b.getGrid()[i][j + 1] != null && b.getGrid()[i + 1][j + 1] != null) {
-                        if (squares == 0 && b.getGrid()[i][j].getType().equals(b.getGrid()[i + 1][j].getType()) && auxiliary[i][j] == 0 &&
-                                b.getGrid()[i][j].getType().equals(b.getGrid()[i][j + 1].getType()) && auxiliary[i][j + 1] == 0 &&
-                                b.getGrid()[i][j].getType().equals(b.getGrid()[i + 1][j + 1].getType()) && auxiliary[i + 1][j] == 0) {
-                            auxiliary[i][j] = 1;
-                            auxiliary[i + 1][j] = 1;
-                            auxiliary[i][j + 1] = 1;
-                            auxiliary[i + 1][j + 1] = 1;
-                            tipeFound = b.getGrid()[i][j].getType();
-                            squares++;
-                        } else if
-                        (squares > 0 && b.getGrid()[i][j].getType().equals(tipeFound) && b.getGrid()[i][j].getType().equals(b.getGrid()[i + 1][j].getType()) && auxiliary[i][j] == 0 &&
-                                b.getGrid()[i][j].getType().equals(b.getGrid()[i][j + 1].getType()) && auxiliary[i][j + 1] == 0 &&
-                                b.getGrid()[i][j].getType().equals(b.getGrid()[i + 1][j + 1].getType()) && auxiliary[i + 1][j] == 0) {
+                        if (b.getGrid()[i][j].getType().equals(b.getGrid()[i + 1][j].getType()) &&
+                                b.getGrid()[i][j].getType().equals(b.getGrid()[i][j + 1].getType())  &&
+                                b.getGrid()[i][j].getType().equals(b.getGrid()[i + 1][j + 1].getType())  &&
+                                auxiliary[i][j] == 0 &&
+                                auxiliary[i][j + 1] == 0 &&
+                                auxiliary[i + 1][j] == 0 &&
+                                auxiliary[i+1][j+1] == 0) {
                             auxiliary[i][j] = 1;
                             auxiliary[i + 1][j] = 1;
                             auxiliary[i][j + 1] = 1;
@@ -72,7 +65,7 @@ public class TwoSquaresCommonGoalCard extends CommonGoalCard{
                 }
             }
         }
-        return (squares== 2);
+        return (squares>=2);
     }
 
     /**

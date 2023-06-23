@@ -11,12 +11,11 @@ public class ClientApp {
     public static void main(String[] args) throws RemoteException {
         CLI cli = new CLI();
         cli.run();
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            public void run() {
-                cli.setChanged();
-                cli.notifyObservers(new DisconnectClientMessage(cli.getNickname()));
-                System.out.println("Dropping connection and quitting...");
-            }
-        });
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            cli.setChanged();
+            cli.notifyObservers(new DisconnectClientMessage(cli.getNickname()));
+            System.out.println("Dropping connection and quitting...");
+            //System.out.println("Quitting...");
+        }));
     }
 }

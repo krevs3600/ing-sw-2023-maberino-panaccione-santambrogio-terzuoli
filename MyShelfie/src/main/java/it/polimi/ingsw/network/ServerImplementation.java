@@ -29,6 +29,8 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
     private final Map<String, Client> connectedClients = new HashMap<>();
     private final Map<Client, GameController> playerGame = new HashMap<>();
 
+    private final List<GameController> savedGames = new ArrayList<>();
+
     public ServerImplementation() throws RemoteException {
         super();
     }
@@ -144,12 +146,28 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
 
             case RESUME_GAME_REQUEST -> {
                 boolean validation = false;
-                Storage storage = new Storage();
-                GameController savedGameController = storage.restore();
-                for (Player player: savedGameController.getGame().getSubscribers()) {
-                    if (player.getName().equals(eventMessage.getNickname())) {
-                        validation = true;
-                        break;
+                GameController savedGameController = null;
+                for (GameController gameController: savedGames) {
+                    for (Player player: gameController.getGame().getSubscribers()) {
+                        if (player.getName().equals(eventMessage.getNickname())) {
+                            validation = true;
+                            savedGameController = gameController;
+                            break;
+                        }
+                    }
+                }
+
+                if(savedGameController==null) {
+                    Storage storage = new Storage();
+                    savedGameController = storage.restore();
+                    if(savedGameController!=null) {
+                        savedGames.add(savedGameController);
+                        for (Player player : savedGameController.getGame().getSubscribers()) {
+                            if (player.getName().equals(eventMessage.getNickname())) {
+                                validation = true;
+                                break;
+                            }
+                        }
                     }
                 }
                 if (validation) {
@@ -163,20 +181,19 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                     }
                     boolean allClientsResumed = true;
                     int missingPlayers = 0;
-                    for (Player checkPlayer: savedGameController.getGame().getSubscribers()) {
+                    for (Player checkPlayer : savedGameController.getGame().getSubscribers()) {
                         if (!getConnectedClients().containsKey(checkPlayer.getName())) {
                             allClientsResumed = false;
-                            missingPlayers ++;
+                            missingPlayers++;
                         }
                     }
                     if (allClientsResumed) {
 
                         savedGameController.update(client, new EndTurnMessage(eventMessage.getNickname()));
-                    }
-                    else {
+                    } else {
                         for (Player waitingPlayer : savedGameController.getGame().getSubscribers()) {
                             if (getConnectedClients().containsKey(waitingPlayer.getName())) {
-                                getConnectedClients().get(waitingPlayer.getName()).onMessage(new WaitingResponseMessage(eventMessage.getNickname(),missingPlayers));
+                                getConnectedClients().get(waitingPlayer.getName()).onMessage(new WaitingResponseMessage(eventMessage.getNickname(), missingPlayers));
                             }
                         }
                     }

@@ -2,6 +2,7 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.CommonGoalCard.CommonGoalCard;
 import it.polimi.ingsw.model.CommonGoalCard.CornersCommonGoalCard;
+import it.polimi.ingsw.model.ModelView.BookshelfView;
 import it.polimi.ingsw.model.utils.TileType;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,6 +26,7 @@ public class CornersCommonGoalCardTest {
     public void correctCheckPattern() {
 
         // empty bookshelf: toBeChecked false
+        System.out.println(new BookshelfView(testBookshelf1, "test"));
         assertFalse(testCommonGoalCard.checkPattern(testBookshelf1));
 
         // not empty bookshelf: toBeChecked true but checkPattern false
@@ -32,6 +34,7 @@ public class CornersCommonGoalCardTest {
             testTilePack.insertTile(new ItemTile(TileType.CAT));
             testBookshelf1.insertTile(testTilePack, 0, 0);
         }
+        System.out.println(new BookshelfView(testBookshelf1, "test"));
         assertFalse(testCommonGoalCard.checkPattern(testBookshelf1));
 
         // all four corners occupied but not by items of the same type
@@ -39,6 +42,7 @@ public class CornersCommonGoalCardTest {
             testTilePack.insertTile(new ItemTile(TileType.BOOK));
             testBookshelf1.insertTile(testTilePack, testBookshelf1.getMaxWidth()-1, 0);
         }
+        System.out.println(new BookshelfView(testBookshelf1, "test"));
         assertFalse(testCommonGoalCard.checkPattern(testBookshelf1));
 
         // common goal achieved: toBeChecked true and checkPattern true
@@ -52,6 +56,7 @@ public class CornersCommonGoalCardTest {
             testTilePack.insertTile(new ItemTile(TileType.CAT));
             testBookshelf2.insertTile(testTilePack, testBookshelf1.getMaxWidth()-1, 0);
         }
+        System.out.println(new BookshelfView(testBookshelf2, "test"));
         assertTrue(testCommonGoalCard.checkPattern(testBookshelf2));
     }
 }

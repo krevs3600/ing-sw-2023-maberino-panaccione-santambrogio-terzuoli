@@ -1,6 +1,8 @@
 package it.polimi.ingsw.persistence;
 
 import it.polimi.ingsw.controller.GameController;
+import it.polimi.ingsw.network.Client;
+import it.polimi.ingsw.network.MessagesToClient.errorMessages.ResumeGameErrorMessage;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -30,7 +32,7 @@ public class Storage {
             return persistentGame.gameController();
 
         } catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
+         return null;
         }
     }
 
