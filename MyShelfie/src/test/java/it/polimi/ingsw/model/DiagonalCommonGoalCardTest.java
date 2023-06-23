@@ -29,6 +29,7 @@ public class DiagonalCommonGoalCardTest {
     public void checkPatternTest(){
 
         // empty bookshelf: toBeChecked false
+        System.out.println(new BookshelfView(testBookshelf1, "test"));
         assertFalse(testCommonGoalCard.checkPattern(testBookshelf1));
 
         // not empty bookshelf: toBeChecked true but checkPattern false
@@ -57,6 +58,7 @@ public class DiagonalCommonGoalCardTest {
                 testBookshelf1.insertTile(testTilePack, 2, 0);
             }
         }
+        System.out.println(new BookshelfView(testBookshelf1, "test"));
         assertFalse(testCommonGoalCard.checkPattern(testBookshelf1));
 
         // five tiles forming a diagonal but not all of the same type
@@ -77,7 +79,7 @@ public class DiagonalCommonGoalCardTest {
         for (int j = 0; j < 2; j++) {
             testBookshelf1.insertTile(testTilePack, 4, 0);
         }
-
+        System.out.println(new BookshelfView(testBookshelf1, "test"));
         assertFalse(testCommonGoalCard.checkPattern(testBookshelf1));
 
         // common goal achieved: toBeChecked true and checkPattern true
@@ -125,9 +127,7 @@ public class DiagonalCommonGoalCardTest {
             testBookshelf2.insertTile(testTilePack, 4, 0);
         }
 
-        BookshelfView bookshelfView2 = new BookshelfView(testBookshelf2, "test");
-        System.out.println(bookshelfView2);
-
+        System.out.println(new BookshelfView(testBookshelf2, "test"));
         assertTrue(testCommonGoalCard.checkPattern(testBookshelf2));
 
         // common goal achieved: toBeChecked true and checkPattern true
@@ -169,8 +169,7 @@ public class DiagonalCommonGoalCardTest {
             testBookshelf3.insertTile(testTilePack, 0, 0);
         }
 
-        BookshelfView bookshelfView3 = new BookshelfView(testBookshelf3, "test");
-        System.out.println(bookshelfView3);
+        System.out.println(new BookshelfView(testBookshelf3, "test"));
         assertTrue(testCommonGoalCard.checkPattern(testBookshelf3));
     }
 }

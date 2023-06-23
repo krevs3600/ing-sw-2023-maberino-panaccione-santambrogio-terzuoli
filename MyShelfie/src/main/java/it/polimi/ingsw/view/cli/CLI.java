@@ -56,9 +56,9 @@ public class CLI extends Observable implements View {
         switch (connectionType) {
             case "r" -> {
                 try {
+                    System.setProperty("java.rmi.server.hostname","127.0.0.1");
                     Registry registry = LocateRegistry.getRegistry(address, port);
                     AppServer server = (AppServer) registry.lookup("MyShelfieServer");
-
                     Client client = new ClientImplementation(this, server.connect());
                     askNickname();
                 } catch (NotBoundException e) {

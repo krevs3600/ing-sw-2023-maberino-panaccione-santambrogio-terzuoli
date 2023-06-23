@@ -2,6 +2,7 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.CommonGoalCard.CommonGoalCard;
 import it.polimi.ingsw.model.CommonGoalCard.CrossCommonGoalCard;
+import it.polimi.ingsw.model.ModelView.BookshelfView;
 import it.polimi.ingsw.model.utils.TileType;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,6 +27,7 @@ public class CrossCommonGoalCardTest {
     public void checkPatternTest(){
 
         // empty bookshelf: toBeChecked false
+        System.out.println(new BookshelfView(testBookshelf1, "test"));
         assertFalse(testCommonGoalCard.checkPattern(testBookshelf1));
 
         // not empty bookshelf: toBeChecked true but checkPattern false
@@ -45,6 +47,7 @@ public class CrossCommonGoalCardTest {
                 testBookshelf1.insertTile(testTilePack, 2, 0);
             }
         }
+        System.out.println(new BookshelfView(testBookshelf1, "test"));
         assertFalse(testCommonGoalCard.checkPattern(testBookshelf1));
 
         // five tiles forming an X but not all of the same tile type
@@ -54,6 +57,7 @@ public class CrossCommonGoalCardTest {
         for (int j = 0; j < 3; j++) {
             testBookshelf1.insertTile(testTilePack, 1, 0);
         }
+        System.out.println(new BookshelfView(testBookshelf1, "test"));
         assertFalse(testCommonGoalCard.checkPattern(testBookshelf1));
 
         // common goal achieved: toBeChecked true and checkPattern true
@@ -76,6 +80,7 @@ public class CrossCommonGoalCardTest {
         for (int j = 0; j < 3; j++) {
             testBookshelf2.insertTile(testTilePack, 2, 0);
         }
+        System.out.println(new BookshelfView(testBookshelf2, "test"));
         assertTrue(testCommonGoalCard.checkPattern(testBookshelf2));
     }
 }
