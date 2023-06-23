@@ -56,7 +56,6 @@ public class CLI extends Observable implements View {
         switch (connectionType) {
             case "r" -> {
                 try {
-                    System.setProperty("java.rmi.server.hostname","127.0.0.1");
                     Registry registry = LocateRegistry.getRegistry(address, port);
                     AppServer server = (AppServer) registry.lookup("MyShelfieServer");
                     Client client = new ClientImplementation(this, server.connect());
@@ -68,7 +67,7 @@ public class CLI extends Observable implements View {
                 }
             }
             case "s" -> {
-                port = (port == 1243) ? 1244 : port;
+                port = (port == 1099) ? 1244 : port;
                 ServerStub serverStub = new ServerStub(address, port);
                 Client client = new ClientImplementation(this, serverStub);
                 serverStub.register(client);
@@ -125,7 +124,7 @@ public class CLI extends Observable implements View {
             serverPort = in.nextLine();
             if (serverPort.equals("")){
                 out.println("\nUsing default port...");
-                return 1243;
+                return 1099;
             }
         } while (!isValidPort(serverPort));
 

@@ -11,16 +11,45 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * <h1>Class LivingRoomBoardView</h1>
+ * This class is the immutable version of class LivingRoomBoard
+ *
+ * @author Carlo Terzuoli
+ * @version 1.0
+ * @since 5/06/2023
+ */
 public class LivingRoomBoardView implements Serializable {
+    /**
+     * LivingRoomBoard's width
+     */
     private final int MAX_WIDTH;
+    /**
+     * LivingRoomBoard's height
+     */
     private final int MAX_HEIGHT;
+    /**
+     * LivingRoomBoard's matrix of immutable spaces
+     */
     private final SpaceView[][] spaces;
+    /**
+     * LivingRoomBoard's immutable Bag
+     */
     private final BagView bagView;
+    /**
+     * LivingRoomBoard's list of immutable CommonGoalCards
+     */
     private final List<CommonGoalCardView> commonGoalCards;
-
+    /**
+     * UID version
+     */
     @Serial
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Constructor for class LivingRoomBoardView
+     * @param livingRoomBoard object to create immutable version
+     */
     public LivingRoomBoardView (LivingRoomBoard livingRoomBoard) {
         this.MAX_HEIGHT = livingRoomBoard.getMaxHeight();
         this.MAX_WIDTH = livingRoomBoard.getMaxWidth();
@@ -40,18 +69,35 @@ public class LivingRoomBoardView implements Serializable {
         }
     }
 
+    /**
+     * Getter method for the spaces' matrix
+     * @return the spaces' matrix
+     */
     public SpaceView[][] getSpaces() {
         return this.spaces;
     }
 
+    /**
+     * Getter method for the CommonGoalCards
+     * @return the list of CommonGoalCards
+     */
     public List<CommonGoalCardView> getCommonGoalCards () {
         return this.commonGoalCards;
     }
 
+    /**
+     * Getter method for the Bag
+     * @return the immutable Bag
+     */
     public BagView getBag () {
         return this.bagView;
     }
 
+    /**
+     * Getter method for the Space
+     * @param position from where to retrieve the space
+     * @return the SpaceView at that specific position
+     */
     public SpaceView getSpace(Position position){
         return this.spaces[position.getRow()][position.getColumn()];
     }
@@ -73,6 +119,11 @@ public class LivingRoomBoardView implements Serializable {
         return board;
     }
 
+    /**
+     * Method useful for GameView string representation. Each line of the LivingRoomBoard is indexed by an integer
+     * to print the LivingRoomBoard line by line where is needed.
+     * @return map HashMap indexing line's number with string's line
+     */
     public HashMap<Integer, String> toDict(){
         HashMap<Integer, String> map = new HashMap<>();
         map.put(0, cliHorizontalNums() + "      ");

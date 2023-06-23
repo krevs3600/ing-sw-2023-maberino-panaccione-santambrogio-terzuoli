@@ -22,6 +22,15 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * <h1>Class LivingBoardController</h1>
+ *  This class represents the controller of the fxml scene with
+ *  the game's board
+ *
+ * @author Francesca Pia Panaccione, Carlo Terzuoli
+ * @version 1.0
+ * @since 5/25/2023
+ */
 public class LivingBoardController {
     /**
     * JavaFX GridPane with dimensions 9x9 representing the board

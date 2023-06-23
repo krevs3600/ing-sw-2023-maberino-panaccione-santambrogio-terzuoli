@@ -11,32 +11,77 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.HashMap;
 
-
+/**
+ * <h1>Class BookshelfView</h1>
+ * This class is the immutable version of class Bookshelf
+ *
+ * @author Francesca Santambrogio, Carlo Terzuoli
+ * @version 1.0
+ * @since 5/06/2023
+ */
 public class BookshelfView implements Serializable {
 
+    /**
+     * Matrix of the bookshelf's ItemTile
+     */
     private final ItemTile[][] bookshelf;
+    /**
+     * Bookshelf's width
+     */
     private final int MAX_WIDTH;
+    /**
+     * Bookshelf's height
+     */
     private final int MAX_HEIGHT;
+    /**
+     * UID version
+     */
     @Serial
     private static final long  serialVersionUID = 1L;
-
+    /**
+     * Bookshelf's player name
+     */
     private final String playerName;
 
+    /**
+     * Constructor for class BookshelfView
+     * @param bookshelf Bookshelf object to create immutable version
+     * @param playerName name of the player owning the bookshelf
+     */
     public BookshelfView (Bookshelf bookshelf, String playerName) {
         this.bookshelf = bookshelf.getGrid();
         this.MAX_WIDTH= bookshelf.getMaxWidth();
         this.MAX_HEIGHT = bookshelf.getMaxHeight();
         this.playerName = playerName;
     }
-
+    /**
+     * Getter method to return the bookshelf's grid
+     * @return bookshelf's grid
+     */
     public ItemTile[][] getGrid () {
         return bookshelf;
     }
 
+    /**
+     * Getter method for bookshelf's width
+     * @return bookshelf's width
+     */
     public int getMaxWidth () { return this.MAX_WIDTH;}
+    /**
+     * Getter method for bookshelf's height
+     * @return bookshelf's height
+     */
     public int getMaxHeight () { return this.MAX_HEIGHT;}
+    /**
+     * Getter method for bookshelf's player name
+     * @return bookshelf's player name
+     */
     public String getPlayerName() { return playerName;}
 
+    /**
+     * Override of method to string to print the bookshelf
+     * @return string representation of bookshelf
+     */
     @Override
     public String toString(){
         String result = "";
@@ -50,6 +95,11 @@ public class BookshelfView implements Serializable {
         return result;
     }
 
+    /**
+     * Method useful for GameView string representation. Each line of the bookshelf is indexed by an integer
+     * to print the bookshelf line by line where is needed.
+     * @return map HashMap indexing line's number with string's line
+     */
     public HashMap<Integer, String> toDict(){
         int WIDTH = 24;
         HashMap<Integer, String> map = new HashMap<>();
@@ -77,6 +127,13 @@ public class BookshelfView implements Serializable {
         return map;
     }
 
+    /**
+     * It fills the given string with spaces to reach the desired width
+     * otherwise the last three characters are replaced by a dot.
+     * @param width length of the returned string
+     * @param string actual string
+     * @return
+     */
     private String titleGenerator(int width, String string){
         String result = "";
         if (string.length() <= width){

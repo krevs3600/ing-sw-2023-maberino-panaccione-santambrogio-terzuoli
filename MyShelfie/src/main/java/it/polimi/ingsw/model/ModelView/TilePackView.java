@@ -9,20 +9,45 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * <h1>Class TilePackView</h1>
+ * This class is the immutable version of class TilePack
+ *
+ * @author Carlo Terzuoli
+ * @version 1.0
+ * @since 5/07/2023
+ */
 public class TilePackView implements Serializable {
-
+    /**
+     * List of ItemTile in the TilePack
+     */
     private final List<ItemTile> tilePack;
+    /**
+     * UID version
+     */
     @Serial
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Constructor for TilePackView
+     * @param tilePack list of tiles contained in the TilePack
+     */
     public TilePackView (TilePack tilePack) {
         this.tilePack = tilePack.getTiles();
     }
 
+    /**
+     * Getter method for the list of tiles
+     * @return the list of tiles
+     */
     public List<ItemTile> getTiles () {
         return this.tilePack;
     }
 
+    /**
+     * Override of method to string to print the TilePack
+     * @return the string representation of the TilePack
+     */
     @Override
     public String toString(){
         String tilePackTxt = "";
@@ -35,7 +60,11 @@ public class TilePackView implements Serializable {
         }
         return tilePackTxt;
     }
-
+    /**
+     * Method useful for GameView string representation. Each line of the TilePack is indexed by an integer
+     * to print the TilePack line by line where is needed.
+     * @return map HashMap indexing line's number with string's line
+     */
     public HashMap<Integer, String> toDict(){
         HashMap<Integer, String> map = new HashMap<>();
         // first line

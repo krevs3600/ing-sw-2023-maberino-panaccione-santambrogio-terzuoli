@@ -11,23 +11,65 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
-
+/**
+ * <h1>Class GameView</h1>
+ * This class is the immutable version of class Game
+ *
+ * @author Francesca Santambrogio, Carlo Terzuoli
+ * @version 1.0
+ * @since 5/06/2023
+ */
 public class GameView implements Serializable {
+    /**
+     * Game's unique id
+     */
     private final String id;
+    /**
+     * Immutable Deck of PersonalGoalCards
+     */
     private final PersonalGoalCardDeckView personalGoalCardDeckView;
+    /**
+     * List of Immutable Player's in the game
+     */
     private final List<PlayerView> subscribers;
-
-    private final List<PlayerView> subscribersWithoutCurrent=new ArrayList<>();
+    /**
+     * List of Immutable Player's in the game except for the Player in status ACTIVE
+     */
+    private final List<PlayerView> subscribersWithoutCurrent = new ArrayList<>();
+    /**
+     * Immutable LivingRoomBoard
+     */
     private final LivingRoomBoardView livingRoomBoardView;
+    /**
+     * Number of players in the game
+     */
     private final NumberOfPlayers numberOfPlayers;
+    /**
+     * Int indexing the current player in the subscribers' list
+     */
     private final int cursor;
+    /**
+     * Immutable TilePack
+     */
     private final TilePackView tilePackView;
+    /**
+     * Immutable Player in status ACTIVE
+     */
     private final PlayerView currentPlayer;
-
+    /**
+     * UID version
+     */
     @Serial
     private static final long serialVersionUID = 1L;
+    /**
+     * Game's turn phase
+     */
     private final GamePhase turnPhase;
 
+    /**
+     * Constructor for class GameView
+     * @param game Game object to create immutable version
+     */
     public GameView (Game game) {
         this.turnPhase = game.getTurnPhase();
         this.cursor = game.getCursor();
@@ -43,73 +85,107 @@ public class GameView implements Serializable {
         this.currentPlayer = new PlayerView(game.getCurrentPlayer());
     }
 
+    /**
+     * Getter method for game's id
+     * @return the game's id
+     */
     public String getId () {
         return this.id;
     }
 
+    /**
+     * Getter method for the PersonalGoalCardDeck
+     * @return the PersonalGoalCardDeck
+     */
     public PersonalGoalCardDeckView getPersonalGoalCardDeck () {
         return this.personalGoalCardDeckView;
     }
-
+    /**
+     * Getter method for the list of subscribers
+     * @return the list of subscribers
+     */
     public List<PlayerView> getSubscribers () {
-
         return this.subscribers;
     }
 
+    /**
+     * Getter method for the list of subscribers
+     * @return the list of subscribers
+     */
     public LivingRoomBoardView getLivingRoomBoard () {
         return this.livingRoomBoardView;
     }
 
+    /**
+     * Getter method for the number of players
+     * @return the number of players
+     */
     public NumberOfPlayers getNumberOfPlayers () {
         return this.numberOfPlayers;
     }
 
+    /**
+     * Getter method for the players' list except the one in status ACTIVE
+     * @return the players' list except the one in status ACTIVE
+     */
     public List<PlayerView> otherPlayersList(PlayerView player) {
         for (PlayerView otherPlayer : subscribers) {
             if(!otherPlayer.getName().equals(player.getName())){
                 subscribersWithoutCurrent.add(otherPlayer);
             }
-
         }
         return  subscribersWithoutCurrent;
     }
 
+    /**
+     * Getter method for the cursor
+     * @return the cursor
+     */
     public int getCursor () {
         return this.cursor;
     }
 
-    public TilePackView getTilePack () { return this.tilePackView;}
+    /**
+     * Getter method for the immutable TilePack
+     * @return the immutable TilePack
+     */
+    public TilePackView getTilePack () {
+        return this.tilePackView;
+    }
+
+    /**
+     * Getter method for the player in status ACTIVE
+     * @return the player in status ACTIVE
+     */
     public PlayerView getCurrentPlayer(){
         return this.currentPlayer;
     }
+
+    // todo what if no nickname is associated to a player in the game?
+    /**
+     * Given a nickname it returns the player in the game
+     * @param nickname of the player to be retrieved
+     * @return the PlayerView associated to the given nickname
+     */
     public PlayerView getPlayer(String nickname){
         return this.getSubscribers().stream().filter(x->x.getName().equals(nickname)).toList().get(0);
     }
+
+    /**
+     * Getter method for the game's turn phase
+     * @return the game's turn phase
+     */
     public GamePhase getTurnPhase(){
         return this.turnPhase;
     }
+
+    /**
+     * Getter method for the CommonGoalCards drawn for the game
+     * @return the game's CommonGoalCards
+     */
     public List<CommonGoalCardView> getCommonGoalCards(){
         return this.getLivingRoomBoard().getCommonGoalCards();
     }
-
-
-    /**public void update(Observable o, Object arg) {
-        if (!(o instanceof Game model)){
-            System.err.println("Discarding update from " + o);
-        }
-
-        if (arg instanceof String subscriber){
-            setChanged();
-            notifyObservers(subscriber);
-        }
-
-        if (arg instanceof Game game){
-            setChanged();
-            notifyObservers(new GameView(game));
-        }
-
-    }
-     */
 
     /**
      * Method to calculate the index of the player wrt the list of subscribers of the game
@@ -126,6 +202,11 @@ public class GameView implements Serializable {
         return -1;
     }
 
+    /**
+     * Method to calculate the index of the next player wrt the list of subscribers of the game
+     * @param nickname name of the player
+     * @return int the index of the next player otherwise -1
+     */
     private int getNextPlayerIndex(String nickname) {
         int index = getPersonalGameIndex(nickname);
         if (index != -1) {
@@ -134,6 +215,11 @@ public class GameView implements Serializable {
         return -1;
     }
 
+    /**
+     * Method to order the subscribers' list in the game placing nickname at index 0
+     * @param nickname
+     * @return the reordered list of subscribers
+     */
     private List<Integer> orderedIndexes(String nickname){
         List<String> subscriberNames = new ArrayList<>(getSubscribers().stream().map(PlayerView::getName).toList());
         List<Integer> subscribersIndex = new ArrayList<>();
@@ -150,14 +236,18 @@ public class GameView implements Serializable {
                 subscribersIndex.add(clientIndex);
                 name = subscriberNames.get(getNextPlayerIndex(name));
             }
-
         }
         return subscribersIndex;
     }
 
 
-
-
+    /**
+     * Method to create an horizontal representation of the game, containing all the information
+     * of the CommonGoalCards and their ScoringTokens, the Players' bookshelves, the LivingRoomBoard
+     * and the TilePack.
+     * @param nickname viewing the string representation
+     * @return the horizontal string representation of the CLI
+     */
     public String toCLI(String nickname) {
         // todo optimization can be made
         List<Integer> indexes = orderedIndexes(nickname);
@@ -251,6 +341,11 @@ public class GameView implements Serializable {
         return game;
     }
 
+    /**
+     * Method to generate an empty string
+     * @param rowLength wanted length
+     * @return an empty string of length rowLength
+     */
     private static String getStringWithSpaces(int rowLength) {
         int spaces = rowLength - "".length();
         String result = "";
@@ -260,7 +355,8 @@ public class GameView implements Serializable {
         }
         return result;
     }
-
+    /**
+    * // todo to be removed, just for testing
     public static void main(String[] args){
         Game game = new Game(NumberOfPlayers.FOUR_PLAYERS, "Zo");
         game.subscribe(new Player("Carlo"));
@@ -276,5 +372,5 @@ public class GameView implements Serializable {
         System.out.print("\033[H\033[2J");
         System.out.flush();
         System.out.println(view.toCLI("Carlo"));
-    }
+    }*/
 }
