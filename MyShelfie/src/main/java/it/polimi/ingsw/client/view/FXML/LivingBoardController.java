@@ -16,6 +16,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Text;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -88,6 +89,11 @@ public class LivingBoardController {
     @FXML
     public ImageView commonGoalCard1;
 
+    public String descriptioncommonGoalCard1;
+
+    public String descriptioncommonGoalCard2;
+
+
     /**
      * JavaFX ImageView for visualizing the second commonGoalCard
      */
@@ -118,6 +124,19 @@ public class LivingBoardController {
 
     @FXML
     public Label OtherPlayerTurnLabel;
+    @FXML
+    public ImageView firstCommonGC;
+    public ImageView SeconCommonGC;
+
+    @FXML
+    public Text Description_1GC;
+    @FXML
+    public Text Description_2GC;
+
+    @FXML
+    public AnchorPane PaneForPopup;
+    @FXML
+    public Text textforPopUp;
     /**
      * JavaFX ImageView for assigning the token for the completion of the first common goal
      */
@@ -277,7 +296,9 @@ public class LivingBoardController {
         //init common goal card
         try {
             commonGoalCard1.setImage(new Image(new FileInputStream(getCommonGoalCardPic(gameView.getLivingRoomBoard().getCommonGoalCards().get(0)))));
+            descriptioncommonGoalCard1=gameView.getLivingRoomBoard().getCommonGoalCards().get(0).toString();
             commonGoalCard2.setImage(new Image(new FileInputStream(getCommonGoalCardPic(gameView.getLivingRoomBoard().getCommonGoalCards().get(1)))));
+            descriptioncommonGoalCard2=gameView.getLivingRoomBoard().getCommonGoalCards().get(1).toString();
         } catch (FileNotFoundException e) {
             System.err.println(e.getMessage());
         }

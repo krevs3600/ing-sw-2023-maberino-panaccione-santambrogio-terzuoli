@@ -52,22 +52,20 @@ public class AppServerImpl extends UnicastRemoteObject implements AppServer
             }
         });
         socketThread.start();
-        /*
         try {
             rmiThread.join();
             socketThread.join();
-            System.out.println("Closing existing connections...");
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            System.err.println("No connection protocol available. Exiting...");
         }
-         */
 
     }
 
     private static void startRMI() throws RemoteException {
         AppServerImpl server = getInstance();
-        Registry registry = LocateRegistry.createRegistry(1243);
-        registry.rebind("/MyShelfieServer", server);
+
+        Registry registry = LocateRegistry.createRegistry(1099);
+        registry.rebind("MyShelfieServer", server);
     }
 
     public static void startSocket() throws RemoteException {
@@ -104,7 +102,7 @@ public class AppServerImpl extends UnicastRemoteObject implements AppServer
     @Override
     public Server connect() throws RemoteException {
         if (server == null) {
-            server = new ServerImplementation(1243);
+            server = new ServerImplementation();
         }
         return server;
     }

@@ -19,6 +19,7 @@ import it.polimi.ingsw.network.Socket.ServerStub;
 import it.polimi.ingsw.network.eventMessages.*;
 import it.polimi.ingsw.observer_observable.Observable;
 import javafx.animation.FadeTransition;
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -543,9 +544,11 @@ public class GUI extends Observable implements View {
 
     // booleano per distinguere la prima volta del gioco e le altre
     private boolean isFirstTime = true;
+    private boolean firstturnever=true;
 
     @Override
     public void update(GameView game, EventMessage eventMessage) {
+
         this.game = game;
         switch (eventMessage.getType()) {
             case BOARD -> {
@@ -561,32 +564,50 @@ public class GUI extends Observable implements View {
                         Platform.runLater(() -> {
 
                             stage.setScene(scene);
-                            // if (isFirstTime) {
-                            //     int displayTimeMillis = 9000;
-                            //     livingBoardController.AnchorPaneforTheCandPgoalcards.setVisible(true);
-                            //     FadeTransition fadeTransition = new FadeTransition(Duration.millis(displayTimeMillis), livingBoardController.AnchorPaneforTheCandPgoalcards);
-                            //     fadeTransition.setOnFinished(event -> {
-                            //         livingBoardController.AnchorPaneforTheCandPgoalcards.setVisible(false);
-                            //     });
-                            //     fadeTransition.play();
-                            //     isFirstTime = false;
-                            //
-                            // }
+
 
                             livingBoardController.initialize(game, nickname);
                             livingBoardController.updateLivingRoomBoard(game.getLivingRoomBoard());
+
+                                int displayTimeMillis = 9000;
+                                livingBoardController.firstCommonGC.setImage(livingBoardController.commonGoalCard1.getImage());
+                                livingBoardController.SeconCommonGC.setImage(livingBoardController.commonGoalCard2.getImage());
+                                livingBoardController.Description_1GC.setText(livingBoardController.descriptioncommonGoalCard1);
+                                livingBoardController.Description_2GC.setText(livingBoardController.descriptioncommonGoalCard2);
+                                // todo prendere attributo della common goal card e settare il testo
+
+
+
+                                FadeTransition fadeTransition = new FadeTransition(Duration.millis(displayTimeMillis), livingBoardController.anchorPaneForTheCandPGoalCards);
+                                fadeTransition.setOnFinished(event -> {
+                                    livingBoardController.anchorPaneForTheCandPGoalCards.setVisible(false);
+                                });
+                                fadeTransition.play();
+                                isFirstTime = false;
+
+
                             livingBoardController.tilePack.setDisable(true);
                         });
                     } catch (IOException e) {
                         System.out.println(e);
                     }
-                    isFirstTime = false;
                 } else {
                     Platform.runLater(() -> {
                         livingBoardController.updateLivingRoomBoard(game.getLivingRoomBoard());
                         livingBoardController.tilePack.setDisable(true);
                         livingBoardController.resetColumnChoice();
-                        showPopup("NEW TURN HAS JUST STARTED");
+
+
+                        int displayTimeMillis = 3000;
+                        livingBoardController.PaneForPopup.setVisible(true);
+                        livingBoardController.textforPopUp.setText("New Turn");
+                        FadeTransition fadeTransition = new FadeTransition(Duration.millis(displayTimeMillis), livingBoardController.PaneForPopup);
+                        fadeTransition.setOnFinished(event -> {
+                            livingBoardController.PaneForPopup.setVisible(false);
+                        });
+                        fadeTransition.play();
+
+                      //  showPopup("NEW TURN HAS JUST STARTED");
 
                     });
                 }
@@ -594,15 +615,75 @@ public class GUI extends Observable implements View {
 
             case PLAYER_TURN -> {
                 System.out.println(getNickname() + " " + eventMessage.getNickname() + " " + game.getCurrentPlayer().getName());
+
                 System.out.println("it's " + game.getCurrentPlayer().getName() + " turn");
                 if (this.nickname.equals(game.getCurrentPlayer().getName())) {
-                    Platform.runLater(() -> {
-                        livingBoardController.board.setDisable(false);
-                        showPopup("it's your turn"); // todo ricontrollare questo pop up non mi sembra che compaia
-                        livingBoardController.OtherPlayerTurnLabel.setVisible(false);
-                        livingBoardController.board.setDisable(false);
-                        livingBoardController.disableColumnChoice();
-                    });
+                    // booleano altrimenti ogni volta fa la pausa
+                    if(firstturnever) {
+
+                        PauseTransition delay = new PauseTransition(Duration.millis(10000));
+                        delay.setOnFinished(event -> {
+
+                            Platform.runLater(() -> {
+                                livingBoardController.board.setDisable(false);
+                                int displayTimeMillis = 3000;
+                                livingBoardController.PaneForPopup.setVisible(true);
+                                livingBoardController.textforPopUp.setText("it's your turn");
+                                FadeTransition fadeTransition = new FadeTransition(Duration.millis(displayTimeMillis), livingBoardController.PaneForPopup);
+                                fadeTransition.setOnFinished(ev -> {
+                                    livingBoardController.PaneForPopup.setVisible(false);
+                                });
+                                fadeTransition.play();
+
+
+                                // showPopup("it's your turn"); // todo ricontrollare questo pop up non mi sembra che compaia
+                                livingBoardController.OtherPlayerTurnLabel.setVisible(false);
+                                livingBoardController.board.setDisable(false);
+                                livingBoardController.disableColumnChoice();
+                            });
+                            // Codice da eseguire dopo il ritardo
+                            //System.out.println("Delayed code executed");
+                        });
+                        delay.play();
+                        firstturnever=false;
+                    }
+                    else {
+                        Platform.runLater(() -> {
+                            livingBoardController.board.setDisable(false);
+                            int displayTimeMillis = 3000;
+                            livingBoardController.PaneForPopup.setVisible(true);
+                            livingBoardController.textforPopUp.setText("it's your turn");
+                            FadeTransition fadeTransition = new FadeTransition(Duration.millis(displayTimeMillis), livingBoardController.PaneForPopup);
+                            fadeTransition.setOnFinished(ev -> {
+                                livingBoardController.PaneForPopup.setVisible(false);
+                            });
+                            fadeTransition.play();
+
+
+                            // showPopup("it's your turn"); // todo ricontrollare questo pop up non mi sembra che compaia
+                            livingBoardController.OtherPlayerTurnLabel.setVisible(false);
+                            livingBoardController.board.setDisable(false);
+                            livingBoardController.disableColumnChoice();
+                        });
+
+                    }
+
+                  // Platform.runLater(() -> {
+                  //     livingBoardController.board.setDisable(false);
+                  //     int displayTimeMillis = 10000;
+                  //     livingBoardController.PaneForPopup.setVisible(true);
+                  //     livingBoardController.textforPopUp.setText("it's your turn");
+                  //     FadeTransition fadeTransition = new FadeTransition(Duration.millis(displayTimeMillis), livingBoardController.PaneForPopup);
+                  //     fadeTransition.setOnFinished(event -> {
+                  //         livingBoardController.PaneForPopup.setVisible(false);
+                  //     });
+                  //     fadeTransition.play();
+                  //
+                  //    // showPopup("it's your turn"); // todo ricontrollare questo pop up non mi sembra che compaia
+                  //     livingBoardController.OtherPlayerTurnLabel.setVisible(false);
+                  //     livingBoardController.board.setDisable(false);
+                  //     livingBoardController.disableColumnChoice();
+                  // });
                     //salva per vedere se sono gli stessi
 
                     // todo ricontrollare questo pop up non mi sembra che compaia
@@ -630,7 +711,8 @@ public class GUI extends Observable implements View {
                         livingBoardController.setGameView(game);
                     });
                     if (game.getTilePack().getTiles().size() > 0) {
-                        Platform.runLater(() -> showPopup("Choose an item tile to insert from the tilepack \ninto the selected column"));
+                        Platform.runLater(() ->
+                                showPopup("Choose an item tile to insert from the tilepack \ninto the selected column"));
                     } else if (game.getTurnPhase().equals(GamePhase.PLACING_TILES)) {
                         setChanged();
                         notifyObservers(new EndTurnMessage(eventMessage.getNickname()));
@@ -825,7 +907,7 @@ public class GUI extends Observable implements View {
             URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/computeScore_scene.fxml/").toURI().toURL();
             FXMLLoader fxmlLoader = new FXMLLoader(url);
             scene = new Scene(fxmlLoader.load());
-            WinController winController = fxmlLoader.getController();
+            ComputeScoreController computeScoreController= fxmlLoader.getController();
             winController.setGui(this);
             this.winController = winController;
             Platform.runLater(() -> stage.setScene(scene));

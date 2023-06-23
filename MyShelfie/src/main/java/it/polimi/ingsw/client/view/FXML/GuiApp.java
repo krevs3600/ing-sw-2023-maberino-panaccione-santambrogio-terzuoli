@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -45,8 +46,10 @@ public class GuiApp extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        GUI gui = new GUI();
-        gui.gameMenuGUI(stage);
+        // ADD
+      GUI gui=new GUI();
+      gui.gameMenuGUI(stage);
+      window=stage;
     }
 
     public static void main(String[] args) {
@@ -55,10 +58,17 @@ public class GuiApp extends Application {
     public static Stage getWindow(){
         return window;
     }
-    public void closeJavaFxMain(){
+
+
+
+    public void closeJavaFxMain(MouseEvent event){
         GuiApp.getWindow().close();
     }
+
     //TODO: refactor del metodo (createGame)
+
+
+
 }
 
 
