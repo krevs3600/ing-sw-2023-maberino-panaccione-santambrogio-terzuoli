@@ -52,15 +52,12 @@ public class AppServerImpl extends UnicastRemoteObject implements AppServer
             }
         });
         socketThread.start();
-        /*
         try {
             rmiThread.join();
             socketThread.join();
-            System.out.println("Closing existing connections...");
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            System.err.println("No connection protocol available. Exiting...");
         }
-         */
 
     }
 
@@ -105,7 +102,7 @@ public class AppServerImpl extends UnicastRemoteObject implements AppServer
     @Override
     public Server connect() throws RemoteException {
         if (server == null) {
-            server = new ServerImplementation(1099);
+            server = new ServerImplementation();
         }
         return server;
     }
