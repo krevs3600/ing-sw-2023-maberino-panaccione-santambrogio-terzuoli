@@ -1,23 +1,15 @@
 package it.polimi.ingsw.client.view.FXML;
 
-import it.polimi.ingsw.AppServer;
 import it.polimi.ingsw.network.ClientImplementation;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.rmi.NotBoundException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 
 /**
  * <h1>Class ServerSettingController</h1>
@@ -75,7 +67,7 @@ public class ServerSettingsController {
         //TODO: check for empty value and for string instead of integer v
         // alue
         if(isValidIPAddress(address) && isValidPort(chosenPort)) {
-            gui.createConnection(address, chosenPort);
+            gui.connectToServer(address, chosenPort);
         }
         else if (!isValidIPAddress(address) || !isValidPort(chosenPort) || isValidIPAddress("")|| isValidIPAddress(" ")){
             WrongValueInputs.setVisible(true);
@@ -84,12 +76,8 @@ public class ServerSettingsController {
     /**
      *
      This method is used to check the validity of a specific port
-
      * @param chosenPort the port chosen by the player to get access to the game
      */
-
-
-
     private boolean isValidPort(int chosenPort) {
         try {
             return chosenPort >= 1 && chosenPort <= 65535;

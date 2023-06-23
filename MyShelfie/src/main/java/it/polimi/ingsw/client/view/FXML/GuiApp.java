@@ -46,10 +46,9 @@ public class GuiApp extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        // ADD
-      GUI gui=new GUI();
+      GUI gui = new GUI();
       gui.gameMenuGUI(stage);
-      window=stage;
+      window = stage;
     }
 
     public static void main(String[] args) {
@@ -59,15 +58,11 @@ public class GuiApp extends Application {
         return window;
     }
 
-
-
     public void closeJavaFxMain(MouseEvent event){
         GuiApp.getWindow().close();
     }
 
     //TODO: refactor del metodo (createGame)
-
-
 
 }
 

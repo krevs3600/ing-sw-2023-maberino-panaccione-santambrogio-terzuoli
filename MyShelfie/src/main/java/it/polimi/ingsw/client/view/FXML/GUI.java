@@ -1,10 +1,8 @@
 package it.polimi.ingsw.client.view.FXML;
 
 import it.polimi.ingsw.AppServer;
-import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.ModelView.GameView;
 import it.polimi.ingsw.model.ModelView.PlayerView;
-import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.utils.GamePhase;
 import it.polimi.ingsw.model.utils.NumberOfPlayers;
 import it.polimi.ingsw.model.utils.Position;
@@ -25,22 +23,17 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -228,7 +221,7 @@ public class GUI extends Observable implements View {
      * @param port the port chosen by the player for the connection, which was already syntactically checked in the {@link ServerSettingsController}
      */
 
-    public void createConnection(String address, int port) throws IOException, NotBoundException {
+    public void connectToServer(String address, int port) throws IOException, NotBoundException {
         if (rmIorSocketController.isRMI()) {
             try {
                 Registry registry = LocateRegistry.getRegistry(address, port);
@@ -241,7 +234,7 @@ public class GUI extends Observable implements View {
                 System.err.println("not bound exception registry");
             }
         } else if (rmIorSocketController.isSocket()) {
-            if (port == 1243) port = 1244;
+            if (port == 1099) port = 1244;
             ServerStub serverStub = new ServerStub(address, port);
            // client = new ClientImplementation(this, serverStub); // todo eliminare
             Client client=new ClientImplementation(this, serverStub);
