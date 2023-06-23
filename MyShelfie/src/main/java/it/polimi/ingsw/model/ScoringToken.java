@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.CommonGoalCard.CommonGoalCard;
+import it.polimi.ingsw.view.cli.ColorCLI;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -46,5 +47,9 @@ public class ScoringToken implements Serializable {
      */
     public int getValue() {
         return value;
+    }
+
+    public String toString(){
+        return "[" + ColorCLI.RED.getCode() + " " + String.valueOf(getValue()) + " " + ColorCLI.RESET.getCode() + "]";
     }
 }

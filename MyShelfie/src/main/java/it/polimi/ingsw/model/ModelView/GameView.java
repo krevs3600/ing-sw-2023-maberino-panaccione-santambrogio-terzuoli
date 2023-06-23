@@ -3,12 +3,14 @@ package it.polimi.ingsw.model.ModelView;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.utils.GamePhase;
 import it.polimi.ingsw.model.utils.NumberOfPlayers;
+import it.polimi.ingsw.view.cli.ColorCLI;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Stack;
 
 public class GameView implements Serializable {
     private final String id;
@@ -170,7 +172,12 @@ public class GameView implements Serializable {
         HashMap<Integer, String> bookshelf = this.getSubscribers().get(getPersonalGameIndex(nickname)).getBookshelf().toDict();
 
         game = game.concat(UP_MARGIN);
-        game = game.concat(getCommonGoalCards().get(0).toString() + "\n\n" + getCommonGoalCards().get(1).toString() + "\n\n");
+        Stack stack = getCommonGoalCards().get(0).getStack();
+        game = game.concat(stack.get(stack.size()-1).toString() + " ");
+        game = game.concat(getCommonGoalCards().get(0).toString() + "\n\n");
+        stack = getCommonGoalCards().get(1).getStack();
+        game = game.concat(stack.get(stack.size()-1).toString() + " ");
+        game = game.concat(getCommonGoalCards().get(1).toString() + "\n\n");
 
         int personal = 0;
         int board = 0;

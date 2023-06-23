@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.utils;
 import it.polimi.ingsw.model.Bookshelf;
 import it.polimi.ingsw.model.ItemTile;
 import it.polimi.ingsw.model.LivingRoomBoard;
+import it.polimi.ingsw.view.cli.ColorCLI;
 
 /**
  * <h1>Enumeration TileType</h1>
@@ -14,19 +15,19 @@ import it.polimi.ingsw.model.LivingRoomBoard;
  */
 public enum TileType {
 
-    CAT("C", "\033[42m"),
-    BOOK("B", "\033[47m"),
-    GAME("G", "\033[43m"),
-    FRAME("F", "\033[44m"),
-    TROPHY("T", "\033[46m"),
-    PLANT("P", "\033[45m");
+    CAT("C", ColorCLI.GREEN),
+    BOOK("B", ColorCLI.WHITE),
+    GAME("G", ColorCLI.YELLOW),
+    FRAME("F", ColorCLI.BLUE),
+    TROPHY("T", ColorCLI.CYAN),
+    PLANT("P", ColorCLI.PURPLE);
 
     final String abbreviation;
     final String colorBackground;
 
-    private TileType(String abbreviation, String colorBackground){
+    private TileType(String abbreviation, ColorCLI color){
         this.abbreviation = abbreviation;
-        this.colorBackground = colorBackground;
+        this.colorBackground = color.getCode();
     }
 
     /**

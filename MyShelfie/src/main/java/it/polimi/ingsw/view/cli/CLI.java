@@ -68,7 +68,7 @@ public class CLI extends Observable implements View {
                 }
             }
             case "s" -> {
-                port = (port == 1099) ? 1244 : port;
+                port = (port == 1243) ? 1244 : port;
                 ServerStub serverStub = new ServerStub(address, port);
                 Client client = new ClientImplementation(this, serverStub);
                 serverStub.register(client);
@@ -125,7 +125,7 @@ public class CLI extends Observable implements View {
             serverPort = in.nextLine();
             if (serverPort.equals("")){
                 out.println("\nUsing default port...");
-                return 1099;
+                return 1243;
             }
         } while (!isValidPort(serverPort));
 
