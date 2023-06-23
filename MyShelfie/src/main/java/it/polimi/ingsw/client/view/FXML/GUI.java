@@ -544,9 +544,11 @@ public class GUI extends Observable implements View {
 
     // booleano per distinguere la prima volta del gioco e le altre
     private boolean isFirstTime = true;
+    private boolean firstturnever=true;
 
     @Override
     public void update(GameView game, EventMessage eventMessage) {
+
         this.game = game;
         switch (eventMessage.getType()) {
             case BOARD -> {
@@ -591,9 +593,12 @@ public class GUI extends Observable implements View {
                     }
                 } else {
                     Platform.runLater(() -> {
+                        livingBoardController.updateLivingRoomBoard(game.getLivingRoomBoard());
+                        livingBoardController.tilePack.setDisable(true);
+                        livingBoardController.resetColumnChoice();
 
 
-                        int displayTimeMillis = 10000;
+                        int displayTimeMillis = 3000;
                         livingBoardController.PaneForPopup.setVisible(true);
                         livingBoardController.textforPopUp.setText("New Turn");
                         FadeTransition fadeTransition = new FadeTransition(Duration.millis(displayTimeMillis), livingBoardController.PaneForPopup);
@@ -613,9 +618,36 @@ public class GUI extends Observable implements View {
 
                 System.out.println("it's " + game.getCurrentPlayer().getName() + " turn");
                 if (this.nickname.equals(game.getCurrentPlayer().getName())) {
-                    PauseTransition delay = new PauseTransition(Duration.millis(10000));
-                    delay.setOnFinished(event -> {
+                    // booleano altrimenti ogni volta fa la pausa
+                    if(firstturnever) {
 
+                        PauseTransition delay = new PauseTransition(Duration.millis(10000));
+                        delay.setOnFinished(event -> {
+
+                            Platform.runLater(() -> {
+                                livingBoardController.board.setDisable(false);
+                                int displayTimeMillis = 3000;
+                                livingBoardController.PaneForPopup.setVisible(true);
+                                livingBoardController.textforPopUp.setText("it's your turn");
+                                FadeTransition fadeTransition = new FadeTransition(Duration.millis(displayTimeMillis), livingBoardController.PaneForPopup);
+                                fadeTransition.setOnFinished(ev -> {
+                                    livingBoardController.PaneForPopup.setVisible(false);
+                                });
+                                fadeTransition.play();
+
+
+                                // showPopup("it's your turn"); // todo ricontrollare questo pop up non mi sembra che compaia
+                                livingBoardController.OtherPlayerTurnLabel.setVisible(false);
+                                livingBoardController.board.setDisable(false);
+                                livingBoardController.disableColumnChoice();
+                            });
+                            // Codice da eseguire dopo il ritardo
+                            //System.out.println("Delayed code executed");
+                        });
+                        delay.play();
+                        firstturnever=false;
+                    }
+                    else {
                         Platform.runLater(() -> {
                             livingBoardController.board.setDisable(false);
                             int displayTimeMillis = 3000;
@@ -627,15 +659,14 @@ public class GUI extends Observable implements View {
                             });
                             fadeTransition.play();
 
+
                             // showPopup("it's your turn"); // todo ricontrollare questo pop up non mi sembra che compaia
                             livingBoardController.OtherPlayerTurnLabel.setVisible(false);
                             livingBoardController.board.setDisable(false);
                             livingBoardController.disableColumnChoice();
                         });
-                        // Codice da eseguire dopo il ritardo
-                        System.out.println("Delayed code executed");
-                    });
-                    delay.play();
+
+                    }
 
                   // Platform.runLater(() -> {
                   //     livingBoardController.board.setDisable(false);
@@ -876,7 +907,7 @@ public class GUI extends Observable implements View {
             URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/computeScore_scene.fxml/").toURI().toURL();
             FXMLLoader fxmlLoader = new FXMLLoader(url);
             scene = new Scene(fxmlLoader.load());
-            WinController winController = fxmlLoader.getController();
+            ComputeScoreController computeScoreController= fxmlLoader.getController();
             winController.setGui(this);
             this.winController = winController;
             Platform.runLater(() -> stage.setScene(scene));
