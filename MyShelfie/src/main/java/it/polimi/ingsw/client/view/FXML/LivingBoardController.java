@@ -4,13 +4,13 @@ import it.polimi.ingsw.model.ModelView.*;
 import it.polimi.ingsw.model.ScoringToken;
 import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.model.utils.SpaceType;
-import it.polimi.ingsw.model.utils.TileType;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -135,6 +135,18 @@ public class LivingBoardController {
 
     @FXML
     public AnchorPane PaneForPopup;
+    @FXML
+    public Text textPopUp;
+
+    @FXML
+    public ImageView CommonGoalAchieved;
+
+    @FXML
+    public Text CommonGoalText;
+
+    @FXML
+    public AnchorPane AnchorPaneForCG;
+
     @FXML
     public Text textforPopUp;
     /**

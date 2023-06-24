@@ -16,6 +16,8 @@
     -fx-background-radius: 0;
     -fx-border-radius: 15px;
     -fx-background-color: transparent;
+    -fx-background-radius: 50em;
+
 }
 
 .button:hover {

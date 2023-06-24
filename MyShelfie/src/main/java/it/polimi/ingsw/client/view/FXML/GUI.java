@@ -533,7 +533,7 @@ public class GUI extends Observable<EventMessage> implements View {
 
     // booleano per distinguere la prima volta del gioco e le altre
     private boolean isFirstTime = true;
-    private boolean firstTurnEver =true;
+
 
     @Override
     public void update(GameView game, EventMessage eventMessage) {
@@ -604,80 +604,13 @@ public class GUI extends Observable<EventMessage> implements View {
 
             case PLAYER_TURN -> {
                 if (this.nickname.equals(game.getCurrentPlayer().getName())) {
-                    // booleano altrimenti ogni volta fa la pausa
-                    if(firstTurnEver) {
-
-                        PauseTransition delay = new PauseTransition(Duration.millis(10000));
-                        delay.setOnFinished(event -> {
-
-                            Platform.runLater(() -> {
-                                livingBoardController.board.setDisable(false);
-                                int displayTimeMillis = 3000;
-                                livingBoardController.PaneForPopup.setVisible(true);
-                                livingBoardController.textforPopUp.setText("it's your turn");
-                                FadeTransition fadeTransition = new FadeTransition(Duration.millis(displayTimeMillis), livingBoardController.PaneForPopup);
-                                fadeTransition.setOnFinished(ev -> {
-                                    livingBoardController.PaneForPopup.setVisible(false);
-                                });
-                                fadeTransition.play();
-
-
-                                // showPopup("it's your turn"); // todo ricontrollare questo pop up non mi sembra che compaia
+                    showPopup("it's your turn"); // todo ricontrollare questo pop up non mi sembra che compaia
                                 livingBoardController.OtherPlayerTurnLabel.setVisible(false);
                                 livingBoardController.board.setDisable(false);
                                 livingBoardController.disableColumnChoice();
-                            });
-                            // Codice da eseguire dopo il ritardo
-                            //System.out.println("Delayed code executed");
-                        });
-                        delay.play();
-                        firstTurnEver =false;
-                    }
-                    else {
-                        Platform.runLater(() -> {
-                            livingBoardController.board.setDisable(false);
-                            int displayTimeMillis = 3000;
-                            livingBoardController.PaneForPopup.setVisible(true);
-                            livingBoardController.textforPopUp.setText("it's your turn");
-                            FadeTransition fadeTransition = new FadeTransition(Duration.millis(displayTimeMillis), livingBoardController.PaneForPopup);
-                            fadeTransition.setOnFinished(ev -> {
-                                livingBoardController.PaneForPopup.setVisible(false);
-                            });
-                            fadeTransition.play();
+                }
 
-
-                            // showPopup("it's your turn"); // todo ricontrollare questo pop up non mi sembra che compaia
-                            livingBoardController.OtherPlayerTurnLabel.setVisible(false);
-                            livingBoardController.board.setDisable(false);
-                            livingBoardController.disableColumnChoice();
-                        });
-
-                    }
-
-                  // Platform.runLater(() -> {
-                  //     livingBoardController.board.setDisable(false);
-                  //     int displayTimeMillis = 10000;
-                  //     livingBoardController.PaneForPopup.setVisible(true);
-                  //     livingBoardController.textforPopUp.setText("it's your turn");
-                  //     FadeTransition fadeTransition = new FadeTransition(Duration.millis(displayTimeMillis), livingBoardController.PaneForPopup);
-                  //     fadeTransition.setOnFinished(event -> {
-                  //         livingBoardController.PaneForPopup.setVisible(false);
-                  //     });
-                  //     fadeTransition.play();
-                  //
-                  //    // showPopup("it's your turn"); // todo ricontrollare questo pop up non mi sembra che compaia
-                  //     livingBoardController.OtherPlayerTurnLabel.setVisible(false);
-                  //     livingBoardController.board.setDisable(false);
-                  //     livingBoardController.disableColumnChoice();
-                  // });
-                    //salva per vedere se sono gli stessi
-
-                    // todo ricontrollare questo pop up non mi sembra che compaia
-
-                    // todo : farei un do-while fin quando la carta non è cliccata mettere un
-                    //  timer che fa scadere il turno se non è cliccata entro 3 minuti tipo
-
-                } else {
+                else {
                     Platform.runLater(() -> {
                         livingBoardController.board.setDisable(true);
                         livingBoardController.disableColumnChoice();
@@ -720,7 +653,7 @@ public class GUI extends Observable<EventMessage> implements View {
                 } else {
                     Platform.runLater(() ->
                             livingBoardController.updateLivingRoomBoard(game.getLivingRoomBoard()));
-                    showPopup(game.getCurrentPlayer().getName() + "is picking Tiles");
+                  //  showPopup(game.getCurrentPlayer().getName() + "is picking Tiles");
                 }
             }
             case TILE_PACK, COLUMN_CHOICE, BOOKSHELF -> {
@@ -836,9 +769,25 @@ public class GUI extends Observable<EventMessage> implements View {
     public void showPopup(String text){
         Popup popup = new Popup();
         Label noSelection = new Label(text);
-        noSelection.setStyle("-fx-background-color: #FFCCCC; -fx-text-fill: #FF0000;-fx-font-size: 30; -fx-padding: 30px;");
+        noSelection.setStyle("-fx-background-color: #DAA520; -fx-text-fill: #FFFFFF;-fx-font-size: 30; -fx-padding: 30px;-fx-font-family:'Libian SC';");
         popup.getContent().add(noSelection);
         popup.setAutoHide(true);
+        PauseTransition pause = new PauseTransition(Duration.seconds(2));
+        pause.setOnFinished(event -> popup.hide());
+
+        popup.setOnShown(event -> pause.playFromStart());
+
+        root.setOnMouseClicked(event -> {
+            popup.hide();
+            pause.stop();
+        });
+
+        root.setOnMouseEntered(event -> pause.pause());
+        root.setOnMouseExited(event -> pause.play());
+
+
+
+        // Mostra il pop-up
         if (getStage()!=null){
             Platform.runLater(()-> popup.show(this.getStage()));
         }
