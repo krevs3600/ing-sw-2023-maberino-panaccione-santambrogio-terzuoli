@@ -1,6 +1,7 @@
 package it.polimi.ingsw.network.eventMessages;
 
 public enum EventMessageType {
+    PING,
     NICKNAME,
     GAME_NAME,
     GAME_CREATION,

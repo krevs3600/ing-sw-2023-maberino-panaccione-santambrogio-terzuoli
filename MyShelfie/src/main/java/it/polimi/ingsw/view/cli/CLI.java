@@ -298,6 +298,21 @@ public class CLI extends Observable<EventMessage> implements View {
                 LoginResponseMessage loginResponseMessage = (LoginResponseMessage) message;
                 if (loginResponseMessage.isValidNickname()) {
                     System.out.println("\nAvailable nickname " + loginResponseMessage.getNickname() + " 😊");
+                    new Thread()
+                    {
+                        public void run() {
+                            try {
+                                while (true) {
+                                    setChanged();
+                                    notifyObservers(new PingMessage(loginResponseMessage.getNickname()));
+                                    System.out.println("Ti mando un bacino");
+                                    Thread.sleep(5000);
+                                }
+                            } catch (RuntimeException | InterruptedException e) {
+                                CLI.this.run();
+                            }
+                        }
+                    }.start();
                     gameMenu();
 
                 } else {

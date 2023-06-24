@@ -3,8 +3,6 @@ package it.polimi.ingsw.model.ModelView;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.utils.GamePhase;
 import it.polimi.ingsw.model.utils.NumberOfPlayers;
-import it.polimi.ingsw.view.cli.ColorCLI;
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -192,6 +190,7 @@ public class GameView implements Serializable {
      * @param nickname name of the player
      * @return int the index of the player otherwise -1
      */
+    // TODO mettere in Game
     public int getPersonalGameIndex(String nickname) {
         int personalGameIndex;
         for(int i=0; i<this.getSubscribers().size(); i++){
@@ -217,7 +216,7 @@ public class GameView implements Serializable {
 
     /**
      * Method to order the subscribers' list in the game placing nickname at index 0
-     * @param nickname
+     * @param nickname the nickname to place at index 0
      * @return the reordered list of subscribers
      */
     private List<Integer> orderedIndexes(String nickname){
@@ -262,7 +261,7 @@ public class GameView implements Serializable {
         HashMap<Integer, String> bookshelf = this.getSubscribers().get(getPersonalGameIndex(nickname)).getBookshelf().toDict();
 
         game = game.concat(UP_MARGIN);
-        Stack stack = getCommonGoalCards().get(0).getStack();
+        Stack<ScoringToken> stack = getCommonGoalCards().get(0).getStack();
         game = game.concat(stack.get(stack.size()-1).toString() + " ");
         game = game.concat(getCommonGoalCards().get(0).toString() + "\n\n");
         stack = getCommonGoalCards().get(1).getStack();

@@ -10,6 +10,7 @@ import it.polimi.ingsw.network.MessagesToClient.errorMessages.ResumeGameErrorMes
 import it.polimi.ingsw.network.MessagesToClient.requestMessage.*;
 import it.polimi.ingsw.network.eventMessages.*;
 import it.polimi.ingsw.persistence.Storage;
+import it.polimi.ingsw.view.cli.CLI;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
@@ -70,7 +71,7 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
     }
 
     @Override
-    public void update(Client client, EventMessage eventMessage) throws IOException {
+    public synchronized void update(Client client, EventMessage eventMessage) throws IOException {
 
         switch (eventMessage.getType()) {
             case NICKNAME -> {
@@ -80,8 +81,22 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                     //  Set<String> availableGames = new HashSet<>(currentLobbyGameNames);                                                            //        validNickname = true;
                     //  if(currentLobbyGameNames.size()==0){                                                                                          //        currentPlayersNicknames.add(eventMessage.getNickName());
                     //      client.onMessage(new LoginResponseMessage(true,false, eventMessage.getNickName()));                                       //        connectedClients.put(eventMessage.getNickName(), client);
-                    //  }                                                                                                                             //    }
-                    client.onMessage(new LoginResponseMessage(eventMessage.getNickname(), true));                       //    if (validNickname) {
+                    //  }
+                    new Thread()
+                    {
+                        public void run() {
+                            try {
+                                while (true) {
+                                    client.onMessage(new PingToClientMessage(eventMessage.getNickname()));
+                                    System.out.println("Ti mando un bacino");
+                                    Thread.sleep(5000);
+                                }
+                            } catch (RuntimeException | InterruptedException | IOException e) {
+                                System.err.println("il bro sputa fatti");
+                            }
+                        }
+                    }.start();
+                    client.onMessage(new LoginResponseMessage(eventMessage.getNickname(), true));
                 }                                                                                                                                 //        client.onMessage(new CreatorLoginResponseMessage(eventMessage.getNickName(), validNickname));
                 else                                                                                                                              //    } else
                     client.onMessage(new LoginResponseMessage(eventMessage.getNickname(), false));                                                                            //        client.onMessage(new CreatorLoginResponseMessage(validNickname));

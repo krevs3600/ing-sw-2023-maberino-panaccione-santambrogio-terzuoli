@@ -49,7 +49,7 @@ public class ClientImplementation extends UnicastRemoteObject implements Client 
         view.update(gameView, eventMessage);
     }
 
-    public void onMessage(MessageToClient message) throws IOException {
+    public synchronized void onMessage(MessageToClient message) throws IOException {
 
 //just to set the parametres, maybe it will be a problem with concurrency (?)
         if (message instanceof RequestMessage) {

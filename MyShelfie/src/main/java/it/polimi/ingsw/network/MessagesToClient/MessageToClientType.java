@@ -3,6 +3,7 @@ package it.polimi.ingsw.network.MessagesToClient;
 public enum MessageToClientType {
 
     // request messages type
+    PING,
     LOGIN_RESPONSE,
     GAME_CREATION,
     JOIN_GAME_RESPONSE,
