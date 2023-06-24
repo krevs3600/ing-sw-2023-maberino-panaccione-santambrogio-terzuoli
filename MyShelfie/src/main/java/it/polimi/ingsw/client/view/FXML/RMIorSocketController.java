@@ -1,24 +1,11 @@
 package it.polimi.ingsw.client.view.FXML;
 
+import it.polimi.ingsw.network.eventMessages.EventMessage;
 import it.polimi.ingsw.observer_observable.Observable;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.geometry.Bounds;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
-import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.stage.Popup;
-import javafx.stage.Stage;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
 
 
 /**
@@ -30,24 +17,19 @@ import java.net.URL;
  * @version 1.0
  * @since 5/23/2023
  */
-public class RMIorSocketController extends Observable {
+public class RMIorSocketController extends Observable<EventMessage> {
     @FXML
-    public AnchorPane PaneforParquet;
+    public RadioButton RMI_button;
     @FXML
-    public RadioButton RMIbutton;
-    @FXML
-    public RadioButton TCPbutton;
+    public RadioButton TCP_button;
     @FXML
     public Button okButton;
 
-    private Stage stage;
-    private Scene scene;
-    private Parent root;
     private GUI gui;
 
-    private boolean RMI=false;
+    private boolean RMI = false;
 
-    private boolean socket=false;
+    private boolean TCP = false;
 
 
     /**
@@ -63,13 +45,13 @@ public class RMIorSocketController extends Observable {
 
     /**
      * Getter method
-     * @return the {@link RMIorSocketController#socket} present in the {@link RMIorSocketController}
+     * @return the {@link RMIorSocketController#TCP} present in the {@link RMIorSocketController}
      * which is  a boolean that is "true" if the player has chosen the socket connection type, false otherwise
      *
      */
 
-    public boolean isSocket(){
-        return socket;
+    public boolean isTCP(){
+        return TCP;
     }
 
     /**
@@ -77,17 +59,17 @@ public class RMIorSocketController extends Observable {
      This method is used to create the connection  as soon as the players confirms his choice by pressing the {@link RMIorSocketController RMIbutton}
      or the {@link RMIorSocketController TCPbutton} in the
      {@code RMIorSocket_scene}
-     * @param event the click on the {@link RMIorSocketController RMIbutton} or on the {@link RMIorSocketController TCPbutton}
+     * @param event the click on the {@link RMIorSocketController RMI_button} or on the {@link RMIorSocketController TCP_button}
      */
 
-    public void createConnection(MouseEvent event) throws IOException{
-        if (RMIbutton.isSelected()) {
+    public void createConnection(MouseEvent event){
+        if (RMI_button.isSelected()) {
             RMI = true;
-            socket = false;
+            TCP = false;
             gui.createConnection();
-        } else if (TCPbutton.isSelected()){
+        } else if (TCP_button.isSelected()){
             RMI = false;
-            socket = true;
+            TCP = true;
             gui.createConnection();
         } else {
             gui.showPopup("Please select an option");

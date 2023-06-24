@@ -70,4 +70,9 @@ public abstract class CommonGoalCard extends GoalCard  implements Serializable {
     public abstract boolean checkPattern(Bookshelf b);
 
     public String getType() { return this.getClass().getName();}
+
+    @Override
+    public String toString(){
+        return "AbstractCommonGoalCard";
+    }
 }

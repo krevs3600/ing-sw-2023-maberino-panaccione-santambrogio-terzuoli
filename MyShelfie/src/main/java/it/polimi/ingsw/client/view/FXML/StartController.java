@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.view.FXML;
 
+import it.polimi.ingsw.network.eventMessages.EventMessage;
 import it.polimi.ingsw.observer_observable.Observable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -24,7 +25,7 @@ import java.net.URL;
  * @version 1.0
  * @since 5/23/2023
  */
-public class StartController extends Observable{
+public class StartController extends Observable<EventMessage>{
     @FXML
     public AnchorPane rootPane;
 

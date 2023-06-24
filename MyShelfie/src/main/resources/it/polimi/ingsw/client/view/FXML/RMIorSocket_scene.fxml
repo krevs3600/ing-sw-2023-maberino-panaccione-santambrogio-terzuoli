@@ -54,7 +54,7 @@
                     <children>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                             <children>
-                                <RadioButton fx:id="TCPbutton" mnemonicParsing="false" prefHeight="40.0" text="TCP (socket)" textFill="WHITE">
+                                <RadioButton fx:id="TCP_button" mnemonicParsing="false" prefHeight="40.0" text="TCP (socket)" textFill="WHITE">
                                     <font>
                                         <Font size="25.0" />
                                     </font>
@@ -65,7 +65,7 @@
                                         <Insets right="50.0" />
                                     </HBox.margin>
                                 </RadioButton>
-                                <RadioButton fx:id="RMIbutton" mnemonicParsing="false" prefHeight="40.0" text="RMI" textFill="WHITE" toggleGroup="$connectionType">
+                                <RadioButton fx:id="RMI_button" mnemonicParsing="false" prefHeight="40.0" text="RMI" textFill="WHITE" toggleGroup="$connectionType">
                                     <font>
                                         <Font size="25.0" />
                                     </font>

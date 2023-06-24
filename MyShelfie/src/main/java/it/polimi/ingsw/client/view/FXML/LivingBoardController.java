@@ -253,8 +253,6 @@ public class LivingBoardController {
         initBookshelf(otherBookshelf);
         // INIT SCORING TOKENS
         Stack<ScoringToken> stack = gameView.getLivingRoomBoard().getCommonGoalCards().get(0).getStack();
-        System.out.println(stack);
-        stack.forEach(System.out::println);
         String resource = "src/main/resources/it/polimi/ingsw/client/view/scoring tokens/scoring_";
         String initToken = resource.concat(String.valueOf(stack.pop().getValue()) + ".jpg");
         try{
@@ -264,7 +262,6 @@ public class LivingBoardController {
         } catch (FileNotFoundException e){
             e.printStackTrace();
         }
-
         // updateBookshelf(gameView.getPlayer(getPlayers().get(personalGameIndex)).getBookshelf(), bookshelf);
         // updateBookshelf(gameView.getPlayer(getPlayers().get(watchedPlayer)).getBookshelf(), otherBookshelf);
         if (gameView.getSubscribers().size() == 2){

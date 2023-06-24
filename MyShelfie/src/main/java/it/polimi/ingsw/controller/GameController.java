@@ -302,10 +302,8 @@ public class GameController implements Serializable {
                         // client.onMessage(new FirstCommonGoalMessage(currentPlayer.getName()));
                     }
                     if(card.equals(commonGoalCards.get(1)) && !currentPlayer.isSecondCommonGoalAchieved()) {
-                        currentPlayer.setScore(card.getStack().pop().getValue());
                         int value = game.popCommonGoalCardStack(1);
                         currentPlayer.setScore(value);
-                        currentPlayer.hasAchievedFirstGoal();
                         currentPlayer.hasAchievedSecondGoal();
                         // client.onMessage(new SecondCommonGoalMessage((currentPlayer.getName())));
                     }

@@ -45,7 +45,7 @@ import java.util.Set;
  * @version 1.0
  * @since 5/21/2023
  */
-public class GUI extends Observable implements View {
+public class GUI extends Observable<EventMessage> implements View {
 
     private Stage stage;
     private Scene scene;
@@ -233,7 +233,7 @@ public class GUI extends Observable implements View {
             } catch (NotBoundException e) {
                 System.err.println("not bound exception registry");
             }
-        } else if (rmIorSocketController.isSocket()) {
+        } else if (rmIorSocketController.isTCP()) {
             if (port == 1099) port = 1244;
             ServerStub serverStub = new ServerStub(address, port);
            // client = new ClientImplementation(this, serverStub); // todo eliminare
@@ -298,7 +298,6 @@ public class GUI extends Observable implements View {
      */
 
     public void chosenPosition(int r, int c) {
-       // System.out.println(this.client.getNickname() + " ha scelto la tile nella posizione " + r + " " + c);
         setChanged();
         notifyObservers(new TilePositionMessage(getNickname(), new Position(r, c)));
 
@@ -321,8 +320,6 @@ public class GUI extends Observable implements View {
 
     @Override
     public void showGameNamesList(Set<String> availableGameNames) {
-        System.out.println(" il gioco da joinare si chiama " + this.gameNameListController.getGameToJoin());
-        System.out.println("il client è " + getNickname());
         setChanged();
         notifyObservers(new GameNameChoiceMessage(getNickname(), this.gameNameListController.getGameToJoin()));
 
@@ -375,7 +372,6 @@ public class GUI extends Observable implements View {
                         this.numberOfPlayersController = numberOfPlayersController;
                         numberOfPlayersController.setGui(this);
                         numberOfPlayersController.setGameName(gameNameResponseMessage.getGameName());
-                        System.out.println("il nome del gioco è " + numberOfPlayersController.getGameName());
                         Platform.runLater(() -> stage.setScene(scene));
                     } catch (IOException e) {
                         throw new RuntimeException(e);
@@ -537,7 +533,7 @@ public class GUI extends Observable implements View {
 
     // booleano per distinguere la prima volta del gioco e le altre
     private boolean isFirstTime = true;
-    private boolean firstturnever=true;
+    private boolean firstTurnEver =true;
 
     @Override
     public void update(GameView game, EventMessage eventMessage) {
@@ -582,7 +578,7 @@ public class GUI extends Observable implements View {
                             livingBoardController.tilePack.setDisable(true);
                         });
                     } catch (IOException e) {
-                        System.out.println(e);
+                        System.err.println(e);
                     }
                 } else {
                     Platform.runLater(() -> {
@@ -607,12 +603,9 @@ public class GUI extends Observable implements View {
             }
 
             case PLAYER_TURN -> {
-                System.out.println(getNickname() + " " + eventMessage.getNickname() + " " + game.getCurrentPlayer().getName());
-
-                System.out.println("it's " + game.getCurrentPlayer().getName() + " turn");
                 if (this.nickname.equals(game.getCurrentPlayer().getName())) {
                     // booleano altrimenti ogni volta fa la pausa
-                    if(firstturnever) {
+                    if(firstTurnEver) {
 
                         PauseTransition delay = new PauseTransition(Duration.millis(10000));
                         delay.setOnFinished(event -> {
@@ -638,7 +631,7 @@ public class GUI extends Observable implements View {
                             //System.out.println("Delayed code executed");
                         });
                         delay.play();
-                        firstturnever=false;
+                        firstTurnEver =false;
                     }
                     else {
                         Platform.runLater(() -> {
@@ -719,7 +712,6 @@ public class GUI extends Observable implements View {
 
             case PICKING_TILES -> {
                 if (this.nickname.equals(game.getCurrentPlayer().getName())) {
-                    System.out.println("arrivato a " + this.getNickname());
                     Platform.runLater(() -> {
                         livingBoardController.updateLivingRoomBoard(game.getLivingRoomBoard());
                         livingBoardController.updateTilePack(game.getTilePack());
@@ -736,7 +728,6 @@ public class GUI extends Observable implements View {
             }
             case COMMON_GOAL_CARD -> {
                 CommonGoalCardMessage message = (CommonGoalCardMessage) eventMessage;
-                System.out.println("Received message goalcard message");
                 Platform.runLater(()->{
                     livingBoardController.updateTokens(game, message.getCommonGoalCardIndex());
                     String number = message.getCommonGoalCardIndex() == 0 ? "first" : "second";
@@ -782,10 +773,6 @@ public class GUI extends Observable implements View {
                     winController.fail_3.setVisible(false);
                     winController.fail_4.setVisible(false);
                     winController.congratulations.setText("Congratulations "+ eventMessage.getNickname() +"!");
-
-
-
-                    System.out.println(eventMessage.getNickname() + "win the game");
                 } else {
                     winController.bestplayer.setVisible(false);
                     winController.congratulations.setVisible(false);
@@ -819,9 +806,6 @@ public class GUI extends Observable implements View {
 
                     }
                 }
-
-
-                    System.out.println(" il giocatore a cui mi sono bloccata è "+playerreal.getName());
                     for (int i = 0; i < game.otherPlayersList(playerreal).size(); i++) {
                         if (i == 0) { // 2 giocatori1
                             winController.secondPlayeRScoretxt.setText(game.otherPlayersList(playerreal).get(0).getName() + "'s score is:  " + game.otherPlayersList(playerreal).get(0).getScore());
