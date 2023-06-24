@@ -2,7 +2,7 @@ package it.polimi.ingsw.network.eventMessages;
 
 public class ItemTileIndexMessage extends EventMessage {
     private final long serialVersionUID = 1L;
-    private int index;
+    private final int index;
 
     public ItemTileIndexMessage (String nickName, int index) {
         super(nickName, EventMessageType.ITEM_TILE_INDEX);

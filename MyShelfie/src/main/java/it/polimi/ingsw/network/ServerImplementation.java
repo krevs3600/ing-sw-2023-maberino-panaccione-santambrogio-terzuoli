@@ -139,7 +139,7 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                 if (currentLobbyGameNames.isEmpty()) {
                     client.onMessage(new JoinErrorMessage(eventMessage.getNickname(), "no available games in lobby"));
                 } else {
-                    client.onMessage(new JoinGameResponseMessage(eventMessage.getNickname(), true, availableGames));
+                    client.onMessage(new JoinGameResponseMessage(eventMessage.getNickname(), availableGames));
 
                 }
             }

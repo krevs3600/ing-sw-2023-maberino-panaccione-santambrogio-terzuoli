@@ -17,6 +17,6 @@ public class GameCreationMessage extends EventMessage {
 
     @Override
     public String toString(){
-        return getNickname() + " wants to create a game with " + String.valueOf(getNumOfPlayers()) + " players";
+        return getNickname() + " wants to create a game with " + getNumOfPlayers() + " players";
     }
 }

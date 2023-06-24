@@ -26,7 +26,7 @@ import java.rmi.registry.Registry;
 import java.util.Scanner;
 import java.util.Set;
 
-public class CLI extends Observable implements View {
+public class CLI extends Observable<EventMessage> implements View {
 
     private String nickname;
     private final PrintStream out = System.out;
@@ -94,7 +94,7 @@ public class CLI extends Observable implements View {
     }
 
     public String askConnectionType() {
-        String connectionType = "";
+        String connectionType;
         do {
             out.print("Please insert a connection type: socket (s) or RMI (r): ");
             connectionType = in.nextLine();
@@ -158,24 +158,16 @@ public class CLI extends Observable implements View {
 
         switch (menuOption) {
 
-            case 1 -> {
-                resumeGame();
-            }
-            case 2 -> {
-                createGame();
-            }
-            case 3 -> {
-                joinGame();
-            }
+            case 1 -> resumeGame();
+            case 2 -> createGame();
+            case 3 -> joinGame();
             case 4 -> {
                 out.println("Closing game...");
                 setChanged();
                 notifyObservers(new DisconnectClientMessage(getNickname()));
 
             }
-            default -> {
-                out.println("\nInvalid option, please try again");
-            }
+            default -> out.println("\nInvalid option, please try again");
         }
 
     }
@@ -255,7 +247,7 @@ public class CLI extends Observable implements View {
                 out.println("> " + game);
             }
         }
-        String gameChoice = null;
+        String gameChoice;
         do {
             out.print("\nEnter the game's name to join: ");
             gameChoice = in.nextLine();
@@ -348,7 +340,7 @@ public class CLI extends Observable implements View {
             case ILLEGAL_POSITION, UPPER_BOUND_TILEPACK, NOT_ENOUGH_INSERTABLE_TILES -> {
                     ErrorMessage errorMessage = (ErrorMessage) message;
                     out.println(errorMessage.getErrorMessage());
-                    String answer = "";
+                    String answer;
                     do {
                         out.println("\nIf you wish to stop picking tiles type 'stop', otherwise press ENTER");
                         out.print(">>> ");
@@ -457,18 +449,12 @@ public class CLI extends Observable implements View {
             }
 
 
-            case TILE_PACK -> {
-                /*out.println("\n-----------------------------------------------------------------------\n LIVING ROOM BOARD:");
-                out.println(game.getLivingRoomBoard().toString());*/
-                out.println(game.toCLI(getNickname()));
-            }
+            case TILE_PACK -> out.println(game.toCLI(getNickname()));
 
             case PICKING_TILES -> {
                 if (this.nickname.equals(game.getCurrentPlayer().getName())) {
-                    /*out.println("\n-----------------------------------------------------------------------\n TILE PACK:");
-                    out.println(game.getTilePack().toString());*/
                     out.println(game.toCLI(getNickname()));
-                    String answer = "";
+                    String answer;
                     do {
                         out.println("\nIf you wish to stop picking tiles type 'stop', otherwise press ENTER");
                         out.print(">>> ");

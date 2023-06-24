@@ -3,8 +3,8 @@ package it.polimi.ingsw.network.eventMessages;
 import java.io.Serializable;
 
 public abstract class EventMessage implements Serializable {
-    private String nickname;
-    private EventMessageType type;
+    private final String nickname;
+    private final EventMessageType type;
 
     public EventMessage(String nickName, EventMessageType messageType){
         this.nickname = nickName;

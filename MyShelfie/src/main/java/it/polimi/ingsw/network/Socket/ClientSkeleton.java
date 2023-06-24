@@ -5,12 +5,10 @@ import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.MessagesToClient.MessageToClient;
 import it.polimi.ingsw.network.eventMessages.EventMessage;
 import it.polimi.ingsw.network.Server;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.net.SocketException;
 import java.rmi.RemoteException;
 
 public class ClientSkeleton implements Client {
@@ -70,8 +68,6 @@ public class ClientSkeleton implements Client {
             throw new RemoteException("Cannot send message " + message.getType());
         }
     }
-
-    public void disconnect () throws RemoteException{}
 
     /*
     public void disconnect () throws RemoteException {

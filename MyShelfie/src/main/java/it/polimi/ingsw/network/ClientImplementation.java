@@ -5,7 +5,6 @@ import it.polimi.ingsw.client.view.FXML.View;
 import it.polimi.ingsw.model.ModelView.GameView;
 import it.polimi.ingsw.network.MessagesToClient.MessageToClient;
 import it.polimi.ingsw.network.MessagesToClient.requestMessage.CreatorLoginResponseMessage;
-import it.polimi.ingsw.network.MessagesToClient.requestMessage.GameNameResponseMessage;
 import it.polimi.ingsw.network.MessagesToClient.requestMessage.LoginResponseMessage;
 import it.polimi.ingsw.network.MessagesToClient.requestMessage.RequestMessage;
 import it.polimi.ingsw.network.eventMessages.EventMessage;
@@ -20,7 +19,6 @@ public class ClientImplementation extends UnicastRemoteObject implements Client 
 
     View view;
     private String nickname;
-    private String gameName; // in realtà è un optional
 
     public View getView() {
         return view;
@@ -61,11 +59,6 @@ public class ClientImplementation extends UnicastRemoteObject implements Client 
                     if (creatorLoginResponseMessage.isValidNickname())
                         this.nickname = creatorLoginResponseMessage.getNickname();
 
-                }
-                case GAME_NAME_RESPONSE -> {
-                    GameNameResponseMessage gameNameResponseMessage = (GameNameResponseMessage) message;
-                    if (gameNameResponseMessage.isValidGameName())
-                        this.gameName = gameNameResponseMessage.getGameName();
                 }
                 case LOGIN_RESPONSE -> {
                     LoginResponseMessage loginResponseMessage = (LoginResponseMessage) message;
@@ -124,10 +117,6 @@ public class ClientImplementation extends UnicastRemoteObject implements Client 
 
     public String getNickname() {
         return this.nickname;
-    }
-
-    public String getGameName() {
-        return this.gameName;
     }
 }
 

@@ -5,7 +5,7 @@ import it.polimi.ingsw.model.ModelView.BookshelfView;
 public class BookshelfMessage extends EventMessage {
 
     private final long serialVersionUID = 1L;
-    private BookshelfView bookshelfView;
+    private final BookshelfView bookshelfView;
     public BookshelfMessage(String nickName, BookshelfView bookshelfView) {
         super(nickName, EventMessageType.BOOKSHELF);
         this.bookshelfView = bookshelfView;

@@ -4,7 +4,7 @@ import it.polimi.ingsw.model.ModelView.LivingRoomBoardView;
 
 public class BoardMessage extends EventMessage{
     private final long serialVersionUID = 1L;
-    private LivingRoomBoardView board;
+    private final LivingRoomBoardView board;
     public BoardMessage(String nickName, LivingRoomBoardView board) {
         super(nickName, EventMessageType.BOARD);
         this.board = board;

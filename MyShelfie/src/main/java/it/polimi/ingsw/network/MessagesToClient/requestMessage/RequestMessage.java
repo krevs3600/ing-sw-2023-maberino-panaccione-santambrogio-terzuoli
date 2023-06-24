@@ -3,8 +3,6 @@ package it.polimi.ingsw.network.MessagesToClient.requestMessage;
 import it.polimi.ingsw.network.MessagesToClient.MessageToClient;
 import it.polimi.ingsw.network.MessagesToClient.MessageToClientType;
 
-import java.io.Serializable;
-
 public abstract class RequestMessage extends MessageToClient {
 
 

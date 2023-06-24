@@ -1,13 +1,10 @@
 package it.polimi.ingsw.network.eventMessages;
 
 public enum EventMessageType {
-    ERROR,
     NICKNAME,
     GAME_NAME,
-    MENU_OPTION,
     GAME_CREATION,
     GAME_CHOICE,
-    NUM_OF_PLAYERS_REQUEST,
     TILE_POSITION,
     BOOKSHELF_COLUMN,
     END_TURN,
@@ -16,14 +13,10 @@ public enum EventMessageType {
     JOIN_GAME_REQUEST,
     PLAYER_TURN,
     TILE_PACK,
-    PERSONAL_GOAL_CARD,
     COMMON_GOAL_CARD,
     LAST_TURN,
     END_GAME,
-    INSERTION_REQUEST,
     ITEM_TILE_INDEX,
-    CREATOR_NICKNAME,
-    SCORE,
     FILL_BOOKSHELF,
     SWITCH_PHASE,
     DISCONNECT_CLIENT,

@@ -1,6 +1,5 @@
 package it.polimi.ingsw.network.MessagesToClient.errorMessages;
 
-import it.polimi.ingsw.model.ModelView.LivingRoomBoardView;
 import it.polimi.ingsw.network.MessagesToClient.MessageToClientType;
 
 public class IllegalTilePositionErrorMessage extends ErrorMessage {

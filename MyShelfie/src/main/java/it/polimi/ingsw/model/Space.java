@@ -2,8 +2,6 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.model.utils.SpaceType;
-import it.polimi.ingsw.observer_observable.Observable;
-
 import java.io.Serial;
 import java.io.Serializable;
 
@@ -17,7 +15,7 @@ import java.io.Serializable;
  */
 
 
-public class Space extends Observable  implements Serializable {
+public class Space implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;

@@ -2,14 +2,10 @@ package it.polimi.ingsw.network.Socket;
 
 import it.polimi.ingsw.model.ModelView.GameView;
 import it.polimi.ingsw.network.Client;
-import it.polimi.ingsw.network.MessagesToClient.MessageToClient;
-import it.polimi.ingsw.network.MessagesToClient.MessageToClientType;
 import it.polimi.ingsw.network.MessagesToClient.errorMessages.ErrorMessage;
 import it.polimi.ingsw.network.MessagesToClient.requestMessage.RequestMessage;
 import it.polimi.ingsw.network.eventMessages.EventMessage;
 import it.polimi.ingsw.network.Server;
-import it.polimi.ingsw.network.eventMessages.EventMessageType;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;

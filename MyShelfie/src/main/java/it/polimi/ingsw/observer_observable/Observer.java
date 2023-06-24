@@ -1,6 +1,6 @@
 package it.polimi.ingsw.observer_observable;
 
-public interface Observer<Observable, EventMessage>{
+public interface Observer<EventMessage>{
 
-    void update(Observable o, EventMessage eventMessage);
+    void update(Observable<EventMessage> o, EventMessage eventMessage);
 }

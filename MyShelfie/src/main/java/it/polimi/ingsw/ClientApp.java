@@ -2,8 +2,6 @@ package it.polimi.ingsw;
 
 import it.polimi.ingsw.network.eventMessages.DisconnectClientMessage;
 import it.polimi.ingsw.view.cli.CLI;
-import it.polimi.ingsw.network.ClientImplementation;
-import it.polimi.ingsw.network.Client;
 
 import java.rmi.RemoteException;
 
