@@ -171,7 +171,6 @@ public class LivingRoomBoard  implements Serializable {
      * Afterwards, new ones are drawn from the {@link Bag} and placed on the {@link LivingRoomBoard}.
      */
     public void refill() {
-        // TODO spostare la condizione in cui fare refill nel controller
         getBag().insertTiles(getAllFreeTiles().stream().map(Space::getTile).collect(Collectors.toList()));
         for (Space space : getAllFreeTiles()) {
             space.drawTile();

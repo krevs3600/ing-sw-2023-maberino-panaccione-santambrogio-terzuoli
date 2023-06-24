@@ -11,6 +11,7 @@ import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.network.eventMessages.EventMessage;
 import it.polimi.ingsw.network.eventMessages.*;
 import it.polimi.ingsw.observer_observable.Observable;
+import it.polimi.ingsw.observer_observable.Observer;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -28,7 +29,7 @@ public class Game extends Observable<EventMessage>  implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
-    private String gameName;
+    private final String gameName;
     private final PersonalGoalCardDeck personalGoalCardDeck;
     private final List<Player> subscribers = new ArrayList<>();
     private LivingRoomBoard livingRoomBoard;
@@ -52,10 +53,14 @@ public class Game extends Observable<EventMessage>  implements Serializable {
 
     private boolean firstPlayerHasEnded;
 
+    /**
+     * Class constructor
+     * @param numberOfPlayers the {@link Game#numberOfPlayers} of the game.
+     * @param gameName the {@link Game#gameName} which identifies the game
+     */
     public Game(NumberOfPlayers numberOfPlayers, String gameName){
         //initialize id with random string, This should be quiet random...
         this.gameName = gameName;
-        //this.livingRoomBoard = new LivingRoomBoard(numberOfPlayers);
         this.numberOfPlayers = numberOfPlayers;
         this.personalGoalCardDeck = new PersonalGoalCardDeck();
         this.tilePack = new TilePack();
@@ -66,241 +71,43 @@ public class Game extends Observable<EventMessage>  implements Serializable {
         this.firstPlayerHasEnded = false;
     }
 
+    /**
+     * This method initializes a new {@link LivingRoomBoard} for the game setting the {@link Game#livingRoomBoard} attribute
+     */
     public void initLivingRoomBoard(){
         this.livingRoomBoard = new LivingRoomBoard(numberOfPlayers);
     }
 
-    public void setGameName (String gameName) {
-        this.gameName = gameName;
-    }
-    public boolean isEnded() {
-        return isEnded;
-    }
-    public void setIsEnded () { this.isEnded = true;}
-
-    public boolean isFinalTurn () { return isFinalTurn;}
-    public void setFinalTurn() {
-        isFinalTurn = true;
-        setChanged();
-        notifyObservers(new LastTurnMessage(getCurrentPlayer().getName()));
-    }
-
-    public ItemTile drawTile(Position position) throws IllegalArgumentException{
-        return getLivingRoomBoard().getSpace(position).drawTile();
-    }
-
-    public void insertTileInTilePack (ItemTile itemTile) {
-
-        this.getTilePack().insertTile(itemTile);
-        TilePackView tilePackView = new TilePackView(this.getTilePack());
-        setChanged();
-        notifyObservers(new TilePackMessage(getCurrentPlayer().getName(), tilePackView));
-    }
-
     /**
-     * This method adds a Player to the game
-     * @param player the player to be subscribed
+     * This method adds a {@link Player} to the game
+     * @param player the {@link Player} to be subscribed
      */
     public void subscribe(Player player){
         subscribers.add(player);
-        /*setChanged();
-        notifyObservers(new NumOfPlayersRequestMessage(player.getName()));
-         */
     }
 
-    public void setDrawableTiles(){
-        this.drawableTiles = getLivingRoomBoard().getDrawableTiles();
-    }
-    public List<Space> getDrawableTiles(){
-        return this.drawableTiles;
-    }
     /**
-     * This method chooses the order of play of the game and sets to PICKING_TILES the status of the first player
+     * This method chooses the order of play of the game and sets to {@code PICKING_TILES} the status of the {@link Game#firstPlayer}
+     * and notifies the {@link Observer}s about the starting of the game
+     * by sending a {@link PlayerTurnMessage}
      */
-    //TODO: create new eventMessage type
     public void startGame(){
         Collections.shuffle(subscribers);
-        Player firstPlayer = subscribers.get(0);
-        this.firstPlayer=firstPlayer;
-        firstPlayer.setStatus(PlayerStatus.PICKING_TILES);
+        setFirstPlayer(subscribers.get(0));
+        getFirstPlayer().setStatus(PlayerStatus.PICKING_TILES);
         this.cursor = 0;
         setTurnPhase(GamePhase.INIT_GAME);
         setChanged();
         notifyObservers(new PlayerTurnMessage(firstPlayer.getName()));
     }
-    /**
-     * This method stops the game by setting to INACTIVE the status of all the players
-     */
-    public void endGame(Player winner){
-        setIsEnded();
-        for(Player player : subscribers){
-            player.setStatus(PlayerStatus.INACTIVE);
-        }
-        setChanged();
-        notifyObservers(new WinGameMessage(new PlayerView(winner)));
-        // maybe call to a method to show results
-    }
-    public int popCommonGoalCardStack(int commonGoalCardIndex){
-        CommonGoalCard card = getCommonGoalCards().get(commonGoalCardIndex);
-        Stack<ScoringToken> tokens = (Stack<ScoringToken>) card.getStack().clone();
-        setChanged();
-        notifyObservers(new CommonGoalCardMessage(getCurrentPlayer().getName(), card, commonGoalCardIndex));
-        return card.getStack().pop().getValue();
-    }
+
 
     /**
-     * This method gets the current Player
-     * @return Player the player who is currently playing
+     * This method sets the {@link Game#firstPlayer} with a given one
+     * @param firstPlayer the {@link Player} who is then saved as the first player of the game
      */
-    //TODO: create new event message to switch player turn
-    public Player getCurrentPlayer(){
-        return subscribers.get(cursor);
-    }
+    public void setFirstPlayer(Player firstPlayer) {this.firstPlayer=firstPlayer;}
 
-    public Player getLastPlayer() {
-        return subscribers.get(subscribers.size()-1);
-    }
-
-    /**
-     * This method switches to the next player to have his turn
-     */
-    //TODO: add message event
-    public void changeTurn(){
-        setChanged();
-        notifyObservers(new PlayerTurnMessage(getCurrentPlayer().getName()));
-    }
-
-    public void setCursor () { this.cursor = cursor < subscribers.size()-1 ? cursor+1 : 0; }
-
-    /**
-     * This method refills the LivingRoomBoard by calling its proper method
-     */
-    public void refillLivingRoomBoard(){
-        getLivingRoomBoard().refill();
-    }
-
-    /**
-     * This getter method gets the player's id
-     * @return String It returns the string representing the identification of the player
-     */
-    public String getGameName(){
-        return this.gameName;
-    }
-
-    /**
-     * This getter method gets the number of players in game
-     * @return NumberOfPlayers It returns the enumeration value representing the number of players
-     */
-    public NumberOfPlayers getNumberOfPlayers(){
-        return this.numberOfPlayers;
-    }
-
-    /**
-     * This method gets the common goal cards in play
-     * @return List<CommonGoalCard> It returns the list of the two common goal cards in play
-     */
-    // don't remember why private
-    private List<CommonGoalCard> getCommonGoalCards(){
-        return livingRoomBoard.getCommonGoalCards();
-    }
-
-    /**
-     * This method takes the ScoringToken from the commonGoalCard and gives it to the correct Player
-     * @param commonGoalCard the card of the achieved common goal
-     * @param player the scoring player
-     */
-    public void pullScoringTokens(CommonGoalCard commonGoalCard, Player player){
-        ScoringToken scoringToken = commonGoalCard.pop();
-        player.winToken(scoringToken);
-    }
-
-    /**
-     * This getter method gets the players subscribed to the game
-     * @return List<Player> It returns the list of players subscribed
-     */
-    public List<Player> getSubscribers(){
-        return subscribers;
-    }
-
-    /**
-     * This getter method gets the central board of the game
-     * @return LivingRoomBoard It returns the living room board
-     */
-    public LivingRoomBoard getLivingRoomBoard() {
-        return livingRoomBoard;
-    }
-
-    public void setPersonalGoalCard(Player player, GoalCard personalGoalCard){
-        player.setPersonalGoalCard(personalGoalCard);
-    }
-    public PersonalGoalCardDeck getPersonalGoalCardDeck(){
-        return personalGoalCardDeck;}
-
-    public int getCursor () {return cursor;}
-
-    /*
-    public static void main(String[] args){
-        PersonalGoalCardDeck personalGoalCardDeck = new PersonalGoalCardDeck();
-
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("How many players are going to play? ");
-        int numberOfPlayers = scanner.nextInt();
-        Game game = new Game(NumberOfPlayers.TWO_PLAYERS, "game");
-        for (int i = 0; i<numberOfPlayers; i++){
-            System.out.print("Enter your name: ");
-            String name = scanner.next();
-            game.subscribe(new Player(name));
-        }
-        System.out.println("Game " + game.getGameName());
-        TilePack tilePack = new TilePack();
-        game.startGame();
-        LivingRoomBoard livingRoomBoard = game.getLivingRoomBoard();
-
-        while(true){
-            Player currentPlayer = game.getCurrentPlayer();
-            Player nextPlayer = game.getNextPlayer();
-            List<Space> drawableTiles = livingRoomBoard.getDrawableTiles();
-            System.out.println(livingRoomBoard);
-            System.out.println(drawableTiles);
-            System.out.print(currentPlayer.getName() + " how many tiles would you like to get? ");
-
-            int numberOfTiles = scanner.nextInt();
-            for (int i=0; i<numberOfTiles; i++) {
-                while (tilePack.getSize() < numberOfTiles) {
-                    System.out.print("x: ");
-                    int x = scanner.nextInt();
-                    System.out.print("y: ");
-                    int y = scanner.nextInt();
-
-                    if (drawableTiles.contains(livingRoomBoard.getSpace(new Position(x, y)))) {
-                        tilePack.insertTile(currentPlayer.pickUpTile(livingRoomBoard, new Position(x, y)));
-                        System.out.println(tilePack);
-                        System.out.println(livingRoomBoard);
-                    } else {
-                        System.out.println("You can't take this tile, try again");
-                    }
-                }
-            }
-            currentPlayer.setStatus(PlayerStatus.INSERTING_TILES);
-            // while(tilePack.getSize() > 0){
-            System.out.println(currentPlayer.getBookshelf());
-            System.out.println(tilePack);
-            System.out.print("In which column do you want to put your tiles? ");
-            int column = scanner.nextInt();
-            currentPlayer.insertTile(tilePack, column);
-            System.out.println(currentPlayer.getBookshelf());
-            //}
-            currentPlayer.setStatus(PlayerStatus.INACTIVE);
-            nextPlayer.setStatus(PlayerStatus.PICKING_TILES);
-            game.nextPlayer();
-
-        }
-
-
-    }
-    */
-
-    public GamePhase getTurnPhase() {return this.turnPhase;}
     public void setTurnPhase(GamePhase turnPhase) {
         this.turnPhase = turnPhase;
         if (turnPhase.equals(GamePhase.PLACING_TILES)) {
@@ -316,10 +123,11 @@ public class Game extends Observable<EventMessage>  implements Serializable {
             setAlongSideColumn(false);
             setAlongSideRow(false);
             setDrawableTiles();
-            //this.cursor = cursor < subscribers.size()-1 ? cursor+1 : 0;
-            setCursor();
+            incrementCursor();
             setChanged();
             notifyObservers(new BoardMessage(getCurrentPlayer().getName(), new LivingRoomBoardView(getLivingRoomBoard())));
+            setChanged();
+            notifyObservers(new PlayerTurnMessage(getCurrentPlayer().getName()));
         }
         else if (turnPhase.equals(GamePhase.PICKING_TILES)) {
             setChanged();
@@ -334,38 +142,259 @@ public class Game extends Observable<EventMessage>  implements Serializable {
         }
     }
 
-    public TilePack getTilePack () { return tilePack;}
+    /**
+     * This method sets the attribute {@link Game#drawableTiles}
+     * by taking the value of {@link LivingRoomBoard#getDrawableTiles()} of the {@link Game#livingRoomBoard}.
+     * It is used to make a snapshot of the drawable tiles of the {@link Game#livingRoomBoard}
+     * in a particular phase of the game, usually the beginning of a new turn
+     */
+    public void setDrawableTiles(){
+        this.drawableTiles = getLivingRoomBoard().getDrawableTiles();
+    }
 
-    //TODO: change getSubscribers into getCurrentPlayer
+    /**
+     * This method inserts an {@link ItemTile} in the {@link TilePack}
+     * and notifies the {@link Observer}s about the insertion
+     * by sending a {@link TilePackMessage}
+     * @param itemTile the {@link ItemTile} to insert
+     */
+    public void insertTileInTilePack (ItemTile itemTile) {
+        this.getTilePack().insertTile(itemTile);
+        TilePackView tilePackView = new TilePackView(this.getTilePack());
+        setChanged();
+        notifyObservers(new TilePackMessage(getCurrentPlayer().getName(), tilePackView));
+    }
+
+    /**
+     * This method sets to a given {@code boolean} the {@link Game#alongSideRow} attribute
+     * @param alongSideRow the {@code boolean} set in the attribute
+     */
+    public void setAlongSideRow(boolean alongSideRow) {this.alongSideRow = alongSideRow; }
+
+    /**
+     * This method sets to a given {@code boolean} the {@link Game#alongSideColumn} attribute
+     * @param alongSideColumn the {@code boolean} set in the attribute
+     */
+    public void setAlongSideColumn(boolean alongSideColumn) {this.alongSideColumn = alongSideColumn; }
+
+    /**
+     * This method sets to a given {@code int} the {@link Game#columnChoice} attribute
+     * representing the column chosen by the {@link Game#getCurrentPlayer()} to insert his {@link ItemTile}s
+     * @param columnChoice the {@code int} representing the chosen column
+     */
     public void setColumnChoice (int columnChoice) throws IndexOutOfBoundsException {
-        if (columnChoice >= 0 && columnChoice < getCurrentPlayer().getBookshelf().getMaxWidth()) this.columnChoice = columnChoice;
+        if (columnChoice >= 0 && columnChoice < getCurrentPlayer().getBookshelf().getMaxWidth()) {
+            this.columnChoice = columnChoice;
+        }
         else throw new IndexOutOfBoundsException("invalid column, please choose another one;");
         setChanged();
         notifyObservers(new BookshelfMessage(getCurrentPlayer().getName(), new BookshelfView(getCurrentPlayer().getBookshelf(), getCurrentPlayer().getName())));
     }
 
+    /**
+     * This method increments the value of the {@link Game#cursor} in a circular way
+     * to indicate the following {@link Player} who has to play his turn
+     */
+    public void incrementCursor() { this.cursor = cursor < subscribers.size()-1 ? cursor+1 : 0; }
+
+    /**
+     * This method pops a {@link ScoringToken} from the {@link CommonGoalCard} specified by the index
+     * then notifies the {@link Observer}s about the popping
+     * by sending a {@link CommonGoalCardMessage}
+     * @param commonGoalCardIndex the index of the {@link CommonGoalCard} from which the {@link ScoringToken} is popped
+     * @return and {@code int} representing the value of the popped {@link ScoringToken}
+     */
+    public int popCommonGoalCardStack(int commonGoalCardIndex){
+        CommonGoalCard card = getLivingRoomBoard().getCommonGoalCards().get(commonGoalCardIndex);
+        //Stack<ScoringToken> tokens = (Stack<ScoringToken>) card.getStack().clone();
+        setChanged();
+        notifyObservers(new CommonGoalCardMessage(getCurrentPlayer().getName(), card, commonGoalCardIndex));
+        return card.getStack().pop().getValue();
+    }
+
+
+    /**
+     * This method takes the ScoringToken from the commonGoalCard and gives it to the correct Player
+     * @param commonGoalCard the card of the achieved common goal
+     * @param player the scoring player
+     */
+    // TODO: understand if it is needed
+    public void pullScoringTokens(CommonGoalCard commonGoalCard, Player player){
+        ScoringToken scoringToken = commonGoalCard.pop();
+        player.winToken(scoringToken);
+    }
+
+    /**
+     * This method sets to {@code True} the {@link Game#firstPlayerHasEnded} attribute
+     */
+    public void setFirstPlayerHasEnded() {this.firstPlayerHasEnded = true;}
+
+    /**
+     * This method sets to {@code True} the attribute {@link Game#isFinalTurn}
+     * and notifies the {@link Observer}s about the starting of the last turn
+     * by sending a {@link LastTurnMessage}
+     */
+    public void setFinalTurn() {
+        isFinalTurn = true;
+        setChanged();
+        notifyObservers(new LastTurnMessage(getCurrentPlayer().getName()));
+    }
+
+    /**
+     * This method stops the game by setting to {@code INACTIVE} the {@link PlayerStatus} of all the {@link Game#subscribers}
+     * then notifies the {@link Observer}s about the starting of the game
+     * by sending a {@link WinGameMessage}
+     * @param winner the {@link Player} who has won the game
+     */
+    public void endGame(Player winner){
+        hasEnded();
+        for(Player player : subscribers){
+            player.setStatus(PlayerStatus.INACTIVE);
+        }
+        setChanged();
+        notifyObservers(new WinGameMessage(new PlayerView(winner)));
+    }
+
+    /**
+     * This method sets to {@code True} the attribute {@link Game#isEnded}
+     */
+    public void hasEnded() { this.isEnded = true;}
+
+    /**
+     * This method gets the current {@link Player}
+     * @return the {@link Player} who is currently playing, the one indicated by the {@link Game#cursor}
+     */
+    public Player getCurrentPlayer(){
+        return subscribers.get(cursor);
+    }
+
+    /**
+     * This method gets the last {@link Player}
+     * @return the {@link Player} who is the last playing his turn
+     */
+    public Player getLastPlayer() {
+        return subscribers.get(subscribers.size()-1);
+    }
+
+    /**
+     * Getter method
+     * @return the {@link Game#firstPlayer}
+     */
+    public Player getFirstPlayer () {return this.firstPlayer;}
+
+    /**
+     * Getter method
+     * @return the {@link Game#drawableTiles}
+     */
+    public List<Space> getDrawableTiles(){
+        return this.drawableTiles;
+    }
+
+    /**
+     * Getter method
+     * @return the {@link Game#gameName}
+     */
+    public String getGameName(){
+        return this.gameName;
+    }
+
+    /**
+     * Getter method
+     * @return the {@link Game#numberOfPlayers}
+     */
+    public NumberOfPlayers getNumberOfPlayers(){
+        return this.numberOfPlayers;
+    }
+
+    /**
+     * Getter method
+     * @return the {@link Game#subscribers}
+     */
+    public List<Player> getSubscribers(){
+        return subscribers;
+    }
+
+
+    /**
+     * Getter method
+     * @return the {@link Game#livingRoomBoard}
+     */
+    public LivingRoomBoard getLivingRoomBoard() {
+        return livingRoomBoard;
+    }
+
+    /**
+     * Getter method
+     * @return the {@link Game#personalGoalCardDeck}
+     */
+    public PersonalGoalCardDeck getPersonalGoalCardDeck(){
+        return personalGoalCardDeck;}
+
+    /**
+     * Getter method
+     * @return the {@link Game#cursor}
+     */
+    public int getCursor () {return cursor;}
+
+    /**
+     * Getter method
+     * @return the {@link Game#turnPhase}
+     */
+    public GamePhase getTurnPhase() {return this.turnPhase;}
+
+    /**
+     * Getter method
+     * @return the {@link Game#tilePack}
+     */
+    public TilePack getTilePack () { return tilePack;}
+
+    /**
+     * Getter method
+     * @return the {@link Game#columnChoice}
+     */
     public int getColumnChoice() {
         return columnChoice;
     }
 
-    //TODO
-    public void setPlayerScore(int score, Player player) {
-
-        player.setScore(score);
-    }
-
+    /**
+     * Getter method
+     * @return the {@link Game#buffer} storing the {@link Position}s chosen so far by the current {@link Player}
+     */
     public List<Position> getBuffer(){
         return this.buffer;
     }
 
-    public boolean isAlongSideRow() {return this.alongSideRow; }
-    public void setAlongSideRow(boolean alongSideRow) {this.alongSideRow = alongSideRow; }
-    public void setAlongSideColumn(boolean alongSideColumn) {this.alongSideColumn = alongSideColumn; }
 
+    /**
+     * Getter method
+     * @return the {@link Game#alongSideColumn}
+     */
+    public boolean isAlongSideRow() {return this.alongSideRow; }
+
+    /**
+     * Getter method
+     * @return the {@link Game#alongSideColumn}
+     */
     public boolean isAlongSideColumn() {return this.alongSideColumn; }
 
+    /**
+     * Getter method
+     * @return the {@link Game#firstPlayerHasEnded}
+     */
     public boolean isFirstPlayerHasEnded() {return this.firstPlayerHasEnded;}
 
-    public void setFirstPlayerHasEnded() {this.firstPlayerHasEnded = true;}
 
+    /**
+     * Getter method
+     * @return the @boolean attribute {@link Game#isEnded}
+     */
+    public boolean isEnded() {
+        return isEnded;
+    }
+
+    /**
+     * Getter method
+     * @return the {@code boolean} attribute {@link Game#isFinalTurn}
+     */
+    public boolean isFinalTurn () { return isFinalTurn;}
 }

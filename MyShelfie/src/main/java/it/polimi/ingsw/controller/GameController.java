@@ -42,28 +42,16 @@ public class GameController implements Serializable {
 
         switch (eventMessage.getType()) {
 
-            case GAME_CHOICE -> {
+            // TODO: do we really need all these cases?
+            case GAME_CHOICE, GAME_CREATION, GAME_SPECS -> {
                 Player newPlayer = new Player(eventMessage.getNickname());
                 game.subscribe(newPlayer);
             }
 
-            case GAME_CREATION -> {
-                GameCreationMessage gameCreationMessage = (GameCreationMessage) eventMessage;
-                game.setGameName(gameCreationMessage.getGameName());
-                Player newPlayer = new Player(eventMessage.getNickname());
-                game.subscribe(newPlayer);
-            }
-
-            case GAME_SPECS -> {
-                GameSpecsMessage gameSpecsMessage = (GameSpecsMessage) eventMessage;
-                game.setGameName(gameSpecsMessage.getGameName());
-                Player newPlayer = new Player(eventMessage.getNickname());
-                game.subscribe(newPlayer);
-            }
             case START_GAME -> {
                 game.initLivingRoomBoard();
                 for (Player player : game.getSubscribers()){
-                    game.setPersonalGoalCard(player, game.getPersonalGoalCardDeck().draw());
+                    player.setPersonalGoalCard(game.getPersonalGoalCardDeck().draw());
                 }
                 game.setDrawableTiles();
                 game.startGame();
@@ -74,7 +62,7 @@ public class GameController implements Serializable {
 
                 if (game.getDrawableTiles().contains(game.getLivingRoomBoard().getSpace(tilePositionMessage.getPosition()))) {
                     if (game.getBuffer().isEmpty()) {
-                        ItemTile itemTile = game.drawTile(tilePositionMessage.getPosition());
+                        ItemTile itemTile = game.getLivingRoomBoard().getSpace(tilePositionMessage.getPosition()).drawTile();
                         game.getBuffer().add(tilePositionMessage.getPosition());
                         game.insertTileInTilePack(itemTile);
                         game.setTurnPhase(GamePhase.PICKING_TILES);
@@ -87,7 +75,7 @@ public class GameController implements Serializable {
                                 } else {
                                     game.setAlongSideRow(true);
                                 }
-                                ItemTile itemTile = game.drawTile(tilePositionMessage.getPosition());
+                                ItemTile itemTile = game.getLivingRoomBoard().getSpace(tilePositionMessage.getPosition()).drawTile();
                                 game.getBuffer().add(tilePositionMessage.getPosition());
                                 game.insertTileInTilePack(itemTile);
                                 game.setTurnPhase(GamePhase.PICKING_TILES);
@@ -110,7 +98,7 @@ public class GameController implements Serializable {
                             if (game.isAlongSideColumn()) {
                                 if (tilePositionMessage.getPosition().getColumn() == game.getBuffer().get(0).getColumn()) {
                                         if (game.getCurrentPlayer().getBookshelf().getNumberInsertableTiles() >= game.getBuffer().size() + 1) {
-                                            ItemTile itemTile = game.drawTile(tilePositionMessage.getPosition());
+                                            ItemTile itemTile = game.getLivingRoomBoard().getSpace(tilePositionMessage.getPosition()).drawTile();
                                             game.getBuffer().add(tilePositionMessage.getPosition());
                                             game.insertTileInTilePack(itemTile);
                                             game.setTurnPhase(GamePhase.PICKING_TILES);
@@ -124,7 +112,7 @@ public class GameController implements Serializable {
                             } else if (game.isAlongSideRow()) {
                                 if (tilePositionMessage.getPosition().getRow() == game.getBuffer().get(0).getRow()) {
                                     if (game.getCurrentPlayer().getBookshelf().getNumberInsertableTiles() >= game.getBuffer().size() + 1) {
-                                        ItemTile itemTile = game.drawTile(tilePositionMessage.getPosition());
+                                        ItemTile itemTile = game.getLivingRoomBoard().getSpace(tilePositionMessage.getPosition()).drawTile();
                                         game.getBuffer().add(tilePositionMessage.getPosition());
                                         game.insertTileInTilePack(itemTile);
                                         game.setTurnPhase(GamePhase.PICKING_TILES);
@@ -170,7 +158,7 @@ public class GameController implements Serializable {
                     game.setColumnChoice(game.getColumnChoice());
                     game.setTurnPhase(GamePhase.PLACING_TILES);
                 } catch (IndexOutOfBoundsException e) {}
-
+                // TODO gestire le eccezioni!!
             }
 
             case SWITCH_PHASE -> {
@@ -208,10 +196,9 @@ public class GameController implements Serializable {
 
                 if (!game.isEnded()){
                     if(game.getLivingRoomBoard().getAllFreeTiles().size()==game.getLivingRoomBoard().getDrawableTiles().size()) {
-                        game.refillLivingRoomBoard();
+                        game.getLivingRoomBoard().refill();
                     }
                     game.setTurnPhase(GamePhase.INIT_TURN);
-                    game.changeTurn();
                 }
             }
             case FILL_BOOKSHELF -> {
@@ -235,7 +222,7 @@ public class GameController implements Serializable {
                 max_score = score;
                 winner = player;
             }
-            game.setPlayerScore(score, player);
+            player.setScore(score);
         }
         return winner;
 
@@ -310,14 +297,14 @@ public class GameController implements Serializable {
                     if(card.equals(commonGoalCards.get(0)) && !currentPlayer.isFirstCommonGoalAchieved()) {
                         //Stack<ScoringToken> oldStack = commonGoalCards.get(0).getStack();
                         int value = game.popCommonGoalCardStack(0);
-                        game.setPlayerScore(value, currentPlayer);
+                        currentPlayer.setScore(value);
                         currentPlayer.hasAchievedFirstGoal();
                         // client.onMessage(new FirstCommonGoalMessage(currentPlayer.getName()));
                     }
                     if(card.equals(commonGoalCards.get(1)) && !currentPlayer.isSecondCommonGoalAchieved()) {
-                        game.setPlayerScore(card.getStack().pop().getValue(), currentPlayer);
+                        currentPlayer.setScore(card.getStack().pop().getValue());
                         int value = game.popCommonGoalCardStack(1);
-                        game.setPlayerScore(value, currentPlayer);
+                        currentPlayer.setScore(value);
                         currentPlayer.hasAchievedFirstGoal();
                         currentPlayer.hasAchievedSecondGoal();
                         // client.onMessage(new SecondCommonGoalMessage((currentPlayer.getName())));
