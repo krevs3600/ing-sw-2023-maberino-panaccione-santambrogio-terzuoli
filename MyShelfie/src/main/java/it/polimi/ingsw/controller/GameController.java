@@ -232,8 +232,8 @@ public class GameController implements Serializable {
 
         ArrayList<Integer> points;
         try {
-            //Reader file = new FileReader("src/main/java/it/polimi/ingsw/model/configs/PersonalGoalCards.json");
-            Reader file = new FileReader("C:\\Users\\franc\\IdeaProjects\\ing-sw-2023-maberino-panaccione-santambrogio-terzuoli\\MyShelfie\\src\\main\\java\\it\\polimi\\ingsw\\model\\configs\\PersonalGoalCards.json");
+            Reader file = new FileReader("src/main/java/it/polimi/ingsw/model/configs/PersonalGoalCards.json");
+            //Reader file = new FileReader("C:\\Users\\franc\\IdeaProjects\\ing-sw-2023-maberino-panaccione-santambrogio-terzuoli\\MyShelfie\\src\\main\\java\\it\\polimi\\ingsw\\model\\configs\\PersonalGoalCards.json");
             JSONParser parser = new JSONParser();
             Object jsonObj = parser.parse(file);
             JSONObject jsonObject = (JSONObject) jsonObj;
@@ -308,12 +308,15 @@ public class GameController implements Serializable {
         }
     }
 
-    private ItemTile drawTile(TilePositionMessage tilePositionMessage){
-        ItemTile itemTile = game.getLivingRoomBoard().getSpace(tilePositionMessage.getPosition()).drawTile();
-        game.getBuffer().add(tilePositionMessage.getPosition());
-        game.insertTileInTilePack(itemTile);
-        game.setTurnPhase(GamePhase.PICKING_TILES);
-        return itemTile;
+    protected ItemTile drawTile(TilePositionMessage tilePositionMessage){
+        try{
+            ItemTile itemTile = game.getLivingRoomBoard().getSpace(tilePositionMessage.getPosition()).drawTile();
+            game.getBuffer().add(tilePositionMessage.getPosition());
+            game.insertTileInTilePack(itemTile);
+            game.setTurnPhase(GamePhase.PICKING_TILES);
+            return itemTile;
+        } catch (IllegalAccessError e){}
+        return null;
     }
 }
 
