@@ -159,7 +159,7 @@ public class GameControllerTest {
         /**gameController.update(client1, tilePositionMessage5);
         gameController.update(client1, tilePositionMessage6);
         System.out.println(gameController.getGame().getBuffer().size());
-        System.out.println(gameController.getGame().getLivingRoomBoard().getDrawableTiles().size());
+        System.out.println(gameController.getGame().getLivingRoomBoard().getDrawableTiles().size())
         */
 
     }
