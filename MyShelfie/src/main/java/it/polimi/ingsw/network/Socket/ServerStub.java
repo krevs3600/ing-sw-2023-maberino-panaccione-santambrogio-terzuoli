@@ -67,7 +67,7 @@ public class ServerStub implements Server {
 
     }
 
-    public synchronized void receive(Client client) throws RemoteException {
+    public void receive(Client client) throws RemoteException {
         GameView gameView;
         EventMessage eventMessage;
         try {

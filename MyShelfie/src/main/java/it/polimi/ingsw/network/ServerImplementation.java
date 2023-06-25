@@ -10,8 +10,6 @@ import it.polimi.ingsw.network.MessagesToClient.errorMessages.ResumeGameErrorMes
 import it.polimi.ingsw.network.MessagesToClient.requestMessage.*;
 import it.polimi.ingsw.network.eventMessages.*;
 import it.polimi.ingsw.persistence.Storage;
-import it.polimi.ingsw.view.cli.CLI;
-
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.RMIClientSocketFactory;
@@ -32,6 +30,8 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
 
     private final List<GameController> savedGames = new ArrayList<>();
 
+    private final List<Client> disconnectedClients = new ArrayList<>();
+
     public ServerImplementation() throws RemoteException {
         super();
     }
@@ -49,50 +49,45 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
         Game game = playerGame.get(client).getGame();
         game.addObserver((observer, eventMessage) -> {
             try {
-                /*if (eventMessage instanceof WinGameMessage) {
-                    for (Map.Entry<Client, GameController> entry : playerGame.entrySet()) {
-                        if (client.equals(entry.getKey())) {
-                            playerGame.remove(entry.getKey(), entry.getValue());
-                            currentGames.remove(game.getGameName(), entry.getValue());
-                        }
+                if (eventMessage instanceof PlayerTurnMessage) {
+                    if (disconnectedClients.contains(client)) {
+                        System.out.println("Skipping the " + eventMessage.getNickname() + "'s turn");
+                        playerGame.get(client).update(client, new EndTurnMessage(eventMessage.getNickname()));
                     }
                 }
-
-                 */
                 if (eventMessage instanceof WinGameMessage) {
                     Storage storage = new Storage();
                     storage.delete();
                 }
-                client.update(new GameView(game), (EventMessage) eventMessage);
+                client.update(new GameView(game), eventMessage);
             } catch (RemoteException e) {
                 System.err.println("Unable to update the client: " + e.getMessage() + ". Skipping the update");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         });
     }
 
     @Override
-    public synchronized void update(Client client, EventMessage eventMessage) throws IOException {
+    public void update(Client client, EventMessage eventMessage) throws IOException {
 
         switch (eventMessage.getType()) {
             case NICKNAME -> {
                 if (!currentPlayersNicknames.contains(eventMessage.getNickname())) {                                                              //case CREATOR_NICKNAME -> {
                     currentPlayersNicknames.add(eventMessage.getNickname());                                                                      //    boolean validNickname = false;
                     getConnectedClients().put(eventMessage.getNickname(), client);                                                                     //    if (!currentPlayersNicknames.contains(eventMessage.getNickName())) {
-                    //  Set<String> availableGames = new HashSet<>(currentLobbyGameNames);                                                            //        validNickname = true;
-                    //  if(currentLobbyGameNames.size()==0){                                                                                          //        currentPlayersNicknames.add(eventMessage.getNickName());
-                    //      client.onMessage(new LoginResponseMessage(true,false, eventMessage.getNickName()));                                       //        connectedClients.put(eventMessage.getNickName(), client);
-                    //  }
                     new Thread()
                     {
                         public void run() {
                             try {
                                 while (true) {
-                                    client.onMessage(new PingToClientMessage(eventMessage.getNickname()));
-                                    System.out.println("Ti mando un bacino");
                                     Thread.sleep(5000);
+                                    client.onMessage(new PingToClientMessage(eventMessage.getNickname()));
+                                    System.out.println("Ping sent to " + eventMessage.getNickname());
                                 }
                             } catch (RuntimeException | InterruptedException | IOException e) {
-                                System.err.println("il bro sputa fatti");
+                                System.err.println("client " + eventMessage.getNickname() + "disconnected");
+                                disconnectedClients.add(client);
                             }
                         }
                     }.start();
@@ -100,7 +95,13 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                 }                                                                                                                                 //        client.onMessage(new CreatorLoginResponseMessage(eventMessage.getNickName(), validNickname));
                 else                                                                                                                              //    } else
                     client.onMessage(new LoginResponseMessage(eventMessage.getNickname(), false));                                                                            //        client.onMessage(new CreatorLoginResponseMessage(validNickname));
-            }                                                                                                                                     //}
+            }
+
+            case PING -> {
+                disconnectedClients.remove(client);
+                System.out.println("Ping arrived from " + eventMessage.getNickname());
+            }
+
             //this.gameController.update(client, eventMessage);
             case GAME_NAME -> {
                 GameNameMessage gameNameMessage = (GameNameMessage) eventMessage;

@@ -305,7 +305,6 @@ public class CLI extends Observable<EventMessage> implements View {
                                 while (true) {
                                     setChanged();
                                     notifyObservers(new PingMessage(loginResponseMessage.getNickname()));
-                                    System.out.println("Ti mando un bacino");
                                     Thread.sleep(5000);
                                 }
                             } catch (RuntimeException | InterruptedException e) {
