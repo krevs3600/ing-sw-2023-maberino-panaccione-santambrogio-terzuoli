@@ -41,7 +41,7 @@
                         <Insets bottom="60.0" />
                     </VBox.margin>
                 </VBox>
-                <Label prefHeight="53.0" prefWidth="586.0" text="Type the game of the name to join" textFill="WHITE">
+                <Label prefHeight="28.0" prefWidth="397.0" text="Choose a name for your game" textFill="WHITE">
                     <font>
                         <Font name="Libian SC Regular" size="36.0" />
                     </font>

@@ -17,7 +17,9 @@ import it.polimi.ingsw.network.Socket.ServerStub;
 import it.polimi.ingsw.network.eventMessages.*;
 import it.polimi.ingsw.observer_observable.Observable;
 import javafx.animation.FadeTransition;
+import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -60,6 +62,8 @@ public class GUI extends Observable<EventMessage> implements View {
     private LobbyController lobbyController;
     private StartController startController;
     private WinController winController;
+
+    private ComputeScoreController computeScoreController;
     private LivingBoardController livingBoardController;
    // private ClientImplementation client;
     private GameNameController gameNameController;
@@ -68,8 +72,12 @@ public class GUI extends Observable<EventMessage> implements View {
     private String nickname;
 
     private GameView game; // aggiunto referenza al game
+    private boolean firstToset=false;
+    private boolean secondToset=false;
 
+    private boolean endToset=false;
 
+private int scoreOfThisClient;
     /**
      * Getter method
      * @return the current stage of the game
@@ -553,50 +561,22 @@ public class GUI extends Observable<EventMessage> implements View {
                         Platform.runLater(() -> {
 
                             stage.setScene(scene);
-
-
                             livingBoardController.initialize(game, nickname);
                             livingBoardController.updateLivingRoomBoard(game.getLivingRoomBoard());
 
-                                int displayTimeMillis = 9000;
-                                livingBoardController.firstCommonGC.setImage(livingBoardController.commonGoalCard1.getImage());
-                                livingBoardController.SeconCommonGC.setImage(livingBoardController.commonGoalCard2.getImage());
-                                livingBoardController.Description_1GC.setText(livingBoardController.descriptioncommonGoalCard1);
-                                livingBoardController.Description_2GC.setText(livingBoardController.descriptioncommonGoalCard2);
-                                // todo prendere attributo della common goal card e settare il testo
-
-
-
-                                FadeTransition fadeTransition = new FadeTransition(Duration.millis(displayTimeMillis), livingBoardController.anchorPaneForTheCandPGoalCards);
-                                fadeTransition.setOnFinished(event -> {
-                                    livingBoardController.anchorPaneForTheCandPGoalCards.setVisible(false);
-                                });
-                                fadeTransition.play();
-                                isFirstTime = false;
-
-
                             livingBoardController.tilePack.setDisable(true);
+
                         });
                     } catch (IOException e) {
                         System.err.println(e);
                     }
+                    isFirstTime = false;
                 } else {
                     Platform.runLater(() -> {
                         livingBoardController.updateLivingRoomBoard(game.getLivingRoomBoard());
                         livingBoardController.tilePack.setDisable(true);
                         livingBoardController.resetColumnChoice();
-
-
-                        int displayTimeMillis = 3000;
-                        livingBoardController.PaneForPopup.setVisible(true);
-                        livingBoardController.textforPopUp.setText("New Turn");
-                        FadeTransition fadeTransition = new FadeTransition(Duration.millis(displayTimeMillis), livingBoardController.PaneForPopup);
-                        fadeTransition.setOnFinished(event -> {
-                            livingBoardController.PaneForPopup.setVisible(false);
-                        });
-                        fadeTransition.play();
-
-                      //  showPopup("NEW TURN HAS JUST STARTED");
+                        showPopup("NEW TURN HAS JUST STARTED");
 
                     });
                 }
@@ -665,8 +645,28 @@ public class GUI extends Observable<EventMessage> implements View {
                     livingBoardController.updateTokens(game, message.getCommonGoalCardIndex());
                     String number = message.getCommonGoalCardIndex() == 0 ? "first" : "second";
                     if (eventMessage.getNickname().equals(nickname)){
+
+                        livingBoardController.anchorPaneForTheCandPGoalCards.setVisible(true);
+                        livingBoardController.CommonGoalAchieved.setVisible(true);
+                        livingBoardController.CommonGoalText.setText("You completed the " + number + " common goal");
+                        livingBoardController.CommonGoalText.setVisible(true);
+                        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(5000), event -> livingBoardController.anchorPaneForTheCandPGoalCards.setVisible(false)));
+                             timeline.play();
                         showPopup("You completed the " + number + " common goal");
-                    } else {
+                        if(number.equals("first")){
+                            this.firstToset=true;
+                            this.computeScoreController.No_FirstCommonGoal.setVisible(false);
+                            this.computeScoreController.Yes_FirstCommonGoal.setVisible(true);
+
+                        }else {
+                            this.secondToset=true;
+                            this.computeScoreController.No_SecondCommonGoal.setVisible(false);
+                            this.computeScoreController.Yes_SecondCommonGoal.setVisible(true);
+
+                        }
+
+                    }
+                    else {
                         showPopup(eventMessage.getNickname() + " completed the " + number + " common goal");
                     }
                 });
@@ -674,8 +674,13 @@ public class GUI extends Observable<EventMessage> implements View {
             case LAST_TURN -> {
                 if (this.nickname.equals(game.getCurrentPlayer().getName())) {
                     showPopup("\nCongrats, you filled your bookshelf! You have an extra point!");
+                    endToset=true;
+
                 } else {
                     showPopup("\n" + eventMessage.getNickname() + " filled his bookshelf...");
+
+
+
                 }
             }
             case END_GAME -> {
@@ -690,10 +695,10 @@ public class GUI extends Observable<EventMessage> implements View {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                int scoreOfThisClient=0;
+                //int scoreOfThisClient=0;
                 for(PlayerView player:game.getSubscribers()){
                     if(player.getName().equals(this.nickname)){
-                        scoreOfThisClient= player.getScore();
+                        this.scoreOfThisClient= player.getScore();
                         break;
                     }
                 }
@@ -769,7 +774,7 @@ public class GUI extends Observable<EventMessage> implements View {
     public void showPopup(String text){
         Popup popup = new Popup();
         Label noSelection = new Label(text);
-        noSelection.setStyle("-fx-background-color: #DAA520; -fx-text-fill: #FFFFFF;-fx-font-size: 30; -fx-padding: 30px;-fx-font-family:'Libian SC';");
+        noSelection.setStyle("-fx-background-color: #DAA520; -fx-text-fill: #FFFFFF;-fx-font-size: 30; -fx-padding: 30px;-fx-font-family:'Libian SC';-fx-background-radius: 20px;");
         popup.getContent().add(noSelection);
         popup.setAutoHide(true);
         PauseTransition pause = new PauseTransition(Duration.seconds(2));
@@ -835,7 +840,44 @@ public class GUI extends Observable<EventMessage> implements View {
             scene = new Scene(fxmlLoader.load());
             ComputeScoreController computeScoreController= fxmlLoader.getController();
             winController.setGui(this);
-            this.winController = winController;
+            this.computeScoreController=computeScoreController;
+            this.computeScoreController.commonGoalCard1.setImage(livingBoardController.commonGoalCard1.getImage());
+            this.computeScoreController.commonGoalCard2.setImage(livingBoardController.commonGoalCard2.getImage());
+            if(firstToset) {
+                this.computeScoreController.No_FirstCommonGoal.setVisible(false);
+                this.computeScoreController.Yes_FirstCommonGoal.setVisible(true);
+            }
+
+            if(secondToset){this.computeScoreController.No_SecondCommonGoal.setVisible(false);
+                this.computeScoreController.Yes_SecondCommonGoal.setVisible(true);}
+
+
+            if(endToset){     this.computeScoreController.No_FirsrtEndGame.setVisible(false);
+                this.computeScoreController.Yes_FirstEndGame.setVisible(true);
+                this.computeScoreController.endGamePoint.setText("1 point");
+            }
+
+            if(!endToset){
+                this.computeScoreController.No_FirsrtEndGame.setVisible(true);
+                this.computeScoreController.Yes_FirstEndGame.setVisible(false);
+                this.computeScoreController.endGamePoint.setText("0 point");}
+            this.computeScoreController.totalScore.setText(String.valueOf(scoreOfThisClient));
+
+//todo non funziona
+                if(this.livingBoardController.tokenCommonCard1.getImage()!=null){
+                    this.computeScoreController.eight_onecg.setImage(this.livingBoardController.tokenCommonCard1.getImage());
+                    this.computeScoreController.eight_onecg.setVisible(true);
+                } if (this.livingBoardController.tokenCommonCard2.getImage()!=null) {
+                    this.computeScoreController.eight_secondcg.setImage(this.livingBoardController.tokenCommonCard2.getImage());
+                    this.computeScoreController.eight_secondcg.setVisible(true);
+
+                }
+
+
+
+
+
+
             Platform.runLater(() -> stage.setScene(scene));
         } catch (IOException e) {
             throw new RuntimeException(e);

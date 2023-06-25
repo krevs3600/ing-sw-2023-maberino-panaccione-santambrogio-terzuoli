@@ -15,7 +15,7 @@ public class TilePackMessage extends EventMessage {
     }
 
     public String toString(){
-        return getNickname() + "'s " + "\n" + getTilePackView().toString();
+        return getNickname()+ "'s " + "\n" + getTilePackView().toString();
     }
 
 

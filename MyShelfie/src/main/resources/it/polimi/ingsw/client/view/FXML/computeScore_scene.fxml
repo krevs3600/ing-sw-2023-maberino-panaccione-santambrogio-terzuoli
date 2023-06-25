@@ -31,53 +31,53 @@
                   <Image url="@../common%20goal%20cards/8.jpg" />
                </image>
             </ImageView>
-            <ImageView fitHeight="59.0" fitWidth="50.0" layoutX="574.0" layoutY="179.0">
+            <ImageView fx:id="Yes_FirstCommonGoal" fitHeight="59.0" fitWidth="50.0" layoutX="574.0" layoutY="179.0" visible="false">
                <image>
                   <Image url="@../misc/checkmark.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="59.0" fitWidth="50.0" layoutX="574.0" layoutY="337.0">
+            <ImageView fx:id="Yes_SecondCommonGoal" fitHeight="59.0" fitWidth="50.0" layoutX="574.0" layoutY="337.0" visible="false">
                <image>
                   <Image url="@../misc/checkmark.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="80.0" fitWidth="65.0" layoutX="900.0" layoutY="168.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="four_onecg" fitHeight="80.0" fitWidth="65.0" layoutX="1092.0" layoutY="186.0" pickOnBounds="true" preserveRatio="true" visible="false">
                <image>
                   <Image url="@../scoring%20tokens/scoring_4.jpg" />
                </image>
             </ImageView>
-            <ImageView fitHeight="74.0" fitWidth="65.0" layoutX="998.0" layoutY="168.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="six_onecg" fitHeight="74.0" fitWidth="65.0" layoutX="998.0" layoutY="186.0" pickOnBounds="true" preserveRatio="true" visible="false">
                <image>
                   <Image url="@../scoring%20tokens/scoring_6.jpg" />
                </image>
             </ImageView>
             <ImageView fitHeight="128.0" fitWidth="136.0" layoutX="1219.0" layoutY="176.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fitHeight="74.0" fitWidth="65.0" layoutX="1096.0" layoutY="167.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="eight_onecg" fitHeight="74.0" fitWidth="65.0" layoutX="901.0" layoutY="187.0" pickOnBounds="true" preserveRatio="true" visible="false">
                <image>
                   <Image url="@../scoring%20tokens/scoring_8.jpg" />
                </image>
             </ImageView>
-            <ImageView fitHeight="74.0" fitWidth="65.0" layoutX="1197.0" layoutY="165.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="two_onecg" fitHeight="74.0" fitWidth="65.0" layoutX="1189.0" layoutY="186.0" pickOnBounds="true" preserveRatio="true" visible="false">
                <image>
                   <Image url="@../scoring%20tokens/scoring_2.jpg" />
                </image>
             </ImageView>
-            <ImageView fitHeight="74.0" fitWidth="65.0" layoutX="901.0" layoutY="328.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="four_secondcg" fitHeight="74.0" fitWidth="65.0" layoutX="1093.0" layoutY="347.0" pickOnBounds="true" preserveRatio="true" visible="false">
                <image>
                   <Image url="@../scoring%20tokens/scoring_4.jpg" />
                </image>
             </ImageView>
-            <ImageView fitHeight="74.0" fitWidth="65.0" layoutX="1000.0" layoutY="325.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="six_secondcg" fitHeight="71.0" fitWidth="65.0" layoutX="996.0" layoutY="348.0" pickOnBounds="true" preserveRatio="true" visible="false">
                <image>
                   <Image url="@../scoring%20tokens/scoring_6.jpg" />
                </image>
             </ImageView>
-            <ImageView fitHeight="74.0" fitWidth="65.0" layoutX="1097.0" layoutY="325.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="eight_secondcg" fitHeight="74.0" fitWidth="65.0" layoutX="907.0" layoutY="349.0" pickOnBounds="true" preserveRatio="true" visible="false">
                <image>
                   <Image url="@../scoring%20tokens/scoring_8.jpg" />
                </image>
             </ImageView>
-            <ImageView fitHeight="74.0" fitWidth="65.0" layoutX="1194.0" layoutY="322.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="two_secondcg" fitHeight="74.0" fitWidth="65.0" layoutX="1190.0" layoutY="346.0" pickOnBounds="true" preserveRatio="true" visible="false">
                <image>
                   <Image url="@../scoring%20tokens/scoring_2.jpg" />
                </image>
@@ -87,7 +87,7 @@
                   <Image url="@../scoring%20tokens/end%20game.jpg" />
                </image>
             </ImageView>
-            <ImageView fitHeight="59.0" fitWidth="50.0" layoutX="574.0" layoutY="475.0">
+            <ImageView fx:id="Yes_FirstEndGame" fitHeight="59.0" fitWidth="50.0" layoutX="574.0" layoutY="475.0">
                <image>
                   <Image url="@../misc/checkmark.png" />
                </image>
@@ -102,17 +102,17 @@
                   <Image url="@../personal%20goal%20cards/Personal_Goals6.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="59.0" fitWidth="50.0" layoutX="574.0" layoutY="606.0">
+            <ImageView fx:id="Yes_PersonalGoalCard" fitHeight="59.0" fitWidth="50.0" layoutX="574.0" layoutY="606.0">
                <image>
                   <Image url="@../misc/checkmark.png" />
                </image>
             </ImageView>
-            <Label fx:id="commonPoint2" layoutX="1312.0" layoutY="322.0" text="=X points " textFill="#fffdfd">
+            <Label fx:id="commonPoint2" layoutX="1302.0" layoutY="352.0" text="=X points " textFill="#fffdfd">
                <font>
                   <Font name="Libian SC Regular" size="36.0" />
                </font>
             </Label>
-            <Label fx:id="commonPoint1" layoutX="1304.0" layoutY="172.0" text="= X points" textFill="#f8f5f5">
+            <Label fx:id="commonPoint1" layoutX="1304.0" layoutY="192.0" text="= X points" textFill="#f8f5f5">
                <font>
                   <Font name="Libian SC Regular" size="36.0" />
                </font>
@@ -163,45 +163,12 @@
                   <Font name="Libian SC Regular" size="36.0" />
                </font>
             </Label>
-            <StackPane layoutX="508.0" layoutY="140.0" prefHeight="150.0" prefWidth="193.0">
+            <StackPane layoutX="508.0" layoutY="140.0" prefHeight="74.0" prefWidth="14.0" />
+            <StackPane layoutX="441.0" layoutY="289.0" prefHeight="150.0" prefWidth="104.0" />
+            <StackPane layoutX="496.0" layoutY="488.0" prefHeight="93.0" prefWidth="87.0" />
+            <StackPane fx:id="Yes_ExtraPoint" layoutX="499.0" layoutY="686.0" prefHeight="150.0" prefWidth="200.0">
                <children>
-                  <ImageView fitHeight="69.0" fitWidth="80.0">
-                     <image>
-                        <Image url="@../misc/X-Letter-Background-PNG.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </StackPane>
-            <StackPane layoutX="499.0" layoutY="291.0" prefHeight="150.0" prefWidth="200.0">
-               <children>
-                  <ImageView fitHeight="69.0" fitWidth="80.0">
-                     <image>
-                        <Image url="@../misc/X-Letter-Background-PNG.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </StackPane>
-            <StackPane layoutX="496.0" layoutY="431.0" prefHeight="150.0" prefWidth="200.0">
-               <children>
-                  <ImageView fitHeight="69.0" fitWidth="80.0">
-                     <image>
-                        <Image url="@../misc/X-Letter-Background-PNG.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </StackPane>
-            <StackPane layoutX="499.0" layoutY="574.0" prefHeight="150.0" prefWidth="200.0">
-               <children>
-                  <ImageView fitHeight="69.0" fitWidth="80.0">
-                     <image>
-                        <Image url="@../misc/X-Letter-Background-PNG.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </StackPane>
-            <StackPane layoutX="499.0" layoutY="686.0" prefHeight="150.0" prefWidth="200.0">
-               <children>
-                  <ImageView fitHeight="69.0" fitWidth="80.0">
+                  <ImageView fx:id="No_ExtraPoint" fitHeight="71.0" fitWidth="77.0">
                      <image>
                         <Image url="@../misc/X-Letter-Background-PNG.png" />
                      </image>
@@ -227,6 +194,26 @@
                   <RowConstraints maxHeight="126.34542846679688" minHeight="10.0" prefHeight="65.1842041015625" vgrow="SOMETIMES" />
               </rowConstraints>
             </GridPane>
+            <ImageView fx:id="No_FirstCommonGoal" fitHeight="67.0" fitWidth="74.0" layoutX="557.0" layoutY="182.0">
+               <image>
+                  <Image url="@../misc/X-Letter-Background-PNG.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="No_SecondCommonGoal" fitHeight="69.0" fitWidth="80.0" layoutX="556.0" layoutY="344.0">
+               <image>
+                  <Image url="@../misc/X-Letter-Background-PNG.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="No_FirsrtEndGame" fitHeight="69.0" fitWidth="80.0" layoutX="556.0" layoutY="480.0">
+               <image>
+                  <Image url="@../misc/X-Letter-Background-PNG.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="No_PersonalGoalCard" fitHeight="70.0" fitWidth="80.0" layoutX="553.0" layoutY="612.0">
+               <image>
+                  <Image url="@../misc/X-Letter-Background-PNG.png" />
+               </image>
+            </ImageView>
          </children>
       </AnchorPane>
    </children>
