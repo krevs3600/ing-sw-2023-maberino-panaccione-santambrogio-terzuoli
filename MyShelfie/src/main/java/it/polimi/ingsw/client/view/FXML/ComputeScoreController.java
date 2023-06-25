@@ -68,26 +68,17 @@ public class ComputeScoreController {
     @FXML
     public ImageView No_PersonalGoalCard;
 
-    @FXML
-    public ImageView six_onecg;
+
+
+
+
 
     @FXML
-    public ImageView eight_onecg;
+    public ImageView first_view;
 
     @FXML
-    public ImageView two_onecg;
+    public ImageView second_view;
 
-    @FXML
-    public ImageView four_secondcg;
-
-    @FXML
-    public ImageView six_secondcg;
-
-    @FXML
-    public ImageView eight_secondcg;
-
-    @FXML
-    public ImageView two_secondcg;
 
 
 

@@ -36,6 +36,7 @@ public class Game extends Observable<EventMessage>  implements Serializable {
     private final NumberOfPlayers numberOfPlayers;
     private int cursor;
 
+
     private Player firstPlayer;
     private GamePhase turnPhase;
     private List<Space> drawableTiles = new ArrayList<>();

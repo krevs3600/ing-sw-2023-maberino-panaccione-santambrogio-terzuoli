@@ -33,6 +33,10 @@ public class PlayerView implements Serializable {
      * Player's score
      */
     private final int score;
+
+    private int personalgoalcardscore;
+
+    private int adjacenttilesscore;
     /**
      * PersonalGoalCard given to the player for the game he's playing
      */
@@ -59,6 +63,8 @@ public class PlayerView implements Serializable {
         this.score = player.getScore();
         this.personalGoalCard = player.getPersonalGoalCard();
         this.scoringTokens = player.getTokens();
+        this.personalgoalcardscore=player.getPersonalgoalcardscore();
+        this.adjacenttilesscore=player.getAdjacenttilesscore();
     }
 
     /**
@@ -96,6 +102,12 @@ public class PlayerView implements Serializable {
      */
     public PersonalGoalCard getPersonalGoalCard () {
         return this.personalGoalCard;
+    }
+
+
+    public int getAdjacenttilesscore(){return this.adjacenttilesscore;}
+    public int getPersonalgoalcardscore() {
+        return personalgoalcardscore;
     }
 
     /**

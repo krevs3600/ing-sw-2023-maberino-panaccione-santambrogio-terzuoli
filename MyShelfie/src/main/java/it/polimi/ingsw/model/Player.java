@@ -23,11 +23,14 @@ public class Player  implements Serializable {
 
     private final Bookshelf bookshelf;
     private int score;
+
+    private int personalgoalcardscore;
     private PersonalGoalCard personalGoalCard;
     private final List<ScoringToken> tokens;
 
     private boolean firstCommonGoalAchieved;
     private boolean secondCommonGoalAchieved;
+    private int adjacenttilesscore;
 
     /**
      * Class constructor
@@ -90,6 +93,16 @@ public class Player  implements Serializable {
      * @param incremental {@code int} amount by which the {@link Player#score} needs to be raised
      */
     public void setScore (int incremental) { this.score += incremental;}
+
+    public void setPersonalgoalcardscore(int score){this.personalgoalcardscore=score;}
+
+    public int getPersonalgoalcardscore() {
+        return personalgoalcardscore;
+    }
+
+    public void setAdjacenttilesscore(int score){this.adjacenttilesscore=score;}
+
+    public int getAdjacenttilesscore(){return this.adjacenttilesscore;}
 
     /**
      * Setter method

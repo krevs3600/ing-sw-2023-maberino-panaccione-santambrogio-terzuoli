@@ -71,6 +71,10 @@ public class GUI extends Observable<EventMessage> implements View {
     private GameNameListController gameNameListController;
     private String nickname;
 
+    private int personalGoalCardScore=0;
+
+    private int adjacentTilesScore=0;
+
     private GameView game; // aggiunto referenza al game
     private boolean firstToset=false;
     private boolean secondToset=false;
@@ -578,6 +582,7 @@ private int scoreOfThisClient;
                         livingBoardController.resetColumnChoice();
                         showPopup("NEW TURN HAS JUST STARTED");
 
+
                     });
                 }
             }
@@ -653,17 +658,7 @@ private int scoreOfThisClient;
                         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(5000), event -> livingBoardController.anchorPaneForTheCandPGoalCards.setVisible(false)));
                              timeline.play();
                         showPopup("You completed the " + number + " common goal");
-                        if(number.equals("first")){
-                            this.firstToset=true;
-                            this.computeScoreController.No_FirstCommonGoal.setVisible(false);
-                            this.computeScoreController.Yes_FirstCommonGoal.setVisible(true);
 
-                        }else {
-                            this.secondToset=true;
-                            this.computeScoreController.No_SecondCommonGoal.setVisible(false);
-                            this.computeScoreController.Yes_SecondCommonGoal.setVisible(true);
-
-                        }
 
                     }
                     else {
@@ -753,6 +748,12 @@ private int scoreOfThisClient;
                             winController.FourthPlayerScoretxt.setText(game.otherPlayersList(playerreal).get(2).getName() + "'s score is:  " + game.otherPlayersList(playerreal).get(2).getScore());
                         }
                     }
+
+                this.personalGoalCardScore=playerreal.getPersonalgoalcardscore();
+                    this.adjacentTilesScore=playerreal.getAdjacenttilesscore();
+
+
+
 
                 }
 
@@ -864,14 +865,16 @@ private int scoreOfThisClient;
             this.computeScoreController.totalScore.setText(String.valueOf(scoreOfThisClient));
 
 //todo non funziona
-                if(this.livingBoardController.tokenCommonCard1.getImage()!=null){
-                    this.computeScoreController.eight_onecg.setImage(this.livingBoardController.tokenCommonCard1.getImage());
-                    this.computeScoreController.eight_onecg.setVisible(true);
-                } if (this.livingBoardController.tokenCommonCard2.getImage()!=null) {
-                    this.computeScoreController.eight_secondcg.setImage(this.livingBoardController.tokenCommonCard2.getImage());
-                    this.computeScoreController.eight_secondcg.setVisible(true);
 
-                }
+
+          if(this.personalGoalCardScore!=0) {
+              this.computeScoreController.Yes_PersonalGoalCard.setVisible(true);
+              this.computeScoreController.No_PersonalGoalCard.setVisible(false);
+          }
+            this.computeScoreController.personalGoalPoint.setText(this.personalGoalCardScore+"points");
+
+            this.computeScoreController.generalPoint.setText(this.adjacentTilesScore+"points");
+
 
 
 
