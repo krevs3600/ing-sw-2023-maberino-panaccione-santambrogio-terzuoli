@@ -6,6 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -35,6 +36,60 @@ public class ComputeScoreController {
     public Label generalPoint;
     @FXML
     public Label totalScore;
+
+    @FXML
+    public ImageView Yes_FirstCommonGoal;
+
+    @FXML
+    public ImageView Yes_SecondCommonGoal;
+
+    @FXML
+    public ImageView Yes_FirstEndGame;
+
+    @FXML
+    public ImageView Yes_PersonalGoalCard;
+
+
+    @FXML
+    public StackPane Yes_ExtraPoint;
+
+    @FXML
+    public ImageView No_ExtraPoint;
+
+    @FXML
+    public ImageView No_FirstCommonGoal;
+
+    @FXML
+    public ImageView No_SecondCommonGoal;
+
+    @FXML
+    public ImageView No_FirsrtEndGame;
+
+    @FXML
+    public ImageView No_PersonalGoalCard;
+
+    @FXML
+    public ImageView six_onecg;
+
+    @FXML
+    public ImageView eight_onecg;
+
+    @FXML
+    public ImageView two_onecg;
+
+    @FXML
+    public ImageView four_secondcg;
+
+    @FXML
+    public ImageView six_secondcg;
+
+    @FXML
+    public ImageView eight_secondcg;
+
+    @FXML
+    public ImageView two_secondcg;
+
+
 
     public void initialize(GameView game, String nickname){
         LivingBoardController.initBookshelf(bookshelf);

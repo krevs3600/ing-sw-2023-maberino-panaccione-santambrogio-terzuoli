@@ -4,19 +4,20 @@ import it.polimi.ingsw.model.ModelView.*;
 import it.polimi.ingsw.model.ScoringToken;
 import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.model.utils.SpaceType;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -149,6 +150,16 @@ public class LivingBoardController {
 
     @FXML
     public Text textforPopUp;
+
+    @FXML
+    public TitledPane descriptionFirstCG;
+    @FXML
+    public TitledPane descriptionSecondCG;
+    @FXML
+    public Text descriptioncommonGoalCard1_text;
+
+    @FXML
+    public Text descriptioncommonGoalCard2_text;
     /**
      * JavaFX ImageView for assigning the token for the completion of the first common goal
      */
@@ -306,8 +317,14 @@ public class LivingBoardController {
         try {
             commonGoalCard1.setImage(new Image(new FileInputStream(getCommonGoalCardPic(gameView.getLivingRoomBoard().getCommonGoalCards().get(0)))));
             descriptioncommonGoalCard1=gameView.getLivingRoomBoard().getCommonGoalCards().get(0).toString();
+            descriptionFirstCG.setText("First common goal card ");
+            descriptioncommonGoalCard1_text.setText(descriptioncommonGoalCard1);
+
             commonGoalCard2.setImage(new Image(new FileInputStream(getCommonGoalCardPic(gameView.getLivingRoomBoard().getCommonGoalCards().get(1)))));
             descriptioncommonGoalCard2=gameView.getLivingRoomBoard().getCommonGoalCards().get(1).toString();
+
+            descriptionSecondCG.setText("Second common goal card");
+            descriptioncommonGoalCard2_text.setText(descriptioncommonGoalCard2);
         } catch (FileNotFoundException e) {
             System.err.println(e.getMessage());
         }
