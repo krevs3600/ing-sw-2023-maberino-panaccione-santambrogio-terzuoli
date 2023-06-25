@@ -1,25 +1,12 @@
 package it.polimi.ingsw.client.view.FXML;
 
-
-/*import it.polimi.ingsw.model.ReducedGod;
-import it.polimi.ingsw.model.board.Position;
-import it.polimi.ingsw.model.board.ReducedSpace;
-import it.polimi.ingsw.model.enumerations.Color;
-*/
-
-import it.polimi.ingsw.model.Bookshelf;
-import it.polimi.ingsw.model.CommonGoalCard.CommonGoalCard;
 import it.polimi.ingsw.model.ModelView.GameView;
-import it.polimi.ingsw.model.ModelView.SpaceView;
-import it.polimi.ingsw.model.Space;
 import it.polimi.ingsw.network.MessagesToClient.MessageToClient;
 import it.polimi.ingsw.network.eventMessages.EventMessage;
 import javafx.beans.Observable;
-
 import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.util.List;
 import java.util.Set;
 
 
@@ -125,7 +112,7 @@ public interface View {
      * This method overrides the {@code Observer update}: it is called by an {@link Observable} class,
      * in this case a {@link GameView},
      * when it is notified about an event passed as an {@link EventMessage}.
-     * According to the {@EventMessage #type}, this method interacts differently with the User
+     * According to the type of the {@link EventMessage}, this method interacts differently with the User
      * @param gameView the Observable class
      * @param eventMessage the specific event of which the class is notified
      */

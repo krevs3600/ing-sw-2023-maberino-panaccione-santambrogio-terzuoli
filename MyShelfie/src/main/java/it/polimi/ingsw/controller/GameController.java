@@ -62,14 +62,12 @@ public class GameController implements Serializable {
 
                 if (game.getDrawableTiles().contains(game.getLivingRoomBoard().getSpace(tilePositionMessage.getPosition()))) {
                     if (game.getBuffer().isEmpty()) {
-                        ItemTile itemTile = drawTile(tilePositionMessage);
-
+                        drawTileAndInsertInTilepack(tilePositionMessage);
                     } else if (game.getBuffer().size() == 1) {
-
                         if (game.getBuffer().get(0).isAdjacent(tilePositionMessage.getPosition())) {
                             if (game.getCurrentPlayer().getBookshelf().getNumberInsertableTiles() >= game.getBuffer().size() + 1) {
                                 setAlongsideWhat(tilePositionMessage);
-                                ItemTile itemTile = drawTile(tilePositionMessage);
+                                drawTileAndInsertInTilepack(tilePositionMessage);
                             } else {
                                 client.onMessage(new NotEnoughInsertableTilesErrorMessage(eventMessage.getNickname(), "The number of insertable tiles in your bookshelf is too small, you cannot insert all of the tiles then"));
                             }
@@ -89,7 +87,7 @@ public class GameController implements Serializable {
                             if (game.isAlongSideColumn()) {
                                 if (tilePositionMessage.getPosition().getColumn() == game.getBuffer().get(0).getColumn()) {
                                         if (game.getCurrentPlayer().getBookshelf().getNumberInsertableTiles() >= game.getBuffer().size() + 1) {
-                                            ItemTile itemTile = drawTile(tilePositionMessage);
+                                            drawTileAndInsertInTilepack(tilePositionMessage);
                                         } else {
                                             client.onMessage(new NotEnoughInsertableTilesErrorMessage(eventMessage.getNickname(), "The number of insertable tiles in your bookshelf is too small, you cannot insert all of the tiles then"));
                                         }
@@ -100,7 +98,7 @@ public class GameController implements Serializable {
                             } else if (game.isAlongSideRow()) {
                                 if (tilePositionMessage.getPosition().getRow() == game.getBuffer().get(0).getRow()) {
                                     if (game.getCurrentPlayer().getBookshelf().getNumberInsertableTiles() >= game.getBuffer().size() + 1) {
-                                        ItemTile itemTile = drawTile(tilePositionMessage);
+                                        drawTileAndInsertInTilepack(tilePositionMessage);
                                     } else {
                                         client.onMessage(new NotEnoughInsertableTilesErrorMessage(eventMessage.getNickname(), "The number of insertable tiles in your bookshelf is too small, you cannot insert all of the tiles then"));
                                     }
@@ -308,12 +306,11 @@ public class GameController implements Serializable {
         }
     }
 
-    private ItemTile drawTile(TilePositionMessage tilePositionMessage){
+    private void drawTileAndInsertInTilepack(TilePositionMessage tilePositionMessage){
         ItemTile itemTile = game.getLivingRoomBoard().getSpace(tilePositionMessage.getPosition()).drawTile();
         game.getBuffer().add(tilePositionMessage.getPosition());
         game.insertTileInTilePack(itemTile);
         game.setTurnPhase(GamePhase.PICKING_TILES);
-        return itemTile;
     }
 }
 

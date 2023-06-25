@@ -4,17 +4,9 @@ import it.polimi.ingsw.network.eventMessages.EventMessage;
 import it.polimi.ingsw.observer_observable.Observable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
-
-import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 
 /**
  * <h1>Class StartController</h1>

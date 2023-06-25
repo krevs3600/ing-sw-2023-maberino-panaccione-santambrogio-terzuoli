@@ -52,6 +52,15 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                 if (eventMessage instanceof PlayerTurnMessage) {
                     if (disconnectedClients.contains(client)) {
                         System.out.println("Skipping the " + eventMessage.getNickname() + "'s turn");
+                        int disconnectedPlayers;
+                        do {
+                            disconnectedPlayers = 0;
+                            for (Client disconnectedClientsOfTheGame: disconnectedClients) {
+                                if (playerGame.containsKey(disconnectedClientsOfTheGame)) {
+                                    disconnectedPlayers ++;
+                                }
+                            }
+                        } while (disconnectedPlayers==playerGame.get(client).getGame().getSubscribers().size()-1);
                         playerGame.get(client).update(client, new EndTurnMessage(eventMessage.getNickname()));
                     }
                 }

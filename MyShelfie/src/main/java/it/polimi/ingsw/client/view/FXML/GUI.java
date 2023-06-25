@@ -16,7 +16,6 @@ import it.polimi.ingsw.network.MessagesToClient.requestMessage.*;
 import it.polimi.ingsw.network.Socket.ServerStub;
 import it.polimi.ingsw.network.eventMessages.*;
 import it.polimi.ingsw.observer_observable.Observable;
-import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
@@ -28,7 +27,6 @@ import javafx.scene.control.Label;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -234,7 +232,6 @@ private int scoreOfThisClient;
             try {
                 Registry registry = LocateRegistry.getRegistry(address, port);
                 AppServer server = (AppServer) registry.lookup("MyShelfieServer");
-              //  this.client = new ClientImplementation(this, server.connect()); //todo eliminare
                 Client client= new ClientImplementation(this,server.connect());
 
 
@@ -433,11 +430,9 @@ private int scoreOfThisClient;
                 }
             }
 
-            case JOIN_GAME_ERROR -> {
-                JoinErrorMessage joinErrorMessage = (JoinErrorMessage) message;
-                // pop up not available games in the lobby
-                showPopup("No available games in the lobby");
-            }
+            case JOIN_GAME_ERROR -> // pop up not available games in the lobby
+                    showPopup("No available games in the lobby");
+
             case RESUME_GAME_ERROR -> {
                 ResumeGameErrorMessage resumeGameErrorMessage = (ResumeGameErrorMessage) message;
                 showPopup(resumeGameErrorMessage.getErrorMessage());
@@ -475,8 +470,6 @@ private int scoreOfThisClient;
                 if (getNickname().equals(message.getNickname())) {
                     ErrorMessage errorMessage = (ErrorMessage) message;
                     this.showPopup(errorMessage.getErrorMessage());
-                    String answer = "";
-
                 }
             }
 
@@ -872,11 +865,6 @@ private int scoreOfThisClient;
                     this.computeScoreController.eight_secondcg.setVisible(true);
 
                 }
-
-
-
-
-
 
             Platform.runLater(() -> stage.setScene(scene));
         } catch (IOException e) {

@@ -4,8 +4,6 @@ import it.polimi.ingsw.model.ModelView.*;
 import it.polimi.ingsw.model.ScoringToken;
 import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.model.utils.SpaceType;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
@@ -17,8 +15,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
-import javafx.util.Duration;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;

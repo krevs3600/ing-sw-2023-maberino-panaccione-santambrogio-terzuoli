@@ -1,6 +1,5 @@
 package it.polimi.ingsw.client.view.FXML;
 
-import it.polimi.ingsw.model.Bookshelf;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
