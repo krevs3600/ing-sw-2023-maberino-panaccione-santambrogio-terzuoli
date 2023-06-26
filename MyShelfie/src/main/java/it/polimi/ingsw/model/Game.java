@@ -228,7 +228,10 @@ public class Game extends Observable<EventMessage>  implements Serializable {
     /**
      * This method sets to {@code True} the {@link Game#firstPlayerHasEnded} attribute
      */
-    public void setFirstPlayerHasEnded() {this.firstPlayerHasEnded = true;}
+    public void setFirstPlayerHasEnded() {
+        this.firstPlayerHasEnded = true;
+        this.getCurrentPlayer().setFirstToFinish();
+    }
 
     /**
      * This method sets to {@code True} the attribute {@link Game#isFinalTurn}
@@ -364,7 +367,6 @@ public class Game extends Observable<EventMessage>  implements Serializable {
     public List<Position> getBuffer(){
         return this.buffer;
     }
-
 
     /**
      * Getter method

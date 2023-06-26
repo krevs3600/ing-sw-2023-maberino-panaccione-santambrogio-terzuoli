@@ -168,8 +168,9 @@ public class GameController implements Serializable {
                     if (!game.isFirstPlayerHasEnded()) {
                         game.setFirstPlayerHasEnded();
                         game.setFinalTurn();
-                        game.getCurrentPlayer().setScore(1);
-                        if (game.getCurrentPlayer().equals(game.getLastPlayer())){
+                        Player currentPlayer = game.getCurrentPlayer();
+                        currentPlayer.setScore(1);
+                        if (currentPlayer.equals(game.getLastPlayer())){
                             //TODO: show always the score to the clients, updating it when needed
                             Player winner = getWinner();
                             //TODO: create a new message specific to the case when the last player in the rotation fills the bookshelf
@@ -195,7 +196,7 @@ public class GameController implements Serializable {
 
     /**
      * This method is used to compute the final score of the player at the end of the game
-     * @return int It returns the final score of the player
+     * @return player who has won the game
      */
     public Player getWinner() {
         Player winner = null;
@@ -215,8 +216,8 @@ public class GameController implements Serializable {
     public int computePlayerScoreEndGame(Player player){
         //Computation of points from personal goal card
         ItemTile[][] bookshelf = player.getBookshelf().getGrid();
-        int scorep=0;
-        int score=0;
+        int personalCardScore = 0;
+        int score = 0;
         //personalGoalCard.getScoringItem().forEach((key, value) -> );
         int count = 0;
         for (Map.Entry<Integer, TileType> element :
@@ -243,10 +244,8 @@ public class GameController implements Serializable {
             throw new RuntimeException(e);
         }
 
-        scorep=points.get(count);
-        player.setPersonalgoalcardscore(scorep);
-
-
+        personalCardScore = points.get(count);
+        player.setPersonalGoalCardScore(personalCardScore);
 
         //Computation of points from adjacent tiles groups at end of game
         ArrayList<List<Integer>> pointsAdj = new ArrayList<>();
@@ -258,18 +257,16 @@ public class GameController implements Serializable {
             for (Integer key : adjacentTiles.keySet()) {
                 for (int i = 0; i < pointsAdj.get(0).size(); i++) {
                     if (key.equals(pointsAdj.get(0).get(i))) {
-                        score = score + (pointsAdj.get(1).get(i)) * adjacentTiles.get(key);
+                        score += (pointsAdj.get(1).get(i)) * adjacentTiles.get(key);
                     } else if (key > pointsAdj.get(0).get(3)) {
-                        score = score + (pointsAdj.get(1).get(3)) * adjacentTiles.get(key);
+                        score += (pointsAdj.get(1).get(3)) * adjacentTiles.get(key);
                     }
                 }
             }
-
         }
-       player.setAdjacenttilesscore(score);
+        player.setAdjacentTilesScore(score);
 
-        score=score+scorep;
-
+        score += personalCardScore;
         return score;
     }
 
@@ -319,7 +316,6 @@ public class GameController implements Serializable {
         game.getBuffer().add(tilePositionMessage.getPosition());
         game.insertTileInTilePack(itemTile);
         game.setTurnPhase(GamePhase.PICKING_TILES);
-
     }
 }
 

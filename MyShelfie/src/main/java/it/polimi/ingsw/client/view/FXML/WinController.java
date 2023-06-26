@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.view.FXML;
 
+import it.polimi.ingsw.model.ModelView.GameView;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -24,33 +25,33 @@ public class WinController {
 
 
     @FXML
-    public ImageView Throphy_2;
+    public ImageView Trophy_2;
 
     @FXML
-    public ImageView Throphy_1;
+    public ImageView Trophy_1;
 
 
     @FXML
-    public ImageView Throphy_3;
+    public ImageView Trophy_3;
 
     @FXML
-    public ImageView Throphy_4;
+    public ImageView Trophy_4;
 
     @FXML
     public Label congratulations;
 
     @FXML
-    public Label YouWonTheGame;
+    public Label youWonTheGame;
 
 
     @FXML
-    public Label bestplayer;
+    public Label bestPlayer;
 
     @FXML
     public Label lost;
 
     @FXML
-    public Label DontGiveUp;
+    public Label dontGiveUp;
 
     @FXML
     public Label willBeBetter;
@@ -70,17 +71,17 @@ public class WinController {
     public Label myscoretext;
 
     @FXML
-    public Label secondPlayeRScoretxt;
+    public Label secondPlayerScoreTxt;
 
     @FXML
-    public Label thirdPlayerscoretxt;
+    public Label thirdPlayerScoreTxt;
 
 
     @FXML
     public Separator lineone;
 
     @FXML
-    public Label FourthPlayerScoretxt;
+    public Label fourthPlayerScoretxt;
 
     @FXML
     public Separator linetwo;
@@ -97,9 +98,12 @@ public class WinController {
     @FXML
     public Button MyScoreDetail;
 
-
+    private GameView game;
     private GUI gui;
 
+    public void setGame(GameView game) {
+        this.game = game;
+    }
 
     /**
      *This method is used to allow the player to see details about second player's score
@@ -126,7 +130,6 @@ public class WinController {
      */
     public void setGui(GUI gui) {
         this.gui=gui;
-
     }
 
     /**
@@ -135,8 +138,7 @@ public class WinController {
      */
 
     public void showDetailsOfTheScore(MouseEvent mouseEvent) {
-        gui.showThisClientScores();
-
+        gui.showThisClientScores(game);
     }
 
     /**

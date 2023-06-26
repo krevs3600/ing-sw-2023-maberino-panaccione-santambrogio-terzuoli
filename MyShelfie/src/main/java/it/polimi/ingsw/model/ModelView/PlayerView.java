@@ -34,9 +34,9 @@ public class PlayerView implements Serializable {
      */
     private final int score;
 
-    private final int personalgoalcardscore;
+    private final int personalGoalCardScore;
 
-    private final int adjacenttilesscore;
+    private final int adjacentTilesScore;
     /**
      * PersonalGoalCard given to the player for the game he's playing
      */
@@ -50,6 +50,7 @@ public class PlayerView implements Serializable {
      */
     @Serial
     private static final long serialVersionUID = 1L;
+    private final boolean firstToFinish;
 
     /**
      * Constructor for class BookshelfView
@@ -63,8 +64,9 @@ public class PlayerView implements Serializable {
         this.score = player.getScore();
         this.personalGoalCard = player.getPersonalGoalCard();
         this.scoringTokens = player.getTokens();
-        this.personalgoalcardscore=player.getPersonalgoalcardscore();
-        this.adjacenttilesscore=player.getAdjacenttilesscore();
+        this.personalGoalCardScore = player.getPersonalGoalCardScore();
+        this.adjacentTilesScore = player.getAdjacentTilesScore();
+        this.firstToFinish = player.isFirstToFinish();
     }
 
     /**
@@ -105,9 +107,9 @@ public class PlayerView implements Serializable {
     }
 
 
-    public int getAdjacenttilesscore(){return this.adjacenttilesscore;}
-    public int getPersonalgoalcardscore() {
-        return personalgoalcardscore;
+    public int getAdjacentTilesScore(){return this.adjacentTilesScore;}
+    public int getPersonalGoalCardScore() {
+        return personalGoalCardScore;
     }
 
     /**
@@ -116,5 +118,9 @@ public class PlayerView implements Serializable {
      */
     public List<ScoringToken> getTokens () {
         return this.scoringTokens;
+    }
+
+    public boolean isFirstToFinish() {
+        return firstToFinish;
     }
 }

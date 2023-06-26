@@ -20,19 +20,19 @@
                     </font>
                 </Label>
                 <Separator layoutX="85.0" layoutY="84.0" prefHeight="5.0" prefWidth="1233.0" />
-                <Label fx:id="secondPlayeRScoretxt" layoutX="77.0" layoutY="102.0" prefHeight="82.0" prefWidth="1003.0" text="P1 Score:    X points " textFill="WHITE">
+                <Label fx:id="secondPlayerScoreTxt" layoutX="77.0" layoutY="102.0" prefHeight="82.0" prefWidth="1003.0" text="P1 Score:    X points " textFill="WHITE">
                     <font>
                         <Font name="Libian SC Regular" size="36.0" />
                     </font>
                 </Label>
                 <Separator layoutX="94.0" layoutY="176.0" prefHeight="2.0" prefWidth="1220.0" />
-                <Label fx:id="thirdPlayerscoretxt" layoutX="77.0" layoutY="181.0" prefHeight="82.0" prefWidth="1003.0" text="P2 Score:   X points " textFill="WHITE" visible="false">
+                <Label fx:id="thirdPlayerScoreTxt" layoutX="77.0" layoutY="181.0" prefHeight="82.0" prefWidth="1003.0" text="P2 Score:   X points " textFill="WHITE" visible="false">
                     <font>
                         <Font name="Libian SC Regular" size="36.0" />
                     </font>
                 </Label>
                 <Separator fx:id="lineone" layoutX="88.0" layoutY="249.0" prefHeight="8.0" prefWidth="1233.0" visible="false" />
-                <Label fx:id="FourthPlayerScoretxt" layoutX="77.0" layoutY="260.0" prefHeight="82.0" prefWidth="1003.0" text="P3 Score:   X points " textFill="WHITE" visible="false">
+                <Label fx:id="fourthPlayerScoretxt" layoutX="77.0" layoutY="260.0" prefHeight="82.0" prefWidth="1003.0" text="P3 Score:   X points " textFill="WHITE" visible="false">
                     <font>
                         <Font name="Libian SC Regular" size="36.0" />
                     </font>
@@ -53,22 +53,22 @@
                         <Font name="Libian SC Regular" size="26.0" />
                     </font>
                 </Button>
-                <ImageView fx:id="Throphy_2" fitHeight="200.0" fitWidth="200.0" layoutX="467.0" layoutY="377.0">
+                <ImageView fx:id="Trophy_2" fitHeight="200.0" fitWidth="200.0" layoutX="467.0" layoutY="377.0">
                     <image>
                         <Image url="@../itemtiles/Trofei1.1.png" />
                     </image>
                 </ImageView>
-                <ImageView fx:id="Throphy_1" fitHeight="200.0" fitWidth="200.0" layoutX="157.0" layoutY="472.0">
+                <ImageView fx:id="Trophy_1" fitHeight="200.0" fitWidth="200.0" layoutX="157.0" layoutY="472.0">
                     <image>
                         <Image url="@../scoring%20tokens/end%20game.jpg" />
                     </image>
                 </ImageView>
-                <ImageView fx:id="Throphy_3" fitHeight="200.0" fitWidth="200.0" layoutX="784.0" layoutY="377.0">
+                <ImageView fx:id="Trophy_3" fitHeight="200.0" fitWidth="200.0" layoutX="784.0" layoutY="377.0">
                     <image>
                         <Image url="@../itemtiles/Trofei1.3.png" />
                     </image>
                 </ImageView>
-                <ImageView fx:id="Throphy_4" fitHeight="200.0" fitWidth="200.0" layoutX="1084.0" layoutY="472.0">
+                <ImageView fx:id="Trophy_4" fitHeight="200.0" fitWidth="200.0" layoutX="1084.0" layoutY="472.0">
                     <image>
                         <Image url="@../scoring%20tokens/end%20game.jpg" />
                     </image>
@@ -81,12 +81,12 @@
                         <Font name="Libian SC Regular" size="48.0" />
                     </font>
                 </Label>
-                <Label fx:id="YouWonTheGame" layoutX="490.0" layoutY="630.0" prefHeight="114.0" prefWidth="645.0" text="You've won the game " textFill="WHITE">
+                <Label fx:id="youWonTheGame" layoutX="490.0" layoutY="630.0" prefHeight="114.0" prefWidth="645.0" text="You've won the game " textFill="WHITE">
                     <font>
                         <Font name="Libian SC Regular" size="64.0" />
                     </font>
                 </Label>
-                <Label fx:id="bestplayer" layoutX="320.0" layoutY="688.0" text="You are the best player of all time " textFill="#fffefe">
+                <Label fx:id="bestPlayer" layoutX="320.0" layoutY="688.0" text="You are the best player of all time " textFill="#fffefe">
                     <font>
                         <Font name="Libian SC Regular" size="72.0" />
                     </font>
@@ -96,7 +96,7 @@
                         <Font name="Libian SC Regular" size="48.0" />
                     </font>
                 </Label>
-                <Label fx:id="DontGiveUp" layoutX="556.0" layoutY="651.0" text="...but don't give up " visible="false">
+                <Label fx:id="dontGiveUp" layoutX="556.0" layoutY="651.0" text="...but don't give up " visible="false">
                     <font>
                         <Font name="Libian SC Regular" size="48.0" />
                     </font>

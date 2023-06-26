@@ -16,7 +16,6 @@ import it.polimi.ingsw.network.MessagesToClient.requestMessage.*;
 import it.polimi.ingsw.network.Socket.ServerStub;
 import it.polimi.ingsw.network.eventMessages.*;
 import it.polimi.ingsw.observer_observable.Observable;
-import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
@@ -71,15 +70,15 @@ public class GUI extends Observable<EventMessage> implements View {
     private GameNameListController gameNameListController;
     private String nickname;
 
-    private int personalGoalCardScore=0;
+    private int personalGoalCardScore = 0;
 
     private int adjacentTilesScore=0;
 
     private GameView game; // aggiunto referenza al game
-    private boolean firstToset=false;
-    private boolean secondToset=false;
+    private boolean firstToSet =false;
+    private boolean secondToSet =false;
 
-    private boolean endToset=false;
+    private boolean endToSet =false;
 
 private int scoreOfThisClient;
     /**
@@ -589,10 +588,12 @@ private int scoreOfThisClient;
 
             case PLAYER_TURN -> {
                 if (this.nickname.equals(game.getCurrentPlayer().getName())) {
-                    showPopup("it's your turn"); // todo ricontrollare questo pop up non mi sembra che compaia
-                                livingBoardController.OtherPlayerTurnLabel.setVisible(false);
-                                livingBoardController.board.setDisable(false);
-                                livingBoardController.disableColumnChoice();
+                    Platform.runLater(() -> {
+                        showPopup("it's your turn"); // todo ricontrollare questo pop up non mi sembra che compaia
+                        livingBoardController.OtherPlayerTurnLabel.setVisible(false);
+                        livingBoardController.board.setDisable(false);
+                        livingBoardController.disableColumnChoice();
+                    });
                 }
 
                 else {
@@ -659,14 +660,12 @@ private int scoreOfThisClient;
                              timeline.play();
                         showPopup("You completed the " + number + " common goal");
                         if(number.equals("first")){
-                            this.firstToset=true;
-
+                            this.firstToSet =true;
 
                         }else {
-                            this.secondToset=true;
+                            this.secondToSet =true;
 
                         }
-
                     }
                     else {
                         showPopup(eventMessage.getNickname() + " completed the " + number + " common goal");
@@ -676,13 +675,10 @@ private int scoreOfThisClient;
             case LAST_TURN -> {
                 if (this.nickname.equals(game.getCurrentPlayer().getName())) {
                     showPopup("\nCongrats, you filled your bookshelf! You have an extra point!");
-                    endToset=true;
+                    endToSet =true;
 
                 } else {
                     showPopup("\n" + eventMessage.getNickname() + " filled his bookshelf...");
-
-
-
                 }
             }
             case END_GAME -> {
@@ -692,20 +688,17 @@ private int scoreOfThisClient;
                     scene = new Scene(fxmlLoader.load());
                     WinController winController = fxmlLoader.getController();
                     winController.setGui(this);
+                    winController.setGame(game);
                     this.winController = winController;
                     Platform.runLater(() -> stage.setScene(scene));
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
                 //int scoreOfThisClient=0;
-                for(PlayerView player:game.getSubscribers()){
-                    if(player.getName().equals(this.nickname)){
-                        this.scoreOfThisClient= player.getScore();
-                        break;
-                    }
-                }
+                PlayerView client = game.getPlayer(this.nickname);
+                this.scoreOfThisClient = client.getScore();
 
-                winController.myscoretext.setText("YOUR  FINAL SCORE IS           " + scoreOfThisClient);
+                winController.myscoretext.setText("YOUR  FINAL SCORE IS  " + scoreOfThisClient);
 
                 if (eventMessage.getNickname().equals(this.nickname)) {
                     winController.fail_1.setVisible(false);
@@ -714,53 +707,41 @@ private int scoreOfThisClient;
                     winController.fail_4.setVisible(false);
                     winController.congratulations.setText("Congratulations "+ eventMessage.getNickname() +"!");
                 } else {
-                    winController.bestplayer.setVisible(false);
+                    winController.bestPlayer.setVisible(false);
                     winController.congratulations.setVisible(false);
-                    winController.YouWonTheGame.setVisible(false);
+                    winController.youWonTheGame.setVisible(false);
                     winController.lost.setVisible(true);
-                    winController.lost.setText("Sorry " +this.nickname+"...... you lost");
-                    winController.DontGiveUp.setVisible(true);
+                    winController.lost.setText("Sorry " + this.nickname + "...... you lost");
+                    winController.dontGiveUp.setVisible(true);
                     winController.willBeBetter.setVisible(true);
                     Platform.runLater(() -> showPopup(eventMessage.getNickname() + " won"));
                 }
 
                 if (game.getNumberOfPlayers().equals(NumberOfPlayers.THREE_PLAYERS) || game.getNumberOfPlayers().equals(NumberOfPlayers.FOUR_PLAYERS)) {
                     winController.lineone.setVisible(true);
-                    winController.thirdPlayerscoretxt.setVisible(true);
+                    winController.thirdPlayerScoreTxt.setVisible(true);
                     winController.viewD_3player.setVisible(true);
                     if (game.getNumberOfPlayers().equals(NumberOfPlayers.FOUR_PLAYERS)) {
                         winController.linetwo.setVisible(true);
-                        winController.FourthPlayerScoretxt.setVisible(true);
+                        winController.fourthPlayerScoretxt.setVisible(true);
                         winController.viewD_4player.setVisible(true);
                     }
                 }
 
-                PlayerView playerreal=null;
+                PlayerView playerClient = game.getPlayer(this.nickname);
 
-
-
-                for (PlayerView player : game.getSubscribers()) {
-                    if (this.nickname.equals(player.getName())) {
-                        playerreal=player;
-                        break; // quindi metodo che mi ritorna il giocatore associato a questo client e poi costruisco una lista senza quel giocatore.
-
+                for (int i = 0; i < game.otherPlayersList(playerClient).size(); i++) {
+                    if (i == 0) { // 2 giocatori1
+                        winController.secondPlayerScoreTxt.setText(game.otherPlayersList(playerClient).get(0).getName() + "'s score is:  " + game.otherPlayersList(playerClient).get(0).getScore());
+                    } else if (i == 1) { // 3 giocatori
+                        winController.thirdPlayerScoreTxt.setText(game.otherPlayersList(playerClient).get(1).getName() + "'s score is:  " + game.otherPlayersList(playerClient).get(1).getScore());
+                    } else if (i == 2) {
+                        winController.fourthPlayerScoretxt.setText(game.otherPlayersList(playerClient).get(2).getName() + "'s score is:  " + game.otherPlayersList(playerClient).get(2).getScore());
                     }
                 }
-                    for (int i = 0; i < game.otherPlayersList(playerreal).size(); i++) {
-                        if (i == 0) { // 2 giocatori1
-                            winController.secondPlayeRScoretxt.setText(game.otherPlayersList(playerreal).get(0).getName() + "'s score is:  " + game.otherPlayersList(playerreal).get(0).getScore());
-                        } else if (i == 1) { // 3 giocatori
-                            winController.thirdPlayerscoretxt.setText(game.otherPlayersList(playerreal).get(1).getName() + "'s score is:  " + game.otherPlayersList(playerreal).get(1).getScore());
-                        } else if (i == 2) {
-                            winController.FourthPlayerScoretxt.setText(game.otherPlayersList(playerreal).get(2).getName() + "'s score is:  " + game.otherPlayersList(playerreal).get(2).getScore());
-                        }
-                    }
 
-                this.personalGoalCardScore=playerreal.getPersonalgoalcardscore();
-                    this.adjacentTilesScore=playerreal.getAdjacenttilesscore();
-
-
-
+                this.personalGoalCardScore = playerClient.getPersonalGoalCardScore();
+                this.adjacentTilesScore = playerClient.getAdjacentTilesScore();
 
                 }
 
@@ -841,47 +822,48 @@ private int scoreOfThisClient;
      * in the scene {@code win_scene}.
      */
 
-    public void showThisClientScores() {
+    public void showThisClientScores(GameView game) {
         try {
             URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/computeScore_scene.fxml/").toURI().toURL();
             FXMLLoader fxmlLoader = new FXMLLoader(url);
             scene = new Scene(fxmlLoader.load());
-            ComputeScoreController computeScoreController= fxmlLoader.getController();
+            ComputeScoreController computeScoreController = fxmlLoader.getController();
             winController.setGui(this);
-            this.computeScoreController=computeScoreController;
-            this.computeScoreController.commonGoalCard1.setImage(livingBoardController.commonGoalCard1.getImage());
-            this.computeScoreController.commonGoalCard2.setImage(livingBoardController.commonGoalCard2.getImage());
-            if(firstToset) {
+            this.computeScoreController = computeScoreController;
+            this.computeScoreController.initialize(game, this.nickname);
+            // this.computeScoreController.commonGoalCard1.setImage(livingBoardController.commonGoalCard1.getImage());
+            // this.computeScoreController.commonGoalCard2.setImage(livingBoardController.commonGoalCard2.getImage());
+            if(firstToSet) {
                 this.computeScoreController.No_FirstCommonGoal.setVisible(false);
                 this.computeScoreController.Yes_FirstCommonGoal.setVisible(true);
             }
 
-            if(secondToset){this.computeScoreController.No_SecondCommonGoal.setVisible(false);
+            if(secondToSet){
+                this.computeScoreController.No_SecondCommonGoal.setVisible(false);
                 this.computeScoreController.Yes_SecondCommonGoal.setVisible(true);}
 
 
-            if(endToset){     this.computeScoreController.No_FirsrtEndGame.setVisible(false);
+            if(endToSet){
+                this.computeScoreController.No_FirsrtEndGame.setVisible(false);
                 this.computeScoreController.Yes_FirstEndGame.setVisible(true);
                 this.computeScoreController.endGamePoint.setText("1 point");
             }
 
-            if(!endToset){
+            if(!endToSet){
                 this.computeScoreController.No_FirsrtEndGame.setVisible(true);
                 this.computeScoreController.Yes_FirstEndGame.setVisible(false);
                 this.computeScoreController.endGamePoint.setText("0 point");}
             this.computeScoreController.totalScore.setText(String.valueOf(scoreOfThisClient));
 
-//todo non funziona
+            //todo non funziona
+            if(this.personalGoalCardScore!=0) {
+                this.computeScoreController.Yes_PersonalGoalCard.setVisible(true);
+                this.computeScoreController.No_PersonalGoalCard.setVisible(false);
+            }
 
+            System.out.println("il numero di punti delle personal è " + this.personalGoalCardScore);
 
-          if(this.personalGoalCardScore!=0) {
-              this.computeScoreController.Yes_PersonalGoalCard.setVisible(true);
-              this.computeScoreController.No_PersonalGoalCard.setVisible(false);
-          }
-
-            System.out.println("il numero di punti delle personal è "+this.personalGoalCardScore);
-
-            System.out.println("il numero di punti delle adiacenti è "+this.adjacentTilesScore);
+            System.out.println("il numero di punti delle adiacenti è " + this.adjacentTilesScore);
 
 
             this.computeScoreController.personalGoalPoint.setText(this.personalGoalCardScore+"points");

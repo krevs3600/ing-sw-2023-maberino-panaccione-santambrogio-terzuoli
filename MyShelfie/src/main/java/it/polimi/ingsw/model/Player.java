@@ -24,13 +24,14 @@ public class Player  implements Serializable {
     private final Bookshelf bookshelf;
     private int score;
 
-    private int personalgoalcardscore;
+    private int personalGoalCardScore;
     private PersonalGoalCard personalGoalCard;
     private final List<ScoringToken> tokens;
 
     private boolean firstCommonGoalAchieved;
     private boolean secondCommonGoalAchieved;
-    private int adjacenttilesscore;
+    private int adjacentTilesScore;
+    private boolean firstToFinish = false;
 
     /**
      * Class constructor
@@ -43,6 +44,7 @@ public class Player  implements Serializable {
         this.tokens = new ArrayList<>();
         this.firstCommonGoalAchieved = false;
         this.secondCommonGoalAchieved = false;
+
     }
 
     /**
@@ -94,15 +96,15 @@ public class Player  implements Serializable {
      */
     public void setScore (int incremental) { this.score += incremental;}
 
-    public void setPersonalgoalcardscore(int score){this.personalgoalcardscore=score;}
+    public void setPersonalGoalCardScore(int score){this.personalGoalCardScore = score;}
 
-    public int getPersonalgoalcardscore() {
-        return personalgoalcardscore;
+    public int getPersonalGoalCardScore() {
+        return personalGoalCardScore;
     }
 
-    public void setAdjacenttilesscore(int score){this.adjacenttilesscore=score;}
+    public void setAdjacentTilesScore(int score){this.adjacentTilesScore = score;}
 
-    public int getAdjacenttilesscore(){return this.adjacenttilesscore;}
+    public int getAdjacentTilesScore(){return this.adjacentTilesScore;}
 
     /**
      * Setter method
@@ -115,7 +117,9 @@ public class Player  implements Serializable {
     /**
      * This method is called when the player has achieved the first {@link CommonGoalCard} of the game
      */
-    public void hasAchievedFirstGoal () { this.firstCommonGoalAchieved=true;}
+    public void hasAchievedFirstGoal () {
+        this.firstCommonGoalAchieved = true;
+    }
 
     /**
      * This method is called when the player has achieved the second {@link CommonGoalCard} of the game
@@ -186,4 +190,11 @@ public class Player  implements Serializable {
      */
     public List<ScoringToken> getTokens () { return this.tokens;}
 
+    public void setFirstToFinish() {
+        this.firstToFinish = true;
+    }
+
+    public boolean isFirstToFinish(){
+        return firstToFinish;
+    }
 }

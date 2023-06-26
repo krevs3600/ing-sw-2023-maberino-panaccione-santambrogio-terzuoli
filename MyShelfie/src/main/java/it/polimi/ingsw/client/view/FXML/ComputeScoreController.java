@@ -12,6 +12,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 import static it.polimi.ingsw.client.view.FXML.LivingBoardController.getCommonGoalCardPic;
+import static it.polimi.ingsw.client.view.FXML.LivingBoardController.updateBookshelf;
 
 public class ComputeScoreController {
     @FXML
@@ -69,22 +70,15 @@ public class ComputeScoreController {
     public ImageView No_PersonalGoalCard;
 
 
-
-
-
-
     @FXML
     public ImageView first_view;
 
     @FXML
     public ImageView second_view;
 
-
-
-
     public void initialize(GameView game, String nickname){
-        LivingBoardController.initBookshelf(bookshelf);
-        LivingBoardController.updateBookshelf(game.getPlayer(nickname).getBookshelf(), bookshelf);
+        // LivingBoardController.initBookshelf(bookshelf);
+        updateBookshelf(game.getPlayer(nickname).getBookshelf(), bookshelf);
 
         try {
             commonGoalCard1.setImage(new Image(new FileInputStream(getCommonGoalCardPic(game.getLivingRoomBoard().getCommonGoalCards().get(0)))));
@@ -93,7 +87,7 @@ public class ComputeScoreController {
             System.err.println(e.getMessage());
         }
 
-        int num = game.getSubscribers().stream().filter(x-> x.getName().equals(nickname)).toList().get(0).getPersonalGoalCard().getPath();
+        int num = game.getPlayer(nickname).getPersonalGoalCard().getPath();
         try {
             personalGoalCard.setImage(new Image(new FileInputStream("src/main/resources/it/polimi/ingsw/client/view/personal goal cards/Personal_Goals" + num + ".png")));
         } catch (FileNotFoundException e) {
