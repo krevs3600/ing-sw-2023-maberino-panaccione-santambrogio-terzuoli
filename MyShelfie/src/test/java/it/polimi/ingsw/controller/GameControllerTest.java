@@ -11,7 +11,6 @@ import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.network.ServerImplementation;
 import it.polimi.ingsw.network.eventMessages.*;
 import it.polimi.ingsw.view.cli.CLI;
-import org.controlsfx.control.PropertySheet;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -46,18 +45,18 @@ public class GameControllerTest {
 
 
     //Messages
-    private EventMessage gameCreationMessage = new GameCreationMessage("Franz", 2, "twoPlayersGameName");
-    private EventMessage gameChoiceMessage = new GameNameChoiceMessage("Senofonte", "twoPlayersGameName");
-    private EventMessage gameSpecsMessage = new GameSpecsMessage("Senofonte", "TwoPLayersGameName", 2);
-    private EventMessage gameStartMessage = new StartGameMessage("Franz");
-    private EventMessage tilePositionMessage1;
-    private EventMessage tilePositionMessage2;
-    private EventMessage tilePositionMessage3;
-    private EventMessage tilePositionMessage4;
-    private EventMessage tilePositionMessage5;
-    private EventMessage tilePositionMessage6;
-    private EventMessage tilePositionMessage7;
-    private EventMessage endTurnMessage;
+    private GameCreationMessage gameCreationMessage = new GameCreationMessage("Franz", 2, "twoPlayersGameName");
+    private GameNameChoiceMessage gameChoiceMessage = new GameNameChoiceMessage("Senofonte", "twoPlayersGameName");
+    private GameSpecsMessage gameSpecsMessage = new GameSpecsMessage("Senofonte", "TwoPLayersGameName", 2);
+    private StartGameMessage gameStartMessage = new StartGameMessage("Franz");
+    private TilePositionMessage tilePositionMessage1;
+    private TilePositionMessage tilePositionMessage2;
+    private TilePositionMessage tilePositionMessage3;
+    private TilePositionMessage tilePositionMessage4;
+    private TilePositionMessage tilePositionMessage5;
+    private TilePositionMessage tilePositionMessage6;
+    private TilePositionMessage tilePositionMessage7;
+    private EndTurnMessage endTurnMessage;
 
     @Before
     public void setUp() throws RemoteException {
@@ -95,7 +94,7 @@ public class GameControllerTest {
         gameController.update(client1, gameCreationMessage);
         assertNotNull(gameController.getGame());
         //System.out.println(gameController.getGame().getGameName());
-        assertTrue(gameController.getGame().getGameName().equals("twoPlayersGameName"));
+        assertEquals("twoPlayersGameName", gameController.getGame().getGameName());
         assertEquals(gameController.getGame().getSubscribers().size(), 1);
         assertEquals("Franz", gameController.getGame().getSubscribers().get(0).getName());
     }
@@ -103,23 +102,23 @@ public class GameControllerTest {
     @Test
     public void gameChoiceMessageTest() throws IOException {
         gameController.update(client1, gameCreationMessage);
-        Assert.assertEquals(1, gameController.getGame().getSubscribers().size());
+        assertEquals(1, gameController.getGame().getSubscribers().size());
         gameController.update(client2, gameChoiceMessage);
-        Assert.assertEquals(2, gameController.getGame().getSubscribers().size());
-        Assert.assertEquals("Franz", gameController.getGame().getSubscribers().get(0).getName());
-        Assert.assertEquals("Senofonte", gameController.getGame().getSubscribers().get(1).getName());
+        assertEquals(2, gameController.getGame().getSubscribers().size());
+        assertEquals("Franz", gameController.getGame().getSubscribers().get(0).getName());
+        assertEquals("Senofonte", gameController.getGame().getSubscribers().get(1).getName());
     }
 
     @Test
     public void startGameMessageTest() throws IOException {
         gameController.update(client1, gameCreationMessage);
         gameController.update(client2, gameChoiceMessage);
-        Assert.assertEquals(null, gameController.getGame().getLivingRoomBoard());
-        Assert.assertEquals(0, gameController.getGame().getDrawableTiles().size());
+        assertNull(gameController.getGame().getLivingRoomBoard());
+        assertEquals(0, gameController.getGame().getDrawableTiles().size());
         gameController.update(client1, gameStartMessage);
-        Assert.assertNotNull(gameController.getGame().getLivingRoomBoard());
-        Assert.assertEquals(16, gameController.getGame().getDrawableTiles().size());
-        Assert.assertEquals(gameController.getGame().getFirstPlayer().getStatus(), PlayerStatus.PICKING_TILES);
+        assertNotNull(gameController.getGame().getLivingRoomBoard());
+        assertEquals(16, gameController.getGame().getDrawableTiles().size());
+        assertEquals(gameController.getGame().getFirstPlayer().getStatus(), PlayerStatus.PICKING_TILES);
     }
 
 
@@ -128,19 +127,18 @@ public class GameControllerTest {
         gameController.update(client1, gameCreationMessage);
         gameController.update(client2, gameChoiceMessage);
         gameController.update(client1, gameStartMessage);
-        Assert.assertTrue(gameController.getGame().getLivingRoomBoard().getDrawableTiles().size()==16);
+        assertEquals(16, gameController.getGame().getLivingRoomBoard().getDrawableTiles().size());
         //System.out.println(gameController.getGame().getLivingRoomBoard().getSpace(new Position(1,3)).getTile());
         //gameController.update(client2, tilePositionMessage1);
         Assert.assertEquals(0, gameController.getGame().getBuffer().size());
-        ItemTile tileOnBoard = gameController.getGame().getLivingRoomBoard().getSpace(new Position(1,3)).getTile();
-        ItemTile pickedTile = gameController.drawTile((TilePositionMessage) tilePositionMessage1);
-        assertEquals(tileOnBoard, pickedTile);
-        Assert.assertTrue(gameController.getGame().getBuffer().size()==1);
-        gameController.drawTile((TilePositionMessage) tilePositionMessage4);
-        gameController.drawTile((TilePositionMessage) tilePositionMessage1);
+        gameController.drawTileAndInsertInTilePack(tilePositionMessage1);
+        assertNull(gameController.getGame().getLivingRoomBoard().getSpace(new Position(1,3)).getTile());
+        assertEquals(1, gameController.getGame().getBuffer().size());
+        gameController.drawTileAndInsertInTilePack((TilePositionMessage) tilePositionMessage4);
+        gameController.drawTileAndInsertInTilePack(tilePositionMessage1);
         Assert.assertEquals(1, gameController.getGame().getBuffer().size());
         //Assert.assertEquals(gameController.getGame().getDrawableTiles().size(), 15);
-        Assert.assertTrue(gameController.getGame().getLivingRoomBoard().getDrawableTiles().size()==15);
+        assertEquals(15, gameController.getGame().getLivingRoomBoard().getDrawableTiles().size());
     }
 
 
@@ -156,7 +154,7 @@ public class GameControllerTest {
         assertEquals(2,gameController.getGame().getBuffer().size());
         gameController.update(client2, endTurnMessage);
 
-        /**gameController.update(client1, tilePositionMessage5);
+        /*gameController.update(client1, tilePositionMessage5);
         gameController.update(client1, tilePositionMessage6);
         System.out.println(gameController.getGame().getBuffer().size());
         System.out.println(gameController.getGame().getLivingRoomBoard().getDrawableTiles().size())

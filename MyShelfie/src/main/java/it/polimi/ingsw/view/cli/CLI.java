@@ -17,7 +17,6 @@ import it.polimi.ingsw.network.eventMessages.EventMessage;
 import it.polimi.ingsw.network.Socket.ServerStub;
 import it.polimi.ingsw.network.eventMessages.*;
 import it.polimi.ingsw.observer_observable.Observable;
-
 import java.io.PrintStream;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -298,20 +297,22 @@ public class CLI extends Observable<EventMessage> implements View {
                 LoginResponseMessage loginResponseMessage = (LoginResponseMessage) message;
                 if (loginResponseMessage.isValidNickname()) {
                     System.out.println("\nAvailable nickname " + loginResponseMessage.getNickname() + " 😊");
-                    new Thread()
-                    {
-                        public void run() {
+                    new Thread(() -> {
+                        try {
+                            while (true) {
+                                setChanged();
+                                notifyObservers(new PingMessage(loginResponseMessage.getNickname()));
+                                Thread.sleep(5000);
+                            }
+                        } catch (RuntimeException | InterruptedException e) {
                             try {
-                                while (true) {
-                                    setChanged();
-                                    notifyObservers(new PingMessage(loginResponseMessage.getNickname()));
-                                    Thread.sleep(5000);
-                                }
-                            } catch (RuntimeException | InterruptedException e) {
-                                CLI.this.run();
+                                System.err.println(e.getMessage());
+                                createConnection();
+                            } catch (RemoteException | NotBoundException ex) {
+                                throw new RuntimeException(ex);
                             }
                         }
-                    }.start();
+                    }).start();
                     gameMenu();
 
                 } else {
@@ -432,30 +433,8 @@ public class CLI extends Observable<EventMessage> implements View {
             }
 
             case BOARD -> {
-                // to check if it works
+
                 out.println(game.toCLI(getNickname()));
-                /*out.println("\n-----------------------------------------------------------------------\n");
-                System.out.println("--- NEW TURN ---");
-                out.println("\nLIVING ROOM BOARD:");
-                out.println(game.getLivingRoomBoard().toString());
-                for (PlayerView playerView : game.getSubscribers()) {
-                    out.println("\n-----------------------------------------------------------------------\n" + playerView.getName() + "'s BOOKSHELF:");
-                    out.println(playerView.getBookshelf().toString());
-                    out.println("\n" + playerView.getName() + "'s score: " + playerView.getScore());
-                }
-                for (PlayerView playerView : game.getSubscribers()) {
-                    if (this.client.getNickname().equals(playerView.getName())) {
-                        out.println("\n-----------------------------------------------------------------------\n YOUR PERSONAL GOAL CARD:");
-                        out.println(playerView.getPersonalGoalCard().toString());
-                    }
-                }
-                int i = 0;
-                for (CommonGoalCardView commonGoalCardView : game.getLivingRoomBoard().getCommonGoalCards()) {
-                    i++;
-                    out.println("\n-----------------------------------------------------------------------\n");
-                    out.println("Common goal card " + i + ":\n" + commonGoalCardView.toString());
-                }
-                 */
 
                 if (!this.nickname.equals(game.getCurrentPlayer().getName())) {
                     out.println("\nIt's " + eventMessage.getNickname() + "'s turn\n");

@@ -1,4 +1,5 @@
 package it.polimi.ingsw.network;
+
 import it.polimi.ingsw.network.eventMessages.EventMessage;
 
 import java.io.IOException;
@@ -13,4 +14,5 @@ public interface Server extends Remote{
 
     void removeGameFromLobby (String gameName) throws RemoteException;
     void removeClient(Client client) throws RemoteException;
+
 }

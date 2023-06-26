@@ -131,5 +131,6 @@ public interface View {
      */
      void update(GameView gameView, EventMessage eventMessage);
 
+    void deleteAllObservers();
 }
 

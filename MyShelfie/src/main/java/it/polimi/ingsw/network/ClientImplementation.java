@@ -8,6 +8,7 @@ import it.polimi.ingsw.network.MessagesToClient.requestMessage.CreatorLoginRespo
 import it.polimi.ingsw.network.MessagesToClient.requestMessage.LoginResponseMessage;
 import it.polimi.ingsw.network.MessagesToClient.requestMessage.RequestMessage;
 import it.polimi.ingsw.network.eventMessages.EventMessage;
+import it.polimi.ingsw.observer_observable.Observer;
 import it.polimi.ingsw.view.cli.CLI;
 
 import java.io.IOException;
@@ -67,15 +68,7 @@ public class ClientImplementation extends UnicastRemoteObject implements Client 
 
                 }
 
-                case DISCONNECTION_RESPONSE -> {
-                    if (view instanceof CLI) {
-                        ((CLI) view).deleteAllObservers();
-                    }
-                    else{
-                        ((GUI) view).deleteAllObservers();
-                    }
-
-                }
+                case DISCONNECTION_RESPONSE -> view.deleteAllObservers();
 
 
             }
@@ -90,13 +83,12 @@ public class ClientImplementation extends UnicastRemoteObject implements Client 
 
     private void initialize(Server server) throws RemoteException {
         if (view instanceof CLI){
-             ((CLI) view).addObserver((observable, eventMessage) -> {
+            ((CLI)view).addObserver((observable, eventMessage) -> {
                 try {
-                    server.update(this, (EventMessage) eventMessage);
-                } catch (RemoteException e) {
-                    System.err.println("Unable to update the server: " + e.getMessage() + ". Skipping the update. ");
+                    server.update(this, eventMessage);
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    System.err.println("Unable to update the server: " + e.getMessage() + ". Skipping the update. ");
+                    ((CLI)view).deleteAllObservers();
                 }
              });
 
@@ -104,12 +96,10 @@ public class ClientImplementation extends UnicastRemoteObject implements Client 
         else if (view instanceof GUI){
             ((GUI) view).addObserver((observable, eventMessage) -> {
                 try {
-                    server.update(this, (EventMessage) eventMessage);
-                   // ((GUI) view).setClient(this);
-                } catch (RemoteException e) {
-                    System.err.println("Unable to update the server: " + e.getMessage() + ". Skipping the update. ");
+                    server.update(this, eventMessage);
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    System.err.println("Unable to update the server: " + e.getMessage() + ". Skipping the update. ");
+                    ((CLI)view).deleteAllObservers();
                 }
             });
         }

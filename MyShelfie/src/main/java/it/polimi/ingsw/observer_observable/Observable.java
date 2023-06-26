@@ -24,11 +24,6 @@ public abstract class Observable<EventMessage> {
     public synchronized void deleteObserver(Observer<EventMessage> obs) {
         observers.remove(obs);
     }
-    public void notifyObservers() {
-        notifyObservers(null);
-    }
-
-
 
     public void notifyObservers(EventMessage message) {
 
