@@ -26,9 +26,6 @@ public class GameController implements Serializable {
 
     private final Game game;
 
-    private final List<String> disconnectedPlayers = new ArrayList<>();
-
-
     public static final String savedGameFile = "memoryCard";
 
     public GameController( Game game){
@@ -323,10 +320,6 @@ public class GameController implements Serializable {
         game.insertTileInTilePack(itemTile);
         game.setTurnPhase(GamePhase.PICKING_TILES);
 
-    }
-
-    public List<String> getDisconnectedPlayers() {
-        return disconnectedPlayers;
     }
 }
 

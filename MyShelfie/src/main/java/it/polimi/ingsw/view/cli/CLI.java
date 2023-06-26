@@ -28,8 +28,8 @@ import java.util.Set;
 public class CLI extends Observable<EventMessage> implements View {
 
     private String nickname;
-    private final PrintStream out = System.out;
-    private final Scanner in = new Scanner(System.in);
+    private PrintStream out;
+    private Scanner in;
 
 
     public void run() {
@@ -44,10 +44,12 @@ public class CLI extends Observable<EventMessage> implements View {
     }
 
     private void printLogo() {
+        out = new PrintStream(System.out);
         out.println("myShelfie\n");
     }
 
     public void createConnection() throws RemoteException, NotBoundException {
+        in = new Scanner(System.in);
         String connectionType = askConnectionType();
         String address = askServerAddress();
         int port = askServerPort();
@@ -63,6 +65,7 @@ public class CLI extends Observable<EventMessage> implements View {
                     System.err.println("not bound exception registry");
                 } catch (RemoteException re) {
                     re.printStackTrace();
+                    createConnection();
                 }
             }
             case "s" -> {
@@ -314,7 +317,6 @@ public class CLI extends Observable<EventMessage> implements View {
                         }
                     }).start();
                     gameMenu();
-
                 } else {
                         System.err.println("\nInvalid nickname, please choose another one\n");
                         askNickname();

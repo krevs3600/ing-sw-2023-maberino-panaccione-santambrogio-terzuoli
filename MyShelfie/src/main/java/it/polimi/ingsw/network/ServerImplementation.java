@@ -9,6 +9,7 @@ import it.polimi.ingsw.network.MessagesToClient.errorMessages.JoinErrorMessage;
 import it.polimi.ingsw.network.MessagesToClient.errorMessages.ResumeGameErrorMessage;
 import it.polimi.ingsw.network.MessagesToClient.requestMessage.*;
 import it.polimi.ingsw.network.eventMessages.*;
+import it.polimi.ingsw.observer_observable.Observer;
 import it.polimi.ingsw.persistence.Storage;
 import java.io.IOException;
 import java.rmi.RemoteException;
@@ -30,6 +31,8 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
 
     private final List<GameController> savedGames = new ArrayList<>();
 
+    private final Map<String, GameController> disconnectedPlayersGame = new HashMap<>();
+
     public ServerImplementation() throws RemoteException {
         super();
     }
@@ -47,7 +50,7 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
         Game game = playerGame.get(client).getGame();
         game.addObserver((obs, eventMessage) -> {
             try {
-                if (eventMessage instanceof PlayerTurnMessage && playerGame.get(client).getDisconnectedPlayers().contains(eventMessage.getNickname()))
+                if (eventMessage instanceof PlayerTurnMessage && playerGame.get(client).equals(disconnectedPlayersGame.get(eventMessage.getNickname())))
                 {
                     System.out.println("Skipping the " + eventMessage.getNickname() + "'s turn");
                     playerGame.get(client).update(client, new EndTurnMessage(eventMessage.getNickname()));
@@ -82,7 +85,7 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                             }
                         } catch (InterruptedException | IOException e) {
                             System.err.println("client " + eventMessage.getNickname() + "disconnected");
-                            playerGame.get(client).getDisconnectedPlayers().add(eventMessage.getNickname());
+                            disconnectedPlayersGame.put(eventMessage.getNickname(), playerGame.get(client));
                         }
                     }).start();
                     client.onMessage(new LoginResponseMessage(eventMessage.getNickname(), true));
@@ -92,7 +95,7 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
             }
 
             case PING -> {
-                playerGame.get(client).getDisconnectedPlayers().remove(eventMessage.getNickname());
+                disconnectedPlayersGame.remove(eventMessage.getNickname(), playerGame.get(client));
                 System.out.println("Ping arrived from " + eventMessage.getNickname());
             }
 
@@ -154,8 +157,8 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
             }
 
             case RESUME_GAME_REQUEST -> {
-                if (playerGame.get(client).getDisconnectedPlayers().contains(eventMessage.getNickname())) {
-                    playerGame.get(client).getDisconnectedPlayers().remove(eventMessage.getNickname());
+                if (disconnectedPlayersGame.containsKey(eventMessage.getNickname())) {
+                    disconnectedPlayersGame.put(eventMessage.getNickname(), playerGame.get(client));
                 }
 
                 else {
@@ -259,6 +262,9 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                     currentPlayersNicknames.remove(eventMessage.getNickname());
                     getConnectedClients().remove(eventMessage.getNickname());
                 } else {
+                    playerGame.get(client).getGame().deleteObserver((obs, event) -> {
+                        System.out.println(event.getNickname() + " deleted from the observers of the game");
+                    });
                     String gameName = playerGame.get(client).getGame().getGameName();
                     GameController controller = currentGames.get(gameName);
                     Game game = controller.getGame();
@@ -324,7 +330,7 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
 
 /* todo disconnessioni durante la partita da rivedere assolutamente
 // ancora in lobby, in match
-if (playerGame != null) {
+if (playerGame  != null) {
     if (playerGame.get(client) != null) {
         GameController controller = playerGame.get(client);
         // remove game name from set
