@@ -658,7 +658,14 @@ private int scoreOfThisClient;
                         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(5000), event -> livingBoardController.anchorPaneForTheCandPGoalCards.setVisible(false)));
                              timeline.play();
                         showPopup("You completed the " + number + " common goal");
+                        if(number.equals("first")){
+                            this.firstToset=true;
 
+
+                        }else {
+                            this.secondToset=true;
+
+                        }
 
                     }
                     else {
@@ -871,6 +878,12 @@ private int scoreOfThisClient;
               this.computeScoreController.Yes_PersonalGoalCard.setVisible(true);
               this.computeScoreController.No_PersonalGoalCard.setVisible(false);
           }
+
+            System.out.println("il numero di punti delle personal è "+this.personalGoalCardScore);
+
+            System.out.println("il numero di punti delle adiacenti è "+this.adjacentTilesScore);
+
+
             this.computeScoreController.personalGoalPoint.setText(this.personalGoalCardScore+"points");
 
             this.computeScoreController.generalPoint.setText(this.adjacentTilesScore+"points");

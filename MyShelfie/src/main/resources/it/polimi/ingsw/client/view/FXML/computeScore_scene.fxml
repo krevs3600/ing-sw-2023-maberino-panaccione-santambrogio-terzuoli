@@ -41,16 +41,6 @@
                   <Image url="@../misc/checkmark.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="80.0" fitWidth="65.0" layoutX="900.0" layoutY="168.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../scoring%20tokens/scoring_4.jpg" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="74.0" fitWidth="65.0" layoutX="998.0" layoutY="168.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../scoring%20tokens/scoring_6.jpg" />
-               </image>
-            </ImageView>
             <ImageView fitHeight="128.0" fitWidth="136.0" layoutX="1219.0" layoutY="176.0" pickOnBounds="true" preserveRatio="true" />
             <ImageView fx:id="eight_onecg" fitHeight="74.0" fitWidth="65.0" layoutX="901.0" layoutY="187.0" pickOnBounds="true" preserveRatio="true" visible="false">
                <image>
@@ -60,11 +50,6 @@
             <ImageView fx:id="eight_secondcg" fitHeight="74.0" fitWidth="65.0" layoutX="907.0" layoutY="349.0" pickOnBounds="true" preserveRatio="true" visible="false">
                <image>
                   <Image url="@../scoring%20tokens/scoring_8.jpg" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="74.0" fitWidth="65.0" layoutX="1194.0" layoutY="322.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../scoring%20tokens/scoring_2.jpg" />
                </image>
             </ImageView>
             <ImageView fx:id="endGameToken" fitHeight="106.0" fitWidth="98.0" layoutX="742.0" layoutY="457.0" pickOnBounds="true" preserveRatio="true">
@@ -87,17 +72,17 @@
                   <Image url="@../personal%20goal%20cards/Personal_Goals6.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="Yes_PersonalGoalCard" fitHeight="59.0" fitWidth="50.0" layoutX="574.0" layoutY="606.0">
+            <ImageView fx:id="Yes_PersonalGoalCard" fitHeight="59.0" fitWidth="50.0" layoutX="574.0" layoutY="606.0" visible="false">
                <image>
                   <Image url="@../misc/checkmark.png" />
                </image>
             </ImageView>
-            <Label fx:id="commonPoint2" layoutX="1302.0" layoutY="352.0" text="=X points " textFill="#fffdfd">
+            <Label fx:id="commonPoint2" layoutX="967.0" layoutY="337.0" text="=0 points " textFill="#fffdfd">
                <font>
                   <Font name="Libian SC Regular" size="36.0" />
                </font>
             </Label>
-            <Label fx:id="commonPoint1" layoutX="1304.0" layoutY="192.0" text="= X points" textFill="#f8f5f5">
+            <Label fx:id="commonPoint1" layoutX="968.0" layoutY="179.0" text="= 0 points" textFill="#f8f5f5">
                <font>
                   <Font name="Libian SC Regular" size="36.0" />
                </font>
@@ -107,12 +92,12 @@
                   <Font size="36.0" />
                </font>
             </Label>
-            <Label fx:id="personalGoalPoint" layoutX="1314.0" layoutY="606.0" prefHeight="33.0" prefWidth="203.0" text="=X points " textFill="WHITE">
+            <Label fx:id="personalGoalPoint" layoutX="960.0" layoutY="613.0" prefHeight="33.0" prefWidth="203.0" text="=0 points " textFill="WHITE">
                <font>
                   <Font name="Libian SC Regular" size="36.0" />
                </font>
             </Label>
-            <Label fx:id="endGamePoint" layoutX="1321.0" layoutY="476.0" text="=1 point " textFill="#fffdfd">
+            <Label fx:id="endGamePoint" layoutX="966.0" layoutY="469.0" prefHeight="65.0" prefWidth="119.0" text="=1 point " textFill="#fffdfd">
                <font>
                   <Font name="Libian SC Regular" size="36.0" />
                </font>
@@ -132,13 +117,13 @@
                   <Font size="36.0" />
                </font>
             </Label>
-            <Label fx:id="generalPoint" layoutX="1306.0" layoutY="722.0" prefHeight="33.0" prefWidth="203.0" text="=X points " textFill="WHITE">
+            <Label fx:id="generalPoint" layoutX="962.0" layoutY="722.0" prefHeight="33.0" prefWidth="203.0" text="=X points " textFill="WHITE">
                <font>
                   <Font name="Libian SC Regular" size="36.0" />
                </font>
             </Label>
             <Line endX="687.0" endY="1.220703125E-4" layoutX="831.0" layoutY="818.0" startX="-258.44573974609375" startY="1.220703125E-4" stroke="#fff9f9" />
-            <Label fx:id="totalScore" layoutX="1317.0" layoutY="831.0" prefHeight="33.0" prefWidth="203.0" text="=X points " textFill="WHITE">
+            <Label fx:id="totalScore" layoutX="943.0" layoutY="829.0" prefHeight="33.0" prefWidth="203.0" text="=X points " textFill="WHITE">
                <font>
                   <Font name="Libian SC Regular" size="36.0" />
                </font>
@@ -194,9 +179,14 @@
                   <Image url="@../misc/X-Letter-Background-PNG.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="No_PersonalGoalCard" fitHeight="70.0" fitWidth="80.0" layoutX="553.0" layoutY="612.0">
+            <ImageView fx:id="No_PersonalGoalCard" fitHeight="70.0" fitWidth="80.0" layoutX="557.0" layoutY="605.0">
                <image>
                   <Image url="@../misc/X-Letter-Background-PNG.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="85.0" fitWidth="173.0" layoutX="674.0" layoutY="719.0">
+               <image>
+                  <Image url="@../scoringtokens/Adjacent_Tiles.png" />
                </image>
             </ImageView>
          </children>

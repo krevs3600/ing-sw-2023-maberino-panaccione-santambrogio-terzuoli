@@ -216,7 +216,7 @@ public class GameController implements Serializable {
     public int computePlayerScoreEndGame(Player player){
         //Computation of points from personal goal card
         ItemTile[][] bookshelf = player.getBookshelf().getGrid();
-        int scorep;
+        int scorep=0;
         int score=0;
         //personalGoalCard.getScoringItem().forEach((key, value) -> );
         int count = 0;
@@ -245,8 +245,8 @@ public class GameController implements Serializable {
         }
 
         scorep=points.get(count);
-        Player currentPlayer = game.getCurrentPlayer();
-        currentPlayer.setPersonalgoalcardscore(scorep);
+        player.setPersonalgoalcardscore(scorep);
+
 
 
         //Computation of points from adjacent tiles groups at end of game
@@ -267,7 +267,7 @@ public class GameController implements Serializable {
             }
 
         }
-        currentPlayer.setAdjacenttilesscore(score);
+       player.setAdjacenttilesscore(score);
 
         score=score+scorep;
 

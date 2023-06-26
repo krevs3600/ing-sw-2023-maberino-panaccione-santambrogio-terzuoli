@@ -34,9 +34,9 @@ public class PlayerView implements Serializable {
      */
     private final int score;
 
-    private int personalgoalcardscore;
+    private final int personalgoalcardscore;
 
-    private int adjacenttilesscore;
+    private final int adjacenttilesscore;
     /**
      * PersonalGoalCard given to the player for the game he's playing
      */
