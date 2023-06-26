@@ -160,6 +160,18 @@ public class LivingBoardController {
 
     @FXML
     public Text descriptioncommonGoalCard2_text;
+
+    @FXML
+    public Button ExitGame_button;
+
+    @FXML
+    public RadioButton YesExit;
+
+    @FXML
+    public AnchorPane PaneForExit;
+
+    @FXML
+    public RadioButton NoExit;
     /**
      * JavaFX ImageView for assigning the token for the completion of the first common goal
      */
@@ -652,6 +664,20 @@ public class LivingBoardController {
      */
     public Map<Integer, String> getPlayers() {
         return players;
+    }
+
+    public void ExitGame(MouseEvent mouseEvent) {
+        PaneForExit.setVisible(true);
+
+    }
+
+    public void keep_playing(MouseEvent mouseEvent) {
+        PaneForExit.setVisible(false);
+    }
+
+    public void leave_definitively(MouseEvent mouseEvent) {
+        //todo: gestire direttamente nella gui, chiudere lo stage ed invia il messaggio a tutti gli altri
+
     }
 }
 
