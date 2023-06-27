@@ -145,21 +145,19 @@ public class LivingBoardController {
     @FXML
     public Text CommonGoalText;
 
-    @FXML
-    public AnchorPane AnchorPaneForCG;
 
     @FXML
-    public Text textforPopUp;
+    public Text textForPopUp;
 
     @FXML
     public TitledPane descriptionFirstCG;
     @FXML
     public TitledPane descriptionSecondCG;
     @FXML
-    public Text descriptioncommonGoalCard1_text;
+    public Text descriptionCommonGoalCard1_text;
 
     @FXML
-    public Text descriptioncommonGoalCard2_text;
+    public Text descriptionCommonGoalCard2_text;
 
     @FXML
     public Button ExitGame_button;
@@ -344,13 +342,13 @@ public class LivingBoardController {
             commonGoalCard1.setImage(new Image(new FileInputStream(getCommonGoalCardPic(gameView.getLivingRoomBoard().getCommonGoalCards().get(0)))));
             descriptioncommonGoalCard1=gameView.getLivingRoomBoard().getCommonGoalCards().get(0).toString();
             descriptionFirstCG.setText("First common goal card ");
-            descriptioncommonGoalCard1_text.setText(descriptioncommonGoalCard1);
+            descriptionCommonGoalCard1_text.setText(descriptioncommonGoalCard1);
 
             commonGoalCard2.setImage(new Image(new FileInputStream(getCommonGoalCardPic(gameView.getLivingRoomBoard().getCommonGoalCards().get(1)))));
             descriptioncommonGoalCard2=gameView.getLivingRoomBoard().getCommonGoalCards().get(1).toString();
 
             descriptionSecondCG.setText("Second common goal card");
-            descriptioncommonGoalCard2_text.setText(descriptioncommonGoalCard2);
+            descriptionCommonGoalCard2_text.setText(descriptioncommonGoalCard2);
         } catch (FileNotFoundException e) {
             System.err.println(e.getMessage());
         }

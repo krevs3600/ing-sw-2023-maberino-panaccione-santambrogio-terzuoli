@@ -114,11 +114,12 @@ private int scoreOfThisClient;
         stage.setScene(scene);
         this.stage = stage;
         stage.show();
-        stage.setHeight(scene.getHeight());
-        stage.setWidth(scene.getWidth());
-        stage.setResizable(true);
         width = stage.getWidth();
         height = stage.getHeight();
+        stage.setHeight(height);
+        stage.setWidth(width);
+        stage.setResizable(false);
+
         startController = fxmlLoader.getController();
         startController.setGui(this);
     }
@@ -175,15 +176,7 @@ private int scoreOfThisClient;
      */
 
     public void askTypeOfConnection(Stage stage) throws IOException {
-        URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/RMIorSocket_scene.fxml/").toURI().toURL();
-
         FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("RMIorSocket_scene.fxml"));
-
-        try {
-            root = FXMLLoader.load(url);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
         scene = new Scene(fxmlLoader.load());
         this.stage = stage;
         Platform.runLater(() -> stage.setScene(scene));
@@ -195,13 +188,11 @@ private int scoreOfThisClient;
     @Override
     public void createConnection() {
         try {
-            URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/AddressIp_scene.fxml/").toURI().toURL();
-            FXMLLoader fxmlLoader = new FXMLLoader(url);
+            FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("AddressIp_scene.fxml"));
             scene = new Scene(fxmlLoader.load());
             Platform.runLater(() -> stage.setScene(scene));
             serverSettingsController = fxmlLoader.getController();
             serverSettingsController.setGui(this);
-
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -231,8 +222,6 @@ private int scoreOfThisClient;
                 Registry registry = LocateRegistry.getRegistry(address, port);
                 AppServer server = (AppServer) registry.lookup("MyShelfieServer");
                 Client client= new ClientImplementation(this,server.connect());
-
-
             } catch (NotBoundException e) {
                 System.err.println("not bound exception registry");
             }
@@ -261,9 +250,7 @@ private int scoreOfThisClient;
         }
 
         try {
-            URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/login_scene.fxml/").toURI().toURL();
-            ;
-            FXMLLoader fxmlLoader = new FXMLLoader(url);
+            FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("login_scene.fxml"));
             scene = new Scene(fxmlLoader.load());
             Platform.runLater(() -> stage.setScene(scene));
             nicknameController = fxmlLoader.getController();
@@ -343,8 +330,7 @@ private int scoreOfThisClient;
                 if (loginResponseMessage.isValidNickname()) {
 
                     try {
-                        URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/Menu_scene.fxml/").toURI().toURL();
-                        FXMLLoader fxmlLoader = new FXMLLoader(url);
+                        FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("Menu_scene.fxml"));
                         scene = new Scene(fxmlLoader.load());
                         this.nickname = ((LoginResponseMessage) message).getNickname();
                         MenuController menuController = fxmlLoader.getController();
@@ -362,8 +348,7 @@ private int scoreOfThisClient;
                 GameNameResponseMessage gameNameResponseMessage = (GameNameResponseMessage) message;
                 if (gameNameResponseMessage.isValidGameName()) {
                     try {
-                        URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/NumberofPlayers_scene.fxml/").toURI().toURL();
-                        FXMLLoader fxmlLoader = new FXMLLoader(url);
+                        FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("NumberofPlayers_scene.fxml"));
                         scene = new Scene(fxmlLoader.load());
                         NumberOfPlayersController numberOfPlayersController = fxmlLoader.getController();
                         this.numberOfPlayersController = numberOfPlayersController;
@@ -385,8 +370,7 @@ private int scoreOfThisClient;
                 GameCreationResponseMessage gameCreationResponseMessage = (GameCreationResponseMessage) message;
                 if (gameCreationResponseMessage.isValidGameCreation()) {
                     try {
-                        URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/lobby_scene.fxml/").toURI().toURL();
-                        FXMLLoader fxmlLoader = new FXMLLoader(url);
+                        FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("lobby_scene.fxml"));
                         scene = new Scene(fxmlLoader.load());
                         lobbyController = fxmlLoader.getController();
                         lobbyController.setGui(this);
@@ -406,8 +390,7 @@ private int scoreOfThisClient;
                 //else if (createorJoinGameController.getJoinGameb()) {
                 if (!((JoinGameResponseMessage) message).getAvailableGamesInLobby().isEmpty()) {
                     try {
-                        URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/GameNameList_scene.fxml/").toURI().toURL();
-                        FXMLLoader fxmlLoader = new FXMLLoader(url);
+                        FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("GameNameList_scene.fxml"));
                         scene = new Scene(fxmlLoader.load());
                         GameNameListController gameNameListController = fxmlLoader.getController();
                         gameNameListController.setGui(this);
@@ -482,8 +465,7 @@ private int scoreOfThisClient;
                 WaitingResponseMessage waitingResponseMessage = (WaitingResponseMessage) message;
                 if (this.lobbyController == null) {
                     try {
-                        URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/lobby_scene.fxml/").toURI().toURL();
-                        FXMLLoader fxmlLoader = new FXMLLoader(url);
+                        FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("lobby_scene.fxml"));
                         scene = new Scene(fxmlLoader.load());
                         lobbyController = fxmlLoader.getController();
                         lobbyController.setGui(this);
@@ -581,8 +563,7 @@ private int scoreOfThisClient;
     public void gameMenu() {
         if (menuController.getCreateGame()) {
             try {
-                URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/GameName_scene.fxml/").toURI().toURL();
-                FXMLLoader fxmlLoader = new FXMLLoader(url);
+                FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("GameName_scene.fxml"));
                 scene = new Scene(fxmlLoader.load());
                 gameNameController = fxmlLoader.getController();
                 gameNameController.setGui(this);
@@ -616,8 +597,7 @@ private int scoreOfThisClient;
                 // todo: in questo caso deve comparire il pop up con i personal goal card e i common goal cards e si inizializza la scena
                 if (isFirstTime) {
                     try {
-                        URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/livingBoard_scene.fxml/").toURI().toURL();
-                        FXMLLoader fxmlLoader = new FXMLLoader(url);
+                        FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("livingBoard_scene.fxml"));
                         Scene scene = new Scene(fxmlLoader.load());
                         livingBoardController = fxmlLoader.getController();
                         livingBoardController.setGui(this);
@@ -736,8 +716,7 @@ private int scoreOfThisClient;
             }
             case END_GAME -> {
                 try {
-                    URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/win_scene.fxml/").toURI().toURL();
-                    FXMLLoader fxmlLoader = new FXMLLoader(url);
+                    FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("win_scene.fxml"));
                     scene = new Scene(fxmlLoader.load());
                     WinController winController = fxmlLoader.getController();
                     winController.setGui(this);
@@ -841,7 +820,6 @@ private int scoreOfThisClient;
         setChanged();
         notifyObservers(new ItemTileIndexMessage(nickname, itemTileIndex));
     }
-
    /* public static Stage getWindow(){
         return window;
     }
@@ -853,8 +831,6 @@ private int scoreOfThisClient;
     */
 
 
-
-
     /**
      *This method is used to set the {@code computeScore_scene.fxml } and instantiate his scene controller in the GUI.
      * In that scene the player can see the details of his score.
@@ -864,15 +840,10 @@ private int scoreOfThisClient;
 
     public void showThisClientScores(GameView game) {
         try {
-            URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/computeScore_scene.fxml/").toURI().toURL();
-            FXMLLoader fxmlLoader = new FXMLLoader(url);
+            FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("computeScore_scene.fxml"));
             scene = new Scene(fxmlLoader.load());
             computeScoreController = fxmlLoader.getController();
             winController.setGui(this);
-            //todo non funziona
-            System.out.println("il numero di punti delle personal è " + game.getPlayer(nickname).getPersonalGoalCardScore());
-            System.out.println("il numero di punti delle adiacenti è " + game.getPlayer(nickname).getAdjacentTilesScore());
-
             Platform.runLater(() -> {
                 stage.setScene(scene);
                 computeScoreController.initialize(game, this.nickname);

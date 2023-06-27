@@ -26,6 +26,19 @@
 
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="908.0" prefWidth="1510.0" styleClass="rootPane" stylesheets="@../css/livingBoard_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.FXML.LivingBoardController">
     <children>
+      <AnchorPane fx:id="PaneForPopup" prefHeight="823.0" prefWidth="1437.0" visible="false">
+         <children>
+            <Pane layoutX="334.0" layoutY="318.0" prefHeight="83.0" prefWidth="796.0" styleClass="popup">
+               <children>
+                  <Text fx:id="textForPopUp" fill="WHITE" layoutX="176.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="507.4582214355469">
+                     <font>
+                        <Font size="72.0" />
+                     </font>
+                  </Text>
+               </children>
+            </Pane>
+         </children>
+      </AnchorPane>
       <AnchorPane fx:id="PaneForPopup" prefHeight="823.0" prefWidth="1437.0" visible="false" />
         <BorderPane prefHeight="908.0" prefWidth="1510.0" style="-fx-border-width: 10;">
             <center>
@@ -211,7 +224,7 @@
                                         </StackPane>
                               <TitledPane fx:id="descriptionFirstCG" layoutX="58.0" layoutY="22.0" prefHeight="211.0" prefWidth="271.0">
                                  <content>
-                                    <Text fx:id="descriptioncommonGoalCard1_text" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" textAlignment="CENTER" wrappingWidth="268.21630859375">
+                                    <Text fx:id="descriptionCommonGoalCard1_text" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" textAlignment="CENTER" wrappingWidth="268.21630859375">
                                        <font>
                                           <Font name="Libian SC Regular" size="16.0" />
                                        </font>
@@ -236,7 +249,7 @@
                                         </StackPane>
                               <TitledPane fx:id="descriptionSecondCG" layoutX="60.0" layoutY="21.0" prefHeight="223.0" prefWidth="266.0">
                                  <content>
-                                    <Text fx:id="descriptioncommonGoalCard2_text" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" textAlignment="CENTER" wrappingWidth="264.21630859375">
+                                    <Text fx:id="descriptionCommonGoalCard2_text" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" textAlignment="CENTER" wrappingWidth="264.21630859375">
                                        <font>
                                           <Font name="Libian SC Regular" size="14.0" />
                                        </font>
