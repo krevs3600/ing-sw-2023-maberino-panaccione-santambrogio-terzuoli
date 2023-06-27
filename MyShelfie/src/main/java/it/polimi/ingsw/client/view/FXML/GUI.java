@@ -824,6 +824,7 @@ private int scoreOfThisClient;
      * The switch to this scene comes after the player has clicked the {@link WinController MyScoreDetail} button
      * in the scene {@code win_scene}.
      */
+
     public void showThisClientScores(GameView game) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("computeScore_scene.fxml"));
