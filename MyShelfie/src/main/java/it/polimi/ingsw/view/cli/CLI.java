@@ -415,6 +415,10 @@ public class CLI extends Observable<EventMessage> implements View {
 
              */
 
+            case WAIT_FOR_OTHER_PLAYERS -> {
+                out.println("Waiting for other players to reconnect...");
+            }
+
             case CLIENT_DISCONNECTION -> {
                 out.println(message.getNickname() + " has disconnected");
             }
@@ -559,9 +563,14 @@ public class CLI extends Observable<EventMessage> implements View {
                 }
                 out.println("\nGame has ended... Hope you had fun!");
                 //TODO: togliere il gioco dalla lista!!
-                gameMenu();
-                //setChanged();
-                //notifyObservers(new DisconnectClientMessage( this.client.getNickname()));
+
+                new Thread(() -> {
+                    try {
+                        gameMenu();
+                    } catch (RuntimeException e) {
+                        System.err.println(e.getMessage());
+                    }
+                }).start();
             }
         }
     }
