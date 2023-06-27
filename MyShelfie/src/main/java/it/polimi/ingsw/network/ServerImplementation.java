@@ -231,7 +231,7 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                     }
                     else client.onMessage(new ResumeGameResponseMessage(eventMessage.getNickname()));
                 }
-                else client.onMessage(new ResumeGameErrorMessage(eventMessage.getNickname(), "no games to resume"));
+                else client.onMessage(new ResumeGameErrorMessage(eventMessage.getNickname(), " there is no games to resume"));
             }
 
             case RELOAD_GAME_REQUEST -> {

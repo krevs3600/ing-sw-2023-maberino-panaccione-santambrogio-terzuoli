@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
@@ -51,9 +52,9 @@
                         <Insets bottom="20.0" />
                     </VBox.margin>
                 </Label>
-            <Button fx:id="CreateNewGame" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#CreateGame" prefHeight="50.0" prefWidth="279.0" text="CREATE A NEW GAME ">
+            <Button fx:id="CreateNewGame" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#CreateGame" prefHeight="40.0" prefWidth="279.0" text="CREATE A NEW GAME ">
                <font>
-                  <Font size="20.0" />
+                  <Font size="16.0" />
                </font>
                <VBox.margin>
                   <Insets bottom="10.0" />
@@ -75,9 +76,9 @@
                   </LinearGradient>
                </textFill>
             </Button>
-            <Button fx:id="joinGame" contentDisplay="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#JoinGame" prefHeight="50.0" prefWidth="279.0" text="JOIN A  GAME ">
+            <Button fx:id="joinGame" contentDisplay="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#JoinGame" prefHeight="40.0" prefWidth="279.0" text="JOIN A  GAME ">
                <font>
-                  <Font size="20.0" />
+                  <Font size="16.0" />
                </font>
                <VBox.margin>
                   <Insets bottom="10.0" />
@@ -99,16 +100,13 @@
                   </LinearGradient>
                </textFill>
             </Button>
-            <Button fx:id="EXIT" contentDisplay="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#ExitGame" prefHeight="40.0" prefWidth="279.0" text="EXIT">
-               <font>
-                  <Font size="20.0" />
-               </font>
+            <Button fx:id="ResumeGameButton" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#ResumeGame" prefHeight="40.0" prefWidth="279.0" text="RESUME GAME" textOverrun="CLIP">
                <textFill>
                   <LinearGradient endX="1.0" endY="1.0">
                      <stops>
                         <Stop>
                            <color>
-                              <Color red="0.6447368264198303" green="0.2895345985889435" blue="0.2895345985889435" />
+                              <Color red="0.7182220816612244" green="0.8157894611358643" blue="0.6269493103027344" />
                            </color>
                         </Stop>
                         <Stop offset="1.0">
@@ -119,22 +117,22 @@
                      </stops>
                   </LinearGradient>
                </textFill>
+               <font>
+                  <Font size="16.0" />
+               </font>
             </Button>
-                <VBox alignment="CENTER" prefHeight="265.0" prefWidth="1510.0">
-               <VBox.margin>
-                  <Insets bottom="20.0" />
-               </VBox.margin>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0">
                <children>
-                  <Button fx:id="ResumeGameButton" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#ResumeOldGame" prefHeight="50.0" prefWidth="279.0" text="RESUME GAME" textOverrun="CLIP">
+                  <Button fx:id="EXIT" contentDisplay="CENTER" layoutX="595.0" layoutY="65.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#ExitGame" prefHeight="40.0" prefWidth="279.0" text="EXIT">
                      <font>
-                        <Font size="20.0" />
+                        <Font size="16.0" />
                      </font>
                      <textFill>
                         <LinearGradient endX="1.0" endY="1.0">
                            <stops>
                               <Stop>
                                  <color>
-                                    <Color red="0.7182220816612244" green="0.8157894611358643" blue="0.6269493103027344" />
+                                    <Color red="0.6447368264198303" green="0.2895345985889435" blue="0.2895345985889435" />
                                  </color>
                               </Stop>
                               <Stop offset="1.0">
@@ -146,8 +144,29 @@
                         </LinearGradient>
                      </textFill>
                   </Button>
+                  <Button fx:id="ReloadGameButton" layoutX="595.0" layoutY="13.0" mnemonicParsing="false" onMouseClicked="#ReloadGame" prefHeight="40.0" prefWidth="279.0" text="RELOAD GAME">
+                     <textFill>
+                        <LinearGradient endX="1.0" endY="1.0" startY="0.9216152019002375">
+                           <stops>
+                              <Stop>
+                                 <color>
+                                    <Color red="0.7260321378707886" green="0.42320001125335693" blue="0.9200000166893005" />
+                                 </color>
+                              </Stop>
+                              <Stop offset="1.0">
+                                 <color>
+                                    <Color red="1.0" green="1.0" blue="1.0" />
+                                 </color>
+                              </Stop>
+                           </stops>
+                        </LinearGradient>
+                     </textFill>
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Button>
                </children>
-                </VBox>
+            </AnchorPane>
                 <VBox alignment="BOTTOM_CENTER" prefHeight="301.0" prefWidth="1510.0">
                     <children>
                         <HBox alignment="BOTTOM_CENTER" prefHeight="273.0" prefWidth="1513.0">
@@ -157,7 +176,7 @@
                                         <Image url="@../itemtiles/Piante1.2.png" />
                                     </image>
                                 </ImageView>
-                                <ImageView fitHeight="334.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
+                                <ImageView fitHeight="259.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
                                         <Image url="@../itemtiles/Gatti1.1.png" />
                                     </image>

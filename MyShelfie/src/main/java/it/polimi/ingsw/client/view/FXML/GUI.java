@@ -12,6 +12,7 @@ import it.polimi.ingsw.network.MessagesToClient.MessageToClient;
 import it.polimi.ingsw.network.MessagesToClient.errorMessages.ErrorMessage;
 import it.polimi.ingsw.network.MessagesToClient.errorMessages.JoinErrorMessage;
 import it.polimi.ingsw.network.MessagesToClient.errorMessages.ReloadGameErrorMessage;
+import it.polimi.ingsw.network.MessagesToClient.errorMessages.ResumeGameErrorMessage;
 import it.polimi.ingsw.network.MessagesToClient.requestMessage.*;
 import it.polimi.ingsw.network.Socket.ServerStub;
 import it.polimi.ingsw.network.eventMessages.*;
@@ -419,13 +420,31 @@ private int scoreOfThisClient;
                 }
             }
 
+
+            case RESUME_GAME_RESPONSE -> {
+                createorJoinGameController.ResumeGameButton.setDisable(true);
+                createorJoinGameController.ReloadGameButton.setDisable(true);
+                createorJoinGameController.CreateNewGame.setDisable(true);
+                createorJoinGameController.joinGame.setDisable(true);
+                //todo capire cosa succede quando preme exit in questto caso
+
+                showPopup("waiting for resumegame"); // fare una cosa duratura
+
+            }
+
+
             case JOIN_GAME_ERROR -> {
                 JoinErrorMessage joinErrorMessage = (JoinErrorMessage) message;
                 showPopup("No available games in the lobby");
             }
             case RESUME_GAME_ERROR -> {
-                ReloadGameErrorMessage resumeGameErrorMessage = (ReloadGameErrorMessage) message;
+                ResumeGameErrorMessage resumeGameErrorMessage = (ResumeGameErrorMessage) message;
                 showPopup(resumeGameErrorMessage.getErrorMessage());
+
+            }
+            case RELOAD_GAME_ERROR -> {
+                ReloadGameErrorMessage reloadGameErrorMessage = (ReloadGameErrorMessage) message;
+                showPopup(reloadGameErrorMessage.getErrorMessage());
             }
 
             case WAIT_PLAYERS -> {
@@ -544,6 +563,11 @@ private int scoreOfThisClient;
     }
 
     public void resumeGame() {
+        setChanged();
+        notifyObservers(new ResumeGameMessage(getNickname()));
+    }
+
+    public void reloadGame() {
         setChanged();
         notifyObservers(new ReloadGameMessage(getNickname()));
     }

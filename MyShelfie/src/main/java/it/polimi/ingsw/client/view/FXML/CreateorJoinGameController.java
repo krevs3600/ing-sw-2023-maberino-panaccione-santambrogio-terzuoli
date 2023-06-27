@@ -1,10 +1,7 @@
 package it.polimi.ingsw.client.view.FXML;
 
 import javafx.fxml.FXML;
-import javafx.scene.Group;
 import javafx.scene.control.Button;
-import javafx.scene.control.DialogPane;
-import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 
 /**
@@ -33,6 +30,9 @@ public class CreateorJoinGameController {
 
     @FXML
     public Button ResumeGameButton;
+
+    @FXML
+    public Button ReloadGameButton;
 
     private boolean joinGameb = false;
     private boolean createGame = false;
@@ -100,7 +100,12 @@ public class CreateorJoinGameController {
 // //TODO: gestire chiusura stage
     }
 
-    public void ResumeOldGame(MouseEvent mouseEvent) {
+    public void ResumeGame(MouseEvent mouseEvent) {
         gui.resumeGame();
+    }
+
+    public void ReloadGame(MouseEvent mouseEvent) {
+        gui.reloadGame();
+
     }
 }
