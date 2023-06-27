@@ -51,6 +51,9 @@ public class GUI extends Observable<EventMessage> implements View {
     private Stage stage;
     private Scene scene;
     private Parent root;
+
+
+
     private static double width;
     private static double height;
     private NicknameController nicknameController;
@@ -77,6 +80,9 @@ private int scoreOfThisClient;
     public Stage getStage() {
         return stage;
     }
+
+
+
 
 
     /*
@@ -475,10 +481,23 @@ private int scoreOfThisClient;
                 createConnection();
             }
 
-            case DISCONNECTION_RESPONSE -> {
-                showPopup("You lost the connection to the server, and can no longer play");
-                createConnection();
+
+            case CLIENT_DISCONNECTION -> {
+
+                livingBoardController.TextForResilience.setText(message.getNickname()+"has disconnected but don't worry, the game goes on!");
+                livingBoardController.PaneForResilience.setVisible(true);
+                Timeline timeline = new Timeline(new KeyFrame(Duration.millis(5000), event -> livingBoardController.PaneForResilience.setVisible(false)));
+                timeline.play();
+                System.out.println("client" +message.getNickname()+"getDisconnected");
+
+               
             }
+            //todo verificare che non serva più
+
+           //  case DISCONNECTION_RESPONSE -> {
+           //      showPopup("You lost the connection to the server, and can no longer play");
+           //      createConnection();
+           //  }
         }
 
     }
@@ -574,17 +593,23 @@ private int scoreOfThisClient;
             case PLAYER_TURN -> {
                 if (this.nickname.equals(game.getCurrentPlayer().getName())) {
                     Platform.runLater(() -> {
-                        showPopup("it's your turn"); // todo ricontrollare questo pop up non mi sembra che compaia
-                        livingBoardController.OtherPlayerTurnLabel.setVisible(false);
+                        this.livingBoardController.setTurnLabelGreen();
+                        this.livingBoardController.turnLabel.setText("YOUR TURN");
+                        this.livingBoardController.setSphereTurnGreen();
+                       // showPopup("it's your turn"); // todo ricontrollare questo pop up non mi sembra che compaia
+                       // livingBoardController.OtherPlayerTurnLabel.setVisible(false);
                         livingBoardController.board.setDisable(false);
                         livingBoardController.disableColumnChoice();
                     });
                 } else {
                     Platform.runLater(() -> {
+                        this.livingBoardController.setSphereTurnRed();
+                        this.livingBoardController.setTurnLabelRed();
+                        this.livingBoardController.turnLabel.setText(eventMessage.getNickname()+" 'S TURN");
                         livingBoardController.board.setDisable(true);
                         livingBoardController.disableColumnChoice();
-                        livingBoardController.OtherPlayerTurnLabel.setText("Wait... " + eventMessage.getNickname() + " is picking tiles");
-                        livingBoardController.OtherPlayerTurnLabel.setVisible(true);
+                        //livingBoardController.OtherPlayerTurnLabel.setText("Wait... " + eventMessage.getNickname() + " is picking tiles");
+                      //  livingBoardController.OtherPlayerTurnLabel.setVisible(true);
                     });
                 }
             }

@@ -4,8 +4,6 @@ import it.polimi.ingsw.model.ModelView.*;
 import it.polimi.ingsw.model.ScoringToken;
 import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.model.utils.SpaceType;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
@@ -16,8 +14,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.PhongMaterial;
+import javafx.scene.shape.Sphere;
 import javafx.scene.text.Text;
-import javafx.util.Duration;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -172,6 +172,20 @@ public class LivingBoardController {
 
     @FXML
     public RadioButton NoExit;
+
+    @FXML
+    public AnchorPane PaneForResilience;
+
+    @FXML
+    public Text TextForResilience;
+    @FXML
+    public Sphere sphereTurn;
+
+    @FXML
+    public Text turnLabel;
+
+
+
     /**
      * JavaFX ImageView for assigning the token for the completion of the first common goal
      */
@@ -677,8 +691,43 @@ public class LivingBoardController {
 
     public void leave_definitively(MouseEvent mouseEvent) {
         //todo: gestire direttamente nella gui, chiudere lo stage ed invia il messaggio a tutti gli altri
+        GuiApp.getWindow().close();
 
     }
+
+    public void setSphereTurnGreen(){
+        // Creazione del materiale con il colore desiderato
+        PhongMaterial material = new PhongMaterial();
+        material.setDiffuseColor(Color.SPRINGGREEN); // Imposta il colore diffuso
+        material.setSpecularColor(Color.SPRINGGREEN); // Imposta il colore speculare
+        // material.set... // Puoi impostare altre proprietà del materiale se necessario
+
+        // Imposta il materiale sulla sfera
+        sphereTurn.setMaterial(material);
+
+    }
+
+    public void setSphereTurnRed(){
+        // Creazione del materiale con il colore desiderato
+        PhongMaterial material = new PhongMaterial();
+        material.setDiffuseColor(Color.ORANGERED); // Imposta il colore diffuso
+        material.setSpecularColor(Color.ORANGERED); // Imposta il colore speculare
+        // material.set... // Puoi impostare altre proprietà del materiale se necessario
+
+        // Imposta il materiale sulla sfera
+        sphereTurn.setMaterial(material);
+
+    }
+
+    public void setTurnLabelRed(){
+        turnLabel.setFill(Color.ORANGERED);
+    }
+
+    public void setTurnLabelGreen(){
+        turnLabel.setFill(Color.SPRINGGREEN);
+    }
+
+
 }
 
 
