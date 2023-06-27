@@ -95,6 +95,9 @@ public class Game extends Observable<EventMessage>  implements Serializable {
     public void startGame(){
         Collections.shuffle(subscribers);
         setFirstPlayer(subscribers.get(0));
+        for (Player player: getSubscribers()) {
+            player.setStatus(PlayerStatus.ACTIVE);
+        }
         getFirstPlayer().setStatus(PlayerStatus.PICKING_TILES);
         this.cursor = 0;
         setTurnPhase(GamePhase.INIT_GAME);
@@ -196,7 +199,12 @@ public class Game extends Observable<EventMessage>  implements Serializable {
      * This method increments the value of the {@link Game#cursor} in a circular way
      * to indicate the following {@link Player} who has to play his turn
      */
-    public void incrementCursor() { this.cursor = cursor < subscribers.size()-1 ? cursor+1 : 0; }
+    public void incrementCursor() {
+        this.cursor = cursor < subscribers.size()-1 ? cursor+1 : 0;
+        while (subscribers.get(cursor).getStatus().equals(PlayerStatus.INACTIVE)) {
+            this.cursor = cursor < subscribers.size()-1 ? cursor+1 : 0;
+        }
+    }
 
     /**
      * This method pops a {@link ScoringToken} from the {@link CommonGoalCard} specified by the index
@@ -268,6 +276,7 @@ public class Game extends Observable<EventMessage>  implements Serializable {
      * This method gets the current {@link Player}
      * @return the {@link Player} who is currently playing, the one indicated by the {@link Game#cursor}
      */
+    //TODO: sistemare java doc
     public Player getCurrentPlayer(){
         return subscribers.get(cursor);
     }

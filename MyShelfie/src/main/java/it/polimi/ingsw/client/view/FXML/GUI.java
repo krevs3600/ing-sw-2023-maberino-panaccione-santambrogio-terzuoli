@@ -11,7 +11,7 @@ import it.polimi.ingsw.network.ClientImplementation;
 import it.polimi.ingsw.network.MessagesToClient.MessageToClient;
 import it.polimi.ingsw.network.MessagesToClient.errorMessages.ErrorMessage;
 import it.polimi.ingsw.network.MessagesToClient.errorMessages.JoinErrorMessage;
-import it.polimi.ingsw.network.MessagesToClient.errorMessages.ResumeGameErrorMessage;
+import it.polimi.ingsw.network.MessagesToClient.errorMessages.ReloadGameErrorMessage;
 import it.polimi.ingsw.network.MessagesToClient.requestMessage.*;
 import it.polimi.ingsw.network.Socket.ServerStub;
 import it.polimi.ingsw.network.eventMessages.*;
@@ -442,7 +442,7 @@ private int scoreOfThisClient;
                 showPopup("No available games in the lobby");
             }
             case RESUME_GAME_ERROR -> {
-                ResumeGameErrorMessage resumeGameErrorMessage = (ResumeGameErrorMessage) message;
+                ReloadGameErrorMessage resumeGameErrorMessage = (ReloadGameErrorMessage) message;
                 showPopup(resumeGameErrorMessage.getErrorMessage());
             }
 
@@ -539,7 +539,7 @@ private int scoreOfThisClient;
 
     public void resumeGame() {
         setChanged();
-        notifyObservers(new ResumeGameMessage(getNickname()));
+        notifyObservers(new ReloadGameMessage(getNickname()));
     }
 
     // booleano per distinguere la prima volta del gioco e le altre

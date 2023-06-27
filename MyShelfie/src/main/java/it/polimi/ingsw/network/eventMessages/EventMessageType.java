@@ -26,6 +26,7 @@ public enum EventMessageType {
 
     START_GAME,
     RESUME_GAME_REQUEST,
+    RELOAD_GAME_REQUEST,
     // error
     GAME_SPECS, COLUMN_CHOICE;
 
