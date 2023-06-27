@@ -19,19 +19,17 @@ public class Player  implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     private final String name;
-    private PlayerStatus status;
-
-    private final Bookshelf bookshelf;
-    private int score;
-
-    private int personalGoalCardScore;
-    private PersonalGoalCard personalGoalCard;
     private final List<ScoringToken> tokens;
-
+    private final Bookshelf bookshelf;
+    private PlayerStatus status;
+    private PersonalGoalCard personalGoalCard;
     private boolean firstCommonGoalAchieved;
     private boolean secondCommonGoalAchieved;
-    private int adjacentTilesScore;
     private boolean firstToFinish = false;
+    private int adjacentTilesScore;
+    private int score;
+    private int personalGoalCardScore;
+
 
     /**
      * Class constructor
@@ -44,7 +42,6 @@ public class Player  implements Serializable {
         this.tokens = new ArrayList<>();
         this.firstCommonGoalAchieved = false;
         this.secondCommonGoalAchieved = false;
-
     }
 
     /**
@@ -72,7 +69,6 @@ public class Player  implements Serializable {
         catch (IndexOutOfBoundsException e) {
             System.err.println(e.getMessage());
         }
-
     }
 
     /**
@@ -96,15 +92,23 @@ public class Player  implements Serializable {
      */
     public void setScore (int incremental) { this.score += incremental;}
 
-    public void setPersonalGoalCardScore(int score){this.personalGoalCardScore = score;}
+    public void setPersonalGoalCardScore(int score){
+        this.personalGoalCardScore = score;
+        System.out.println(getName() + " pcg: " + score);
+    }
 
     public int getPersonalGoalCardScore() {
         return personalGoalCardScore;
     }
 
-    public void setAdjacentTilesScore(int score){this.adjacentTilesScore = score;}
+    public void setAdjacentTilesScore(int score){
+        this.adjacentTilesScore = score;
+        System.out.println(getName() + " adj: " + score);
+    }
 
-    public int getAdjacentTilesScore(){return this.adjacentTilesScore;}
+    public int getAdjacentTilesScore(){
+        return this.adjacentTilesScore;
+    }
 
     /**
      * Setter method

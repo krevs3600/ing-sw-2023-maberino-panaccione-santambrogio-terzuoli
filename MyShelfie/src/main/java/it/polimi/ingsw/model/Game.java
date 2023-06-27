@@ -207,7 +207,6 @@ public class Game extends Observable<EventMessage>  implements Serializable {
      */
     public int popCommonGoalCardStack(int commonGoalCardIndex){
         CommonGoalCard card = getLivingRoomBoard().getCommonGoalCards().get(commonGoalCardIndex);
-        //Stack<ScoringToken> tokens = (Stack<ScoringToken>) card.getStack().clone();
         setChanged();
         notifyObservers(new  CommonGoalCardMessage(getCurrentPlayer().getName(), card, commonGoalCardIndex));
         return card.getStack().pop().getValue();

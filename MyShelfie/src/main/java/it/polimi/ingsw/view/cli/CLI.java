@@ -186,13 +186,12 @@ public class CLI extends Observable<EventMessage> implements View {
     private void joinGame(){
         setChanged();
         notifyObservers(new JoinGameMessage(getNickname()));
-
     }
 
     public void askNumberOfPlayers(String gameName) {
             int numOfPlayers = 0;
             while (numOfPlayers <= 0) {
-                out.print("\nPlease insert the number of players: ");
+                out.print("Please insert the number of players: ");
                 numOfPlayers = in.nextInt();
                 in.nextLine();
             }
@@ -206,9 +205,9 @@ public class CLI extends Observable<EventMessage> implements View {
         String gameName = "";
 
         while (gameName.length() < 1 || numOfPlayers <= 0) {
-            out.print("\n" + getNickname() + " choose your game's name: ");
+            out.print(getNickname() + " choose your game's name: ");
             gameName = in.nextLine();
-            out.print("\nPlease insert the number of players: ");
+            out.print("Please insert the number of players: ");
             numOfPlayers = in.nextInt();
             in.nextLine();
         }
@@ -220,7 +219,7 @@ public class CLI extends Observable<EventMessage> implements View {
 
         String gameName = "";
         while (gameName.length() < 1) {
-            out.print("\n" + getNickname() + " choose your game's name: ");
+            out.print(getNickname() + " choose your game's name: ");
             gameName = in.nextLine();
         }
         setChanged();
@@ -232,7 +231,7 @@ public class CLI extends Observable<EventMessage> implements View {
     public void askNickname() {
         String nickName = "";
         while (nickName.length() < 1) {
-            out.print("\nPlease insert your name: ");
+            out.print("Please insert your name: ");
             nickName = in.nextLine();
             this.nickname = nickName;
         }
@@ -242,20 +241,20 @@ public class CLI extends Observable<EventMessage> implements View {
 
     public void showGameNamesList(Set<String> availableGameNames) {
         if (availableGameNames.isEmpty()){
-            out.println("\nNo games available, please create a new one!");
+            out.println("No games available, please create a new one!");
         } else {
-            out.println("\nAvailable games in lobby:\n");
+            out.println("Available games in lobby:\n");
             for (String game : availableGameNames) {
                 out.println("> " + game);
             }
         }
         String gameChoice;
         do {
-            out.print("\nEnter the game's name to join: ");
+            out.print("Enter the game's name to join: ");
             gameChoice = in.nextLine();
 
             if(!availableGameNames.contains(gameChoice)) {
-                System.err.println("\nInvalid game choice");
+                System.err.println("Invalid game choice");
             }
         }while(!availableGameNames.contains(gameChoice));
 
@@ -282,16 +281,16 @@ public class CLI extends Observable<EventMessage> implements View {
             case GAME_SPECS -> {
                 GameSpecsResponseMessage gameSpecsResponseMessage = (GameSpecsResponseMessage) message;
                 if (gameSpecsResponseMessage.isValidGameName()) {
-                    System.out.println("\nAvailable game name :) ");
+                    System.out.println("Available game name :) ");
                 } else {
-                    System.err.println("\nThe game name is already taken, please choose another game name");
+                    System.err.println("The game name is already taken, please choose another game name");
                     askGameSpecs();
                 }
                 if(gameSpecsResponseMessage.isValidGameCreation()){
-                    System.out.println("\nValid number of players :) ");
-                    System.out.println("\nWaiting for other players... ");
+                    System.out.println("Valid number of players :) ");
+                    System.out.println("Waiting for other players... ");
                 } else {
-                    System.err.println("\nInvalid number of players, please choose a number within the available range");
+                    System.err.println("Invalid number of players, please choose a number within the available range");
                     askGameSpecs();
                 }
             }
@@ -299,7 +298,7 @@ public class CLI extends Observable<EventMessage> implements View {
             case LOGIN_RESPONSE -> {
                 LoginResponseMessage loginResponseMessage = (LoginResponseMessage) message;
                 if (loginResponseMessage.isValidNickname()) {
-                    System.out.println("\nAvailable nickname " + loginResponseMessage.getNickname() + " 😊");
+                    System.out.println("Available nickname " + loginResponseMessage.getNickname() + " 😊");
                     new Thread(() -> {
                         try {
                             while (true) {
@@ -318,7 +317,7 @@ public class CLI extends Observable<EventMessage> implements View {
                     }).start();
                     gameMenu();
                 } else {
-                        System.err.println("\nInvalid nickname, please choose another one\n");
+                        System.err.println("Invalid nickname, please choose another one\n");
                         askNickname();
                     }
 
@@ -345,9 +344,9 @@ public class CLI extends Observable<EventMessage> implements View {
                 //assert message instanceof WaitingResponseMessage;
                 WaitingResponseMessage waitingResponseMessage = (WaitingResponseMessage) message;
                 if (waitingResponseMessage.getMissingPlayers() == 1) {
-                    out.println("\nWaiting for 1 player... ");
+                    out.println("Waiting for 1 player... ");
                 } else {
-                    out.println("\nWaiting for " + waitingResponseMessage.getMissingPlayers() + " players... ");
+                    out.println("Waiting for " + waitingResponseMessage.getMissingPlayers() + " players... ");
                 }
             }
             case PLAYER_JOINED_LOBBY_RESPONSE -> {

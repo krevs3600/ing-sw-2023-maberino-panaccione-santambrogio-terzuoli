@@ -1,12 +1,14 @@
 package it.polimi.ingsw.client.view.FXML;
 
 import it.polimi.ingsw.model.ModelView.GameView;
+import it.polimi.ingsw.model.ModelView.PlayerView;
+import it.polimi.ingsw.model.RomanNumber;
+import it.polimi.ingsw.model.ScoringToken;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -25,6 +27,7 @@ public class ComputeScoreController {
     public ImageView endGameToken;
     @FXML
     public ImageView personalGoalCard;
+
     @FXML
     public Label commonPoint2;
     @FXML
@@ -38,60 +41,74 @@ public class ComputeScoreController {
     @FXML
     public Label totalScore;
 
-    @FXML
-    public ImageView Yes_FirstCommonGoal;
 
     @FXML
-    public ImageView Yes_SecondCommonGoal;
-
+    public ImageView checkFirstCommonGoal;
     @FXML
-    public ImageView Yes_FirstEndGame;
-
+    public ImageView checkSecondCommonGoal;
     @FXML
-    public ImageView Yes_PersonalGoalCard;
-
-
+    public ImageView checkFirstToFinish;
     @FXML
-    public StackPane Yes_ExtraPoint;
-
+    public ImageView checkPersonalGoalCard;
     @FXML
-    public ImageView No_ExtraPoint;
+    public ImageView checkAdjacent;
 
-    @FXML
-    public ImageView No_FirstCommonGoal;
-
-    @FXML
-    public ImageView No_SecondCommonGoal;
-
-    @FXML
-    public ImageView No_FirsrtEndGame;
-
-    @FXML
-    public ImageView No_PersonalGoalCard;
-
-
-    @FXML
-    public ImageView first_view;
-
-    @FXML
-    public ImageView second_view;
 
     public void initialize(GameView game, String nickname){
-        // LivingBoardController.initBookshelf(bookshelf);
+        // loading the configuration of the bookshelf
         updateBookshelf(game.getPlayer(nickname).getBookshelf(), bookshelf);
-
+        // loading the two CommonGoalCards
         try {
             commonGoalCard1.setImage(new Image(new FileInputStream(getCommonGoalCardPic(game.getLivingRoomBoard().getCommonGoalCards().get(0)))));
             commonGoalCard2.setImage(new Image(new FileInputStream(getCommonGoalCardPic(game.getLivingRoomBoard().getCommonGoalCards().get(1)))));
         } catch (FileNotFoundException e) {
             System.err.println(e.getMessage());
         }
-
+        // loading the PersonalGoalCard
         int num = game.getPlayer(nickname).getPersonalGoalCard().getPath();
         try {
             personalGoalCard.setImage(new Image(new FileInputStream("src/main/resources/it/polimi/ingsw/client/view/personal goal cards/Personal_Goals" + num + ".png")));
         } catch (FileNotFoundException e) {
             System.err.println(e.getMessage());
         }
+    }
+
+    public void loadScore(PlayerView player) {
+        // loading the checkmark image from path
+        String checkmarkPath = "src/main/resources/it/polimi/ingsw/client/view/misc/checkmark.png";
+        Image checkmark = null;
+        try {
+            checkmark = new Image(new FileInputStream(checkmarkPath));
+        } catch (FileNotFoundException e) {
+            System.err.println("Can't find image checkmark.png in " + checkmarkPath);
+        }
+        // updating CommonGoalCards points
+        System.out.println(player.getTokens());
+        for (ScoringToken scoringToken : player.getTokens()){
+            if (scoringToken.getRomanNumber().equals(RomanNumber.ONE)){
+                checkFirstCommonGoal.setImage(checkmark);
+                commonPoint1.setText("= " + scoringToken.getValue() + " points");
+            }
+            if (scoringToken.getRomanNumber().equals(RomanNumber.TWO)){
+                checkFirstCommonGoal.setImage(checkmark);
+                commonPoint2.setText("= " + scoringToken.getValue() + " points");
+            }
+        }
+        // updating firstToFinish point
+        if (player.isFirstToFinish()){
+            checkFirstToFinish.setImage(checkmark);
+            endGamePoint.setText("= 1 point");
+        }
+        // updating personalGoalCard points
+        if (player.getPersonalGoalCardScore() > 0) {
+            checkPersonalGoalCard.setImage(checkmark);
+            personalGoalPoint.setText("= " + player.getPersonalGoalCardScore() + " points");
+        }
+        // updating adjacent points
+        if (player.getAdjacentTilesScore() > 0) {
+            checkAdjacent.setImage(checkmark);
+            generalPoint.setText("= " + player.getAdjacentTilesScore() + " points");
+        }
+        totalScore.setText("= " + player.getScore() + " points");
     }
 }

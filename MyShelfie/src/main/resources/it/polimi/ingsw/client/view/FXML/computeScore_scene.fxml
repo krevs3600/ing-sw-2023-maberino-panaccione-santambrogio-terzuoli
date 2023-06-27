@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
@@ -16,6 +17,11 @@
    <children>
       <AnchorPane prefHeight="200.0" prefWidth="200.0">
          <children>
+            <Button layoutX="549.0" layoutY="15.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="456.0" text="Compute score" textFill="#fcfcfc">
+               <font>
+                  <Font name="Libian SC Regular" size="36.0" />
+               </font>
+            </Button>
             <ImageView fitHeight="509.0" fitWidth="518.0" layoutX="35.0" layoutY="172.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../boards/bookshelf.png" />
@@ -31,157 +37,14 @@
                   <Image url="@../common%20goal%20cards/8.jpg" />
                </image>
             </ImageView>
-            <ImageView fx:id="Yes_FirstCommonGoal" fitHeight="59.0" fitWidth="50.0" layoutX="574.0" layoutY="179.0" visible="false">
-               <image>
-                  <Image url="@../misc/checkmark.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="Yes_SecondCommonGoal" fitHeight="59.0" fitWidth="50.0" layoutX="574.0" layoutY="337.0" visible="false">
-               <image>
-                  <Image url="@../misc/checkmark.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="128.0" fitWidth="136.0" layoutX="1219.0" layoutY="176.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="eight_onecg" fitHeight="74.0" fitWidth="65.0" layoutX="901.0" layoutY="187.0" pickOnBounds="true" preserveRatio="true" visible="false">
-               <image>
-                  <Image url="@../scoring%20tokens/scoring_8.jpg" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="eight_secondcg" fitHeight="74.0" fitWidth="65.0" layoutX="907.0" layoutY="349.0" pickOnBounds="true" preserveRatio="true" visible="false">
-               <image>
-                  <Image url="@../scoring%20tokens/scoring_8.jpg" />
-               </image>
-            </ImageView>
             <ImageView fx:id="endGameToken" fitHeight="106.0" fitWidth="98.0" layoutX="742.0" layoutY="457.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../scoring%20tokens/end%20game.jpg" />
                </image>
             </ImageView>
-            <ImageView fx:id="Yes_FirstEndGame" fitHeight="59.0" fitWidth="50.0" layoutX="574.0" layoutY="475.0">
-               <image>
-                  <Image url="@../misc/checkmark.png" />
-               </image>
-            </ImageView>
-            <Button layoutX="549.0" layoutY="15.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="456.0" text="Compute score" textFill="#fcfcfc">
-               <font>
-                  <Font name="Libian SC Regular" size="36.0" />
-               </font>
-            </Button>
             <ImageView fx:id="personalGoalCard" fitHeight="113.0" fitWidth="91.0" layoutX="751.0" layoutY="592.0">
                <image>
                   <Image url="@../personal%20goal%20cards/Personal_Goals6.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="Yes_PersonalGoalCard" fitHeight="59.0" fitWidth="50.0" layoutX="574.0" layoutY="606.0" visible="false">
-               <image>
-                  <Image url="@../misc/checkmark.png" />
-               </image>
-            </ImageView>
-            <Label fx:id="commonPoint2" layoutX="967.0" layoutY="337.0" text="=0 points " textFill="#fffdfd">
-               <font>
-                  <Font name="Libian SC Regular" size="36.0" />
-               </font>
-            </Label>
-            <Label fx:id="commonPoint1" layoutX="968.0" layoutY="179.0" text="= 0 points" textFill="#f8f5f5">
-               <font>
-                  <Font name="Libian SC Regular" size="36.0" />
-               </font>
-            </Label>
-            <Label layoutX="918.0" layoutY="497.0" textFill="WHITE">
-               <font>
-                  <Font size="36.0" />
-               </font>
-            </Label>
-            <Label fx:id="personalGoalPoint" layoutX="960.0" layoutY="613.0" prefHeight="33.0" prefWidth="203.0" text="=0 points " textFill="WHITE">
-               <font>
-                  <Font name="Libian SC Regular" size="36.0" />
-               </font>
-            </Label>
-            <Label fx:id="endGamePoint" layoutX="966.0" layoutY="469.0" prefHeight="65.0" prefWidth="119.0" text="=1 point " textFill="#fffdfd">
-               <font>
-                  <Font name="Libian SC Regular" size="36.0" />
-               </font>
-            </Label>
-            <ImageView fitHeight="88.0" fitWidth="151.0" layoutX="698.0" layoutY="739.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../misc/screenshot.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="59.0" fitWidth="50.0" layoutX="574.0" layoutY="731.0">
-               <image>
-                  <Image url="@../misc/checkmark.png" />
-               </image>
-            </ImageView>
-            <Label layoutX="1358.0" layoutY="752.0">
-               <font>
-                  <Font size="36.0" />
-               </font>
-            </Label>
-            <Label fx:id="generalPoint" layoutX="962.0" layoutY="722.0" prefHeight="33.0" prefWidth="203.0" text="=X points " textFill="WHITE">
-               <font>
-                  <Font name="Libian SC Regular" size="36.0" />
-               </font>
-            </Label>
-            <Line endX="687.0" endY="1.220703125E-4" layoutX="831.0" layoutY="818.0" startX="-258.44573974609375" startY="1.220703125E-4" stroke="#fff9f9" />
-            <Label fx:id="totalScore" layoutX="943.0" layoutY="829.0" prefHeight="33.0" prefWidth="203.0" text="=X points " textFill="WHITE">
-               <font>
-                  <Font name="Libian SC Regular" size="36.0" />
-               </font>
-            </Label>
-            <Label layoutX="775.0" layoutY="832.0" prefHeight="33.0" prefWidth="203.0" text="Total" textFill="WHITE">
-               <font>
-                  <Font name="Libian SC Regular" size="36.0" />
-               </font>
-            </Label>
-            <StackPane layoutX="508.0" layoutY="140.0" prefHeight="74.0" prefWidth="14.0" />
-            <StackPane layoutX="441.0" layoutY="289.0" prefHeight="150.0" prefWidth="104.0" />
-            <StackPane layoutX="496.0" layoutY="488.0" prefHeight="93.0" prefWidth="87.0" />
-            <StackPane fx:id="Yes_ExtraPoint" layoutX="499.0" layoutY="686.0" prefHeight="150.0" prefWidth="200.0">
-               <children>
-                  <ImageView fx:id="No_ExtraPoint" fitHeight="71.0" fitWidth="77.0">
-                     <image>
-                        <Image url="@../misc/X-Letter-Background-PNG.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </StackPane>
-            <AnchorPane layoutX="104.0" layoutY="555.0" prefHeight="44.0" prefWidth="56.0" />
-            <GridPane fx:id="bookshelf" gridLinesVisible="true" hgap="11.1" layoutX="93.0" layoutY="210.0" prefHeight="405.0" prefWidth="396.0" vgap="11.1">
-              <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="92.0" minWidth="10.0" prefWidth="65.1842041015625" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="123.0" minWidth="10.0" prefWidth="65.1842041015625" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="133.0" minWidth="10.0" prefWidth="65.1842041015625" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="162.0" minWidth="10.0" prefWidth="65.1842041015625" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="156.0" minWidth="0.0" prefWidth="65.1842041015625" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="156.0" minWidth="0.0" prefWidth="0.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints maxHeight="67.30703735351562" minHeight="10.0" prefHeight="65.1842041015625" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="115.9083251953125" minHeight="10.0" prefHeight="67.3157958984375" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="142.43069458007812" minHeight="10.0" prefHeight="71.503173828125" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="161.10769653320312" minHeight="10.0" prefHeight="68.84970092773438" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="151.72174072265625" minHeight="10.0" prefHeight="69.65029907226562" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="126.34542846679688" minHeight="10.0" prefHeight="65.1842041015625" vgrow="SOMETIMES" />
-              </rowConstraints>
-            </GridPane>
-            <ImageView fx:id="No_FirstCommonGoal" fitHeight="67.0" fitWidth="74.0" layoutX="557.0" layoutY="182.0">
-               <image>
-                  <Image url="@../misc/X-Letter-Background-PNG.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="No_SecondCommonGoal" fitHeight="69.0" fitWidth="80.0" layoutX="556.0" layoutY="344.0">
-               <image>
-                  <Image url="@../misc/X-Letter-Background-PNG.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="No_FirsrtEndGame" fitHeight="69.0" fitWidth="80.0" layoutX="556.0" layoutY="480.0">
-               <image>
-                  <Image url="@../misc/X-Letter-Background-PNG.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="No_PersonalGoalCard" fitHeight="70.0" fitWidth="80.0" layoutX="557.0" layoutY="605.0">
-               <image>
-                  <Image url="@../misc/X-Letter-Background-PNG.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="85.0" fitWidth="173.0" layoutX="674.0" layoutY="719.0">
@@ -189,6 +52,87 @@
                   <Image url="@../scoringtokens/Adjacent_Tiles.png" />
                </image>
             </ImageView>
+            <Label fx:id="commonPoint1" layoutX="944.0" layoutY="182.0" text="= 0 points" textFill="#f8f5f5">
+               <font>
+                  <Font name="Libian SC Regular" size="36.0" />
+               </font>
+            </Label>
+            <Label fx:id="commonPoint2" layoutX="944.0" layoutY="342.0" text="= 0 points " textFill="#fffdfd">
+               <font>
+                  <Font name="Libian SC Regular" size="36.0" />
+               </font>
+            </Label>
+            <Label fx:id="endGamePoint" layoutX="944.0" layoutY="491.0" text="= 0 points " textFill="#fffdfd">
+               <font>
+                  <Font name="Libian SC Regular" size="36.0" />
+               </font>
+            </Label>
+            <Label fx:id="personalGoalPoint" layoutX="944.0" layoutY="622.0" text="= 0 points " textFill="#fffdfd">
+               <font>
+                  <Font name="Libian SC Regular" size="36.0" />
+               </font>
+            </Label>
+            <Label fx:id="generalPoint" layoutX="944.0" layoutY="742.0" text="= 0 points " textFill="#fffdfd">
+               <font>
+                  <Font name="Libian SC Regular" size="36.0" />
+               </font>
+            </Label>
+            <Line endX="687.0" endY="1.220703125E-4" layoutX="831.0" layoutY="818.0" startX="-258.44573974609375" startY="1.220703125E-4" stroke="#fff9f9" />
+            <Label layoutX="775.0" layoutY="832.0" prefHeight="33.0" prefWidth="203.0" text="Total" textFill="WHITE">
+               <font>
+                  <Font name="Libian SC Regular" size="36.0" />
+               </font>
+            </Label>
+            <Label fx:id="totalScore" layoutX="943.0" layoutY="829.0" prefHeight="33.0" prefWidth="203.0" text="= X points " textFill="WHITE">
+               <font>
+                  <Font name="Libian SC Regular" size="36.0" />
+               </font>
+            </Label>
+            <ImageView fx:id="checkFirstCommonGoal" fitHeight="67.0" fitWidth="74.0" layoutX="557.0" layoutY="182.0">
+               <image>
+                  <Image url="@../misc/x_mark.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="checkSecondCommonGoal" fitHeight="69.0" fitWidth="80.0" layoutX="556.0" layoutY="344.0">
+               <image>
+                  <Image url="@../misc/x_mark.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="checkFirstToFinish" fitHeight="67.0" fitWidth="74.0" layoutX="560.0" layoutY="468.0">
+               <image>
+                  <Image url="@../misc/x_mark.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="checkPersonalGoalCard" fitHeight="70.0" fitWidth="80.0" layoutX="557.0" layoutY="605.0">
+               <image>
+                  <Image url="@../misc/x_mark.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="checkAdjacent" fitHeight="70.0" fitWidth="80.0" layoutX="557.0" layoutY="719.0">
+               <image>
+                  <Image url="@../misc/x_mark.png" />
+               </image>
+            </ImageView>
+            <GridPane fx:id="bookshelf" hgap="10.0" layoutX="80.0" layoutY="199.0" prefHeight="421.0" prefWidth="421.0" vgap="5.0">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <padding>
+                  <Insets bottom="14.0" left="16.0" right="21.0" top="11.0" />
+               </padding>
+            </GridPane>
          </children>
       </AnchorPane>
    </children>

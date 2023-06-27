@@ -4,17 +4,10 @@ import it.polimi.ingsw.network.eventMessages.EventMessage;
 import it.polimi.ingsw.observer_observable.Observable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 
 /**
  * <h1>Class StartController</h1>
@@ -61,7 +54,7 @@ public class StartController extends Observable<EventMessage>{
      *This method is used to switch from the initial fxml scene to the connection scene
      */
     public void switchToConnection(ActionEvent event) throws IOException {
-        gui.askTypeofConnection(gui.getStage());
+        gui.askTypeOfConnection(gui.getStage());
     }
 
 

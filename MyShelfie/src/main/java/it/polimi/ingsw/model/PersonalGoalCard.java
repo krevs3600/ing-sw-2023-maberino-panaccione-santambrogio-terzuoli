@@ -14,13 +14,13 @@ import java.util.*;
  * @since 4/8/2023
  */
 public class PersonalGoalCard extends GoalCard implements Serializable {
-    private static final int DIMENSION=6;
+    private static final int DIMENSION = 6;
     private final int[] scores = new int[]{1, 2, 4, 6, 9, 12};
     private final int path;
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private final HashMap<Integer, TileType> scoringItem;
+    private final HashMap<Integer, TileType> scoringItemTiles;
 
     /**
      * Class constructor
@@ -28,7 +28,7 @@ public class PersonalGoalCard extends GoalCard implements Serializable {
      * the keys are the positions of the {@link ItemTile}s in the {@link Bookshelf}, while the values correspond to the type of {@link ItemTile}
      */
     public PersonalGoalCard(HashMap<Integer,TileType> configuration, int path){
-        this.scoringItem = configuration;
+        this.scoringItemTiles = configuration;
         this.path = path;
     }
 
@@ -40,10 +40,10 @@ public class PersonalGoalCard extends GoalCard implements Serializable {
 
     /**
      * Getter method
-     * @return the {@link PersonalGoalCard#scoringItem}, namely the map with the configuration of specific {@link TileType}s in specific positions
+     * @return the {@link PersonalGoalCard#scoringItemTiles}, namely the map with the configuration of specific {@link TileType}s in specific positions
      */
-    public Map<Integer, TileType> getScoringItem() {
-        return scoringItem;
+    public Map<Integer, TileType> getScoringItemTiles() {
+        return scoringItemTiles;
     }
 
     /**
@@ -76,7 +76,7 @@ public class PersonalGoalCard extends GoalCard implements Serializable {
         map.put(0, number.concat("    "));
 
         String rows = "";
-        Set<Integer> keys = scoringItem.keySet();
+        Set<Integer> keys = scoringItemTiles.keySet();
         int j = 0;
         for(int i=0; i<30;i++){
             // new row
@@ -85,7 +85,7 @@ public class PersonalGoalCard extends GoalCard implements Serializable {
                 rows = rows.concat(String.valueOf(5-i/5)+ " ");
             }
             if(keys.contains(i)){
-                TileType tileType = scoringItem.get(i);
+                TileType tileType = scoringItemTiles.get(i);
                 rows = rows.concat(tileType.getColorBackground() + " " + tileType.getAbbreviation() + " " + "\033[0m ");
             }
             else{

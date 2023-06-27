@@ -9,6 +9,7 @@ import it.polimi.ingsw.network.Server;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.StreamCorruptedException;
 import java.net.Socket;
 import java.rmi.RemoteException;
 
@@ -82,7 +83,7 @@ public class ServerStub implements Server {
                 eventMessage = (EventMessage) ois.readObject();
                 client.update(gameView, eventMessage);
             }
-        }catch (IOException | ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }

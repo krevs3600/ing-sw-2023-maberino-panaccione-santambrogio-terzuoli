@@ -157,8 +157,9 @@ public class GameController implements Serializable {
                 computeScoreMidGame();
 
                 if(game.isFinalTurn()) {
-                    // game is ended
+                    // game is ended immediately
                     if (game.getCurrentPlayer().equals(game.getLastPlayer())){
+                        // getWinner updates the players' scores
                         Player winner = getWinner();
                         game.endGame(winner);
                     }
@@ -171,9 +172,9 @@ public class GameController implements Serializable {
                         Player currentPlayer = game.getCurrentPlayer();
                         currentPlayer.setScore(1);
                         if (currentPlayer.equals(game.getLastPlayer())){
-                            //TODO: show always the score to the clients, updating it when needed
+                            // TODO: show always the score to the clients, updating it when needed
                             Player winner = getWinner();
-                            //TODO: create a new message specific to the case when the last player in the rotation fills the bookshelf
+                            // TODO: create a new message specific to the case when the last player in the rotation fills the bookshelf
                             game.endGame(winner);
                         }
                     }
@@ -202,8 +203,11 @@ public class GameController implements Serializable {
         Player winner = null;
         int max_score = 0;
         for (Player player : game.getSubscribers()){
+            System.out.println(player.getName());
             int score = computePlayerScoreEndGame(player);
+            System.out.println("mid game score: " + score);
             if(score > max_score) {
+                System.out.println("greater than " + max_score);
                 max_score = score;
                 winner = player;
             }
@@ -216,21 +220,19 @@ public class GameController implements Serializable {
     public int computePlayerScoreEndGame(Player player){
         //Computation of points from personal goal card
         ItemTile[][] bookshelf = player.getBookshelf().getGrid();
-        int personalCardScore = 0;
+        int personalCardScore;
         int score = 0;
-        //personalGoalCard.getScoringItem().forEach((key, value) -> );
         int count = 0;
         for (Map.Entry<Integer, TileType> element :
-                player.getPersonalGoalCard().getScoringItem().entrySet()) {
+                player.getPersonalGoalCard().getScoringItemTiles().entrySet()) {
             try{
                 if (bookshelf[(element.getKey())/5][(element.getKey())%5].getType().equals(element.getValue())) {
                     count++;
                 }
             } catch (NullPointerException ignored){
             }
-
         }
-
+        // loading points rule
         ArrayList<Integer> points;
         try {
             Reader file = new FileReader("src/main/java/it/polimi/ingsw/model/configs/PersonalGoalCards.json");
@@ -243,7 +245,6 @@ public class GameController implements Serializable {
         } catch (IOException | ParseException e) {
             throw new RuntimeException(e);
         }
-
         personalCardScore = points.get(count);
         player.setPersonalGoalCardScore(personalCardScore);
 
@@ -265,7 +266,6 @@ public class GameController implements Serializable {
             }
         }
         player.setAdjacentTilesScore(score);
-
         score += personalCardScore;
         return score;
     }
@@ -281,20 +281,17 @@ public class GameController implements Serializable {
            Player currentPlayer = game.getCurrentPlayer();
             if (card.toBeChecked(currentPlayer.getBookshelf())) {
                 if(card.checkPattern(currentPlayer.getBookshelf())){
-                    //ScoringToken tempToken = card.getStack().pop();
-                    //score+=tempToken.getValue();
                     if(card.equals(commonGoalCards.get(0)) && !currentPlayer.isFirstCommonGoalAchieved()) {
-                        //Stack<ScoringToken> oldStack = commonGoalCards.get(0).getStack();
+                        currentPlayer.winToken(card.getStack().get(card.getStack().size()-1));
                         int value = game.popCommonGoalCardStack(0);
                         currentPlayer.setScore(value);
                         currentPlayer.hasAchievedFirstGoal();
-                        // client.onMessage(new FirstCommonGoalMessage(currentPlayer.getName()));
                     }
                     if(card.equals(commonGoalCards.get(1)) && !currentPlayer.isSecondCommonGoalAchieved()) {
+                        currentPlayer.winToken(card.getStack().get(card.getStack().size()-1));
                         int value = game.popCommonGoalCardStack(1);
                         currentPlayer.setScore(value);
                         currentPlayer.hasAchievedSecondGoal();
-                        // client.onMessage(new SecondCommonGoalMessage((currentPlayer.getName())));
                     }
                 }
             }

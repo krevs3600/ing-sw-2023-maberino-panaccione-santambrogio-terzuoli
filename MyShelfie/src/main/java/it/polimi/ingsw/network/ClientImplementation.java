@@ -45,14 +45,14 @@ public class ClientImplementation extends UnicastRemoteObject implements Client 
     }
 
     @Override
-//TODO: lancio eccezione al chiamante inserendo update in una coda fino a che la connessione torna
+    //TODO: lancio eccezione al chiamante inserendo update in una coda fino a che la connessione torna
     public void update(GameView gameView, EventMessage eventMessage) {
         view.update(gameView, eventMessage);
     }
 
     public void onMessage(MessageToClient message) throws IOException {
 
-//just to set the parametres, maybe it will be a problem with concurrency (?)
+        //just to set the parameters, maybe it will be a problem with concurrency (?)
         if (message instanceof RequestMessage) {
             switch (message.getType()) {
                 case CREATOR_LOGIN_RESPONSE -> {

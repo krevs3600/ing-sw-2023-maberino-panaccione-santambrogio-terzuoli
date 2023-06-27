@@ -51,7 +51,6 @@ public class GUI extends Observable<EventMessage> implements View {
     private Stage stage;
     private Scene scene;
     private Parent root;
-    private static Stage window;
     private static double width;
     private static double height;
     private NicknameController nicknameController;
@@ -61,24 +60,13 @@ public class GUI extends Observable<EventMessage> implements View {
     private LobbyController lobbyController;
     private StartController startController;
     private WinController winController;
-
     private ComputeScoreController computeScoreController;
     private LivingBoardController livingBoardController;
-   // private ClientImplementation client;
     private GameNameController gameNameController;
     private NumberOfPlayersController numberOfPlayersController;
     private GameNameListController gameNameListController;
     private String nickname;
-
-    private int personalGoalCardScore = 0;
-
-    private int adjacentTilesScore=0;
-
     private GameView game; // aggiunto referenza al game
-    private boolean firstToSet =false;
-    private boolean secondToSet =false;
-
-    private boolean endToSet =false;
 
 private int scoreOfThisClient;
     /**
@@ -120,7 +108,6 @@ private int scoreOfThisClient;
         stage.show();
         stage.setHeight(scene.getHeight());
         stage.setWidth(scene.getWidth());
-        window = stage;
         stage.setResizable(true);
         width = stage.getWidth();
         height = stage.getHeight();
@@ -179,7 +166,7 @@ private int scoreOfThisClient;
      *@param stage where to set the scene
      */
 
-    public void askTypeofConnection(Stage stage) throws IOException {
+    public void askTypeOfConnection(Stage stage) throws IOException {
         URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/RMIorSocket_scene.fxml/").toURI().toURL();
 
         FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("RMIorSocket_scene.fxml"));
@@ -189,7 +176,6 @@ private int scoreOfThisClient;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        window = stage;
         scene = new Scene(fxmlLoader.load());
         this.stage = stage;
         Platform.runLater(() -> stage.setScene(scene));
@@ -204,7 +190,6 @@ private int scoreOfThisClient;
             URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/AddressIp_scene.fxml/").toURI().toURL();
             FXMLLoader fxmlLoader = new FXMLLoader(url);
             scene = new Scene(fxmlLoader.load());
-            window = stage;
             Platform.runLater(() -> stage.setScene(scene));
             serverSettingsController = fxmlLoader.getController();
             serverSettingsController.setGui(this);
@@ -237,7 +222,6 @@ private int scoreOfThisClient;
             try {
                 Registry registry = LocateRegistry.getRegistry(address, port);
                 AppServer server = (AppServer) registry.lookup("MyShelfieServer");
-              //  this.client = new ClientImplementation(this, server.connect()); //todo eliminare
                 Client client= new ClientImplementation(this,server.connect());
 
 
@@ -247,7 +231,6 @@ private int scoreOfThisClient;
         } else if (rmIorSocketController.isTCP()) {
             if (port == 1099) port = 1244;
             ServerStub serverStub = new ServerStub(address, port);
-           // client = new ClientImplementation(this, serverStub); // todo eliminare
             Client client=new ClientImplementation(this, serverStub);
             serverStub.register(client);
             new Thread(() -> {
@@ -344,8 +327,6 @@ private int scoreOfThisClient;
 
     }
 
-
-
     @Override
     public void showMessage(MessageToClient message) {
         switch (message.getType()) {
@@ -365,10 +346,7 @@ private int scoreOfThisClient;
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-                    // this.nicknameController.InvalidNickname.setVisible(true);
-                    // showGameNamesList(loginResponseMessage.getAvailableGames());
                 } else {
-                    // this.nicknameController.InvalidNickname.setVisible(true);
                     showPopup("Unavailable nickname, please choose another one");
                 }
             }
@@ -388,7 +366,6 @@ private int scoreOfThisClient;
                         throw new RuntimeException(e);
                     }
                 } else {
-                    // this.gameNameController.alreadyTakenGameName.setVisible(true);
                     showPopup("Invalid game name, please choose another one");
                 }
             }
@@ -438,7 +415,6 @@ private int scoreOfThisClient;
 
             case JOIN_GAME_ERROR -> {
                 JoinErrorMessage joinErrorMessage = (JoinErrorMessage) message;
-                // pop up not available games in the lobby
                 showPopup("No available games in the lobby");
             }
             case RESUME_GAME_ERROR -> {
@@ -490,7 +466,18 @@ private int scoreOfThisClient;
                 // ma le avevo disabilitate...
                 livingBoardController.resetColumnChoice();
             }
-            case PLAYER_OFFLINE, KILL_GAME, DISCONNECTION_RESPONSE -> {
+            case PLAYER_OFFLINE -> {
+                PlayerOfflineMessage offlineMessage = (PlayerOfflineMessage) message;
+                showPopup(offlineMessage.getNickname() + " got disconnected");
+            }
+            case KILL_GAME -> {
+                showPopup("Game down");
+                createConnection();
+            }
+
+            case DISCONNECTION_RESPONSE -> {
+                showPopup("You lost the connection to the server, and can no longer play");
+                createConnection();
             }
         }
 
@@ -580,8 +567,6 @@ private int scoreOfThisClient;
                         livingBoardController.tilePack.setDisable(true);
                         livingBoardController.resetColumnChoice();
                         showPopup("NEW TURN HAS JUST STARTED");
-
-
                     });
                 }
             }
@@ -594,9 +579,7 @@ private int scoreOfThisClient;
                         livingBoardController.board.setDisable(false);
                         livingBoardController.disableColumnChoice();
                     });
-                }
-
-                else {
+                } else {
                     Platform.runLater(() -> {
                         livingBoardController.board.setDisable(true);
                         livingBoardController.disableColumnChoice();
@@ -639,7 +622,7 @@ private int scoreOfThisClient;
                 } else {
                     Platform.runLater(() ->
                             livingBoardController.updateLivingRoomBoard(game.getLivingRoomBoard()));
-                  //  showPopup(game.getCurrentPlayer().getName() + "is picking Tiles");
+                    //  showPopup(game.getCurrentPlayer().getName() + "is picking Tiles");
                 }
             }
             case TILE_PACK, COLUMN_CHOICE, BOOKSHELF -> {
@@ -647,27 +630,19 @@ private int scoreOfThisClient;
             }
             case COMMON_GOAL_CARD -> {
                 CommonGoalCardMessage message = (CommonGoalCardMessage) eventMessage;
-                Platform.runLater(()->{
+                Platform.runLater(() -> {
                     livingBoardController.updateTokens(game, message.getCommonGoalCardIndex());
                     String number = message.getCommonGoalCardIndex() == 0 ? "first" : "second";
-                    if (eventMessage.getNickname().equals(nickname)){
+                    if (eventMessage.getNickname().equals(nickname)) {
 
                         livingBoardController.anchorPaneForTheCandPGoalCards.setVisible(true);
                         livingBoardController.CommonGoalAchieved.setVisible(true);
                         livingBoardController.CommonGoalText.setText("You completed the " + number + " common goal");
                         livingBoardController.CommonGoalText.setVisible(true);
                         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(5000), event -> livingBoardController.anchorPaneForTheCandPGoalCards.setVisible(false)));
-                             timeline.play();
+                        timeline.play();
                         showPopup("You completed the " + number + " common goal");
-                        if(number.equals("first")){
-                            this.firstToSet =true;
-
-                        }else {
-                            this.secondToSet =true;
-
-                        }
-                    }
-                    else {
+                    } else {
                         showPopup(eventMessage.getNickname() + " completed the " + number + " common goal");
                     }
                 });
@@ -675,8 +650,6 @@ private int scoreOfThisClient;
             case LAST_TURN -> {
                 if (this.nickname.equals(game.getCurrentPlayer().getName())) {
                     showPopup("\nCongrats, you filled your bookshelf! You have an extra point!");
-                    endToSet =true;
-
                 } else {
                     showPopup("\n" + eventMessage.getNickname() + " filled his bookshelf...");
                 }
@@ -705,7 +678,7 @@ private int scoreOfThisClient;
                     winController.fail_2.setVisible(false);
                     winController.fail_3.setVisible(false);
                     winController.fail_4.setVisible(false);
-                    winController.congratulations.setText("Congratulations "+ eventMessage.getNickname() +"!");
+                    winController.congratulations.setText("Congratulations " + eventMessage.getNickname() + "!");
                 } else {
                     winController.bestPlayer.setVisible(false);
                     winController.congratulations.setVisible(false);
@@ -739,27 +712,14 @@ private int scoreOfThisClient;
                         winController.fourthPlayerScoretxt.setText(game.otherPlayersList(playerClient).get(2).getName() + "'s score is:  " + game.otherPlayersList(playerClient).get(2).getScore());
                     }
                 }
-
-                this.personalGoalCardScore = playerClient.getPersonalGoalCardScore();
-                this.adjacentTilesScore = playerClient.getAdjacentTilesScore();
-
-                }
-
-
             }
         }
-
-
-
-
+    }
 
     /**
      *This method is used to display a generic pop-up warning in all game scenes
      * @param text the message that appears in the popup
      */
-
-
-
     public void showPopup(String text){
         Popup popup = new Popup();
         Label noSelection = new Label(text);
@@ -781,7 +741,7 @@ private int scoreOfThisClient;
 
 
 
-        // Mostra il pop-up
+        // show the popup
         if (getStage()!=null){
             Platform.runLater(()-> popup.show(this.getStage()));
         }
@@ -827,56 +787,17 @@ private int scoreOfThisClient;
             URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/computeScore_scene.fxml/").toURI().toURL();
             FXMLLoader fxmlLoader = new FXMLLoader(url);
             scene = new Scene(fxmlLoader.load());
-            ComputeScoreController computeScoreController = fxmlLoader.getController();
+            computeScoreController = fxmlLoader.getController();
             winController.setGui(this);
-            this.computeScoreController = computeScoreController;
-            this.computeScoreController.initialize(game, this.nickname);
-            // this.computeScoreController.commonGoalCard1.setImage(livingBoardController.commonGoalCard1.getImage());
-            // this.computeScoreController.commonGoalCard2.setImage(livingBoardController.commonGoalCard2.getImage());
-            if(firstToSet) {
-                this.computeScoreController.No_FirstCommonGoal.setVisible(false);
-                this.computeScoreController.Yes_FirstCommonGoal.setVisible(true);
-            }
-
-            if(secondToSet){
-                this.computeScoreController.No_SecondCommonGoal.setVisible(false);
-                this.computeScoreController.Yes_SecondCommonGoal.setVisible(true);}
-
-
-            if(endToSet){
-                this.computeScoreController.No_FirsrtEndGame.setVisible(false);
-                this.computeScoreController.Yes_FirstEndGame.setVisible(true);
-                this.computeScoreController.endGamePoint.setText("1 point");
-            }
-
-            if(!endToSet){
-                this.computeScoreController.No_FirsrtEndGame.setVisible(true);
-                this.computeScoreController.Yes_FirstEndGame.setVisible(false);
-                this.computeScoreController.endGamePoint.setText("0 point");}
-            this.computeScoreController.totalScore.setText(String.valueOf(scoreOfThisClient));
-
             //todo non funziona
-            if(this.personalGoalCardScore!=0) {
-                this.computeScoreController.Yes_PersonalGoalCard.setVisible(true);
-                this.computeScoreController.No_PersonalGoalCard.setVisible(false);
-            }
+            System.out.println("il numero di punti delle personal è " + game.getPlayer(nickname).getPersonalGoalCardScore());
+            System.out.println("il numero di punti delle adiacenti è " + game.getPlayer(nickname).getAdjacentTilesScore());
 
-            System.out.println("il numero di punti delle personal è " + this.personalGoalCardScore);
-
-            System.out.println("il numero di punti delle adiacenti è " + this.adjacentTilesScore);
-
-
-            this.computeScoreController.personalGoalPoint.setText(this.personalGoalCardScore+"points");
-
-            this.computeScoreController.generalPoint.setText(this.adjacentTilesScore+"points");
-
-
-
-
-
-
-
-            Platform.runLater(() -> stage.setScene(scene));
+            Platform.runLater(() -> {
+                stage.setScene(scene);
+                computeScoreController.initialize(game, this.nickname);
+                computeScoreController.loadScore(game.getPlayer(this.nickname));
+            });
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
