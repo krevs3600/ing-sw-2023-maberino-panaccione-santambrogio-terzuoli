@@ -133,6 +133,11 @@
                   <Insets bottom="14.0" left="16.0" right="21.0" top="11.0" />
                </padding>
             </GridPane>
+            <Button layoutX="1276.0" layoutY="833.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="216.0" text="BACK" textFill="WHITE">
+               <font>
+                  <Font size="30.0" />
+               </font>
+            </Button>
          </children>
       </AnchorPane>
    </children>

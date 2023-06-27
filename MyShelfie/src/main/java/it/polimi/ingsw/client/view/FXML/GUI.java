@@ -408,7 +408,7 @@ private int scoreOfThisClient;
                 menuController.ReloadGameButton.setDisable(true);
                 menuController.CreateNewGame.setDisable(true);
                 menuController.joinGame.setDisable(true);
-                //todo capire cosa succede quando preme exit in questto caso
+                //todo capire cosa succede quando preme exit in questo caso
                 menuController.ResumePane.setVisible(true);
                 menuController.resumePane2.setVisible(true);
 
@@ -881,7 +881,7 @@ private int scoreOfThisClient;
                     throw new RuntimeException(e);
                 }
             }
-            case "CreateOrJoinGame_scene.fxml" -> {
+            case "Menu_scene.fxml" -> {
                 try {
                     FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("login_scene.fxml"));
                     scene = new Scene(fxmlLoader.load());
@@ -894,11 +894,10 @@ private int scoreOfThisClient;
             }
             case "GameName_scene.fxml", "GameNameList_scene.fxml" -> {
                 try {
-                    FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("CreateorJoinGame_scene.fxml"));
+                    FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("Menu_scene.fxml"));
                     scene = new Scene(fxmlLoader.load());
-                    CreateorJoinGameController createorJoinGameController = fxmlLoader.getController();
-                    createorJoinGameController.setGui(this);
-                    this.createorJoinGameController = createorJoinGameController;
+                    menuController = fxmlLoader.getController();
+                    menuController.setGui(this);
                     Platform.runLater(() -> stage.setScene(scene));
                 } catch (IOException e) {
                     throw new RuntimeException(e);
