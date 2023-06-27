@@ -17,6 +17,7 @@ import it.polimi.ingsw.network.MessagesToClient.requestMessage.*;
 import it.polimi.ingsw.network.Socket.ServerStub;
 import it.polimi.ingsw.network.eventMessages.*;
 import it.polimi.ingsw.observer_observable.Observable;
+import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
@@ -59,7 +60,7 @@ public class GUI extends Observable<EventMessage> implements View {
     private static double height;
     private NicknameController nicknameController;
     private ServerSettingsController serverSettingsController;
-    private CreateorJoinGameController createorJoinGameController;
+    private MenuController menuController;
     private RMIorSocketController rmIorSocketController;
     private LobbyController lobbyController;
     private StartController startController;
@@ -135,7 +136,7 @@ private int scoreOfThisClient;
 
     /**
      * This method is used to notify the server
-     * about the client's choice to enter a game after pressing the {@link CreateorJoinGameController#joinGame} button
+     * about the client's choice to enter a game after pressing the {@link MenuController#joinGame} button
      * in the fxml {@code CreateOrJoinGame_scene}.
      */
 
@@ -342,13 +343,13 @@ private int scoreOfThisClient;
                 if (loginResponseMessage.isValidNickname()) {
 
                     try {
-                        URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/CreateorJoinGame_scene.fxml/").toURI().toURL();
+                        URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/Menu_scene.fxml/").toURI().toURL();
                         FXMLLoader fxmlLoader = new FXMLLoader(url);
                         scene = new Scene(fxmlLoader.load());
                         this.nickname = ((LoginResponseMessage) message).getNickname();
-                        CreateorJoinGameController createorJoinGameController = fxmlLoader.getController();
-                        createorJoinGameController.setGui(this);
-                        this.createorJoinGameController = createorJoinGameController;
+                        MenuController menuController = fxmlLoader.getController();
+                        menuController.setGui(this);
+                        this.menuController = menuController;
                         Platform.runLater(() -> stage.setScene(scene));
                     } catch (IOException e) {
                         throw new RuntimeException(e);
@@ -422,11 +423,41 @@ private int scoreOfThisClient;
 
 
             case RESUME_GAME_RESPONSE -> {
-                createorJoinGameController.ResumeGameButton.setDisable(true);
-                createorJoinGameController.ReloadGameButton.setDisable(true);
-                createorJoinGameController.CreateNewGame.setDisable(true);
-                createorJoinGameController.joinGame.setDisable(true);
+                menuController.ResumeGameButton.setDisable(true);
+                menuController.ReloadGameButton.setDisable(true);
+                menuController.CreateNewGame.setDisable(true);
+                menuController.joinGame.setDisable(true);
                 //todo capire cosa succede quando preme exit in questto caso
+                menuController.ResumePane.setVisible(true);
+                menuController.resumePane2.setVisible(true);
+
+                // Crea l'AnimationTimer per far avanzare la ProgressBar
+                AnimationTimer animationTimer = new AnimationTimer() {
+
+                    private long startTime = -1;
+
+                    @Override
+                    public void handle(long now) {
+                        if (startTime < 0) {
+                            startTime = now;
+                        }
+
+                        // Calcola il tempo trascorso
+                        double elapsedTime = (now - startTime) / 1e9;
+
+                        // Aggiorna il valore della ProgressBar in base al tempo trascorso
+                       menuController.progressBar.setProgress(elapsedTime / 25.0); // Esempio: 5 secondi per completare la ProgressBar
+
+                        // Controllo se il valore della ProgressBar ha raggiunto il massimo
+                        if (menuController.progressBar.getProgress() >= 25.0) {
+                            // Ferma l'AnimationTimer
+                            stop();
+                        }
+                    }
+                };
+
+                // Avvia l'AnimationTimer
+                animationTimer.start();
 
                 showPopup("waiting for resumegame"); // fare una cosa duratura
 
@@ -548,7 +579,7 @@ private int scoreOfThisClient;
     // TODO: mettere tutto in un metodo che cambia il root Pane in base al path che do in input
     @Override
     public void gameMenu() {
-        if (createorJoinGameController.getCreateGame()) {
+        if (menuController.getCreateGame()) {
             try {
                 URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/GameName_scene.fxml/").toURI().toURL();
                 FXMLLoader fxmlLoader = new FXMLLoader(url);

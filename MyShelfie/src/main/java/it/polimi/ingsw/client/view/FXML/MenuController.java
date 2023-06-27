@@ -2,7 +2,9 @@ package it.polimi.ingsw.client.view.FXML;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 
 /**
  * <h1>Class CreateorJoinGameController</h1>
@@ -17,7 +19,7 @@ import javafx.scene.input.MouseEvent;
 
 
 
-public class CreateorJoinGameController {
+public class MenuController {
 
     @FXML
     public Button CreateNewGame;
@@ -33,6 +35,13 @@ public class CreateorJoinGameController {
 
     @FXML
     public Button ReloadGameButton;
+    @FXML
+    public Pane ResumePane;
+    @FXML
+    public ProgressBar progressBar;
+    @FXML
+    public Pane resumePane2;
+
 
     private boolean joinGameb = false;
     private boolean createGame = false;
@@ -40,7 +49,7 @@ public class CreateorJoinGameController {
 
     /**
      * Getter method
-     * @return the {@link CreateorJoinGameController#createGame} present in the {@link CreateorJoinGameController}
+     * @return the {@link MenuController#createGame} present in the {@link MenuController}
      * which is a booelan that is "true" if the player decides to create a new game
      *
      */
@@ -67,9 +76,9 @@ public class CreateorJoinGameController {
 
     /**
      *
-     This method is used to handle the click of the {@link CreateorJoinGameController#CreateNewGame} button that the player selects
+     This method is used to handle the click of the {@link MenuController#CreateNewGame} button that the player selects
      if he decides to create a new game
-     * @param mouseEvent  the click on the {@link CreateorJoinGameController#CreateNewGame}  button
+     * @param mouseEvent  the click on the {@link MenuController#CreateNewGame}  button
      */
     public void CreateGame(MouseEvent mouseEvent) {
        createGame=true;
@@ -78,9 +87,9 @@ public class CreateorJoinGameController {
 
     /**
      *
-     This method is used to handle the click of the {@link CreateorJoinGameController#joinGame} button that the player selects
+     This method is used to handle the click of the {@link MenuController#joinGame} button that the player selects
      if he decides to join an existing game
-     * @param mouseEvent  the click on the {@link CreateorJoinGameController#joinGame}  button
+     * @param mouseEvent  the click on the {@link MenuController#joinGame}  button
      */
 
 
@@ -92,9 +101,9 @@ public class CreateorJoinGameController {
 
     /**
      *
-     This method is used to handle the click of the {@link CreateorJoinGameController#EXIT} button that the player selects
+     This method is used to handle the click of the {@link MenuController#EXIT} button that the player selects
      if he decides to exit application
-     * @param mouseEvent  the click on the {@link CreateorJoinGameController#joinGame}  button
+     * @param mouseEvent  the click on the {@link MenuController#joinGame}  button
      */
     public void ExitGame(MouseEvent mouseEvent) {
 // //TODO: gestire chiusura stage
