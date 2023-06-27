@@ -18,7 +18,7 @@ import javafx.scene.input.MouseEvent;
 
 
 public class CreateorJoinGameController {
-
+    public String resource = "CreateOrJoinGame_scene.fxml";
     @FXML
     public Button CreateNewGame;
 

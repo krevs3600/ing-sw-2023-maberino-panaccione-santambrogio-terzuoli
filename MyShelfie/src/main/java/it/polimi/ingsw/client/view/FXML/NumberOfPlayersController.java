@@ -18,6 +18,7 @@ import javafx.scene.layout.AnchorPane;
  * @since 5/23/2023
  */
 public class NumberOfPlayersController {
+    public String resource = "NumberofPlayers_scene.fxml";
     @FXML
     public AnchorPane PaneforParquet;
     @FXML

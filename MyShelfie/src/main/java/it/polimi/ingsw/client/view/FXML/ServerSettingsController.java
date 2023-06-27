@@ -22,6 +22,7 @@ import java.rmi.NotBoundException;
  */
 
 public class ServerSettingsController {
+    public String resource = "AddressIp_scene.fxml";
     @FXML
     public AnchorPane PaneforParquet;
     public Text WrongValueInputs;
@@ -98,6 +99,10 @@ public class ServerSettingsController {
                 "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
                 "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
         return address.matches(regExp);
+    }
+
+    public void goBack(){
+        gui.goBackToPreviousScene(resource);
     }
 
 }

@@ -107,8 +107,7 @@ private int scoreOfThisClient;
      */
     public void gameMenuGUI(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("start_scene.fxml"));
-        Scene scene = null;
-        scene = new Scene(fxmlLoader.load());
+        Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("myShelfie!");
         stage.setScene(scene);
         this.stage = stage;
@@ -179,9 +178,8 @@ private int scoreOfThisClient;
         scene = new Scene(fxmlLoader.load());
         this.stage = stage;
         Platform.runLater(() -> stage.setScene(scene));
-        RMIorSocketController rmIorSocketController1 = fxmlLoader.getController();
-        rmIorSocketController1.setGui(this);
-        this.rmIorSocketController = rmIorSocketController1;
+        rmIorSocketController = fxmlLoader.getController();
+        rmIorSocketController.setGui(this);
     }
 
     @Override
@@ -759,16 +757,6 @@ private int scoreOfThisClient;
 
         popup.setOnShown(event -> pause.playFromStart());
 
-        root.setOnMouseClicked(event -> {
-            popup.hide();
-            pause.stop();
-        });
-
-        root.setOnMouseEntered(event -> pause.pause());
-        root.setOnMouseExited(event -> pause.play());
-
-
-
         // show the popup
         if (getStage()!=null){
             Platform.runLater(()-> popup.show(this.getStage()));
@@ -806,13 +794,12 @@ private int scoreOfThisClient;
      * The switch to this scene comes after the player has clicked the {@link WinController MyScoreDetail} button
      * in the scene {@code win_scene}.
      */
-
     public void showThisClientScores(GameView game) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("computeScore_scene.fxml"));
             scene = new Scene(fxmlLoader.load());
             computeScoreController = fxmlLoader.getController();
-            winController.setGui(this);
+            computeScoreController.setGui(this);
             Platform.runLater(() -> {
                 stage.setScene(scene);
                 computeScoreController.initialize(game, this.nickname);
@@ -821,7 +808,89 @@ private int scoreOfThisClient;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
 
+
+    public void goBackToPreviousScene(String resource){
+        String[] resources = {
+                "start_scene.fxml", "RMIorSocket_scene.fxml", "AddressIp_scene.fxml", "login_scene.fxml",
+                "CreateOrJoinGame_scene.fxml", "GameName_scene.fxml", "NumberofPlayers_scene.fxml", "GameNameList_scene.fxml",
+                "livingBoard_scene.fxml", "win_scene.fxml", "computeScore_scene.fxml"};
+        switch (resource) {
+            case "RMIorSocket_scene.fxml" -> {
+                try {
+                    FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("start_scene.fxml"));
+                    Scene scene = new Scene(fxmlLoader.load());
+                    stage.setScene(scene);
+                    startController = fxmlLoader.getController();
+                    startController.setGui(this);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            case "AddressIp_scene.fxml" -> {
+                try {
+                    FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("RMIorSocket_scene.fxml"));
+                    scene = new Scene(fxmlLoader.load());
+                    this.stage = stage;
+                    Platform.runLater(() -> stage.setScene(scene));
+                    rmIorSocketController = fxmlLoader.getController();
+                    rmIorSocketController.setGui(this);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            case "login_scene.fxml" -> {
+                try {
+                    FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("AddressIp_scene.fxml"));
+                    scene = new Scene(fxmlLoader.load());
+                    Platform.runLater(() -> stage.setScene(scene));
+                    serverSettingsController = fxmlLoader.getController();
+                    serverSettingsController.setGui(this);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            case "CreateOrJoinGame_scene.fxml" -> {
+                try {
+                    FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("login_scene.fxml"));
+                    scene = new Scene(fxmlLoader.load());
+                    Platform.runLater(() -> stage.setScene(scene));
+                    nicknameController = fxmlLoader.getController();
+                    nicknameController.setGui(this);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            case "GameName_scene.fxml", "GameNameList_scene.fxml" -> {
+                try {
+                    FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("CreateorJoinGame_scene.fxml"));
+                    scene = new Scene(fxmlLoader.load());
+                    CreateorJoinGameController createorJoinGameController = fxmlLoader.getController();
+                    createorJoinGameController.setGui(this);
+                    this.createorJoinGameController = createorJoinGameController;
+                    Platform.runLater(() -> stage.setScene(scene));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            case "win_scene.fxml" -> {
+
+            }
+            case "computeScore_scene.fxml" -> {
+                try {
+                    FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("win_scene.fxml"));
+                    scene = new Scene(fxmlLoader.load());
+                    WinController winController = fxmlLoader.getController();
+                    winController.setGui(this);
+                    winController.setGame(game);
+                    this.winController = winController;
+                    Platform.runLater(() -> stage.setScene(scene));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
     }
 
 }
