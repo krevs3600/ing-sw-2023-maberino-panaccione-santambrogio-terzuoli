@@ -557,7 +557,6 @@ private int scoreOfThisClient;
     public boolean isValidIPAddress(String address) {
         return false;
     }
-
     // TODO: mettere tutto in un metodo che cambia il root Pane in base al path che do in input
     @Override
     public void gameMenu() {

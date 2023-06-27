@@ -98,7 +98,6 @@ public class MenuController {
        //gui.gameMenu();
         gui.joinGame();
     }
-
     /**
      *
      This method is used to handle the click of the {@link MenuController#EXIT} button that the player selects
