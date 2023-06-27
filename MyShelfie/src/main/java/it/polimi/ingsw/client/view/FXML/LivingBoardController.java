@@ -590,7 +590,6 @@ public class LivingBoardController {
             i+=1;
         }
     }
-
     /**
      * Reset the selection of the buttons for the column's selection
      */
