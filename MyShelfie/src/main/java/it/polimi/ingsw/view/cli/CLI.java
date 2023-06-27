@@ -473,12 +473,12 @@ public class CLI extends Observable<EventMessage> implements View {
                                 setChanged();
                                 notifyObservers(new TilePositionMessage(eventMessage.getNickname(), new Position(r, c)));
                             }
-                            case "easteregg" -> {
+                            case "Patrick" -> {
                                 setChanged();
-                                notifyObservers(new FillBookshelfMessage(eventMessage.getNickname()));
+                                notifyObservers(new EasterEggMessage(eventMessage.getNickname()));
                             }
                         }
-                    } while (!answer.equals("stop") && !answer.equals("") && !answer.equals("easteregg"));
+                    } while (!answer.equals("stop") && !answer.equals("") && !answer.equals("Patrick"));
                 }
             }
 
@@ -548,6 +548,7 @@ public class CLI extends Observable<EventMessage> implements View {
                         System.err.println(e.getMessage());
                     }
                 }).start();
+
             }
         }
     }

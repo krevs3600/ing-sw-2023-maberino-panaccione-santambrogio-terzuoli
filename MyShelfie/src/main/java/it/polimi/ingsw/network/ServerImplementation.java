@@ -235,75 +235,69 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
             }
 
             case RELOAD_GAME_REQUEST -> {
-                if (disconnectedPlayersGame.containsKey(eventMessage.getNickname())) {
-                    disconnectedPlayersGame.put(eventMessage.getNickname(), playerGame.get(client));
+
+
+                boolean validation = false;
+                GameController savedGameController = null;
+                for (GameController gameController : savedGames) {
+                    for (Player player : gameController.getGame().getSubscribers()) {
+                        if (player.getName().equals(eventMessage.getNickname())) {
+                            validation = true;
+                            savedGameController = gameController;
+                            break;
+                        }
+                    }
                 }
 
-                else {
-
-
-                    boolean validation = false;
-                    GameController savedGameController = null;
-                    for (GameController gameController : savedGames) {
-                        for (Player player : gameController.getGame().getSubscribers()) {
+                if (savedGameController == null) {
+                    Storage storage = new Storage();
+                    savedGameController = storage.restore();
+                    if (savedGameController != null) {
+                        savedGames.add(savedGameController);
+                        for (Player player : savedGameController.getGame().getSubscribers()) {
                             if (player.getName().equals(eventMessage.getNickname())) {
                                 validation = true;
-                                savedGameController = gameController;
                                 break;
                             }
                         }
                     }
+                }
+                if (validation) {
 
-                    if (savedGameController == null) {
-                        Storage storage = new Storage();
-                        savedGameController = storage.restore();
-                        if (savedGameController != null) {
-                            savedGames.add(savedGameController);
-                            for (Player player : savedGameController.getGame().getSubscribers()) {
-                                if (player.getName().equals(eventMessage.getNickname())) {
-                                    validation = true;
-                                    break;
+                    if (!currentGames.containsKey(savedGameController.getGame().getGameName())) {
+                        currentGames.put(savedGameController.getGame().getGameName(), savedGameController);
+                    }
+                    if (!playerGame.containsKey(client)) {
+                        playerGame.put(client, savedGameController);
+                        register(client);
+                    }
+                    boolean allClientsReloaded = true;
+                    int missingPlayers = 0;
+                    for (Player checkPlayer : savedGameController.getGame().getSubscribers()) {
+                        if (!getConnectedClients().containsKey(checkPlayer.getName())) {
+                            allClientsReloaded = false;
+                            missingPlayers++;
+                        }
+                    }
+                    if (allClientsReloaded) {
+
+                        savedGameController.update(client, new EndTurnMessage(eventMessage.getNickname()));
+                    } else {
+                        for (Player waitingPlayer : savedGameController.getGame().getSubscribers()) {
+                            if (getConnectedClients().containsKey(waitingPlayer.getName())) {
+                                try {
+                                    getConnectedClients().get(waitingPlayer.getName()).onMessage(new WaitingResponseMessage(eventMessage.getNickname(), missingPlayers));
+                                } catch (RemoteException e) {
+                                    System.err.println("disconnection");
                                 }
                             }
                         }
                     }
-                    if (validation) {
-
-                        if (!currentGames.containsKey(savedGameController.getGame().getGameName())) {
-                            currentGames.put(savedGameController.getGame().getGameName(), savedGameController);
-                        }
-                        if (!playerGame.containsKey(client)) {
-                            playerGame.put(client, savedGameController);
-                            register(client);
-                        }
-                        boolean allClientsReloaded = true;
-                        int missingPlayers = 0;
-                        for (Player checkPlayer : savedGameController.getGame().getSubscribers()) {
-                            if (!getConnectedClients().containsKey(checkPlayer.getName())) {
-                                allClientsReloaded = false;
-                                missingPlayers++;
-                            }
-                        }
-                        if (allClientsReloaded) {
-
-                            savedGameController.update(client, new EndTurnMessage(eventMessage.getNickname()));
-                        } else {
-                            for (Player waitingPlayer : savedGameController.getGame().getSubscribers()) {
-                                if (getConnectedClients().containsKey(waitingPlayer.getName())) {
-                                    try {
-                                    getConnectedClients().get(waitingPlayer.getName()).onMessage(new WaitingResponseMessage(eventMessage.getNickname(), missingPlayers));
-                                    } catch (RemoteException e) {
-                                    System.err.println("disconnection");
-                                    }
-                                }
-                            }
-                        }
-                    } else {
-                        try {
+                } else {
+                    try {
                         client.onMessage(new ReloadGameErrorMessage(eventMessage.getNickname(), "there is no game to reload"));
-                        } catch (RemoteException e) {
+                    } catch (RemoteException e) {
                         System.err.println("disconnection");
-                        }
                     }
                 }
             }

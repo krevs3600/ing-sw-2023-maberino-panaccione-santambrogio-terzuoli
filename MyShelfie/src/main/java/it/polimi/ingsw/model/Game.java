@@ -275,7 +275,6 @@ public class Game extends Observable<EventMessage>  implements Serializable {
      * This method gets the current {@link Player}
      * @return the {@link Player} who is currently playing, the one indicated by the {@link Game#cursor}
      */
-    //TODO: sistemare java doc
     public Player getCurrentPlayer(){
         return subscribers.get(cursor);
     }

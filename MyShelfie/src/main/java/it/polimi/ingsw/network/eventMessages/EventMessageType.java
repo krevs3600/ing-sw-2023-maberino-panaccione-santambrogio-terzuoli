@@ -24,6 +24,7 @@ public enum EventMessageType {
     PICKING_TILES,
     PLACING_TILES,
     EXIT,
+    EASTER_EGG,
 
     START_GAME,
     RESUME_GAME_REQUEST,

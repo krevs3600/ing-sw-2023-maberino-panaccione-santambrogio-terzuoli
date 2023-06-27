@@ -228,7 +228,7 @@ public class GameController implements Serializable {
                     game.setTurnPhase(GamePhase.INIT_TURN);
                 }
             }
-            case FILL_BOOKSHELF -> {
+            case EASTER_EGG -> {
                 game.getCurrentPlayer().getBookshelf().insertTileTest();
                 game.insertTileInTilePack(new ItemTile(TileType.CAT));
                 game.setTurnPhase(GamePhase.PICKING_TILES);
