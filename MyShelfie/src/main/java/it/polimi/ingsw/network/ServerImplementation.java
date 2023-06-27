@@ -95,8 +95,24 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                                 System.out.println("Ping sent to " + eventMessage.getNickname());
                             }
                         } catch (InterruptedException | IOException e) {
-
                             disconnectClient(client, eventMessage.getNickname());
+                            for (Map.Entry<Client, GameController> entry : playerGame.entrySet()) {
+                                if(entry.getValue().equals(disconnectedPlayersGame.get(eventMessage.getNickname()))) {
+                                    try {
+                                        entry.getKey().onMessage(new ClientDisconnectedMessage(eventMessage.getNickname()));
+                                    } catch (IOException ex) {
+                                        throw new RuntimeException(ex);
+                                    }
+                                }
+                            }
+                            if (disconnectedPlayersGame.get(eventMessage.getNickname()).getGame().getCurrentPlayer().getName().equals(eventMessage.getNickname())) {
+                                try {
+                                    disconnectedPlayersGame.get(eventMessage.getNickname()).update(client, new EndTurnMessage(eventMessage.getNickname()));
+                                } catch (IOException ex) {
+                                    throw new RuntimeException(ex);
+                                }
+                            }
+
                         }
                     }).start();
 
@@ -206,7 +222,16 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                     playerGame.put(client, disconnectedPlayersGame.get(eventMessage.getNickname()));
                     disconnectedPlayersGame.remove(eventMessage.getNickname());
                     register(client);
-                    client.onMessage(new ResumeGameResponseMessage(eventMessage.getNickname()));
+                    int numOfDisconnectedPlayers = 0;
+                    for (Player player: playerGame.get(client).getGame().getSubscribers()) {
+                        if (disconnectedPlayersGame.containsKey(player.getName())) {
+                            numOfDisconnectedPlayers++;
+                        }
+                    }
+                    if (numOfDisconnectedPlayers==playerGame.get(client).getGame().getSubscribers().size()-2) {
+                        playerGame.get(client).update(client, new EndTurnMessage(eventMessage.getNickname()));
+                    }
+                    else client.onMessage(new ResumeGameResponseMessage(eventMessage.getNickname()));
                 }
                 else client.onMessage(new ResumeGameErrorMessage(eventMessage.getNickname(), "no games to resume"));
             }
@@ -321,6 +346,19 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                     removeGameFromLobby(gameNameChoiceMessage.getGameChoice());
                     gameController.update(client, new StartGameMessage(eventMessage.getNickname()));
                 }
+            }
+
+            case END_TURN -> {
+                int numOfDisconnectedPlayers = 0;
+                for (Player player: playerGame.get(client).getGame().getSubscribers()) {
+                    if (disconnectedPlayersGame.containsKey(player.getName())) {
+                        numOfDisconnectedPlayers++;
+                    }
+                }
+                if (numOfDisconnectedPlayers==playerGame.get(client).getGame().getSubscribers().size()-1) {
+                    client.onMessage(new WaitingForOtherPlayersMessage(eventMessage.getNickname()));
+                }
+                else playerGame.get(client).update(client, eventMessage);
             }
 
             default ->

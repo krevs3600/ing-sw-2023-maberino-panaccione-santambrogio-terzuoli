@@ -99,7 +99,7 @@ public class ClientImplementation extends UnicastRemoteObject implements Client 
                     server.update(this, eventMessage);
                 } catch (IOException e) {
                     System.err.println("Unable to update the server: Skipping the update. ");
-                    ((CLI)view).deleteAllObservers();
+                    ((GUI)view).deleteAllObservers();
                 }
             });
         }
