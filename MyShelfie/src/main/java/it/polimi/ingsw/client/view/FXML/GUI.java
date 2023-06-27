@@ -789,13 +789,6 @@ private int scoreOfThisClient;
 
         popup.setOnShown(event -> pause.playFromStart());
 
-        root.setOnMouseClicked(event -> {
-            popup.hide();
-            pause.stop();
-        });
-
-        root.setOnMouseEntered(event -> pause.pause());
-        root.setOnMouseExited(event -> pause.play());
 
 
 
