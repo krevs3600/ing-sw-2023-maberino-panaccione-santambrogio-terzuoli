@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.PlayerStatus;
 import it.polimi.ingsw.model.utils.GamePhase;
 import it.polimi.ingsw.model.utils.NumberOfPlayers;
 import it.polimi.ingsw.model.utils.Position;
+import it.polimi.ingsw.model.utils.TileType;
 import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.ClientImplementation;
 import it.polimi.ingsw.network.Server;
@@ -285,6 +286,42 @@ public class GameControllerTest {
         assertEquals(2, gameController.getGame().getSubscribers().get(0).getBookshelf().getNumberOfTiles());
         assertEquals(0, gameController.getGame().getSubscribers().get(1).getBookshelf().getNumberOfTiles());
 
+    }
+
+    @Test
+    public void endGameMessageTest() throws IOException {
+        //initialize game
+        gameController.update(client1, gameCreationMessage);
+        gameController.update(client2, gameChoiceMessage);
+        gameController.update(client1, gameStartMessage);
+
+        assertEquals(0, gameController.getGame().getCurrentPlayer().getBookshelf().getNumberOfTiles());
+
+        //fill the player's bookshelf, so that once his turn ends, the game will go in endgame mode
+        for (int k = 0; k< gameController.getGame().getCurrentPlayer().getBookshelf().getMaxWidth(); k++) {
+            while (gameController.getGame().getCurrentPlayer().getBookshelf().getNumberInsertableTilesColumn(k)>0) {
+                gameController.getGame().getTilePack().insertTile(new ItemTile(TileType.CAT));
+                gameController.getGame().getTilePack().insertTile(new ItemTile(TileType.BOOK));
+                gameController.getGame().getTilePack().insertTile(new ItemTile(TileType.TROPHY));
+                for (int i = 0; i < 3; i++) {
+                    gameController.getGame().getCurrentPlayer().getBookshelf().insertTile(gameController.getGame().getTilePack(), k, 0);
+                }
+            }
+        }
+
+        assertTrue(gameController.getGame().getCurrentPlayer().getBookshelf().isFull());
+        //send endTurn message, so that endgame will be triggered
+        EndTurnMessage endGame = new EndTurnMessage(gameController.getGame().getCurrentPlayer().getName());
+        gameController.update(client1, endGame);
+        assertTrue(gameController.getGame().isFinalTurn());
+
+        EndTurnMessage endGame2 = new EndTurnMessage(gameController.getGame().getCurrentPlayer().getName());
+        gameController.update(client2, endGame2);
+
+        assertTrue(gameController.getGame().getSubscribers().get(0).getScore()>0);
+        assertTrue(gameController.getGame().getSubscribers().get(1).getScore()==0);
+        assertEquals(gameController.getGame().getSubscribers().get(0),gameController.getWinner());
+        //System.out.println(gameController.getGame().getSubscribers().get(1).getScore() + "    " + gameController.getGame().getSubscribers().get(0).getScore());
     }
 
 
