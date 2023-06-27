@@ -17,6 +17,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.*;
+import java.rmi.RemoteException;
 import java.util.*;
 
 public class GameController implements Serializable {
@@ -70,10 +71,18 @@ public class GameController implements Serializable {
                                 setAlongsideWhat(tilePositionMessage);
                                 drawTileAndInsertInTilePack(tilePositionMessage);
                             } else {
+                                try {
                                 client.onMessage(new NotEnoughInsertableTilesErrorMessage(eventMessage.getNickname(), "The number of insertable tiles in your bookshelf is too small, you cannot insert all of the tiles then"));
+                                } catch (RemoteException e) {
+                                System.err.println("disconnection");
+                                }
                             }
                         } else {
+                            try {
                             client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), "Invalid position, please choose another one"));
+                        } catch (RemoteException e) {
+                            System.err.println("disconnection");
+                        }
                         }
                     } else if (game.getBuffer().size() == 2) {
                         boolean fairPosition = false;
@@ -90,36 +99,64 @@ public class GameController implements Serializable {
                                         if (game.getCurrentPlayer().getBookshelf().getNumberInsertableTiles() >= game.getBuffer().size() + 1) {
                                             drawTileAndInsertInTilePack(tilePositionMessage);
                                         } else {
+                                            try {
                                             client.onMessage(new NotEnoughInsertableTilesErrorMessage(eventMessage.getNickname(), "The number of insertable tiles in your bookshelf is too small, you cannot insert all of the tiles then"));
+                                            } catch (RemoteException e) {
+                                                System.err.println("disconnection");
+                                            }
                                         }
                                 }
                                 else {
+                                    try {
                                     client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), "Invalid position, please choose another one"));
+                                    } catch (RemoteException e) {
+                                    System.err.println("disconnection");
+                                    }
                                 }
                             } else if (game.isAlongSideRow()) {
                                 if (tilePositionMessage.getPosition().getRow() == game.getBuffer().get(0).getRow()) {
                                     if (game.getCurrentPlayer().getBookshelf().getNumberInsertableTiles() >= game.getBuffer().size() + 1) {
                                         drawTileAndInsertInTilePack(tilePositionMessage);
                                     } else {
+                                        try {
                                         client.onMessage(new NotEnoughInsertableTilesErrorMessage(eventMessage.getNickname(), "The number of insertable tiles in your bookshelf is too small, you cannot insert all of the tiles then"));
+                                        } catch (RemoteException e) {
+                                        System.err.println("disconnection");
+                                        }
                                     }
                                 }
                                 else {
+                                    try {
                                     client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), "Invalid position, please choose another one"));
+                                    } catch (RemoteException e) {
+                                    System.err.println("disconnection");
+                                    }
                                 }
                             }
 
                         } else {
+                            try {
                             client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), "Invalid position, please choose another one"));
+                        } catch (RemoteException e) {
+                            System.err.println("disconnection");
+                        }
                             //throw new IllegalAccessError("Space forbidden or empty")
                         }
                     } else {
+                        try {
                         client.onMessage(new UpperBoundTilePackErrorMessage(eventMessage.getNickname(), "You can take three tiles at most!"));
+                    } catch (RemoteException e) {
+                        System.err.println("disconnection");
+                    }
                         //throw new IllegalAccessError("Space forbidden or empty");
                     }
                 }
                 else {
+                    try {
                     client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), "Invalid position, please choose another one"));
+                } catch (RemoteException e) {
+                    System.err.println("disconnection");
+                }
                     //throw new IllegalAccessError("Space forbidden or empty");
                 }
             }
@@ -127,7 +164,11 @@ public class GameController implements Serializable {
             case BOOKSHELF_COLUMN -> {
                 BookshelfColumnMessage bookshelfColumnMessage = (BookshelfColumnMessage) eventMessage;
                 if (game.getCurrentPlayer().getBookshelf().getNumberInsertableTilesColumn(bookshelfColumnMessage.getColumn()) < game.getTilePack().getSize()) {
+                    try {
                     client.onMessage(new NotEnoughInsertableTilesInColumnErrorMessage(eventMessage.getNickname(), "There are not enough spaces in this column, please choose another one"));
+                } catch (RemoteException e) {
+                    System.err.println("disconnection");
+                }
                 }
                 try {
                     game.setColumnChoice(bookshelfColumnMessage.getColumn());

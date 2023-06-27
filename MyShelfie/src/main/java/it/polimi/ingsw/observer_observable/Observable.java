@@ -34,7 +34,8 @@ public abstract class Observable<EventMessage> {
         }
 
 
-        for (Observer<EventMessage> observer : observers) {
+
+        for (Observer<EventMessage> observer : getObservers()) {
             observer.update(this, message);
         }
     }
@@ -48,12 +49,16 @@ public abstract class Observable<EventMessage> {
     protected synchronized void clearChanged() {
         changed = false;
     }
+
+    public synchronized List<Observer<EventMessage>> getObservers () {
+        return observers;
+    }
     public synchronized boolean hasChanged() {
         return changed;
     }
 
 
-    public synchronized int countObservers() {
+    public int countObservers() {
         return observers.size();
     }
 

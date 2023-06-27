@@ -11,6 +11,7 @@ import it.polimi.ingsw.network.ClientImplementation;
 import it.polimi.ingsw.network.MessagesToClient.MessageToClient;
 import it.polimi.ingsw.network.MessagesToClient.errorMessages.ErrorMessage;
 import it.polimi.ingsw.network.MessagesToClient.errorMessages.JoinErrorMessage;
+import it.polimi.ingsw.network.MessagesToClient.errorMessages.ReloadGameErrorMessage;
 import it.polimi.ingsw.network.MessagesToClient.errorMessages.ResumeGameErrorMessage;
 import it.polimi.ingsw.network.MessagesToClient.requestMessage.*;
 import it.polimi.ingsw.network.eventMessages.EventMessage;
@@ -160,10 +161,11 @@ public class CLI extends Observable<EventMessage> implements View {
 
         switch (menuOption) {
 
-            case 1 -> resumeGame();
-            case 2 -> createGame();
-            case 3 -> joinGame();
-            case 4 -> {
+            case 1 -> createGame();
+            case 2 -> joinGame();
+            case 3 -> resumeGame();
+            case 4 -> reloadGame();
+            case 5 -> {
                 out.println("Closing game...");
                 setChanged();
                 notifyObservers(new DisconnectClientMessage(getNickname()));
@@ -177,6 +179,11 @@ public class CLI extends Observable<EventMessage> implements View {
     private void resumeGame() {
         setChanged();
         notifyObservers(new ResumeGameMessage(getNickname()));
+    }
+
+    private void reloadGame() {
+        setChanged();
+        notifyObservers(new ReloadGameMessage(getNickname()));
     }
 
     private void createGame() {
@@ -307,8 +314,8 @@ public class CLI extends Observable<EventMessage> implements View {
                                 Thread.sleep(5000);
                             }
                         } catch (RuntimeException | InterruptedException e) {
+                            System.err.println(e.getMessage());
                             try {
-                                System.err.println(e.getMessage());
                                 createConnection();
                             } catch (RemoteException | NotBoundException ex) {
                                 throw new RuntimeException(ex);
@@ -329,9 +336,19 @@ public class CLI extends Observable<EventMessage> implements View {
 
             }
 
+            case RESUME_GAME_RESPONSE -> {
+                out.println("Waiting to resume the game...");
+            }
+
             case JOIN_GAME_ERROR -> {
                 JoinErrorMessage joinErrorMessage = (JoinErrorMessage) message;
                 System.err.println(joinErrorMessage.getErrorMessage());
+                gameMenu();
+            }
+
+            case RELOAD_GAME_ERROR -> {
+                ReloadGameErrorMessage reloadGameErrorMessage = (ReloadGameErrorMessage) message;
+                System.err.println(reloadGameErrorMessage.getErrorMessage());
                 gameMenu();
             }
 
@@ -340,6 +357,7 @@ public class CLI extends Observable<EventMessage> implements View {
                 System.err.println(resumeGameErrorMessage.getErrorMessage());
                 gameMenu();
             }
+
             case WAIT_PLAYERS -> {
                 //assert message instanceof WaitingResponseMessage;
                 WaitingResponseMessage waitingResponseMessage = (WaitingResponseMessage) message;
@@ -390,9 +408,15 @@ public class CLI extends Observable<EventMessage> implements View {
                 notifyObservers(new BookshelfColumnMessage(message.getNickname(), column));
             }
 
-            case PLAYER_OFFLINE -> {
+            /*case PLAYER_OFFLINE -> {
                 PlayerOfflineMessage offlineMessage = (PlayerOfflineMessage) message;
                 out.println(offlineMessage.getNickname() + " got disconnected");
+            }
+
+             */
+
+            case CLIENT_DISCONNECTION -> {
+                out.println(message.getNickname() + " has disconnected");
             }
             case KILL_GAME -> {
                 out.println("Game down");
@@ -405,13 +429,15 @@ public class CLI extends Observable<EventMessage> implements View {
                 }
             }
 
-            case DISCONNECTION_RESPONSE -> {
+            /* case DISCONNECTION_RESPONSE -> {
                 out.println("\nYou lost the connection to the server, and can no longer play");
                 try {
                     createConnection();
                 } catch (RemoteException | NotBoundException ignored) {
                 }
             }
+
+             */
         }
     }
 

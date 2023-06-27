@@ -10,6 +10,7 @@ package it.polimi.ingsw.model;
  */
 public enum PlayerStatus {
     INACTIVE,
+    ACTIVE,
     PICKING_TILES,
     @Deprecated
     INSERTING_TILES,

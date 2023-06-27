@@ -6,10 +6,10 @@ import it.polimi.ingsw.model.ModelView.GameView;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.utils.NumberOfPlayers;
 import it.polimi.ingsw.network.MessagesToClient.errorMessages.JoinErrorMessage;
+import it.polimi.ingsw.network.MessagesToClient.errorMessages.ReloadGameErrorMessage;
 import it.polimi.ingsw.network.MessagesToClient.errorMessages.ResumeGameErrorMessage;
 import it.polimi.ingsw.network.MessagesToClient.requestMessage.*;
 import it.polimi.ingsw.network.eventMessages.*;
-import it.polimi.ingsw.observer_observable.Observer;
 import it.polimi.ingsw.persistence.Storage;
 import java.io.IOException;
 import java.rmi.RemoteException;
@@ -50,20 +50,31 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
         Game game = playerGame.get(client).getGame();
         game.addObserver((obs, eventMessage) -> {
             try {
-                if (eventMessage instanceof PlayerTurnMessage && playerGame.get(client).equals(disconnectedPlayersGame.get(eventMessage.getNickname())))
+                if (eventMessage instanceof WinGameMessage) {
+                    Storage storage = new Storage();
+                    storage.delete();
+                }
+                if (disconnectedPlayersGame.containsKey(eventMessage.getNickname()) && (eventMessage instanceof PlayerTurnMessage)) {
+                    System.out.println("Skipping the " + eventMessage.getNickname() + "'s turn");
+                    if (!connectedClients.containsValue(client)) {
+                        disconnectedPlayersGame.get(eventMessage.getNickname()).update(client, new EndTurnMessage(eventMessage.getNickname()));
+                    }
+                    return;
+                }
+                if (!connectedClients.containsValue(client)) {
+                    return;
+                }
+                /*if (playerGame.get(client).equals(disconnectedPlayersGame.get(eventMessage.getNickname())))
                 {
                     System.out.println("Skipping the " + eventMessage.getNickname() + "'s turn");
                     playerGame.get(client).update(client, new EndTurnMessage(eventMessage.getNickname()));
                 }
-                else {
-                    if (eventMessage instanceof WinGameMessage) {
-                        Storage storage = new Storage();
-                        storage.delete();
-                    }
-                    client.update(new GameView(game), eventMessage);
-                }
+
+                 */
+
+                client.update(new GameView(game), eventMessage);
             } catch (IOException e) {
-                System.err.println("Unable to update the client: " + e.getMessage() + ". Skipping the update");
+                System.err.println("Unable to update the client:" + e.getMessage() + " Skipping the update");
             }
         });
     }
@@ -84,14 +95,25 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                                 System.out.println("Ping sent to " + eventMessage.getNickname());
                             }
                         } catch (InterruptedException | IOException e) {
-                            System.err.println("client " + eventMessage.getNickname() + "disconnected");
-                            disconnectedPlayersGame.put(eventMessage.getNickname(), playerGame.get(client));
+
+                            disconnectClient(client, eventMessage.getNickname());
                         }
                     }).start();
-                    client.onMessage(new LoginResponseMessage(eventMessage.getNickname(), true));
-                }                                                                                                                                 //        client.onMessage(new CreatorLoginResponseMessage(eventMessage.getNickName(), validNickname));
-                else                                                                                                                              //    } else
-                    client.onMessage(new LoginResponseMessage(eventMessage.getNickname(), false));                                                                            //        client.onMessage(new CreatorLoginResponseMessage(validNickname));
+
+
+                    try {
+                        client.onMessage(new LoginResponseMessage(eventMessage.getNickname(), true));
+                    } catch (RemoteException e) {
+                        System.err.println("disconnection");
+                    }
+                }
+                else {
+                    try {
+                        client.onMessage(new LoginResponseMessage(eventMessage.getNickname(), false));
+                    } catch (RemoteException e) {
+                        System.err.println("disconnection");
+                    }
+                }
             }
 
             case PING -> {
@@ -104,9 +126,17 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                 // da capire cosa modificare
                 if (!currentLobbyGameNames.contains(gameNameMessage.getGameName()) && !currentGames.containsKey(gameNameMessage.getGameName())) {
                     currentLobbyGameNames.add(gameNameMessage.getGameName());
+                    try {
                     client.onMessage(new GameNameResponseMessage(gameNameMessage.getNickname(),gameNameMessage.getGameName(), true));
+                    } catch (RemoteException e) {
+                    System.err.println("disconnection");
+                    }
                 } else {
+                    try {
                     client.onMessage(new GameNameResponseMessage(eventMessage.getNickname(), gameNameMessage.getGameName(), false));
+                } catch (RemoteException e) {
+                        System.err.println("disconnection");
+                    }
                 }
             }
             case GAME_CREATION -> {
@@ -122,7 +152,11 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                     gameController.update(client, gameCreationMessage);
                     isValid = true;
                 }
+                try {
                 client.onMessage(new GameCreationResponseMessage(eventMessage.getNickname(), isValid));
+                } catch (RemoteException e) {
+                    System.err.println("disconnection");
+                }
             }
 
             case GAME_SPECS -> {
@@ -143,20 +177,41 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                         isValidNumOfPlayers = true;
                     }
                 }
+                try {
                 client.onMessage(new GameSpecsResponseMessage(eventMessage.getNickname(), isValidGameName, isValidNumOfPlayers));
+                } catch (RemoteException e) {
+                    System.err.println("disconnection");
+                }
             }
 
             case JOIN_GAME_REQUEST -> {
                 Set<String> availableGames = new HashSet<>(currentLobbyGameNames);
                 if (currentLobbyGameNames.isEmpty()) {
+                    try {
                     client.onMessage(new JoinErrorMessage(eventMessage.getNickname(), "no available games in lobby"));
+                    } catch (RemoteException e) {
+                    System.err.println("disconnection");
+                    }
                 } else {
+                    try  {
                     client.onMessage(new JoinGameResponseMessage(eventMessage.getNickname(), availableGames));
-
+                    } catch (RemoteException e) {
+                    System.err.println("disconnection");
+                    }
                 }
             }
 
             case RESUME_GAME_REQUEST -> {
+                if(disconnectedPlayersGame.containsKey(eventMessage.getNickname())) {
+                    playerGame.put(client, disconnectedPlayersGame.get(eventMessage.getNickname()));
+                    disconnectedPlayersGame.remove(eventMessage.getNickname());
+                    register(client);
+                    client.onMessage(new ResumeGameResponseMessage(eventMessage.getNickname()));
+                }
+                else client.onMessage(new ResumeGameErrorMessage(eventMessage.getNickname(), "no games to resume"));
+            }
+
+            case RELOAD_GAME_REQUEST -> {
                 if (disconnectedPlayersGame.containsKey(eventMessage.getNickname())) {
                     disconnectedPlayersGame.put(eventMessage.getNickname(), playerGame.get(client));
                 }
@@ -198,26 +253,34 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                             playerGame.put(client, savedGameController);
                             register(client);
                         }
-                        boolean allClientsResumed = true;
+                        boolean allClientsReloaded = true;
                         int missingPlayers = 0;
                         for (Player checkPlayer : savedGameController.getGame().getSubscribers()) {
                             if (!getConnectedClients().containsKey(checkPlayer.getName())) {
-                                allClientsResumed = false;
+                                allClientsReloaded = false;
                                 missingPlayers++;
                             }
                         }
-                        if (allClientsResumed) {
+                        if (allClientsReloaded) {
 
                             savedGameController.update(client, new EndTurnMessage(eventMessage.getNickname()));
                         } else {
                             for (Player waitingPlayer : savedGameController.getGame().getSubscribers()) {
                                 if (getConnectedClients().containsKey(waitingPlayer.getName())) {
+                                    try {
                                     getConnectedClients().get(waitingPlayer.getName()).onMessage(new WaitingResponseMessage(eventMessage.getNickname(), missingPlayers));
+                                    } catch (RemoteException e) {
+                                    System.err.println("disconnection");
+                                    }
                                 }
                             }
                         }
                     } else {
-                        client.onMessage(new ResumeGameErrorMessage(eventMessage.getNickname(), "there is no game to resume"));
+                        try {
+                        client.onMessage(new ReloadGameErrorMessage(eventMessage.getNickname(), "there is no game to reload"));
+                        } catch (RemoteException e) {
+                        System.err.println("disconnection");
+                        }
                     }
                 }
             }
@@ -229,17 +292,28 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                 register(client);
                 gameController.update(client,gameNameChoiceMessage);
                 if (gameController.getGame().getSubscribers().size() < gameController.getGame().getNumberOfPlayers().getValue()-1){
+                    try {
                     client.onMessage(new WaitingResponseMessage(eventMessage.getNickname(), gameController.getGame().getNumberOfPlayers().getValue()-gameController.getGame().getSubscribers().size()));
+                    } catch (RemoteException e) {
+                    System.err.println("disconnection");
+                    }
                 }
                 for (Player player : gameController.getGame().getSubscribers()){
                     // notify other clients that a new player has joined the game
                     if (!player.getName().equals(eventMessage.getNickname())){
+                        try {
                         getConnectedClients().get(player.getName()).onMessage(new PlayerJoinedLobbyMessage(eventMessage.getNickname()));
+                        } catch (RemoteException e) {
+                        System.err.println("disconnection");
+                        }
                     }
 
                     if (gameController.getGame().getSubscribers().size() < gameController.getGame().getNumberOfPlayers().getValue()){
+                        try {
                         getConnectedClients().get(player.getName()).onMessage(new WaitingResponseMessage(eventMessage.getNickname(), gameController.getGame().getNumberOfPlayers().getValue()-gameController.getGame().getSubscribers().size()));
-
+                        } catch (RemoteException e) {
+                        System.err.println("disconnection");
+                        }
                     }
                 }
 
@@ -249,70 +323,38 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                 }
             }
 
-            case TILE_POSITION, BOOKSHELF_COLUMN, ITEM_TILE_INDEX, FILL_BOOKSHELF, SWITCH_PHASE, END_TURN ->
+            default ->
                 // il client e l'event message che non deve essere castato ed il tipo di messaggio che
                 // mando è di tipo TilePack message
                 // quindi player turn--> update del client che chiama l'update del server che passa per il game controller il quale poi rinvia direttamente
                 // il messaggio al client.
                     playerGame.get(client).update(client, eventMessage); //prendo il controller associato al client e su di questo chiamo l'update passando
-
-            case DISCONNECT_CLIENT -> {
-                // if client is not in any game
-                if (!playerGame.containsKey(client)){
-                    currentPlayersNicknames.remove(eventMessage.getNickname());
-                    getConnectedClients().remove(eventMessage.getNickname());
-                } else {
-                    playerGame.get(client).getGame().deleteObserver((obs, event) -> {
-                        System.out.println(event.getNickname() + " deleted from the observers of the game");
-                    });
-                    String gameName = playerGame.get(client).getGame().getGameName();
-                    GameController controller = currentGames.get(gameName);
-                    Game game = controller.getGame();
-                    playerGame.remove(client);
-
-
-                    // if game has not started yet
-                    if (currentLobbyGameNames.contains(gameName)){
-                        currentPlayersNicknames.remove(eventMessage.getNickname());
-                        getConnectedClients().remove(eventMessage.getNickname());
-                        Player unsubscribed = game.getSubscribers().stream().filter(x->x.getName().equals(eventMessage.getNickname())).toList().get(0);
-                        game.getSubscribers().remove(unsubscribed);
-
-                        for (Map.Entry<Client, GameController> entry : playerGame.entrySet()){
-                            if (entry.getValue().equals(controller)){
-                                // todo: maybe add game.unsubscribe(String nickname)
-                                entry.getKey().onMessage(new PlayerOfflineMessage(eventMessage.getNickname()));
-                                int missingPlayers = game.getNumberOfPlayers().getValue()-game.getSubscribers().size();
-                                entry.getKey().onMessage(new WaitingResponseMessage(eventMessage.getNickname(), missingPlayers));
-                                }
-                            }
-
-                    } else {
-                        // kill game
-                        currentGames.remove(game.getGameName());
-
-                            for (Map.Entry<Client, GameController> entry : playerGame.entrySet()){
-                                if (entry.getValue().equals(controller)){
-                                    // todo: maybe add game.unsubscribe(String nickname)
-                                    Client c = entry.getKey();
-                                    if (!entry.getKey().equals(client)) {
-
-                                        c.onMessage(new PlayerOfflineMessage(eventMessage.getNickname()));
-                                        c.onMessage(new KillGameMessage(eventMessage.getNickname()));
-                                    }
-                                    playerGame.remove(c);
-                                }
-
-                        }
-                        for (Player player : game.getSubscribers()){
-                            getConnectedClients().remove(player.getName());
-                        }
-                    }
-                }
-                client.onMessage(new DisconnectionResponseMessage(eventMessage.getNickname()));
-            }
         }
     }
+
+            /*else {
+                // kill game
+                currentGames.remove(game.getGameName());
+
+                for (Map.Entry<Client, GameController> entry : playerGame.entrySet()) {
+                    if (entry.getValue().equals(controller)) {
+                        // todo: maybe add game.unsubscribe(String nickname)
+                        Client c = entry.getKey();
+                        if (!entry.getKey().equals(client)) {
+
+                            c.onMessage(new PlayerOfflineMessage(eventMessage.getNickname()));
+                            c.onMessage(new KillGameMessage(eventMessage.getNickname()));
+                        }
+                        playerGame.remove(c);
+                    }
+
+                }
+                for (Player player : game.getSubscribers()) {
+                    getConnectedClients().remove(player.getName());
+                }
+            }
+            */
+        //client.onMessage(new DisconnectionResponseMessage(eventMessage.getNickname()));
     @Override
     public void removeGameFromLobby(String gameName) {
         this.currentLobbyGameNames.remove(gameName);
@@ -324,6 +366,65 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
     }
     public Map<String, Client> getConnectedClients() {
         return connectedClients;
+    }
+
+    public void disconnectClient(Client client, String nickname) {
+        System.err.println("client " + nickname + " disconnected");
+        currentPlayersNicknames.remove(nickname);
+        getConnectedClients().remove(nickname);
+        if (playerGame.containsKey(client)) {
+            disconnectedPlayersGame.put(nickname, playerGame.get(client));
+            /*int i = 0;
+            for (; i < playerGame.get(client).getGame().getSubscribers().size(); i++) {
+                if (playerGame.get(client).getGame().getSubscribers().get(i).getName().equals(nickname)) {
+                    break;
+                }
+            }
+            playerGame.get(client).getGame().deleteObserver(playerGame.get(client).getGame().getObservers().get(i));
+
+             */
+            String gameName = playerGame.get(client).getGame().getGameName();
+            GameController controller = currentGames.get(gameName);
+            Game game = controller.getGame();
+            playerGame.remove(client);
+
+
+            // if game has not started yet
+            if (currentLobbyGameNames.contains(gameName)) {
+
+                for (Map.Entry<Client, GameController> entry : playerGame.entrySet()) {
+                    if (entry.getValue().equals(controller)) {
+                        // todo: maybe add game.unsubscribe(String nickname)
+                        //entry.getKey().onMessage(new PlayerOfflineMessage(eventMessage.getNickname()));
+                        int missingPlayers = game.getNumberOfPlayers().getValue() - game.getSubscribers().size();
+                        try {
+                            entry.getKey().onMessage(new WaitingResponseMessage(nickname, missingPlayers));
+                        } catch (IOException e) {
+                            System.err.println("disconnection");
+                        }
+                    }
+
+                }
+
+
+                for (Map.Entry<Client, GameController> entry : playerGame.entrySet()) {
+                    if (entry.getValue().equals(disconnectedPlayersGame.get(nickname))) {
+                        try {
+                            entry.getKey().onMessage(new ClientDisconnectedMessage(nickname));
+                        } catch (IOException ex) {
+                            throw new RuntimeException(ex);
+                        }
+                    }
+                }
+                if (disconnectedPlayersGame.get(nickname).getGame().getCurrentPlayer().getName().equals(nickname)) {
+                    try {
+                        disconnectedPlayersGame.get(nickname).update(client, new EndTurnMessage(nickname));
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            }
+        }
     }
 }
 
