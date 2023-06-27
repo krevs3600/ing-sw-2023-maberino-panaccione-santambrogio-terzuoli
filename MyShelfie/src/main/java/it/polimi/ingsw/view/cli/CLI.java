@@ -168,7 +168,7 @@ public class CLI extends Observable<EventMessage> implements View {
             case 5 -> {
                 out.println("Closing game...");
                 setChanged();
-                notifyObservers(new DisconnectClientMessage(getNickname()));
+                notifyObservers(new ExitMessage(getNickname()));
 
             }
             default -> out.println("\nInvalid option, please try again");
@@ -336,9 +336,7 @@ public class CLI extends Observable<EventMessage> implements View {
 
             }
 
-            case RESUME_GAME_RESPONSE -> {
-                out.println("Waiting to resume the game...");
-            }
+            case RESUME_GAME_RESPONSE -> out.println("Waiting to resume the game...");
 
             case JOIN_GAME_ERROR -> {
                 JoinErrorMessage joinErrorMessage = (JoinErrorMessage) message;
@@ -415,33 +413,9 @@ public class CLI extends Observable<EventMessage> implements View {
 
              */
 
-            case WAIT_FOR_OTHER_PLAYERS -> {
-                out.println("Waiting for other players to reconnect...");
-            }
+            case WAIT_FOR_OTHER_PLAYERS -> out.println("Waiting for other players to reconnect...");
 
-            case CLIENT_DISCONNECTION -> {
-                out.println(message.getNickname() + " has disconnected");
-            }
-            case KILL_GAME -> {
-                out.println("Game down");
-                try {
-                    createConnection();
-                } catch (RemoteException ignored) {
-
-                } catch (NotBoundException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-
-            /* case DISCONNECTION_RESPONSE -> {
-                out.println("\nYou lost the connection to the server, and can no longer play");
-                try {
-                    createConnection();
-                } catch (RemoteException | NotBoundException ignored) {
-                }
-            }
-
-             */
+            case CLIENT_DISCONNECTION -> out.println(message.getNickname() + " has disconnected");
         }
     }
 
@@ -563,6 +537,9 @@ public class CLI extends Observable<EventMessage> implements View {
                 }
                 out.println("\nGame has ended... Hope you had fun!");
                 //TODO: togliere il gioco dalla lista!!
+
+                setChanged();
+                notifyObservers(new DisconnectClientMessage(eventMessage.getNickname()));
 
                 new Thread(() -> {
                     try {

@@ -20,9 +20,6 @@ import java.util.*;
 
 public class ServerImplementation extends UnicastRemoteObject implements Server {
 
-   // private Map<GameController, Game> currentGames = new HashMap<>();
-
-
     private final Map<String,GameController> currentGames = new HashMap<>();
     private final Set<String> currentPlayersNicknames = new HashSet<>();
     private final Set<String> currentLobbyGameNames = new HashSet<>();
@@ -51,6 +48,7 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
         game.addObserver((obs, eventMessage) -> {
             try {
                 if (eventMessage instanceof WinGameMessage) {
+                    savedGames.remove(playerGame.get(client));
                     Storage storage = new Storage();
                     storage.delete();
                 }
@@ -361,12 +359,23 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                 else playerGame.get(client).update(client, eventMessage);
             }
 
-            default ->
-                // il client e l'event message che non deve essere castato ed il tipo di messaggio che
-                // mando è di tipo TilePack message
-                // quindi player turn--> update del client che chiama l'update del server che passa per il game controller il quale poi rinvia direttamente
-                // il messaggio al client.
-                    playerGame.get(client).update(client, eventMessage); //prendo il controller associato al client e su di questo chiamo l'update passando
+            case EXIT -> {
+                int remainingPlayers = 0;
+                for(Map.Entry<Client, GameController> entry : playerGame.entrySet()) {
+                    if (entry.getValue().equals(playerGame.get(client))) {
+                        remainingPlayers++;
+                    }
+                }
+                if (remainingPlayers==1) currentGames.remove(playerGame.get(client).getGame().getGameName());
+                connectedClients.remove(eventMessage.getNickname(), client);
+                playerGame.remove(client);
+
+            }
+            case DISCONNECT_CLIENT -> {
+                currentPlayersNicknames.remove(eventMessage.getNickname());
+            }
+
+            default -> playerGame.get(client).update(client, eventMessage); //prendo il controller associato al client e su di questo chiamo l'update passando
         }
     }
 

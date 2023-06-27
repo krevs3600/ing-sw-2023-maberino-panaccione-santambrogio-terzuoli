@@ -23,6 +23,7 @@ public enum EventMessageType {
     DISCONNECT_CLIENT,
     PICKING_TILES,
     PLACING_TILES,
+    EXIT,
 
     START_GAME,
     RESUME_GAME_REQUEST,
