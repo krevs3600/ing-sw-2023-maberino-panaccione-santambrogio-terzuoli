@@ -132,7 +132,7 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
             }
 
             case PING -> {
-                disconnectedPlayersGame.remove(eventMessage.getNickname(), playerGame.get(client));
+                //disconnectedPlayersGame.remove(eventMessage.getNickname(), playerGame.get(client));
                 System.out.println("Ping arrived from " + eventMessage.getNickname());
             }
 
@@ -231,6 +231,7 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                         if (playerGame.get(client).getGame().getTurnPhase().equals(GamePhase.WAITING)) {
                             playerGame.get(client).update(client, new EndTurnMessage(eventMessage.getNickname()));
                         }
+                        else client.onMessage(new ResumeGameResponseMessage(eventMessage.getNickname(), new GameView(playerGame.get(client).getGame())));
                     }
                     else client.onMessage(new ResumeGameResponseMessage(eventMessage.getNickname(), new GameView(playerGame.get(client).getGame())));
                 }

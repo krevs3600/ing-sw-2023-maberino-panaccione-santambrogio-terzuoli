@@ -530,6 +530,8 @@ private int scoreOfThisClient;
                 PlayerOfflineMessage offlineMessage = (PlayerOfflineMessage) message;
                 showPopup(offlineMessage.getNickname() + " got disconnected");
             }
+
+
             case KILL_GAME -> {
                 showPopup("Game down");
                 createConnection();
@@ -538,11 +540,11 @@ private int scoreOfThisClient;
 
             case CLIENT_DISCONNECTION -> {
 
-                livingBoardController.TextForResilience.setText(message.getNickname()+"has disconnected but don't worry, the game goes on!");
+                livingBoardController.TextForResilience.setText(message.getNickname() + " has disconnected but don't worry, the game goes on!");
                 livingBoardController.PaneForResilience.setVisible(true);
                 Timeline timeline = new Timeline(new KeyFrame(Duration.millis(5000), event -> livingBoardController.PaneForResilience.setVisible(false)));
                 timeline.play();
-                System.out.println("client" +message.getNickname()+"getDisconnected");
+                //showPopup(message.getNickname() + " has disconnected");
 
                
             }
