@@ -151,7 +151,7 @@ public class CLI extends Observable<EventMessage> implements View {
                 "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
         return address.matches(regExp);
     }
-M
+
 
     public void gameMenu() {
         printMenu();
@@ -288,13 +288,13 @@ M
             case GAME_SPECS -> {
                 GameSpecsResponseMessage gameSpecsResponseMessage = (GameSpecsResponseMessage) message;
                 if (gameSpecsResponseMessage.isValidGameName()) {
-                    System.out.println("Available game name :) ");
+                    System.out.println("Available game name 😊 ");
                 } else {
                     System.err.println("The game name is already taken, please choose another game name");
                     askGameSpecs();
                 }
                 if(gameSpecsResponseMessage.isValidGameCreation()){
-                    System.out.println("Valid number of players :) ");
+                    System.out.println("Valid number of players 😊 ");
                     System.out.println("Waiting for other players... ");
                 } else {
                     System.err.println("Invalid number of players, please choose a number within the available range");
@@ -520,7 +520,7 @@ M
                     out.println(playerView.getName() + "'s score is " + playerView.getScore() + " points");
                 }
                 if (eventMessage.getNickname().equals(getNickname())) {
-                    out.println("\nCongratulations, you won!");
+                    out.println("\nCongratulations, you won 😊!");
                 }
                 out.println("\nGame has ended... Hope you had fun!");
                 setChanged();
