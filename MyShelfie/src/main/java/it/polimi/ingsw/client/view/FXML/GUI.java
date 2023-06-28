@@ -404,11 +404,31 @@ private int scoreOfThisClient;
 
 
             case RESUME_GAME_RESPONSE -> {
+                ResumeGameResponseMessage resumeGameResponseMessage = (ResumeGameResponseMessage) message;
+                try {
+                    URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/livingBoard_scene.fxml/").toURI().toURL();
+                    FXMLLoader fxmlLoader = new FXMLLoader(url);
+                    Scene scene = new Scene(fxmlLoader.load());
+                    livingBoardController = fxmlLoader.getController();
+                    livingBoardController.setGui(this);
+                    Platform.runLater(() -> {
+
+                        stage.setScene(scene);
+                        livingBoardController.initialize(resumeGameResponseMessage.getGameView(), nickname);
+                        livingBoardController.updateLivingRoomBoard(game.getLivingRoomBoard());
+
+                        livingBoardController.tilePack.setDisable(true);
+
+                    });
+                } catch (IOException e) {
+                    System.out.println(e.getMessage());
+                }
                 menuController.ResumeGameButton.setDisable(true);
                 menuController.ReloadGameButton.setDisable(true);
                 menuController.CreateNewGame.setDisable(true);
                 menuController.joinGame.setDisable(true);
-                //todo capire cosa succede quando preme exit in questo caso
+                //todo capire cosa succede quando preme exit in questto caso
+
                 menuController.ResumePane.setVisible(true);
                 menuController.resumePane2.setVisible(true);
 
@@ -427,7 +447,7 @@ private int scoreOfThisClient;
                         double elapsedTime = (now - startTime) / 1e9;
 
                         // Aggiorna il valore della ProgressBar in base al tempo trascorso
-                       menuController.progressBar.setProgress(elapsedTime / 25.0); // Esempio: 5 secondi per completare la ProgressBar
+                        menuController.progressBar.setProgress(elapsedTime / 25.0); // Esempio: 5 secondi per completare la ProgressBar
 
                         // Controllo se il valore della ProgressBar ha raggiunto il massimo
                         if (menuController.progressBar.getProgress() >= 25.0) {

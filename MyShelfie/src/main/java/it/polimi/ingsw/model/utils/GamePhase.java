@@ -14,6 +14,7 @@ public enum GamePhase {
     PICKING_TILES,
     COLUMN_CHOICE,
     PLACING_TILES,
+    WAITING,
     @Deprecated
     END_TURN,
     @Deprecated

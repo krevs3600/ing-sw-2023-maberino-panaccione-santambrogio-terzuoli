@@ -60,7 +60,7 @@ public class CLI extends Observable<EventMessage> implements View {
                 try {
                     Registry registry = LocateRegistry.getRegistry(address, port);
                     AppServer server = (AppServer) registry.lookup("MyShelfieServer");
-                    Client client = new ClientImplementation(this, server.connect());
+                    new ClientImplementation(this, server.connect());
                     askNickname();
                 } catch (NotBoundException e) {
                     System.err.println("not bound exception registry");
@@ -151,7 +151,7 @@ public class CLI extends Observable<EventMessage> implements View {
                 "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
         return address.matches(regExp);
     }
-
+M
 
     public void gameMenu() {
         printMenu();
@@ -406,13 +406,6 @@ public class CLI extends Observable<EventMessage> implements View {
                 notifyObservers(new BookshelfColumnMessage(message.getNickname(), column));
             }
 
-            /*case PLAYER_OFFLINE -> {
-                PlayerOfflineMessage offlineMessage = (PlayerOfflineMessage) message;
-                out.println(offlineMessage.getNickname() + " got disconnected");
-            }
-
-             */
-
             case WAIT_FOR_OTHER_PLAYERS -> out.println("Waiting for other players to reconnect...");
 
             case CLIENT_DISCONNECTION -> out.println(message.getNickname() + " has disconnected");
@@ -493,11 +486,6 @@ public class CLI extends Observable<EventMessage> implements View {
             }
 
             case BOOKSHELF -> {
-                /*out.println("\n-----------------------------------------------------------------------\n" + game.getCurrentPlayer().getName() + "'s BOOKSHELF");
-                out.println(game.getCurrentPlayer().getBookshelf().toString());
-                out.println("\n-----------------------------------------------------------------------\n" + game.getCurrentPlayer().getName() + "'s TILE PACK:");
-                out.println(game.getTilePack().toString());
-                 */
                 out.println(game.toCLI(getNickname()));
                 if (!getNickname().equals(game.getCurrentPlayer().getName())) {
                     out.println("\n" + eventMessage.getNickname() + " is inserting tiles in the bookshelf\n");
@@ -512,7 +500,6 @@ public class CLI extends Observable<EventMessage> implements View {
                         setChanged();
                         notifyObservers(new ItemTileIndexMessage(eventMessage.getNickname(), itemTileIndex));
                     } else {
-                        //activeTurn = false;
                         setChanged();
                         notifyObservers(new EndTurnMessage(eventMessage.getNickname()));
                     }
@@ -536,8 +523,6 @@ public class CLI extends Observable<EventMessage> implements View {
                     out.println("\nCongratulations, you won!");
                 }
                 out.println("\nGame has ended... Hope you had fun!");
-                //TODO: togliere il gioco dalla lista!!
-
                 setChanged();
                 notifyObservers(new DisconnectClientMessage(eventMessage.getNickname()));
 
