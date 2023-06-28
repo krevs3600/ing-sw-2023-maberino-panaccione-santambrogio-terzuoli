@@ -19,6 +19,12 @@ import java.rmi.server.RMIServerSocketFactory;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
 
+/**
+ * <h1>Class ServerImplementation</h1>
+ * The class ServerImplementation implements the Server interface and is used to communicate with the clients
+ *
+ * @version 1.0
+ */
 public class ServerImplementation extends UnicastRemoteObject implements Server {
 
     private final Map<String,GameController> currentGames = new HashMap<>();
@@ -31,10 +37,20 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
 
     private final Map<String, GameController> disconnectedPlayersGame = new HashMap<>();
 
+    /**
+     * Constructor class
+     * Default RMI constructor
+     * @throws RemoteException
+     */
     public ServerImplementation() throws RemoteException {
         super();
     }
 
+    /**
+     * Constructor class
+     * RMI constructor, communication on selected port
+     * @throws RemoteException
+     */
     public ServerImplementation(int port) throws RemoteException {
         super(port);
     }
@@ -43,6 +59,11 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
         super(port, csf, ssf);
     }
 
+    /**
+     * This method is used to register a {@link Client} into the server. It will be sent instances of {@link GameView}
+     * as the game progresses, so it will be able to see the game
+     * @param client the {@link Client} to be added
+     */
     @Override
     public void register(Client client) {
         Game game = playerGame.get(client).getGame();
@@ -78,10 +99,19 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
         });
     }
 
+    /**
+     * The update method's purpose is to have the {@link ServerImplementation} react to every message it receives in the correct manner and to handle
+     *  it correctly.
+     * @param client from which it receives the {@link EventMessage}
+     * @param eventMessage cointaining the action to be performed
+     * @throws IOException
+     */
     @Override
     public void update(Client client, EventMessage eventMessage) throws IOException {
 
         switch (eventMessage.getType()) {
+            //the client provides the nickname with which he/she will play the game. If the nickname is already taken,
+            //the server asks the client to provide a new one
             case NICKNAME -> {
                 if (!currentPlayersNicknames.contains(eventMessage.getNickname())) {                                                              //case CREATOR_NICKNAME -> {
                     currentPlayersNicknames.add(eventMessage.getNickname());                                                                      //    boolean validNickname = false;
@@ -131,11 +161,15 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                 }
             }
 
+            //ping to check whether the client is still playing or it has disconnected
             case PING -> {
                 //disconnectedPlayersGame.remove(eventMessage.getNickname(), playerGame.get(client));
                 System.out.println("Ping arrived from " + eventMessage.getNickname());
             }
 
+            //before creating a game, the server asks the client creating a new one to provide a game name, with which it
+            //will be identified by the server. The game name cannot be duplicated, so if a game name provided has already been
+            //taken, the server asks the client to come up with a new one
             case GAME_NAME -> {
                 GameNameMessage gameNameMessage = (GameNameMessage) eventMessage;
                 // da capire cosa modificare
@@ -154,6 +188,9 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                     }
                 }
             }
+
+            //message that a client uses to communicate to the server that it wants to create a new game. The number of
+            //player that are intended to play the game must be specified and must be within 2 and 4
             case GAME_CREATION -> {
                 GameCreationMessage gameCreationMessage = (GameCreationMessage) eventMessage;
                 boolean isValid = false;
@@ -199,6 +236,8 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                 }
             }
 
+            //the client is requesting to join an already existing game. The server provides the client with a list of
+            //available games
             case JOIN_GAME_REQUEST -> {
                 Set<String> availableGames = new HashSet<>(currentLobbyGameNames);
                 if (currentLobbyGameNames.isEmpty()) {
@@ -216,6 +255,7 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                 }
             }
 
+            //the client is requesting to resume a game he was previously playing and from which it got disconnected
             case RESUME_GAME_REQUEST -> {
                 if(disconnectedPlayersGame.containsKey(eventMessage.getNickname())) {
                     playerGame.put(client, disconnectedPlayersGame.get(eventMessage.getNickname()));
@@ -306,6 +346,8 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                 }
             }
             // TODO check if game has been created
+            //the client selects the game in which it wants to be added from the list previously provided by  the
+            //server. The server register the client and adds it to the game, updating the game controller
             case GAME_CHOICE -> {
                 GameNameChoiceMessage gameNameChoiceMessage=(GameNameChoiceMessage) eventMessage;
                 GameController gameController = currentGames.get(gameNameChoiceMessage.getGameChoice());
@@ -344,6 +386,7 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                 }
             }
 
+            //the client signals it has finished the turn. The server communicates it to the correct game controller
             case END_TURN -> {
                 int numOfDisconnectedPlayers = 0;
                 for (Player player: playerGame.get(client).getGame().getSubscribers()) {
@@ -358,6 +401,7 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                 else playerGame.get(client).update(client, eventMessage);
             }
 
+            //a client wants out of the game
             case EXIT -> {
                 int remainingPlayers = 0;
                 for(Map.Entry<Client, GameController> entry : playerGame.entrySet()) {
@@ -370,11 +414,15 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                 playerGame.remove(client);
 
             }
+
+            //a client has disconnected from the server, which cannot reach it any longer
             case DISCONNECT_CLIENT -> {
                 currentPlayersNicknames.remove(eventMessage.getNickname());
             }
 
-            default -> playerGame.get(client).update(client, eventMessage); //prendo il controller associato al client e su di questo chiamo l'update passando
+            //prendo il controller associato al client e su di questo chiamo l'update passando
+            //the game controller related to the cliend is updted with the message the client is sending
+            default -> playerGame.get(client).update(client, eventMessage);
         }
     }
 
@@ -401,19 +449,38 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
             }
             */
         //client.onMessage(new DisconnectionResponseMessage(eventMessage.getNickname()));
+
+    /**
+     * This method removes a game name from the lobby
+     * @param gameName specified by the client
+     */
     @Override
     public void removeGameFromLobby(String gameName) {
         this.currentLobbyGameNames.remove(gameName);
     }
 
+    /**
+     * This method removes a client
+     * @param client
+     */
     @Override
     public void removeClient(Client client){
 
     }
+
+    /**
+     * Getter method
+     * @return a containing the {@link Player#name} associated to the clients as key and the {@link Client} object as value
+     */
     public Map<String, Client> getConnectedClients() {
         return connectedClients;
     }
 
+    /**
+     * This method is used to disconnect a {@link Client} from a game
+     * @param client to be removed
+     * @param nickname of the {@link Client} to be removed
+     */
     public void disconnectClient(Client client, String nickname) {
         System.err.println("client " + nickname + " disconnected");
         currentPlayersNicknames.remove(nickname);
