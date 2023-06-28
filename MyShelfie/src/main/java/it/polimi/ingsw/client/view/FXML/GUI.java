@@ -17,6 +17,7 @@ import it.polimi.ingsw.network.MessagesToClient.requestMessage.*;
 import it.polimi.ingsw.network.Socket.ServerStub;
 import it.polimi.ingsw.network.eventMessages.*;
 import it.polimi.ingsw.observer_observable.Observable;
+import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
@@ -59,7 +60,7 @@ public class GUI extends Observable<EventMessage> implements View {
     private static double height;
     private NicknameController nicknameController;
     private ServerSettingsController serverSettingsController;
-    private CreateorJoinGameController createorJoinGameController;
+    private MenuController menuController;
     private RMIorSocketController rmIorSocketController;
     private LobbyController lobbyController;
     private StartController startController;
@@ -107,8 +108,7 @@ private int scoreOfThisClient;
      */
     public void gameMenuGUI(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("start_scene.fxml"));
-        Scene scene = null;
-        scene = new Scene(fxmlLoader.load());
+        Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("myShelfie!");
         stage.setScene(scene);
         this.stage = stage;
@@ -136,7 +136,7 @@ private int scoreOfThisClient;
 
     /**
      * This method is used to notify the server
-     * about the client's choice to enter a game after pressing the {@link CreateorJoinGameController#joinGame} button
+     * about the client's choice to enter a game after pressing the {@link MenuController#joinGame} button
      * in the fxml {@code CreateOrJoinGame_scene}.
      */
 
@@ -179,9 +179,8 @@ private int scoreOfThisClient;
         scene = new Scene(fxmlLoader.load());
         this.stage = stage;
         Platform.runLater(() -> stage.setScene(scene));
-        RMIorSocketController rmIorSocketController1 = fxmlLoader.getController();
-        rmIorSocketController1.setGui(this);
-        this.rmIorSocketController = rmIorSocketController1;
+        rmIorSocketController = fxmlLoader.getController();
+        rmIorSocketController.setGui(this);
     }
 
     @Override
@@ -329,12 +328,12 @@ private int scoreOfThisClient;
                 if (loginResponseMessage.isValidNickname()) {
 
                     try {
-                        FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("CreateorJoinGame_scene.fxml"));
+                        FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("Menu_scene.fxml"));
                         scene = new Scene(fxmlLoader.load());
                         this.nickname = ((LoginResponseMessage) message).getNickname();
-                        CreateorJoinGameController createorJoinGameController = fxmlLoader.getController();
-                        createorJoinGameController.setGui(this);
-                        this.createorJoinGameController = createorJoinGameController;
+                        MenuController menuController = fxmlLoader.getController();
+                        menuController.setGui(this);
+                        this.menuController = menuController;
                         Platform.runLater(() -> stage.setScene(scene));
                     } catch (IOException e) {
                         throw new RuntimeException(e);
@@ -405,11 +404,61 @@ private int scoreOfThisClient;
 
 
             case RESUME_GAME_RESPONSE -> {
-                createorJoinGameController.ResumeGameButton.setDisable(true);
-                createorJoinGameController.ReloadGameButton.setDisable(true);
-                createorJoinGameController.CreateNewGame.setDisable(true);
-                createorJoinGameController.joinGame.setDisable(true);
+                ResumeGameResponseMessage resumeGameResponseMessage = (ResumeGameResponseMessage) message;
+                try {
+                    URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/livingBoard_scene.fxml/").toURI().toURL();
+                    FXMLLoader fxmlLoader = new FXMLLoader(url);
+                    Scene scene = new Scene(fxmlLoader.load());
+                    livingBoardController = fxmlLoader.getController();
+                    livingBoardController.setGui(this);
+                    Platform.runLater(() -> {
+
+                        stage.setScene(scene);
+                        livingBoardController.initialize(resumeGameResponseMessage.getGameView(), nickname);
+                        livingBoardController.updateLivingRoomBoard(game.getLivingRoomBoard());
+
+                        livingBoardController.tilePack.setDisable(true);
+
+                    });
+                } catch (IOException e) {
+                    System.out.println(e.getMessage());
+                }
+                menuController.ResumeGameButton.setDisable(true);
+                menuController.ReloadGameButton.setDisable(true);
+                menuController.CreateNewGame.setDisable(true);
+                menuController.joinGame.setDisable(true);
                 //todo capire cosa succede quando preme exit in questto caso
+
+                menuController.ResumePane.setVisible(true);
+                menuController.resumePane2.setVisible(true);
+
+                // Crea l'AnimationTimer per far avanzare la ProgressBar
+                AnimationTimer animationTimer = new AnimationTimer() {
+
+                    private long startTime = -1;
+
+                    @Override
+                    public void handle(long now) {
+                        if (startTime < 0) {
+                            startTime = now;
+                        }
+
+                        // Calcola il tempo trascorso
+                        double elapsedTime = (now - startTime) / 1e9;
+
+                        // Aggiorna il valore della ProgressBar in base al tempo trascorso
+                        menuController.progressBar.setProgress(elapsedTime / 25.0); // Esempio: 5 secondi per completare la ProgressBar
+
+                        // Controllo se il valore della ProgressBar ha raggiunto il massimo
+                        if (menuController.progressBar.getProgress() >= 25.0) {
+                            // Ferma l'AnimationTimer
+                            stop();
+                        }
+                    }
+                };
+
+                // Avvia l'AnimationTimer
+                animationTimer.start();
 
                 showPopup("waiting for resumegame"); // fare una cosa duratura
 
@@ -526,11 +575,10 @@ private int scoreOfThisClient;
     public boolean isValidIPAddress(String address) {
         return false;
     }
-
     // TODO: mettere tutto in un metodo che cambia il root Pane in base al path che do in input
     @Override
     public void gameMenu() {
-        if (createorJoinGameController.getCreateGame()) {
+        if (menuController.getCreateGame()) {
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("GameName_scene.fxml"));
                 scene = new Scene(fxmlLoader.load());
@@ -759,16 +807,6 @@ private int scoreOfThisClient;
 
         popup.setOnShown(event -> pause.playFromStart());
 
-        root.setOnMouseClicked(event -> {
-            popup.hide();
-            pause.stop();
-        });
-
-        root.setOnMouseEntered(event -> pause.pause());
-        root.setOnMouseExited(event -> pause.play());
-
-
-
         // show the popup
         if (getStage()!=null){
             Platform.runLater(()-> popup.show(this.getStage()));
@@ -812,7 +850,7 @@ private int scoreOfThisClient;
             FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("computeScore_scene.fxml"));
             scene = new Scene(fxmlLoader.load());
             computeScoreController = fxmlLoader.getController();
-            winController.setGui(this);
+            computeScoreController.setGui(this);
             Platform.runLater(() -> {
                 stage.setScene(scene);
                 computeScoreController.initialize(game, this.nickname);
@@ -821,7 +859,88 @@ private int scoreOfThisClient;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
 
+
+    public void goBackToPreviousScene(String resource){
+        String[] resources = {
+                "start_scene.fxml", "RMIorSocket_scene.fxml", "AddressIp_scene.fxml", "login_scene.fxml",
+                "CreateOrJoinGame_scene.fxml", "GameName_scene.fxml", "NumberofPlayers_scene.fxml", "GameNameList_scene.fxml",
+                "livingBoard_scene.fxml", "win_scene.fxml", "computeScore_scene.fxml"};
+        switch (resource) {
+            case "RMIorSocket_scene.fxml" -> {
+                try {
+                    FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("start_scene.fxml"));
+                    Scene scene = new Scene(fxmlLoader.load());
+                    stage.setScene(scene);
+                    startController = fxmlLoader.getController();
+                    startController.setGui(this);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            case "AddressIp_scene.fxml" -> {
+                try {
+                    FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("RMIorSocket_scene.fxml"));
+                    scene = new Scene(fxmlLoader.load());
+                    this.stage = stage;
+                    Platform.runLater(() -> stage.setScene(scene));
+                    rmIorSocketController = fxmlLoader.getController();
+                    rmIorSocketController.setGui(this);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            case "login_scene.fxml" -> {
+                try {
+                    FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("AddressIp_scene.fxml"));
+                    scene = new Scene(fxmlLoader.load());
+                    Platform.runLater(() -> stage.setScene(scene));
+                    serverSettingsController = fxmlLoader.getController();
+                    serverSettingsController.setGui(this);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            case "Menu_scene.fxml" -> {
+                try {
+                    FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("login_scene.fxml"));
+                    scene = new Scene(fxmlLoader.load());
+                    Platform.runLater(() -> stage.setScene(scene));
+                    nicknameController = fxmlLoader.getController();
+                    nicknameController.setGui(this);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            case "GameName_scene.fxml", "GameNameList_scene.fxml" -> {
+                try {
+                    FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("Menu_scene.fxml"));
+                    scene = new Scene(fxmlLoader.load());
+                    menuController = fxmlLoader.getController();
+                    menuController.setGui(this);
+                    Platform.runLater(() -> stage.setScene(scene));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            case "win_scene.fxml" -> {
+
+            }
+            case "computeScore_scene.fxml" -> {
+                try {
+                    FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("win_scene.fxml"));
+                    scene = new Scene(fxmlLoader.load());
+                    WinController winController = fxmlLoader.getController();
+                    winController.setGui(this);
+                    winController.setGame(game);
+                    this.winController = winController;
+                    Platform.runLater(() -> stage.setScene(scene));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
     }
 
 }

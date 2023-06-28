@@ -14,7 +14,6 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
@@ -25,6 +24,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
+<?import javafx.scene.layout.Pane?>
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="908.0" prefWidth="1510.0" styleClass="rootPane" stylesheets="@../css/livingBoard_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.FXML.LivingBoardController">
     <children>
       <AnchorPane fx:id="PaneForPopup" prefHeight="823.0" prefWidth="1437.0" visible="false">
@@ -40,6 +40,7 @@
             </Pane>
          </children>
       </AnchorPane>
+      <AnchorPane fx:id="PaneForPopup" prefHeight="823.0" prefWidth="1437.0" visible="false" />
         <BorderPane prefHeight="908.0" prefWidth="1510.0" style="-fx-border-width: 10;">
             <center>
                 <Group BorderPane.alignment="CENTER">
@@ -166,17 +167,17 @@
                               </RadioButton>
                            </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="PaneForResilience" layoutX="-2.0" layoutY="231.0" prefHeight="189.0" prefWidth="636.0" style="-fx-background-color: #A00000;" visible="false">
+                        <AnchorPane fx:id="PaneForResilience" layoutX="-2.0" layoutY="231.0" prefHeight="189.0" prefWidth="636.0" style="-fx-background-color: #A00000; -fx-background-radius: 50px;" visible="false">
                            <children>
-                              <Text fx:id="TextForResilience" fill="WHITE" layoutX="266.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="121.95062255859375" />
+                              <Text fx:id="TextForResilience" fill="WHITE" layoutX="61.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="520.9506225585938" />
                            </children>
                         </AnchorPane>
                         <AnchorPane layoutX="96.0" layoutY="-105.0" prefHeight="99.0" prefWidth="439.0">
                            <children>
-                              <Sphere fx:id="sphereTurn" layoutX="120.0" layoutY="65.0" radius="14.0"/>
+                              <Sphere fx:id="sphereTurn" layoutX="120.0" layoutY="65.0" radius="14.0" />
                               <Text fx:id="turnLabel" layoutX="172.0" layoutY="77.0" strokeType="OUTSIDE" strokeWidth="0.0" text="YOUR TURN" wrappingWidth="223.65435791015625">
                                  <font>
-                                    <Font size="32.0" />
+                                    <Font size="24.0" />
                                  </font>
                                  <fill>
                                     <LinearGradient endX="1.0" endY="1.0">

@@ -34,6 +34,8 @@ import java.util.*;
  * @since 5/25/2023
  */
 public class LivingBoardController {
+
+    public String resource = "livingBoard_scene.fxml";
     /**
     * JavaFX GridPane with dimensions 9x9 representing the board
     */
@@ -124,17 +126,6 @@ public class LivingBoardController {
     public Button playerBookshelf;
 
     @FXML
-    public Label OtherPlayerTurnLabel;
-    @FXML
-    public ImageView firstCommonGC;
-    public ImageView SeconCommonGC;
-
-    @FXML
-    public Text Description_1GC;
-    @FXML
-    public Text Description_2GC;
-
-    @FXML
     public AnchorPane PaneForPopup;
     @FXML
     public Text textPopUp;
@@ -144,7 +135,6 @@ public class LivingBoardController {
 
     @FXML
     public Text CommonGoalText;
-
 
     @FXML
     public Text textForPopUp;
@@ -600,7 +590,6 @@ public class LivingBoardController {
             i+=1;
         }
     }
-
     /**
      * Reset the selection of the buttons for the column's selection
      */

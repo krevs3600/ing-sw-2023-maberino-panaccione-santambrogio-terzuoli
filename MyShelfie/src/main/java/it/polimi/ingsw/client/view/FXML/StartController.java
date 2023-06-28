@@ -19,6 +19,7 @@ import java.io.IOException;
  * @since 5/23/2023
  */
 public class StartController extends Observable<EventMessage>{
+    public String resource = "start_scene.fxml";
     @FXML
     public AnchorPane rootPane;
 

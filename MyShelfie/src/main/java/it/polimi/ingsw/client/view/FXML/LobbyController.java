@@ -23,7 +23,6 @@ import java.net.URL;
  */
 
 public class LobbyController {
-
     @FXML
     public Label numPinLobby;
 

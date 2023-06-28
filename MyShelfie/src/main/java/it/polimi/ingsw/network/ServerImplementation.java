@@ -4,6 +4,7 @@ import it.polimi.ingsw.controller.GameController;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.ModelView.GameView;
 import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.utils.GamePhase;
 import it.polimi.ingsw.model.utils.NumberOfPlayers;
 import it.polimi.ingsw.network.MessagesToClient.errorMessages.JoinErrorMessage;
 import it.polimi.ingsw.network.MessagesToClient.errorMessages.ReloadGameErrorMessage;
@@ -227,9 +228,11 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                         }
                     }
                     if (numOfDisconnectedPlayers==playerGame.get(client).getGame().getSubscribers().size()-2) {
-                        playerGame.get(client).update(client, new EndTurnMessage(eventMessage.getNickname()));
+                        if (playerGame.get(client).getGame().getTurnPhase().equals(GamePhase.WAITING)) {
+                            playerGame.get(client).update(client, new EndTurnMessage(eventMessage.getNickname()));
+                        }
                     }
-                    else client.onMessage(new ResumeGameResponseMessage(eventMessage.getNickname()));
+                    else client.onMessage(new ResumeGameResponseMessage(eventMessage.getNickname(), new GameView(playerGame.get(client).getGame())));
                 }
                 else client.onMessage(new ResumeGameErrorMessage(eventMessage.getNickname(), " there is no games to resume"));
             }
@@ -348,6 +351,7 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                     }
                 }
                 if (numOfDisconnectedPlayers==playerGame.get(client).getGame().getSubscribers().size()-1) {
+                    playerGame.get(client).getGame().setTurnPhase(GamePhase.WAITING);
                     client.onMessage(new WaitingForOtherPlayersMessage(eventMessage.getNickname()));
                 }
                 else playerGame.get(client).update(client, eventMessage);

@@ -17,6 +17,7 @@ import static it.polimi.ingsw.client.view.FXML.LivingBoardController.getCommonGo
 import static it.polimi.ingsw.client.view.FXML.LivingBoardController.updateBookshelf;
 
 public class ComputeScoreController {
+    public String resource = "computeScore_scene.fxml";
     @FXML
     public GridPane bookshelf;
     @FXML
@@ -52,6 +53,8 @@ public class ComputeScoreController {
     public ImageView checkPersonalGoalCard;
     @FXML
     public ImageView checkAdjacent;
+
+    private GUI gui;
 
 
     public void initialize(GameView game, String nickname){
@@ -110,5 +113,17 @@ public class ComputeScoreController {
             generalPoint.setText("= " + player.getAdjacentTilesScore() + " points");
         }
         totalScore.setText("= " + player.getScore() + " points");
+    }
+
+    /**
+     * Setter to have a reference to the view
+     * @param gui reference to the view
+     */
+    public void setGui(GUI gui) {
+        this.gui = gui;
+    }
+
+    public void goBack(){
+        gui.goBackToPreviousScene(resource);
     }
 }

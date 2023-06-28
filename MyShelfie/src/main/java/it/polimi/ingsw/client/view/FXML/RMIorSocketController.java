@@ -18,6 +18,7 @@ import javafx.scene.input.MouseEvent;
  * @since 5/23/2023
  */
 public class RMIorSocketController extends Observable<EventMessage> {
+    public String resource = "RMIorSocket_scene.fxml";
     @FXML
     public RadioButton RMI_button;
     @FXML
@@ -86,5 +87,7 @@ public class RMIorSocketController extends Observable<EventMessage> {
     public void setGui(GUI gui) {
         this.gui=gui;
     }
-
+    public void goBack(MouseEvent event){
+        gui.goBackToPreviousScene(resource);
+    }
 }

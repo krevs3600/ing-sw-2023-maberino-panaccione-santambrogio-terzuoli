@@ -26,9 +26,7 @@ import java.net.URL;
  */
 
 public class NicknameController {
-
-    @FXML
-    public AnchorPane PaneforParquet;
+    public String resource = "login_scene.fxml";
 
     @FXML
     public Button OKButton;
@@ -84,5 +82,9 @@ public class NicknameController {
      */
     public void setGui(GUI gui) {
         this.gui=gui;
+    }
+
+    public void goBack(){
+        gui.goBackToPreviousScene(resource);
     }
 }

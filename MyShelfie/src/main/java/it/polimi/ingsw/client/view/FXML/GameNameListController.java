@@ -28,7 +28,7 @@ import java.util.Set;
 
 public class GameNameListController {
 
-
+    public String resource = "GameNameList_scene.fxml";
     private GUI gui;
 
 
@@ -116,6 +116,10 @@ public class GameNameListController {
             button.setOnMouseClicked(this::GameNameChosen);
             games.getChildren().add(button);
         }
+    }
+
+    public void goBack(){
+        gui.goBackToPreviousScene(resource);
     }
 }
 

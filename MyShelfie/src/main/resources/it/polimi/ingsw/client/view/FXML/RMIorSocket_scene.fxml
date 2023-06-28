@@ -78,14 +78,23 @@
                                 <Insets top="-40.0" />
                             </VBox.margin>
                         </HBox>
-                  <Button fx:id="okButton" mnemonicParsing="false" onMouseClicked="#createConnection" prefHeight="56.0" prefWidth="157.0" stylesheets="@../css/server_scene.css" text="OK" textFill="WHITE">
-                     <font>
-                        <Font size="26.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
-                  </Button>
+                  <HBox alignment="TOP_CENTER" prefHeight="60.0" prefWidth="200.0">
+                     <children>
+                        <Button fx:id="okButton" mnemonicParsing="false" onMouseClicked="#createConnection" prefHeight="56.0" prefWidth="157.0" stylesheets="@../css/server_scene.css" text="OK" textFill="WHITE">
+                           <font>
+                              <Font size="26.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets right="20.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button fx:id="backButton" mnemonicParsing="false" onMouseClicked="#goBack" prefHeight="56.0" prefWidth="157.0" stylesheets="@../css/server_scene.css" text="BACK" textFill="WHITE">
+                           <font>
+                              <Font size="26.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </HBox>
                     </children>
                 </VBox>
                 <VBox alignment="BOTTOM_CENTER" prefHeight="301.0" prefWidth="1510.0">

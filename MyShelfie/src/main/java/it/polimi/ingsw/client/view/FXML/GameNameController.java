@@ -21,11 +21,7 @@ import javafx.scene.layout.AnchorPane;
 
 
 public class GameNameController {
-
-    @FXML
-    public AnchorPane PaneforParquet;
-    @FXML
-    public RadioButton two_players;
+    public String resource = "GameName_scene.fxml";
 
     @FXML
     public TextField textField;
@@ -70,5 +66,9 @@ public class GameNameController {
 
     public void setGui(GUI gui) {
         this.gui=gui;
+    }
+
+    public void goBack(){
+        gui.goBackToPreviousScene(resource);
     }
 }
