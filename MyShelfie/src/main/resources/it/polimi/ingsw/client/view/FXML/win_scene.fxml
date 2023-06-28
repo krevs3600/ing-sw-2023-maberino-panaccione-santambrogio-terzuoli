@@ -131,6 +131,12 @@
                   <Font name="Libian SC Regular" size="26.0" />
                </font>
             </Button>
+            <Button fx:id="backToMenu" layoutX="1231.0" layoutY="337.0" mnemonicParsing="false" onMouseClicked="#backToMenu" prefHeight="42.0" prefWidth="251.0" text="      Go back to the initial menu" textFill="WHITE" />
+            <ImageView fitHeight="30.0" fitWidth="28.0" layoutX="1240.0" layoutY="335.0">
+               <image>
+                  <Image url="@../Publisher_material/casa2.png" />
+               </image>
+            </ImageView>
             </children>
         </AnchorPane>
     </children>

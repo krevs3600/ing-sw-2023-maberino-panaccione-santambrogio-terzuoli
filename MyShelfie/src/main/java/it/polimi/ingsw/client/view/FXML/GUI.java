@@ -75,7 +75,7 @@ public class GUI extends Observable<EventMessage> implements View {
     private GameView game; // aggiunto referenza al game
     private Thread pingThread;
 
-private int scoreOfThisClient;
+    private int scoreOfThisClient;
     /**
      * Getter method
      * @return the current stage of the game
@@ -446,6 +446,8 @@ private int scoreOfThisClient;
                     System.out.println(e.getMessage());
                 }
             }
+
+
             case JOIN_GAME_ERROR -> {
                 JoinErrorMessage joinErrorMessage = (JoinErrorMessage) message;
                 showPopup("No available games in the lobby");
@@ -518,11 +520,14 @@ private int scoreOfThisClient;
 
             case CLIENT_DISCONNECTION -> {
                 ClientDisconnectedMessage disconnectedMessage = (ClientDisconnectedMessage) message;
-                livingBoardController.TextForResilience.setText(message.getNickname() + " has disconnected but don't worry, the game goes on!");
-                livingBoardController.PaneForResilience.setVisible(true);
-                Timeline timeline = new Timeline(new KeyFrame(Duration.millis(5000), event -> livingBoardController.PaneForResilience.setVisible(false)));
-                timeline.play();
-                //showPopup(message.getNickname() + " has disconnected");
+             //   livingBoardController.TextForResilience.setText(message.getNickname() + " has disconnected but don't worry, the game goes on!");
+             //   livingBoardController.PaneForResilience.setVisible(true);
+
+
+
+             showLongPopup(message.getNickname() + " has disconnected but don't worry, the game goes on!");
+
+               // showPopup(message.getNickname() + " has disconnected");
 
                
             }
@@ -532,6 +537,8 @@ private int scoreOfThisClient;
            //      showPopup("You lost the connection to the server, and can no longer play");
            //      createConnection();
            //  }
+
+            case WAIT_FOR_OTHER_PLAYERS -> livingBoardController.board.setDisable(true);
         }
 
     }
@@ -786,7 +793,7 @@ private int scoreOfThisClient;
         noSelection.setStyle("-fx-background-color: #DAA520; -fx-text-fill: #FFFFFF;-fx-font-size: 30; -fx-padding: 30px;-fx-font-family:'Libian SC';-fx-background-radius: 20px;");
         popup.getContent().add(noSelection);
         popup.setAutoHide(true);
-        PauseTransition pause = new PauseTransition(Duration.seconds(2));
+        PauseTransition pause = new PauseTransition(Duration.seconds(3.5));
         pause.setOnFinished(event -> popup.hide());
 
         popup.setOnShown(event -> pause.playFromStart());
@@ -797,6 +804,23 @@ private int scoreOfThisClient;
         }
     }
 
+
+    public void showLongPopup(String text){
+        Popup popup = new Popup();
+        Label noSelection = new Label(text);
+        noSelection.setStyle("-fx-background-color: #DAA520; -fx-text-fill: #FFFFFF;-fx-font-size: 30; -fx-padding: 30px;-fx-font-family:'Libian SC';-fx-background-radius: 20px;");
+        popup.getContent().add(noSelection);
+        popup.setAutoHide(true);
+        PauseTransition pause = new PauseTransition(Duration.seconds(3));
+        pause.setOnFinished(event -> popup.hide());
+
+        popup.setOnShown(event -> pause.playFromStart());
+
+        // show the popup
+        if (getStage()!=null){
+            Platform.runLater(()-> popup.show(this.getStage()));
+        }
+    }
 
     /**
      *This method is used to notify the server of the specific tile to be placed in the bookshelf after the player
@@ -849,7 +873,7 @@ private int scoreOfThisClient;
     public void goBackToPreviousScene(String resource){
         String[] resources = {
                 "start_scene.fxml", "RMIorSocket_scene.fxml", "AddressIp_scene.fxml", "login_scene.fxml",
-                "CreateOrJoinGame_scene.fxml", "GameName_scene.fxml", "NumberofPlayers_scene.fxml", "GameNameList_scene.fxml",
+                "Menu_scene.fxml", "GameName_scene.fxml", "NumberofPlayers_scene.fxml", "GameNameList_scene.fxml",
                 "livingBoard_scene.fxml", "win_scene.fxml", "computeScore_scene.fxml"};
         switch (resource) {
             case "RMIorSocket_scene.fxml" -> {
@@ -897,7 +921,7 @@ private int scoreOfThisClient;
                     throw new RuntimeException(e);
                 }
             }
-            case "GameName_scene.fxml", "GameNameList_scene.fxml" -> {
+            case "GameName_scene.fxml", "GameNameList_scene.fxml","win_scene.fxml" -> {
                 try {
                     FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("Menu_scene.fxml"));
                     scene = new Scene(fxmlLoader.load());
@@ -908,9 +932,7 @@ private int scoreOfThisClient;
                     throw new RuntimeException(e);
                 }
             }
-            case "win_scene.fxml" -> {
 
-            }
             case "computeScore_scene.fxml" -> {
                 try {
                     FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("win_scene.fxml"));

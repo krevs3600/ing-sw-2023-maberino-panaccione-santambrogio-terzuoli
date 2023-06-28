@@ -47,7 +47,7 @@
                 </VBox>
                 <VBox alignment="CENTER" prefHeight="282.0" prefWidth="1510.0">
                     <children>
-                        <Label alignment="CENTER" prefHeight="54.0" prefWidth="330.0" text="IP" textFill="WHITE">
+                        <Label alignment="CENTER" prefHeight="54.0" prefWidth="330.0" text="IP" textFill="WHITE" styleClass="Text" >
                             <font>
                                 <Font name="Libian SC Regular" size="36.0" />
                             </font>

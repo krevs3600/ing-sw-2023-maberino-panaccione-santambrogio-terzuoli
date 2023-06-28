@@ -3,6 +3,11 @@
     -fx-background-size: stretch;
 }
 
+.Text {
+    -fx-font-family: 'LillyBelle';
+    -fx-text-fill: #451616;
+}
+
 .Board {
     -fx-background-image: url("../boards/livingroom.png");
     -fx-background-size: stretch;

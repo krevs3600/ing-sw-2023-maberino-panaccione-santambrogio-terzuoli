@@ -5,10 +5,13 @@ import it.polimi.ingsw.model.ModelView.PlayerView;
 import it.polimi.ingsw.model.RomanNumber;
 import it.polimi.ingsw.model.ScoringToken;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Font;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -54,7 +57,16 @@ public class ComputeScoreController {
     @FXML
     public ImageView checkAdjacent;
 
+    @FXML
+    public Button backToMenu;
+
     private GUI gui;
+
+    // Creazione di un oggetto Font con il font desiderato
+    Font font = Font.loadFont(getClass().getResourceAsStream("it/polimi/ingsw/client/view/fonts/LillyBelle.ttf"), 24);
+
+    // Impostazione del font sulla proprietà font della Label
+
 
 
     public void initialize(GameView game, String nickname){
@@ -74,6 +86,13 @@ public class ComputeScoreController {
         } catch (FileNotFoundException e) {
             System.err.println(e.getMessage());
         }
+        commonPoint1.setFont(font);
+        commonPoint2.setFont(font);
+        personalGoalPoint.setFont(font);
+        endGamePoint.setFont(font);
+        generalPoint.setFont(font);
+        totalScore.setFont(font);
+
     }
 
     public void loadScore(PlayerView player) {
@@ -113,6 +132,8 @@ public class ComputeScoreController {
             generalPoint.setText("= " + player.getAdjacentTilesScore() + " points");
         }
         totalScore.setText("= " + player.getScore() + " points");
+
+
     }
 
     /**
@@ -125,5 +146,9 @@ public class ComputeScoreController {
 
     public void goBack(){
         gui.goBackToPreviousScene(resource);
+    }
+
+    public void backToMenu(MouseEvent mouseEvent) {
+        gui.goBackToPreviousScene("win_scene.fxml");
     }
 }

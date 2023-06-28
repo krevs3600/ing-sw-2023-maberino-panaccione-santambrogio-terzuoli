@@ -98,6 +98,9 @@ public class WinController {
     @FXML
     public Button MyScoreDetail;
 
+    @FXML
+    public Button backToMenu;
+
     private GameView game;
     private GUI gui;
 
@@ -148,5 +151,9 @@ public class WinController {
 
     public void fourth_p_score(MouseEvent mouseEvent) {
 
+    }
+
+    public void backToMenu(MouseEvent mouseEvent) {
+        gui.goBackToPreviousScene("win_scene.fxml");
     }
 }

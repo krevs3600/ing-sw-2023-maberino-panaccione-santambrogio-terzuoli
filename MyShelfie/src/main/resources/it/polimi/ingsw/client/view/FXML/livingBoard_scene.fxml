@@ -14,7 +14,6 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
@@ -25,19 +24,12 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
+<?import javafx.scene.layout.Pane?>
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="908.0" prefWidth="1510.0" styleClass="rootPane" stylesheets="@../css/livingBoard_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.FXML.LivingBoardController">
     <children>
+      <AnchorPane fx:id="PaneForPopup" prefHeight="823.0" prefWidth="1437.0" visible="false" />
       <AnchorPane fx:id="PaneForPopup" prefHeight="823.0" prefWidth="1437.0" visible="false">
          <children>
-            <Pane layoutX="334.0" layoutY="318.0" prefHeight="83.0" prefWidth="796.0" styleClass="popup">
-               <children>
-                  <Text fx:id="textForPopUp" fill="WHITE" layoutX="176.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="507.4582214355469">
-                     <font>
-                        <Font size="72.0" />
-                     </font>
-                  </Text>
-               </children>
-            </Pane>
          </children>
       </AnchorPane>
         <BorderPane prefHeight="908.0" prefWidth="1510.0" style="-fx-border-width: 10;">

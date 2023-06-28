@@ -52,7 +52,7 @@
                   <Image url="@../scoringtokens/Adjacent_Tiles.png" />
                </image>
             </ImageView>
-            <Label fx:id="commonPoint1" layoutX="944.0" layoutY="182.0" text="= 0 points" textFill="#f8f5f5">
+            <Label fx:id="commonPoint1" layoutX="944.0" layoutY="192.0" text="= 0 points" textFill="#f8f5f5">
                <font>
                   <Font name="Libian SC Regular" size="36.0" />
                </font>
@@ -138,6 +138,12 @@
                   <Font size="30.0" />
                </font>
             </Button>
+            <Button fx:id="backToMenu" layoutX="1201.0" layoutY="30.0" mnemonicParsing="false"  onMouseClicked="#backToMenu"  prefHeight="42.0" prefWidth="251.0" text="      Go back to the initial menu" textFill="WHITE" />
+            <ImageView fitHeight="28.0" fitWidth="30.0" layoutX="1212.0" layoutY="29.0">
+               <image>
+                  <Image url="@../Publisher_material/casa2.png" />
+               </image>
+            </ImageView>
          </children>
       </AnchorPane>
    </children>
