@@ -353,7 +353,7 @@ public class GameControllerTest {
             assertEquals(PlayerStatus.INACTIVE, gameController3P.getGame().getSubscribers().get(i).getStatus());
         }
 
-        //check if scores and winner are correct
+        //check if scores and winner are correct!
         assertEquals(0, gameController3P.getGame().getSubscribers().get(0).getScore());
         assertEquals(0, gameController3P.getGame().getSubscribers().get(1).getScore());
         assertTrue(gameController3P.getGame().getSubscribers().get(2).getScore()>0);
