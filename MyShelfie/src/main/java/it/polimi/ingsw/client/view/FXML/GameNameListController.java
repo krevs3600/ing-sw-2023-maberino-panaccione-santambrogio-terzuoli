@@ -90,9 +90,7 @@ public class GameNameListController {
             gui.showGameNamesList(currentLobbyGameNames);
         } else {
             InvalidGameChoice.setVisible(true);
-
         }
-
     }
 
     /**

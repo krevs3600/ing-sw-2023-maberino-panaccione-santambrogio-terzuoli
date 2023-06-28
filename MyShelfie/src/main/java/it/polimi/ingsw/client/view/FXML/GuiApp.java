@@ -49,26 +49,20 @@ public class GuiApp extends Application {
       GUI gui = new GUI();
       gui.gameMenuGUI(stage);
       window = stage;
+    }
 
+    @Override
+    public void stop() throws IOException {
+        System.exit(0);
     }
 
     public static void main(String[] args) {
         launch();
-
     }
-
-
-
 
     public static Stage getWindow(){
         return window;
     }
-
-    public void closeJavaFxMain(MouseEvent event){
-        GuiApp.getWindow().close();
-    }
-
-
 
     //TODO: refactor del metodo (createGame)
 

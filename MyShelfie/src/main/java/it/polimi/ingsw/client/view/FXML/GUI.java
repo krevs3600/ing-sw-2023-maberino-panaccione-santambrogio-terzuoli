@@ -72,6 +72,7 @@ public class GUI extends Observable<EventMessage> implements View {
     private GameNameListController gameNameListController;
     private String nickname;
     private GameView game; // aggiunto referenza al game
+    private Thread pingThread;
 
 private int scoreOfThisClient;
     /**
@@ -228,7 +229,7 @@ private int scoreOfThisClient;
             ServerStub serverStub = new ServerStub(address, port);
             Client client=new ClientImplementation(this, serverStub);
             serverStub.register(client);
-            new Thread(() -> {
+            pingThread = new Thread(() -> {
                 while (true) {
                     try {
                         serverStub.receive(client);
@@ -244,7 +245,8 @@ private int scoreOfThisClient;
                         System.exit(1);
                     }
                 }
-            }).start();
+            });
+            pingThread.start();
         }
 
         try {
@@ -412,7 +414,6 @@ private int scoreOfThisClient;
                     livingBoardController = fxmlLoader.getController();
                     livingBoardController.setGui(this);
                     Platform.runLater(() -> {
-
                         stage.setScene(scene);
                         livingBoardController.setGameView(game);
                         GameView game = resumeGameResponseMessage.getGameView();
@@ -423,6 +424,7 @@ private int scoreOfThisClient;
                         livingBoardController.setTurnLabelRed();
                         livingBoardController.tilePack.setDisable(true);
                         livingBoardController.disableColumnChoice();
+                        livingBoardController.board.setDisable(true);
                     });
                 } catch (IOException e) {
                     System.out.println(e.getMessage());
