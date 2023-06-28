@@ -15,35 +15,21 @@ import javafx.scene.layout.Pane;
  * @version 1.0
  * @since 5/23/2023
  */
-
-
-
-
 public class MenuController {
     public String resource = "Menu_scene.fxml";
     @FXML
     public Button CreateNewGame;
-
     @FXML
     public Button joinGame;
-
     @FXML
     public Button EXIT;
-
     @FXML
     public Button ResumeGameButton;
     @FXML
     public Button ReloadGameButton;
-    @FXML
-    public Pane ResumePane;
-    @FXML
-    public ProgressBar progressBar;
-    @FXML
-    public Pane resumePane2;
 
-
-    private boolean joinGameb = false;
     private boolean createGame = false;
+    private GUI gui;
 
 
 
@@ -57,22 +43,13 @@ public class MenuController {
         return createGame;
     }
 
-
-
-  //  public boolean getJoinGameb(){
-   //     return  this.joinGameb;
-   // }
-    private GUI gui;
-
     /**
      * Setter to have a reference to the view
      * @param gui reference to the view
      */
     public void setGui(GUI gui){
-       this.gui=gui;
+        this.gui=gui;
    }
-
-
 
     /**
      *
@@ -94,7 +71,6 @@ public class MenuController {
 
 
     public void JoinGame(MouseEvent mouseEvent) {
-       joinGameb=true;
        //gui.gameMenu();
         gui.joinGame();
     }
@@ -106,7 +82,7 @@ public class MenuController {
      * @param mouseEvent  the click on the {@link MenuController#joinGame}  button
      */
     public void ExitGame(MouseEvent mouseEvent) {
-// //TODO: gestire chiusura stage
+        System.exit(0);
     }
 
     public void ResumeGame(MouseEvent mouseEvent) {
@@ -115,6 +91,5 @@ public class MenuController {
 
     public void ReloadGame(MouseEvent mouseEvent) {
         gui.reloadGame();
-
     }
 }

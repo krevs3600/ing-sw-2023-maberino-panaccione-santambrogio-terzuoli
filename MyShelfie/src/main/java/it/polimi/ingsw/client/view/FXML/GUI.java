@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.view.FXML;
 
 import it.polimi.ingsw.AppServer;
+import it.polimi.ingsw.model.ModelView.BookshelfView;
 import it.polimi.ingsw.model.ModelView.GameView;
 import it.polimi.ingsw.model.ModelView.PlayerView;
 import it.polimi.ingsw.model.utils.GamePhase;
@@ -407,70 +408,44 @@ private int scoreOfThisClient;
 
             case RESUME_GAME_RESPONSE -> {
                 ResumeGameResponseMessage resumeGameResponseMessage = (ResumeGameResponseMessage) message;
+                showPopup("Resuming the game, please wait...");
+                // disabling other menu's buttons on resume game
+                // disabling other menu's buttons on resume game
+                menuController.ResumeGameButton.setDisable(true);
+                menuController.ReloadGameButton.setDisable(true);
+                menuController.CreateNewGame.setDisable(true);
+                menuController.joinGame.setDisable(true);
+                // reloading the livingBoard_scene
                 try {
                     URL url = new File("src/main/resources/it/polimi/ingsw/client/view/FXML/livingBoard_scene.fxml/").toURI().toURL();
                     FXMLLoader fxmlLoader = new FXMLLoader(url);
                     Scene scene = new Scene(fxmlLoader.load());
                     livingBoardController = fxmlLoader.getController();
                     livingBoardController.setGui(this);
+                    livingBoardController.setGameView(game);
+                    GameView game = resumeGameResponseMessage.getGameView();
                     Platform.runLater(() -> {
-                        stage.setScene(scene);
-                        livingBoardController.setGameView(game);
-                        GameView game = resumeGameResponseMessage.getGameView();
+                        // updating board and bookshelves
                         livingBoardController.initialize(game, nickname);
                         livingBoardController.updateLivingRoomBoard(game.getLivingRoomBoard());
                         LivingBoardController.updateBookshelf(game.getPlayer(nickname).getBookshelf(), livingBoardController.bookshelf);
+                        BookshelfView otherBookshelf = game.getSubscribers().get(livingBoardController.getWatchedPlayer()).getBookshelf();
+                        LivingBoardController.updateBookshelf(otherBookshelf, livingBoardController.otherBookshelf);
+                        // updating turn infos
                         livingBoardController.setSphereTurnRed();
                         livingBoardController.setTurnLabelRed();
+                        livingBoardController.turnLabel.setText("Wait for your turn");
+                        // disabling gui elements
                         livingBoardController.tilePack.setDisable(true);
                         livingBoardController.disableColumnChoice();
                         livingBoardController.board.setDisable(true);
+                        stage.setScene(scene);
                     });
+                    isFirstTime = false;
                 } catch (IOException e) {
                     System.out.println(e.getMessage());
                 }
-                menuController.ResumeGameButton.setDisable(true);
-                menuController.ReloadGameButton.setDisable(true);
-                menuController.CreateNewGame.setDisable(true);
-                menuController.joinGame.setDisable(true);
-                //todo capire cosa succede quando preme exit in questto caso
-
-                menuController.ResumePane.setVisible(true);
-                menuController.resumePane2.setVisible(true);
-
-                // Crea l'AnimationTimer per far avanzare la ProgressBar
-                AnimationTimer animationTimer = new AnimationTimer() {
-
-                    private long startTime = -1;
-
-                    @Override
-                    public void handle(long now) {
-                        if (startTime < 0) {
-                            startTime = now;
-                        }
-
-                        // Calcola il tempo trascorso
-                        double elapsedTime = (now - startTime) / 1e9;
-
-                        // Aggiorna il valore della ProgressBar in base al tempo trascorso
-                        menuController.progressBar.setProgress(elapsedTime / 25.0); // Esempio: 5 secondi per completare la ProgressBar
-
-                        // Controllo se il valore della ProgressBar ha raggiunto il massimo
-                        if (menuController.progressBar.getProgress() >= 25.0) {
-                            // Ferma l'AnimationTimer
-                            stop();
-                        }
-                    }
-                };
-
-                // Avvia l'AnimationTimer
-                animationTimer.start();
-
-                showPopup("waiting for resumegame"); // fare una cosa duratura
-
             }
-
-
             case JOIN_GAME_ERROR -> {
                 JoinErrorMessage joinErrorMessage = (JoinErrorMessage) message;
                 showPopup("No available games in the lobby");
@@ -530,6 +505,7 @@ private int scoreOfThisClient;
             }
             case PLAYER_OFFLINE -> {
                 PlayerOfflineMessage offlineMessage = (PlayerOfflineMessage) message;
+
                 showPopup(offlineMessage.getNickname() + " got disconnected");
             }
 
@@ -541,7 +517,7 @@ private int scoreOfThisClient;
 
 
             case CLIENT_DISCONNECTION -> {
-
+                ClientDisconnectedMessage disconnectedMessage = (ClientDisconnectedMessage) message;
                 livingBoardController.TextForResilience.setText(message.getNickname() + " has disconnected but don't worry, the game goes on!");
                 livingBoardController.PaneForResilience.setVisible(true);
                 Timeline timeline = new Timeline(new KeyFrame(Duration.millis(5000), event -> livingBoardController.PaneForResilience.setVisible(false)));
@@ -663,13 +639,13 @@ private int scoreOfThisClient;
                     });
                 } else {
                     Platform.runLater(() -> {
-                        this.livingBoardController.setSphereTurnRed();
-                        this.livingBoardController.setTurnLabelRed();
-                        this.livingBoardController.turnLabel.setText(eventMessage.getNickname()+" 'S TURN");
+                        livingBoardController.setSphereTurnRed();
+                        livingBoardController.setTurnLabelRed();
+                        livingBoardController.turnLabel.setText(eventMessage.getNickname()+" 'S TURN");
                         livingBoardController.board.setDisable(true);
                         livingBoardController.disableColumnChoice();
-                        //livingBoardController.OtherPlayerTurnLabel.setText("Wait... " + eventMessage.getNickname() + " is picking tiles");
-                      //  livingBoardController.OtherPlayerTurnLabel.setVisible(true);
+                        // livingBoardController.OtherPlayerTurnLabel.setText("Wait... " + eventMessage.getNickname() + " is picking tiles");
+                        // livingBoardController.OtherPlayerTurnLabel.setVisible(true);
                     });
                 }
             }
