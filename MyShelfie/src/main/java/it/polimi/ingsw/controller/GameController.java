@@ -19,6 +19,14 @@ import org.json.simple.parser.ParseException;
 import java.io.*;
 import java.rmi.RemoteException;
 import java.util.*;
+/**
+ * <h1>Class GameController</h1>
+ * The class GameController is used to keep track of everything that happens during the game. Every modification
+ * to the state of the game must pass through the GameController
+ *
+ * @version 1.0
+ * @since 4/30/2023
+ */
 
 public class GameController implements Serializable {
 
@@ -29,25 +37,43 @@ public class GameController implements Serializable {
 
     public static final String savedGameFile = "memoryCard";
 
+    /**
+     * Class constructor
+     * @param game the {@link Game} that is going to be played
+     */
     public GameController( Game game){
         this.game = game;
     }
 
+    /**
+     * Getter method
+     * @return the object referring to the {@link Game#} that is being played
+     */
     public Game getGame () {
         return game;
     }
 
 
+    /**
+     * The update method's purpose is to have the {@link GameController} react to every message it receives in the correct manner and to handle
+     * it correctly.
+     * @param client who sends the message containing an action he/she wants to perform
+     * @param eventMessage containing the desired action by the client
+     * @throws IllegalArgumentException
+     * @throws IOException
+     */
     public void update(Client client, EventMessage eventMessage) throws IllegalArgumentException, IOException {
 
         switch (eventMessage.getType()) {
 
-            // TODO: do we really need all these cases?
+            //In response to these messages, the controller creates a new player and adds it to the game
             case GAME_CHOICE, GAME_CREATION, GAME_SPECS -> {
                 Player newPlayer = new Player(eventMessage.getNickname());
                 game.subscribe(newPlayer);
             }
 
+            //once all the players have entered the game, the living room board can be initialized, the personal goal cards are distributed
+            //and the game can begin
             case START_GAME -> {
                 game.initLivingRoomBoard();
                 for (Player player : game.getSubscribers()){
@@ -57,6 +83,9 @@ public class GameController implements Serializable {
                 game.startGame();
             }
 
+            //every time a player moves to pick a tile, this case is triggered. The controller check whether the position the
+            //player has selected is legal. If so, it proceeds and adds the item tile located in such spot to the tile pack
+            //otherwise an error message is sent and the player is requested to select from a different position
             case TILE_POSITION -> {
                 TilePositionMessage tilePositionMessage = (TilePositionMessage) eventMessage;
 
@@ -161,6 +190,7 @@ public class GameController implements Serializable {
                 }
             }
 
+            //this case is used to select the column in which to insert the item tiles from the tile pack
             case BOOKSHELF_COLUMN -> {
                 BookshelfColumnMessage bookshelfColumnMessage = (BookshelfColumnMessage) eventMessage;
                 if (game.getCurrentPlayer().getBookshelf().getNumberInsertableTilesColumn(bookshelfColumnMessage.getColumn()) < game.getTilePack().getSize()) {
@@ -176,6 +206,8 @@ public class GameController implements Serializable {
                 } catch (IndexOutOfBoundsException e) {}
             }
 
+            //the player can select which tile to insert first into the bookshelf from the tilepack. The tile will be inserted
+            //into the column the player has selected with the previous message
             case ITEM_TILE_INDEX -> {
                 ItemTileIndexMessage itemTileIndexMessage = (ItemTileIndexMessage) eventMessage;
                 game.getCurrentPlayer().insertTile(game.getTilePack(), game.getColumnChoice(), itemTileIndexMessage.getIndex());
@@ -186,11 +218,16 @@ public class GameController implements Serializable {
                 // TODO gestire le eccezioni!!
             }
 
+
+            //when triggered, the controller switches game phase to the subsequent one
             case SWITCH_PHASE -> {
                 SwitchPhaseMessage switchPhaseMessage = (SwitchPhaseMessage) eventMessage;
                 game.setTurnPhase(switchPhaseMessage.getGamePhase());
             }
 
+            //every time a turn ends, several checks are performed. First, the controller checks if a common goal card pattern has been matched
+            //and if so, it awards the points to the player. It also checks if a player has completely filled the bookshelf. In this case, at the end of the present
+            //turn the game will end
             case END_TURN -> {
                 Storage storage = new Storage();
                 storage.store(this);
@@ -258,6 +295,12 @@ public class GameController implements Serializable {
 
     }
 
+    /**
+     * This method is used to compute the score of a {@link Player} once the game is finished. Specifically, the points
+     * regarding the adjacent groups of tiles as well as the points regarding the {@link PersonalGoalCard} of the player
+     * are calculated
+     * @return the final score of the {@link Player}
+     */
     public int computePlayerScoreEndGame(Player player){
         //Computation of points from personal goal card
         ItemTile[][] bookshelf = player.getBookshelf().getGrid();
@@ -340,7 +383,11 @@ public class GameController implements Serializable {
     }
 
 
-
+    /**
+     * This method is used to keep track of whether the {@link Player} is picking {@link ItemTile}s in vertical or
+     * horizontal line, when more than one {@link ItemTile} are being picked
+     * @param tilePositionMessage
+     */
     private void setAlongsideWhat(TilePositionMessage tilePositionMessage){
         if (tilePositionMessage.getPosition().getColumn() == game.getBuffer().get(0).getColumn()) {
             game.setAlongSideColumn(true);
@@ -349,7 +396,13 @@ public class GameController implements Serializable {
         }
     }
 
-    protected void drawTileAndInsertInTilePack(TilePositionMessage tilePositionMessage) {
+    /**
+     * This method is used by the controller to get the tile {@link ItemTile} the {@link Player} has picked from the
+     * {@link LivingRoomBoard} and insert it in the {@link TilePack}. It also keeps track of the {@link Position} of the
+     * tiles a {@link Player} picks during a turn, and checks that he can pick only in a straight line
+     * @param tilePositionMessage containing the position the {@link Player} intends to pick
+     */
+    private void drawTileAndInsertInTilePack(TilePositionMessage tilePositionMessage) {
         ItemTile itemTile = game.getLivingRoomBoard().getSpace(tilePositionMessage.getPosition()).drawTile();
         game.getBuffer().add(tilePositionMessage.getPosition());
         game.insertTileInTilePack(itemTile);
