@@ -414,11 +414,15 @@ private int scoreOfThisClient;
                     Platform.runLater(() -> {
 
                         stage.setScene(scene);
-                        livingBoardController.initialize(resumeGameResponseMessage.getGameView(), nickname);
+                        livingBoardController.setGameView(game);
+                        GameView game = resumeGameResponseMessage.getGameView();
+                        livingBoardController.initialize(game, nickname);
                         livingBoardController.updateLivingRoomBoard(game.getLivingRoomBoard());
-
+                        LivingBoardController.updateBookshelf(game.getPlayer(nickname).getBookshelf(), livingBoardController.bookshelf);
+                        livingBoardController.setSphereTurnRed();
+                        livingBoardController.setTurnLabelRed();
                         livingBoardController.tilePack.setDisable(true);
-
+                        livingBoardController.disableColumnChoice();
                     });
                 } catch (IOException e) {
                     System.out.println(e.getMessage());
