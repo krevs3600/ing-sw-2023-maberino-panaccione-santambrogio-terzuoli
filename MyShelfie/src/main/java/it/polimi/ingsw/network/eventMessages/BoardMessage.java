@@ -18,7 +18,7 @@ public class BoardMessage extends EventMessage{
     private final LivingRoomBoardView board;
 
     /**
-     * Class contructor
+     * Class constructor
      * @param nickName of the {@link Player}
      * @param board the {@link LivingRoomBoardView}
      */

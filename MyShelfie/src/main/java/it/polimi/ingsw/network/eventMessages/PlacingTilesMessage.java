@@ -17,7 +17,7 @@ public class PlacingTilesMessage extends EventMessage {
 
     /**
      * Class constructor
-     * @param player the{@link Player} who is picking tiles
+     * @param player the{@link Player} who is placing tiles
      */
     public PlacingTilesMessage(String player) {
         super(player, EventMessageType.PLACING_TILES);

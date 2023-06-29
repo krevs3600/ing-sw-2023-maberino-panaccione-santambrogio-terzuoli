@@ -10,9 +10,9 @@ import java.io.Serializable;
 
 /**
  * <h1>Abstract Class ErrorMessage</h1>
- * The abstract class ErrorMessage extends the asbtract class MessageToClient. The main purpose of the class is
+ * The abstract class ErrorMessage extends the abstract class MessageToClient. The main purpose of the class is
  *  is for the {@link Server} to send asynchronous messages to the {@link Client}, to signal that a en error
- *  has occured
+ *  has occurred
  *
  * @author Francesca Pia Panaccione, Francesco Santambrogio
  * @version 1.0
@@ -28,7 +28,7 @@ public abstract class ErrorMessage extends MessageToClient {
      * Class constructor
      * @param nickName of the {@link Client} that has to be reached
      * @param errorMessage the content of the {@link MessageToClient}
-     * @param messageType of the message
+     * @param messageType type of the {@link MessageToClient}
      */
     public ErrorMessage(String nickName, String errorMessage, MessageToClientType messageType) {
         super(nickName, messageType);

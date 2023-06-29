@@ -23,7 +23,7 @@ public class IllegalTilePositionErrorMessage extends ErrorMessage {
     /**
      * Class constructor
      * @param nickname of the {@link Player} the message is being sent to
-     * @param message content of the messge
+     * @param message content of the message
      */
     public IllegalTilePositionErrorMessage(String nickname, String message) {
         super(nickname, message, MessageToClientType.ILLEGAL_POSITION);

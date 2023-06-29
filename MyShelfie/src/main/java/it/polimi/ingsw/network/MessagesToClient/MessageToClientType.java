@@ -1,5 +1,15 @@
 package it.polimi.ingsw.network.MessagesToClient;
 
+import it.polimi.ingsw.network.eventMessages.EventMessage;
+
+/**
+ * <h1>Enumeration MessageToClientType</h1>
+ * The enumeration MessageToClientType contains all the types of a {@link MessageToClient}.
+ *
+ * @author Francesca Pia Panaccione, Francesco Santambrogio, Francesco Maberino, Carlo Terzuoli
+ * @version 1.0
+ * @since 5/18/2023
+ */
 public enum MessageToClientType {
 
     // request messages type
