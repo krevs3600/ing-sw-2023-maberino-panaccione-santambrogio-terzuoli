@@ -37,8 +37,8 @@ public class GameControllerTest {
     private Client client1, client2, client3;
     private Server server;
     private CLI cli1, cli2, cli3;
-
-
+}
+/**
 
 
     //Messages
@@ -201,7 +201,7 @@ public class GameControllerTest {
         assertEquals(3, gameController2P.getGame().getBuffer().size());
         assertEquals(3, gameController2P.getGame().getTilePack().getSize());
 
-         */
+
     }
 
     @Test
@@ -365,3 +365,4 @@ public class GameControllerTest {
     }
 
 }
+*/

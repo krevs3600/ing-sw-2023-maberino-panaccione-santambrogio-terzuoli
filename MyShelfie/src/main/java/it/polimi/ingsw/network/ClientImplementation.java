@@ -1,7 +1,7 @@
 package it.polimi.ingsw.network;
 
-import it.polimi.ingsw.client.view.FXML.GUI;
-import it.polimi.ingsw.client.view.FXML.View;
+import it.polimi.ingsw.view.gui.GUI;
+import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.model.ModelView.GameView;
 import it.polimi.ingsw.network.MessagesToClient.MessageToClient;
 import it.polimi.ingsw.network.MessagesToClient.requestMessage.CreatorLoginResponseMessage;

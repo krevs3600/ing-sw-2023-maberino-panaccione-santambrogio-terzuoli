@@ -151,9 +151,9 @@ public class GameTest {
 
         game1.subscribe(new Player("Test1"));
         game1.subscribe(new Player("Test2"));
-        game1.getSubscribers().get(0).setStatus(PlayerStatus.ACTIVE);
-        game1.getSubscribers().get(1).setStatus(PlayerStatus.ACTIVE);
-
+        for (Player player : game1.getSubscribers()){
+            player.setStatus(PlayerStatus.ACTIVE);
+        }
         // before incrementing the cursor
         assertEquals(0, game1.getCursor());
 

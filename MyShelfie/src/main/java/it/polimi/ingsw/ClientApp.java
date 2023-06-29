@@ -1,8 +1,9 @@
 package it.polimi.ingsw;
 
+import it.polimi.ingsw.view.gui.GuiApp;
 import it.polimi.ingsw.view.cli.CLI;
+import javafx.application.Application;
 
-import java.rmi.RemoteException;
 /**
  * <h1>Class ClientApp</h1>
  * The class ClientApp is used to run the CLI
@@ -14,18 +15,24 @@ import java.rmi.RemoteException;
 
 public class ClientApp {
     /**
-     *Main method
+     * Main client application method
      */
-    public static void main(String[] args) throws RemoteException {
-        CLI cli = new CLI();
-        cli.run();
-        /*Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            cli.setChanged();
-            cli.notifyObservers(new DisconnectClientMessage(cli.getNickname()));
-            System.out.println("Dropping connection and quitting...");
-            //System.out.println("Quitting...");
-        }));
+    public static void main(String[] args) {
 
-         */
+        boolean cliParam = false; // default value
+
+        for (String arg : args) {
+            if (arg.equals("--cli") || arg.equals("-c")) {
+                cliParam = true;
+                break;
+            }
+        }
+
+        if (cliParam) {
+            CLI cli = new CLI();
+            cli.run();
+        } else {
+            Application.launch(GuiApp.class);
+        }
     }
 }
