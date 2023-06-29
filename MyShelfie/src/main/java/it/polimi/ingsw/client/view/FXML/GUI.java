@@ -457,7 +457,6 @@ public class GUI extends Observable<EventMessage> implements View {
                 }
             }
             case JOIN_GAME_ERROR -> {
-                JoinErrorMessage joinErrorMessage = (JoinErrorMessage) message;
                 showPopup("No available games in the lobby");
             }
             case RESUME_GAME_ERROR -> {
