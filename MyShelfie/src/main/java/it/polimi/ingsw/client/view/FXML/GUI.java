@@ -33,6 +33,7 @@ import javafx.util.Duration;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.StreamCorruptedException;
 import java.net.URL;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -238,7 +239,6 @@ public class GUI extends Observable<EventMessage> implements View {
                         serverStub.receive(client);
                     } catch (RemoteException e) {
                         System.err.println("Cannot receive from server. Stopping...");
-
                         try {
                             serverStub.close();
                             try {
@@ -249,7 +249,8 @@ public class GUI extends Observable<EventMessage> implements View {
                                 rmIorSocketController = fxmlLoader.getController();
                                 rmIorSocketController.setGui(this);
                                 showPopup("Server crashed, try to reconnect");
-                            } catch (IOException ee) {
+                                pingThread.join();
+                            } catch (IOException | InterruptedException ee) {
                                 throw new RuntimeException(ee);
                             }
 
@@ -518,7 +519,7 @@ public class GUI extends Observable<EventMessage> implements View {
             }
             case CLIENT_DISCONNECTION -> {
                 ClientDisconnectedMessage disconnectedMessage = (ClientDisconnectedMessage) message;
-                showLongPopup(message.getNickname() + " has disconnected but don't worry, the game goes on!");
+                showLongPopup(message.getNickname() + " has disconnected\nbut don't worry, the game goes on!");
             }
             case WAIT_FOR_OTHER_PLAYERS -> {
                 showPopup("Waiting for another player to reconnect");
@@ -596,7 +597,6 @@ public class GUI extends Observable<EventMessage> implements View {
                             livingBoardController.updateLivingRoomBoard(game.getLivingRoomBoard());
 
                             livingBoardController.tilePack.setDisable(true);
-
                         });
                     } catch (IOException e) {
                         System.err.println(e);
@@ -787,17 +787,20 @@ public class GUI extends Observable<EventMessage> implements View {
     public void showLongPopup(String text){
         Popup popup = new Popup();
         Label noSelection = new Label(text);
-        noSelection.setStyle("-fx-background-color: #f17c1c; -fx-text-fill: #FFFFFF;-fx-font-size: 30; -fx-padding: 30px;-fx-font-family:'Libian SC';-fx-background-radius: 20px;");
+        noSelection.setStyle("-fx-background-color: #f17c1c;-fx-text-alignment: 'center'; -fx-text-fill: #FFFFFF;-fx-font-size: 30; -fx-padding: 30px;-fx-font-family:'LillyBelle';-fx-background-radius: 20px;");
         popup.getContent().add(noSelection);
+        popup.setX(300);
         popup.setAutoHide(true);
-        PauseTransition pause = new PauseTransition(Duration.seconds(3));
+        PauseTransition pause = new PauseTransition(Duration.seconds(4));
         pause.setOnFinished(event -> popup.hide());
 
         popup.setOnShown(event -> pause.playFromStart());
 
         // show the popup
         if (getStage()!=null){
-            Platform.runLater(()-> popup.show(this.getStage()));
+            Platform.runLater(()-> {
+                popup.show(this.getStage());
+            });
         }
     }
 

@@ -20,6 +20,7 @@ import it.polimi.ingsw.network.Socket.ServerStub;
 import it.polimi.ingsw.network.eventMessages.*;
 import it.polimi.ingsw.observer_observable.Observable;
 import java.io.PrintStream;
+import java.rmi.ConnectException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -88,9 +89,9 @@ public class CLI extends Observable<EventMessage> implements View {
                     new ClientImplementation(this, server.connect());
                     askNickname();
                 } catch (NotBoundException e) {
-                    System.err.println("not bound exception registry");
+                    System.err.println("Error: not bound exception registry");
                 } catch (RemoteException re) {
-                    re.printStackTrace();
+                    System.err.println("Couldn't connect to server " + address + " on port " + port);
                     createConnection();
                 }
             }
@@ -129,9 +130,9 @@ public class CLI extends Observable<EventMessage> implements View {
     public String askConnectionType() {
         String connectionType;
         do {
-            out.print("\nfPlease insert a connection type: socket (s) or RMI (r): ");
+            out.print("Please insert a connection type: socket (s) or RMI (r): ");
             connectionType = in.nextLine();
-            if (!connectionType.equals("s") && !connectionType.equals("r")) System.err.println("\ninvalid choice");
+            if (!connectionType.equals("s") && !connectionType.equals("r")) System.err.println("Error: invalid choice");
         } while (!connectionType.equals("s") && !connectionType.equals("r"));
         return connectionType;
 
@@ -145,12 +146,12 @@ public class CLI extends Observable<EventMessage> implements View {
     public String askServerAddress(){
         String address;
         do  {
-            out.print("\nPlease insert the server address (press ENTER for localhost): ");
+            out.print("Please insert the server address (press ENTER for localhost): ");
             address = in.nextLine();
-            if (!isValidIPAddress(address) && !address.equals("")) System.err.println("\ninvalid choice");
+            if (!isValidIPAddress(address) && !address.equals("")) System.err.println("Error: invalid choice");
         } while (!isValidIPAddress(address) && !address.equals(""));
         if(address.equals("")){
-            out.println("\nUsing default address...");
+            out.println("Using default address...");
             address = "127.0.0.1";
         }
         return address;
@@ -164,10 +165,10 @@ public class CLI extends Observable<EventMessage> implements View {
     public int askServerPort(){
         String serverPort;
         do {
-            out.print("\nPlease insert the ip port (press ENTER for default): ");
+            out.print("Please insert the ip port (press ENTER for default): ");
             serverPort = in.nextLine();
             if (serverPort.equals("")){
-                out.println("\nUsing default port...");
+                out.println("Using default port...");
                 return 1099;
             }
         } while (!isValidPort(serverPort));
@@ -185,7 +186,7 @@ public class CLI extends Observable<EventMessage> implements View {
             int port = Integer.parseInt(serverPort);
             return port >= 1 && port <= 65535;
         } catch (NumberFormatException e){
-            System.out.println("\nInput is not a number!");
+            out.println("Error: input is not a number!");
             return false;
         }
     }
@@ -221,10 +222,9 @@ public class CLI extends Observable<EventMessage> implements View {
                     out.print(">>> ");
                     String input = in.nextLine();
                     menuOption = Integer.parseInt(input);
-                    in.nextLine();
                     if (menuOption > 0) validOption = true;
                 } catch (NumberFormatException e) {
-                    System.err.println("This is not a valid input, please insert a number");
+                    System.err.println("\nThis is not a valid input, please insert a number");
                 }
             }
 
@@ -282,33 +282,6 @@ public class CLI extends Observable<EventMessage> implements View {
     }
 
     /**
-     * This method is used to notify the server with the number of players chosen by the player for the newly created game.
-     * At this point, the game is created and the creator waits for the other participants to connect to start playing.
-     * @param gameName the name of the game in which to choose the number of players.
-     */
-    public void askNumberOfPlayers(String gameName) {
-
-        int numOfPlayers = 0;
-            while (numOfPlayers <= 0) {
-                boolean isNumber;
-                do {
-                    isNumber = true;
-                    out.print("Please insert the number of players: ");
-                    try {
-                        numOfPlayers = in.nextInt();
-                        in.nextLine();
-                    } catch (InputMismatchException e) {
-                        isNumber= false;
-                    }
-                }while (!isNumber);
-
-            }
-            setChanged();
-            notifyObservers(new GameCreationMessage(getNickname(), numOfPlayers, gameName));
-    }
-
-
-    /**
      * This method is used to ask the player the number of players and game name which will characterize the
      * game he/she is creating
      */
@@ -328,10 +301,12 @@ public class CLI extends Observable<EventMessage> implements View {
                 out.print("Please insert the number of players: ");
                 String input = in.nextLine();
                 numOfPlayers = Integer.parseInt(input);
-                in.nextLine();
-                if (numOfPlayers >= 0) isValidNumber = true;
+                if (numOfPlayers >= 2 && numOfPlayers <= 4) isValidNumber = true;
+                else{
+                    out.println("Players in range 2 to 4");
+                }
             } catch (NumberFormatException e) {
-                System.err.println("This is not a valid input, please insert a number");
+                System.err.println("\nThis is not a valid input, please insert a number");
             }
         }
         setChanged();
@@ -591,6 +566,10 @@ public class CLI extends Observable<EventMessage> implements View {
 
             case CLIENT_DISCONNECTION -> out.println(message.getNickname() + " has disconnected");
         }
+    }
+
+    @Override
+    public void askNumberOfPlayers(String gameName) {
     }
 
     /**

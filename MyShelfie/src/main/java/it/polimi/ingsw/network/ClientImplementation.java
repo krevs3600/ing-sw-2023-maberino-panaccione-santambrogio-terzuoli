@@ -9,7 +9,6 @@ import it.polimi.ingsw.network.MessagesToClient.requestMessage.LoginResponseMess
 import it.polimi.ingsw.network.MessagesToClient.requestMessage.RequestMessage;
 import it.polimi.ingsw.network.eventMessages.EventMessage;
 import it.polimi.ingsw.view.cli.CLI;
-import it.polimi.ingsw.view.*;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;

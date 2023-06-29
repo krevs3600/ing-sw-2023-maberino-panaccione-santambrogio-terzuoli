@@ -14,14 +14,14 @@
     <children>
         <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
             <children>
-                <Label alignment="CENTER" prefHeight="63.0" prefWidth="562.0" styleClass="Text" stylesheets="@../css/menu_scene.css" text=" PLEASE CHOOSE WHAT YOU'D LIKE TO DO ">
+                <Label alignment="CENTER" prefHeight="63.0" prefWidth="668.0" styleClass="Text" stylesheets="@../css/menu_scene.css" text=" PLEASE CHOOSE WHAT YOU'D LIKE TO DO ">
                     <VBox.margin>
-                        <Insets bottom="20.0" />
+                        <Insets bottom="10.0" />
                     </VBox.margin>
                 </Label>
-            <Button fx:id="CreateNewGame" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#CreateGame" prefHeight="40.0" prefWidth="279.0" styleClass="button" stylesheets="@../css/menu_scene.css" text="CREATE A NEW GAME ">
+            <Button fx:id="CreateNewGame" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#CreateGame" prefHeight="55.0" prefWidth="350.0" styleClass="button" stylesheets="@../css/menu_scene.css" text="CREATE A NEW GAME ">
                <VBox.margin>
-                  <Insets bottom="10.0" />
+                  <Insets bottom="7.0" />
                </VBox.margin>
                <textFill>
                   <LinearGradient endX="1.0" endY="1.0">
@@ -39,10 +39,13 @@
                      </stops>
                   </LinearGradient>
                </textFill>
+               <padding>
+                  <Insets top="2.0" />
+               </padding>
             </Button>
-            <Button fx:id="joinGame" contentDisplay="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#JoinGame" prefHeight="40.0" prefWidth="279.0" styleClass="button" stylesheets="@../css/menu_scene.css" text="JOIN A  GAME ">
+            <Button fx:id="joinGame" contentDisplay="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#JoinGame" prefHeight="55.0" prefWidth="350.0" styleClass="button" stylesheets="@../css/menu_scene.css" text="JOIN A  GAME ">
                <VBox.margin>
-                  <Insets bottom="10.0" />
+                  <Insets bottom="7.0" />
                </VBox.margin>
                <textFill>
                   <LinearGradient endX="1.0" endY="1.0">
@@ -60,8 +63,11 @@
                      </stops>
                   </LinearGradient>
                </textFill>
+               <padding>
+                  <Insets top="2.0" />
+               </padding>
             </Button>
-            <Button fx:id="ResumeGameButton" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#ResumeGame" prefHeight="40.0" prefWidth="279.0" styleClass="button" stylesheets="@../css/menu_scene.css" text="RESUME GAME" textOverrun="CLIP">
+            <Button fx:id="ResumeGameButton" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#ResumeGame" prefHeight="55.0" prefWidth="350.0" styleClass="button" stylesheets="@../css/menu_scene.css" text="RESUME GAME" textOverrun="CLIP">
                <textFill>
                   <LinearGradient endX="1.0" endY="1.0">
                      <stops>
@@ -82,31 +88,13 @@
                   <Font size="16.0" />
                </font>
                <VBox.margin>
-                  <Insets bottom="10.0" />
+                  <Insets bottom="7.0" />
                </VBox.margin>
+               <padding>
+                  <Insets top="2.0" />
+               </padding>
             </Button>
-            <Button fx:id="EXIT" contentDisplay="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#ExitGame" prefHeight="40.0" prefWidth="279.0" styleClass="button" stylesheets="@../css/menu_scene.css" text="EXIT">
-               <textFill>
-                  <LinearGradient endX="1.0" endY="1.0">
-                     <stops>
-                        <Stop>
-                           <color>
-                              <Color red="0.6447368264198303" green="0.2895345985889435" blue="0.2895345985889435" />
-                           </color>
-                        </Stop>
-                        <Stop offset="1.0">
-                           <color>
-                              <Color red="1.0" green="1.0" blue="1.0" />
-                           </color>
-                        </Stop>
-                     </stops>
-                  </LinearGradient>
-               </textFill>
-               <VBox.margin>
-                  <Insets bottom="10.0" />
-               </VBox.margin>
-            </Button>
-            <Button fx:id="ReloadGameButton" mnemonicParsing="false" onMouseClicked="#ReloadGame" prefHeight="40.0" prefWidth="279.0" styleClass="button" stylesheets="@../css/menu_scene.css" text="RELOAD GAME">
+            <Button fx:id="ReloadGameButton" mnemonicParsing="false" onMouseClicked="#ReloadGame" prefHeight="55.0" prefWidth="350.0" styleClass="button" stylesheets="@../css/menu_scene.css" text="RELOAD GAME">
                <textFill>
                   <LinearGradient endX="1.0" endY="1.0" startY="0.9216152019002375">
                      <stops>
@@ -126,6 +114,36 @@
                <font>
                   <Font size="16.0" />
                </font>
+               <VBox.margin>
+                  <Insets bottom="7.0" />
+               </VBox.margin>
+               <padding>
+                  <Insets top="2.0" />
+               </padding>
+            </Button>
+            <Button fx:id="EXIT" contentDisplay="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#ExitGame" prefHeight="55.0" prefWidth="350.0" styleClass="button" stylesheets="@../css/menu_scene.css" text="EXIT">
+               <textFill>
+                  <LinearGradient endX="1.0" endY="1.0">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="0.6447368264198303" green="0.2895345985889435" blue="0.2895345985889435" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="1.0" green="1.0" blue="1.0" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </LinearGradient>
+               </textFill>
+               <VBox.margin>
+                  <Insets bottom="7.0" />
+               </VBox.margin>
+               <padding>
+                  <Insets top="2.0" />
+               </padding>
             </Button>
             </children>
         </VBox>

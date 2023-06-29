@@ -148,7 +148,7 @@
                         <AnchorPane layoutX="96.0" layoutY="-105.0" prefHeight="99.0" prefWidth="439.0">
                            <children>
                               <Sphere fx:id="sphereTurn" layoutX="120.0" layoutY="65.0" radius="14.0" />
-                              <Text fx:id="turnLabel" layoutX="172.0" layoutY="77.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="LabelText" text="YOUR TURN" wrappingWidth="223.65435791015625">
+                              <Text fx:id="turnLabel" layoutX="145.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="LabelText" text="YOUR TURN" wrappingWidth="358.65435791015625">
                                  <font>
                                     <Font size="24.0" />
                                  </font>
