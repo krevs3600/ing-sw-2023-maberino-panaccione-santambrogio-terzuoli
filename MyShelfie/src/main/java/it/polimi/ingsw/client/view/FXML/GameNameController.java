@@ -54,7 +54,6 @@ public class GameNameController {
 
 
     public void gameNameChosen(MouseEvent mouseEvent) {
-        //TODO: controllo sugli input spazi vuoti
         this.gameName = textField.getText();
         gui.askGameName();
     }

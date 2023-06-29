@@ -159,14 +159,18 @@ public class GameView implements Serializable {
         return this.currentPlayer;
     }
 
-    // todo what if no nickname is associated to a player in the game?
     /**
      * Given a nickname it returns the player in the game
      * @param nickname of the player to be retrieved
      * @return the PlayerView associated to the given nickname
      */
     public PlayerView getPlayer(String nickname){
-        return this.getSubscribers().stream().filter(x->x.getName().equals(nickname)).toList().get(0);
+        for (PlayerView player : getSubscribers()){
+            if (player.getName().equals(nickname)){
+                return player;
+            }
+        }
+        return null;
     }
 
     /**
@@ -190,7 +194,6 @@ public class GameView implements Serializable {
      * @param nickname name of the player
      * @return int the index of the player otherwise -1
      */
-    // TODO mettere in Game
     public int getPersonalGameIndex(String nickname) {
         int personalGameIndex;
         for(int i=0; i<this.getSubscribers().size(); i++){
@@ -248,7 +251,6 @@ public class GameView implements Serializable {
      * @return the horizontal string representation of the CLI
      */
     public String toCLI(String nickname) {
-        // todo optimization can be made
         List<Integer> indexes = orderedIndexes(nickname);
 
         String game = "";
@@ -354,22 +356,4 @@ public class GameView implements Serializable {
         }
         return result;
     }
-    /**
-    * // todo to be removed, just for testing
-    public static void main(String[] args){
-        Game game = new Game(NumberOfPlayers.FOUR_PLAYERS, "Zo");
-        game.subscribe(new Player("Carlo"));
-        game.subscribe(new Player("Fra"));
-        game.subscribe(new Player("Pi"));
-        game.subscribe(new Player("Mabe"));
-        game.initLivingRoomBoard();
-        PersonalGoalCardDeck deck = new PersonalGoalCardDeck();
-        game.getSubscribers().get(0).setPersonalGoalCard(deck.draw());
-        game.getSubscribers().get(1).setPersonalGoalCard(deck.draw());
-        GameView view = new GameView(game);
-        // clear terminal screen, in a real terminal it should be working
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-        System.out.println(view.toCLI("Carlo"));
-    }*/
 }

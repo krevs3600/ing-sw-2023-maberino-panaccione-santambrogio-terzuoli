@@ -173,15 +173,6 @@ public class Player  implements Serializable {
 
     /**
      * Getter method
-     * @return the {@link FirstPlayerSeat} if the player is the first in the turn
-     */
-    // TODO: gestire il firstPlayerSeat
-    public FirstPlayerSeat getFirstPlayerSeat(){
-        return null;
-    }
-
-    /**
-     * Getter method
      * @return the personal {@link Player#bookshelf} of the player
      */
     public Bookshelf getBookshelf(){

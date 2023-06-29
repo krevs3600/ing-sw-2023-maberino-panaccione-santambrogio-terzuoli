@@ -71,7 +71,6 @@ public class NicknameController {
 
 
     public void connect(MouseEvent event) throws IOException {
-        //TODO: FARE i check sull'input che arriva
         this.nickname = nicknameTextFiled.getText();
         gui.askNickname();
     }

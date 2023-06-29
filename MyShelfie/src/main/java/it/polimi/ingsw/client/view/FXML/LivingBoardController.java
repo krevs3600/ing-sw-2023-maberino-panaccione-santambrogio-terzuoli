@@ -289,16 +289,9 @@ public class LivingBoardController {
         initBookshelf(bookshelf);
         initBookshelf(otherBookshelf);
         // INIT SCORING TOKENS
-        Stack<ScoringToken> stack = gameView.getLivingRoomBoard().getCommonGoalCards().get(0).getStack();
-        String resource = "src/main/resources/it/polimi/ingsw/client/view/scoring tokens/scoring_";
-        String initToken = resource.concat(String.valueOf(stack.pop().getValue()) + ".jpg");
-        try{
-            Image image = new Image(new FileInputStream(initToken));
-            tokenCommonCard1.setImage(image);
-            tokenCommonCard2.setImage(image);
-        } catch (FileNotFoundException e){
-            e.printStackTrace();
-        }
+        initScoringToken(gameView.getCommonGoalCards().get(0) ,tokenCommonCard1);
+        initScoringToken(gameView.getCommonGoalCards().get(1) ,tokenCommonCard2);
+
         // updateBookshelf(gameView.getPlayer(getPlayers().get(personalGameIndex)).getBookshelf(), bookshelf);
         // updateBookshelf(gameView.getPlayer(getPlayers().get(watchedPlayer)).getBookshelf(), otherBookshelf);
         if (gameView.getSubscribers().size() == 2){
@@ -354,6 +347,20 @@ public class LivingBoardController {
         for (Node node : tilePack.getChildren()){
             ImageView imageView = (ImageView) node;
             imageView.setOnMouseClicked(null);
+        }
+    }
+
+    public void initScoringToken(CommonGoalCardView card, ImageView stackImageView) {
+        Stack<ScoringToken> stack = card.getStack();
+        if (stack.size()>0){
+            String resource = "src/main/resources/it/polimi/ingsw/client/view/scoring tokens/scoring_";
+            String initToken = resource.concat(String.valueOf(stack.pop().getValue()) + ".jpg");
+            try{
+                Image image = new Image(new FileInputStream(initToken));
+                stackImageView.setImage(image);
+            } catch (FileNotFoundException e){
+                e.printStackTrace();
+            }
         }
     }
 
@@ -637,7 +644,7 @@ public class LivingBoardController {
                 e.printStackTrace();
             }
         }
-        // todo: make a group
+
         if (commonGoalCardIndex == 0) {
             tokenCommonCard1.setImage(nextToken);
             if (gameView.getCurrentPlayer().getName().equals(nickname)){
@@ -677,9 +684,8 @@ public class LivingBoardController {
     }
 
     public void leave_definitively(MouseEvent mouseEvent) {
-        //todo: gestire direttamente nella gui, chiudere lo stage ed invia il messaggio a tutti gli altri
-        GuiApp.getWindow().close();
-
+        Platform.exit();
+        System.exit(0);
     }
 
     public void setSphereTurnGreen(){

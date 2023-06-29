@@ -223,17 +223,6 @@ public class Game extends Observable<EventMessage>  implements Serializable {
 
 
     /**
-     * This method takes the ScoringToken from the commonGoalCard and gives it to the correct Player
-     * @param commonGoalCard the card of the achieved common goal
-     * @param player the scoring player
-     */
-    // TODO: understand if it is needed
-    public void pullScoringTokens(CommonGoalCard commonGoalCard, Player player){
-        ScoringToken scoringToken = commonGoalCard.pop();
-        player.winToken(scoringToken);
-    }
-
-    /**
      * This method sets to {@code True} the {@link Game#firstPlayerHasEnded} attribute
      */
     public void setFirstPlayerHasEnded() {

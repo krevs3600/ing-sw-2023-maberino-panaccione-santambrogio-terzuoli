@@ -67,8 +67,6 @@ public class ClientImplementation extends UnicastRemoteObject implements Client 
                 }
 
                 case DISCONNECTION_RESPONSE -> view.deleteAllObservers();
-
-
             }
         }
         view.showMessage(message);

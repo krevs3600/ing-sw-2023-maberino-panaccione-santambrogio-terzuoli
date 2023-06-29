@@ -2,12 +2,10 @@
 
 
 .label {
-    -fx-font-family: 'LillyBelle';
 }
 
 
 .rootPane {
-    -fx-font-family: 'LillyBelle';
     -fx-background-image: url("../Publisher_material/Display_5.jpg");
     -fx-background-size: stretch;
 }
