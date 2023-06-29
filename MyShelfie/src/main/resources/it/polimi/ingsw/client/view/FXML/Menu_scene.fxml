@@ -43,18 +43,12 @@
                         <Insets bottom="60.0" />
                     </VBox.margin>
                 </VBox>
-                <Label alignment="CENTER" prefHeight="63.0" prefWidth="562.0" text=" Please choose what you d like to do" textFill="WHITE">
-                    <font>
-                        <Font name="Libian SC Regular" size="36.0" />
-                    </font>
+                <Label alignment="CENTER" prefHeight="63.0" prefWidth="562.0" text=" PLEASE CHOOSE WHAT YOU'D LIKE TO DO " stylesheets="@../css/menu_scene.css" styleClass="Text">
                     <VBox.margin>
                         <Insets bottom="20.0" />
                     </VBox.margin>
                 </Label>
-            <Button fx:id="CreateNewGame" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#CreateGame" prefHeight="40.0" prefWidth="279.0" text="CREATE A NEW GAME ">
-               <font>
-                  <Font size="16.0" />
-               </font>
+            <Button fx:id="CreateNewGame" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#CreateGame" prefHeight="40.0" prefWidth="279.0" text="CREATE A NEW GAME " stylesheets="@../css/menu_scene.css" styleClass="button">
                <VBox.margin>
                   <Insets bottom="10.0" />
                </VBox.margin>
@@ -75,10 +69,7 @@
                   </LinearGradient>
                </textFill>
             </Button>
-            <Button fx:id="joinGame" contentDisplay="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#JoinGame" prefHeight="40.0" prefWidth="279.0" text="JOIN A  GAME ">
-               <font>
-                  <Font size="16.0" />
-               </font>
+            <Button fx:id="joinGame" contentDisplay="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#JoinGame" prefHeight="40.0" prefWidth="279.0" text="JOIN A  GAME " stylesheets="@../css/menu_scene.css" styleClass="button">
                <VBox.margin>
                   <Insets bottom="10.0" />
                </VBox.margin>
@@ -99,7 +90,7 @@
                   </LinearGradient>
                </textFill>
             </Button>
-            <Button fx:id="ResumeGameButton" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#ResumeGame" prefHeight="40.0" prefWidth="279.0" text="RESUME GAME" textOverrun="CLIP">
+            <Button fx:id="ResumeGameButton" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#ResumeGame" prefHeight="40.0" prefWidth="279.0" text="RESUME GAME" textOverrun="CLIP" stylesheets="@../css/menu_scene.css" styleClass="button">
                <textFill>
                   <LinearGradient endX="1.0" endY="1.0">
                      <stops>
@@ -123,10 +114,7 @@
                   <Insets bottom="10.0" />
                </VBox.margin>
             </Button>
-            <Button fx:id="EXIT" contentDisplay="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#ExitGame" prefHeight="40.0" prefWidth="279.0" text="EXIT">
-               <font>
-                  <Font size="16.0" />
-               </font>
+            <Button fx:id="EXIT" contentDisplay="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#ExitGame" prefHeight="40.0" prefWidth="279.0" text="EXIT" stylesheets="@../css/menu_scene.css" styleClass="button">
                <textFill>
                   <LinearGradient endX="1.0" endY="1.0">
                      <stops>
@@ -147,7 +135,7 @@
                   <Insets bottom="10.0" />
                </VBox.margin>
             </Button>
-            <Button fx:id="ReloadGameButton" mnemonicParsing="false" onMouseClicked="#ReloadGame" prefHeight="40.0" prefWidth="279.0" text="RELOAD GAME">
+            <Button fx:id="ReloadGameButton" mnemonicParsing="false" onMouseClicked="#ReloadGame" prefHeight="40.0" prefWidth="279.0" text="RELOAD GAME" stylesheets="@../css/menu_scene.css" styleClass="button">
                <textFill>
                   <LinearGradient endX="1.0" endY="1.0" startY="0.9216152019002375">
                      <stops>
