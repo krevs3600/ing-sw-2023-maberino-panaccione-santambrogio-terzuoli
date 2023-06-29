@@ -1,12 +1,12 @@
 package it.polimi.ingsw.network.eventMessages;
 
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.network.Server;
+import it.polimi.ingsw.network.Client;
 
 /**
  * <h1>Class PingMessage</h1>
- * The class PingMessage extends the abstract class EventMessage. This type of message is used
- * to check whether a  {@link Player} is still playing or it has disconnected
+ * The class PingMessage extends the abstract class EventMessage. This type of message is used by a
+ *   {@link Client} to notify that it is still playing the game and has not disconnected
  *
  * @author Francesco Santambrogio
  * @version 1.0

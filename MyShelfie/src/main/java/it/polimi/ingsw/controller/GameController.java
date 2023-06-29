@@ -301,7 +301,7 @@ public class GameController implements Serializable {
      * are calculated
      * @return the final score of the {@link Player}
      */
-    public int computePlayerScoreEndGame(Player player){
+    private int computePlayerScoreEndGame(Player player){
         int adjacentTilesScore = 0;
         int persconalGoalCardScore = 0;
         //Computation of points from personal goal card
