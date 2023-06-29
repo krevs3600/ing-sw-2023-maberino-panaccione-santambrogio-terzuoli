@@ -7,7 +7,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="908.0" prefWidth="1510.0" styleClass="rootPane" stylesheets="@../css/start_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.FXML.StartController">
     <children>
@@ -24,14 +23,14 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="394.0" prefWidth="1495.0">
                <children>
-                  <VBox prefHeight="409.0" prefWidth="575.0">
+                  <VBox prefHeight="294.0" prefWidth="500.0">
                      <children>
-                              <Button fx:id="playBtn" alignment="CENTER" mnemonicParsing="false" onAction="#switchToConnection" prefHeight="90.0" prefWidth="575.0" styleClass="playBtn" stylesheets="@../css/start_scene.css" text="START " textAlignment="CENTER" >
+                              <Button fx:id="playBtn" alignment="CENTER" mnemonicParsing="false" onAction="#switchToConnection" prefHeight="101.0" prefWidth="500.0" styleClass="playBtn" stylesheets="@../css/start_scene.css" text="START " textAlignment="CENTER">
                            <VBox.margin>
                               <Insets bottom="30.0" />
                            </VBox.margin>
                         </Button>
-                        <Button fx:id="quitBtn1" mnemonicParsing="false" onMouseClicked="#closeJavaFxMain" prefHeight="90.0" prefWidth="575.0" styleClass="quitBtn" stylesheets="@../css/start_scene.css" text="EXIT " textAlignment="CENTER">
+                        <Button fx:id="quitBtn1" mnemonicParsing="false" onMouseClicked="#closeJavaFxMain" prefHeight="90.0" prefWidth="500.0" styleClass="quitBtn" stylesheets="@../css/start_scene.css" text="EXIT " textAlignment="CENTER">
                            <VBox.margin>
                               <Insets />
                            </VBox.margin>

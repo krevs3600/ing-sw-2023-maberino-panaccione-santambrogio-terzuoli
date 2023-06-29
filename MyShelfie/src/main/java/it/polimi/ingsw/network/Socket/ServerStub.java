@@ -63,11 +63,6 @@ public class ServerStub implements Server {
 
     }
 
-    @Override
-    public void removeClient(Client client) throws RemoteException {
-
-    }
-
     public synchronized void receive(Client client) throws RemoteException {
         GameView gameView;
         EventMessage eventMessage;

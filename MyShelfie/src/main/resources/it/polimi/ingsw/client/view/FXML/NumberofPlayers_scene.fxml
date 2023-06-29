@@ -5,8 +5,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.ToggleGroup?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
@@ -16,33 +14,7 @@
     <children>
         <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
             <children>
-                <VBox prefHeight="200.0" prefWidth="100.0">
-                    <children>
-                        <HBox alignment="CENTER" prefHeight="221.0" prefWidth="1510.0">
-                            <children>
-                                <ImageView fitHeight="250.0" fitWidth="500.0" pickOnBounds="true" preserveRatio="true">
-                                    <image>
-                                        <Image url="@../itemtiles/Giochi1.1.png" />
-                                    </image>
-                                </ImageView>
-                                <ImageView fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
-                                    <image>
-                                        <Image url="@../itemtiles/Cornici1.3.png" />
-                                    </image>
-                                </ImageView>
-                                <ImageView fitHeight="250.0" fitWidth="250.0" preserveRatio="true">
-                                    <image>
-                                        <Image url="@../itemtiles/Trofei1.1.png" />
-                                    </image>
-                                </ImageView>
-                            </children>
-                        </HBox>
-                    </children>
-                    <VBox.margin>
-                        <Insets bottom="60.0" />
-                    </VBox.margin>
-                </VBox>
-                <Label alignment="CENTER" prefHeight="53.0" prefWidth="549.0" text="CHOOSE THE NUMBER OF PLAYERS" textFill="WHITE" styleClass="Text">
+                <Label alignment="CENTER" prefHeight="53.0" prefWidth="549.0" styleClass="Text" text="CHOOSE THE NUMBER OF PLAYERS" textFill="WHITE">
                     <VBox.margin>
                         <Insets bottom="40.0" />
                     </VBox.margin>
@@ -51,7 +23,7 @@
                     <children>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                             <children>
-                                <RadioButton fx:id="twoPlayers" mnemonicParsing="false" prefHeight="40.0" text="2" styleClass="Text">
+                                <RadioButton fx:id="twoPlayers" mnemonicParsing="false" prefHeight="40.0" styleClass="Text" text="2">
                                     <HBox.margin>
                                         <Insets right="50.0" />
                                     </HBox.margin>
@@ -59,12 +31,12 @@
                                         <ToggleGroup fx:id="numbers" />
                                     </toggleGroup>
                                 </RadioButton>
-                                <RadioButton fx:id="threePlayers" mnemonicParsing="false" prefHeight="40.0" text="3" styleClass="Text"  toggleGroup="$numbers">
+                                <RadioButton fx:id="threePlayers" mnemonicParsing="false" prefHeight="40.0" styleClass="Text" text="3" toggleGroup="$numbers">
                                     <HBox.margin>
                                         <Insets right="50.0" />
                                     </HBox.margin>
                                 </RadioButton>
-                                <RadioButton fx:id="fourPlayers" mnemonicParsing="false" prefHeight="40.0" text="4" styleClass="Text" toggleGroup="$numbers">
+                                <RadioButton fx:id="fourPlayers" mnemonicParsing="false" prefHeight="40.0" styleClass="Text" text="4" toggleGroup="$numbers">
                                 </RadioButton>
                             </children>
                             <VBox.margin>
@@ -84,29 +56,6 @@
                                 <Insets top="20.0" />
                             </VBox.margin>
                         </Label>
-                    </children>
-                </VBox>
-                <VBox alignment="BOTTOM_CENTER" prefHeight="301.0" prefWidth="1510.0">
-                    <children>
-                        <HBox alignment="BOTTOM_CENTER" prefHeight="273.0" prefWidth="1513.0">
-                            <children>
-                                <ImageView fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
-                                    <image>
-                                        <Image url="@../itemtiles/Piante1.2.png" />
-                                    </image>
-                                </ImageView>
-                                <ImageView fitHeight="334.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
-                                    <image>
-                                        <Image url="@../itemtiles/Gatti1.1.png" />
-                                    </image>
-                                </ImageView>
-                                <ImageView fitHeight="250.0" fitWidth="485.0" preserveRatio="true">
-                                    <image>
-                                        <Image url="@../itemtiles/Libri1.2.png" />
-                                    </image>
-                                </ImageView>
-                            </children>
-                        </HBox>
                     </children>
                 </VBox>
             </children>

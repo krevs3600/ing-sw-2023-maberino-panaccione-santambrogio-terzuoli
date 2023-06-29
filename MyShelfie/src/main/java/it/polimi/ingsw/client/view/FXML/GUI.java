@@ -528,7 +528,10 @@ public class GUI extends Observable<EventMessage> implements View {
                 ClientDisconnectedMessage disconnectedMessage = (ClientDisconnectedMessage) message;
                 showLongPopup(message.getNickname() + " has disconnected but don't worry, the game goes on!");
             }
-            case WAIT_FOR_OTHER_PLAYERS -> livingBoardController.board.setDisable(true);
+            case WAIT_FOR_OTHER_PLAYERS -> {
+                showPopup("Waiting for another player to reconnect");
+                livingBoardController.board.setDisable(true);
+            }
         }
 
     }

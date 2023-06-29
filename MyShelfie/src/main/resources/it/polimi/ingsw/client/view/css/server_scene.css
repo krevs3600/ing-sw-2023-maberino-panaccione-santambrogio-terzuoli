@@ -1,7 +1,7 @@
 
 
 .rootPane {
-    -fx-background-image: url("../misc/sfondoparquet.jpg");
+    -fx-background-image: url("../misc/scene_background.png");
     -fx-background-size: stretch;
 }
 
