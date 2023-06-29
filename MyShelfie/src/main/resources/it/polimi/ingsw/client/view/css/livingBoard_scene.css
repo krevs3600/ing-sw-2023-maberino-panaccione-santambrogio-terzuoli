@@ -24,21 +24,25 @@
     -fx-font-family: 'LillyBelle';
     -fx-text-fill: linear-gradient(to bottom, #FFD700, #B8860B);
     -fx-effect: dropshadow(gaussian, #8B6914, 2, 0, 0, 0);
-    -fx-font-size: 26;
+    -fx-font-size: 20;
 }
 
-.
+.BackText{
+    -fx-font-family: 'LillyBelle';
+    -fx-text-fill: white;
+    -fx-font-size: 15;
+}
 
 .CongratText {
     -fx-font-family: 'LillyBelle';
-    -fx-font-size: 48;
+    -fx-font-size: 40;
     -fx-text-fill: #BCECAC;
     -fx-effect: dropshadow(gaussian, #5E7954, 2, 0, 0, 0);
 }
 
 .LoseText {
     -fx-font-family: 'LillyBelle';
-    -fx-font-size: 48;
+    -fx-font-size: 40;
     -fx-text-fill: #FF8080;
     -fx-effect: dropshadow(gaussian, #8B0000, 2, 0, 0, 0);
 }

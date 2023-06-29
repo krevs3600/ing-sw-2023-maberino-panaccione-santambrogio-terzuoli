@@ -37,7 +37,7 @@
                   <Insets bottom="12.0" left="18.0" right="25.0" top="11.0" />
                </padding>
             </GridPane>
-            <Button layoutX="549.0" layoutY="15.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="456.0" text="COMPUTE SCORE" textFill="#fcfcfc" styleClass="button">
+            <Button layoutX="549.0" layoutY="15.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="456.0" text="COMPUTE SCORE" stylesheets="@../css/livingBoard_scene.css" styleClass="BackText">
             </Button>
             <ImageView fitHeight="509.0" fitWidth="518.0" layoutX="35.0" layoutY="172.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -109,9 +109,7 @@
                   <Image url="@../misc/x_mark.png" />
                </image>
             </ImageView>
-            <Button layoutX="1276.0" layoutY="833.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="216.0" text="BACK" textFill="WHITE" styleClass="button">
-            </Button>
-            <Button fx:id="backToMenu" layoutX="1201.0" layoutY="30.0" mnemonicParsing="false" onMouseClicked="#backToMenu" prefHeight="42.0" prefWidth="251.0" text="      GO BACK TO THE INITIAL MENU" styleClass="Text" />
+            <Button fx:id="backToMenu" layoutX="1201.0" layoutY="30.0" mnemonicParsing="false" onMouseClicked="#backToMenu" prefHeight="42.0" prefWidth="251.0" text="      GO BACK TO THE MENU"  styleClass="BackText" />
             <ImageView fitHeight="28.0" fitWidth="30.0" layoutX="1212.0" layoutY="29.0">
                <image>
                   <Image url="@../Publisher_material/casa2.png" />

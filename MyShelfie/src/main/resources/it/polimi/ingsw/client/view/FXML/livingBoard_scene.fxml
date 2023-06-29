@@ -61,7 +61,7 @@
                                 </GridPane>
                                 <StackPane layoutX="517.0" layoutY="460.0" prefHeight="61.0" prefWidth="64.0" rotate="7.6">
                                     <children>
-                                        <ImageView fitHeight="65.0" fitWidth="62.0" pickOnBounds="true" preserveRatio="true" styleClass="scoringToken" >
+                                        <ImageView fitHeight="65.0" fitWidth="62.0" pickOnBounds="true" preserveRatio="true" styleClass="scoringToken">
                                             <image>
                                                 <Image url="@../scoring%20tokens/end%20game.jpg" />
                                             </image>
@@ -70,7 +70,7 @@
                                 </StackPane>
                                 <AnchorPane fx:id="anchorPaneForTheCandPGoalCards" layoutX="12.0" layoutY="105.0" prefHeight="453.0" prefWidth="609.0" visible="false">
                                     <children>
-                                        <ImageView fx:id="CommonGoalAchieved" fitHeight="431.0" fitWidth="499.0" layoutX="69.0" layoutY="-10.0" styleClass="goalReached" visible="false" >
+                                        <ImageView fx:id="CommonGoalAchieved" fitHeight="431.0" fitWidth="499.0" layoutX="69.0" layoutY="-10.0" styleClass="goalReached" visible="false">
                                             <image>
                                                 <Image url="@../scoring%20tokens/scoring_back_EMPTY.jpg" />
                                             </image>
@@ -81,10 +81,7 @@
                                 </AnchorPane>
                         <AnchorPane fx:id="PaneForExit" layoutX="13.0" layoutY="175.0" prefHeight="127.0" prefWidth="615.0" style="-fx-background-color: #A00000;" visible="false">
                            <children>
-                              <Text layoutX="221.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="     Are you sure?" wrappingWidth="223.8770751953125">
-                                 <font>
-                                    <Font name="Libian SC Regular" size="24.0" />
-                                 </font>
+                              <Text layoutX="221.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="BackText" text="     ARE YOU SURE?" wrappingWidth="223.8770751953125">
                                  <fill>
                                     <LinearGradient endX="1.0" endY="1.0">
                                        <stops>
@@ -102,10 +99,7 @@
                                     </LinearGradient>
                                  </fill>
                               </Text>
-                              <RadioButton fx:id="YesExit" layoutX="201.0" layoutY="64.0" mnemonicParsing="false" onMouseClicked="#leave_definitively" text="YES">
-                                 <font>
-                                    <Font name="Libian SC Regular" size="18.0" />
-                                 </font>
+                              <RadioButton fx:id="YesExit" layoutX="201.0" layoutY="64.0" mnemonicParsing="false" onMouseClicked="#leave_definitively" styleClass="BackText" text="YES">
                                  <textFill>
                                     <LinearGradient endX="1.0" endY="1.0">
                                        <stops>
@@ -126,10 +120,7 @@
                                     <ToggleGroup fx:id="exitConfirmation" />
                                  </toggleGroup>
                               </RadioButton>
-                              <RadioButton fx:id="NoExit" layoutX="350.0" layoutY="64.0" mnemonicParsing="false" onMouseClicked="#keep_playing" text="NO" toggleGroup="$exitConfirmation">
-                                 <font>
-                                    <Font name="Libian SC Regular" size="18.0" />
-                                 </font>
+                              <RadioButton fx:id="NoExit" layoutX="350.0" layoutY="64.0" mnemonicParsing="false" onMouseClicked="#keep_playing" styleClass="BackText" text="NO" toggleGroup="$exitConfirmation">
                                  <textFill>
                                     <LinearGradient endX="1.0" endY="1.0">
                                        <stops>
@@ -221,7 +212,7 @@
                                                 <ImageView fx:id="tokenCommonCard2" fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true" />
                                             </children>
                                         </StackPane>
-                              <TitledPane fx:id="descriptionSecondCG" expanded="false" layoutX="60.0" layoutY="21.0" prefHeight="223.0" prefWidth="266.0" styleClass="Text">
+                              <TitledPane fx:id="descriptionSecondCG" expanded="false" layoutX="60.0" layoutY="31.0" prefHeight="223.0" prefWidth="266.0" styleClass="Text">
                                  <content>
                                     <Text fx:id="descriptionCommonGoalCard2_text" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="TinyText" text="Text" textAlignment="CENTER" wrappingWidth="264.21630859375">
                                     </Text>
@@ -351,7 +342,7 @@
          <bottom>
             <AnchorPane prefHeight="99.0" prefWidth="1510.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button fx:id="ExitGame_button" layoutX="615.0" layoutY="3.0" mnemonicParsing="false" onMouseClicked="#ExitGame" prefHeight="45.0" prefWidth="230.0" style="-fx-background-radius: 20px;" styleClass="button" stylesheets="@../css/livingBoard_scene.css" text="EXIT GAME">
+                  <Button fx:id="ExitGame_button" layoutX="615.0" layoutY="3.0" mnemonicParsing="false" onMouseClicked="#ExitGame" prefHeight="45.0" prefWidth="230.0" styleClass="BackText" stylesheets="@../css/livingBoard_scene.css" text="EXIT GAME">
                   </Button>
                </children>
             </AnchorPane>
