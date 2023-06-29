@@ -27,6 +27,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
@@ -478,6 +479,7 @@ public class GUI extends Observable<EventMessage> implements View {
             }
             case CLIENT_DISCONNECTION -> {
                 ClientDisconnectedMessage disconnectedMessage = (ClientDisconnectedMessage) message;
+
                 showLongPopup(message.getNickname() + " has disconnected\nbut don't worry, the game goes on!");
             }
             case WAIT_FOR_OTHER_PLAYERS -> {
@@ -642,11 +644,10 @@ public class GUI extends Observable<EventMessage> implements View {
 
                         livingBoardController.anchorPaneForTheCandPGoalCards.setVisible(true);
                         livingBoardController.CommonGoalAchieved.setVisible(true);
-                        livingBoardController.CommonGoalText.setText("YOU COMPLETED THE " + number + " COMMON GOAL");
+                        livingBoardController.CommonGoalText.setText("YOU COMPLETED THE\n " + number + "\n COMMON GOAL");
                         livingBoardController.CommonGoalText.setVisible(true);
-                        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(5000), event -> livingBoardController.anchorPaneForTheCandPGoalCards.setVisible(false)));
+                        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(5500), event -> livingBoardController.anchorPaneForTheCandPGoalCards.setVisible(false)));
                         timeline.play();
-                        showPopup("YOU COMPLETED THE " + number + " COMMON GOAL");
                     } else {
                         showPopup(eventMessage.getNickname() + " COMPLETED THE " + number + " COMMON GOAL");
                     }
@@ -726,7 +727,7 @@ public class GUI extends Observable<EventMessage> implements View {
         Popup popup = new Popup();
         Label noSelection = new Label(text);
         noSelection.setStyle(
-                "-fx-background-color: #FF7F50; -fx-text-fill: #FFFFFF;-fx-font-size: 30; -fx-padding: 30px;-fx-font-family:'LillyBelle';-fx-background-radius: 20px;-fx-text-alignment: center;");
+                "-fx-background-color: #DAA520; -fx-text-fill: #FFFFFF;-fx-font-size: 30; -fx-padding: 30px;-fx-font-family:'LillyBelle';-fx-background-radius: 20px;-fx-text-alignment: center;");
         popup.getContent().add(noSelection);
         popup.setAutoHide(true);
         PauseTransition pause = new PauseTransition(Duration.seconds(3.5));
@@ -750,8 +751,9 @@ public class GUI extends Observable<EventMessage> implements View {
         Label noSelection = new Label(text);
         noSelection.setStyle("-fx-background-color: #FF7F50; -fx-text-fill: #FFFFFF;-fx-text-alignment: 'center';-fx-font-size: 30; -fx-padding: 30px;-fx-font-family:'LillyBelle';-fx-background-radius: 20px;");
         popup.getContent().add(noSelection);
-        popup.setX(300);
+        popup.setX(450);
         popup.setAutoHide(true);
+
         PauseTransition pause = new PauseTransition(Duration.seconds(4));
         pause.setOnFinished(event -> popup.hide());
 

@@ -75,7 +75,7 @@
                                                 <Image url="@../scoring%20tokens/scoring_back_EMPTY.jpg" />
                                             </image>
                                         </ImageView>
-                                        <Text fx:id="CommonGoalText" fill="#e8c77acf" layoutX="158.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Text" text="Congratulations you have reached the first/second common goal! You will now receive a scoring token.. Keep it up!" visible="false" wrappingWidth="344.74981689453125">
+                                        <Text fx:id="CommonGoalText" fill="#e8c77acf" layoutX="158.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="CongratText" text="Congratulations you have reached the first/second common goal! You will now receive a scoring token.. Keep it up!" visible="false" wrappingWidth="344.74981689453125">
                                         </Text>
                                     </children>
                                 </AnchorPane>

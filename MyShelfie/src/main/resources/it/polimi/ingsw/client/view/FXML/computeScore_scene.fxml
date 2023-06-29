@@ -11,7 +11,6 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.shape.Line?>
-<?import javafx.scene.text.Font?>
 
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="908.0" prefWidth="1510.0" styleClass="rootPane" stylesheets="@../css/livingBoard_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.FXML.ComputeScoreController">
    <children>
@@ -37,7 +36,7 @@
                   <Insets bottom="12.0" left="18.0" right="25.0" top="11.0" />
                </padding>
             </GridPane>
-            <Button layoutX="549.0" layoutY="15.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="456.0" text="COMPUTE SCORE" stylesheets="@../css/livingBoard_scene.css" styleClass="BackText">
+            <Button layoutX="549.0" layoutY="15.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="456.0" styleClass="BackText" stylesheets="@../css/livingBoard_scene.css" text="COMPUTE SCORE">
             </Button>
             <ImageView fitHeight="509.0" fitWidth="518.0" layoutX="35.0" layoutY="172.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -69,20 +68,20 @@
                   <Image url="@../scoringtokens/Adjacent_Tiles.png" />
                </image>
             </ImageView>
-            <Label fx:id="commonPoint1" layoutX="944.0" layoutY="192.0" text="= 0 points" styleClass="TextPoints" >
+            <Label fx:id="commonPoint1" layoutX="944.0" layoutY="192.0" styleClass="TextPoints" text="= 0 points">
             </Label>
-            <Label fx:id="commonPoint2" layoutX="944.0" layoutY="342.0" text="= 0 points " styleClass="TextPoints">
+            <Label fx:id="commonPoint2" layoutX="944.0" layoutY="342.0" styleClass="TextPoints" text="= 0 points ">
             </Label>
-            <Label fx:id="endGamePoint" layoutX="944.0" layoutY="491.0" text="= 0 points "  styleClass="TextPoints" >
+            <Label fx:id="endGamePoint" layoutX="944.0" layoutY="491.0" styleClass="TextPoints" text="= 0 points ">
             </Label>
-            <Label fx:id="personalGoalPoint" layoutX="944.0" layoutY="622.0" text="= 0 points " styleClass="TextPoints">
+            <Label fx:id="personalGoalPoint" layoutX="944.0" layoutY="622.0" styleClass="TextPoints" text="= 0 points ">
             </Label>
-            <Label fx:id="generalPoint" layoutX="944.0" layoutY="742.0" text="= 0 points " styleClass="TextPoints">
+            <Label fx:id="generalPoint" layoutX="944.0" layoutY="742.0" styleClass="TextPoints" text="= 0 points ">
             </Label>
             <Line endX="687.0" endY="1.220703125E-4" layoutX="831.0" layoutY="818.0" startX="-258.44573974609375" startY="1.220703125E-4" stroke="#fff9f9" />
-            <Label layoutX="775.0" layoutY="832.0" prefHeight="33.0" prefWidth="203.0" text="TOTAL" styleClass="TextPoints">
+            <Label layoutX="775.0" layoutY="832.0" prefHeight="33.0" prefWidth="203.0" styleClass="TextPoints" text="TOTAL">
             </Label>
-            <Label fx:id="totalScore" layoutX="943.0" layoutY="829.0" prefHeight="33.0" prefWidth="203.0" text="= X points " styleClass="TextPoints" >
+            <Label fx:id="totalScore" layoutX="943.0" layoutY="829.0" prefHeight="33.0" prefWidth="203.0" styleClass="TextPoints" text="= X points ">
             </Label>
             <ImageView fx:id="checkFirstCommonGoal" fitHeight="67.0" fitWidth="74.0" layoutX="557.0" layoutY="182.0">
                <image>
@@ -109,7 +108,7 @@
                   <Image url="@../misc/x_mark.png" />
                </image>
             </ImageView>
-            <Button fx:id="backToMenu" layoutX="1201.0" layoutY="30.0" mnemonicParsing="false" onMouseClicked="#backToMenu" prefHeight="42.0" prefWidth="251.0" text="      GO BACK TO THE MENU"  styleClass="BackText" />
+            <Button fx:id="backToMenu" layoutX="1201.0" layoutY="30.0" mnemonicParsing="false" onMouseClicked="#backToMenu" prefHeight="42.0" prefWidth="237.0" styleClass="BackText" text="      GO BACK TO THE MENU" />
             <ImageView fitHeight="28.0" fitWidth="30.0" layoutX="1212.0" layoutY="29.0">
                <image>
                   <Image url="@../Publisher_material/casa2.png" />

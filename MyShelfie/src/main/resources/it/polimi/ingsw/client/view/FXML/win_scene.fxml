@@ -52,9 +52,9 @@
                         <Cursor fx:constant="DEFAULT" />
                     </cursor>
                 </ImageView>
-                <Label fx:id="congratulations" layoutX="511.0" layoutY="601.0" prefHeight="50.0" prefWidth="433.0" styleClass="CongratText" stylesheets="@../css/livingBoard_scene.css" text="CONGRATULATIONS!">
+                <Label fx:id="congratulations" layoutX="489.0" layoutY="601.0" prefHeight="50.0" prefWidth="608.0" styleClass="CongratText" stylesheets="@../css/livingBoard_scene.css" text="     CONGRATULATIONS!">
                 </Label>
-                <Label fx:id="youWonTheGame" layoutX="479.0" layoutY="646.0" prefHeight="114.0" prefWidth="506.0" styleClass="CongratText" stylesheets="@../css/livingBoard_scene.css" text="YOU'VE WON THE GAME ">
+                <Label fx:id="youWonTheGame" layoutX="499.0" layoutY="646.0" prefHeight="114.0" prefWidth="506.0" styleClass="CongratText" stylesheets="@../css/livingBoard_scene.css" text="YOU'VE WON THE GAME ">
                 </Label>
                 <Label fx:id="bestPlayer" layoutX="360.0" layoutY="750.0" styleClass="CongratText" stylesheets="@../css/livingBoard_scene.css" text="YOU ARE THE BEST PLAYER OF ALL TIME ">
                 </Label>
@@ -86,7 +86,7 @@
             </ImageView>
             <Button fx:id="MyScoreDetail" layoutX="547.0" layoutY="18.0" mnemonicParsing="false" onMouseClicked="#showDetailsOfTheScore" prefHeight="60.0" prefWidth="319.0" styleClass="WinText" text="VIEW DETAIL">
             </Button>
-            <Button fx:id="backToMenu" layoutX="1231.0" layoutY="337.0" mnemonicParsing="false" onMouseClicked="#backToMenu" prefHeight="42.0" prefWidth="251.0" styleClass="BackText" text="     GO BACK TO THE  MENU" />
+            <Button fx:id="backToMenu" layoutX="1231.0" layoutY="337.0" mnemonicParsing="false" onMouseClicked="#backToMenu" prefHeight="42.0" prefWidth="233.0" styleClass="BackText" text="     GO BACK TO THE  MENU" />
             <ImageView fitHeight="30.0" fitWidth="28.0" layoutX="1240.0" layoutY="335.0">
                <image>
                   <Image url="@../Publisher_material/casa2.png" />
