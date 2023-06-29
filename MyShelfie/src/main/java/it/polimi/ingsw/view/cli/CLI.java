@@ -14,6 +14,7 @@ import it.polimi.ingsw.network.MessagesToClient.errorMessages.JoinErrorMessage;
 import it.polimi.ingsw.network.MessagesToClient.errorMessages.ReloadGameErrorMessage;
 import it.polimi.ingsw.network.MessagesToClient.errorMessages.ResumeGameErrorMessage;
 import it.polimi.ingsw.network.MessagesToClient.requestMessage.*;
+import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.network.eventMessages.EventMessage;
 import it.polimi.ingsw.network.Socket.ServerStub;
 import it.polimi.ingsw.network.eventMessages.*;
@@ -26,7 +27,15 @@ import java.rmi.registry.Registry;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.Set;
-
+/**
+ * <h1>Class CLI</h1>
+ * The class CLI extends the Observable abstract class and implements all the methods of the View interface.
+ * This class is used to manage the command line interface
+ *
+ * @author Francesco Santambrogio, Francesca Pia Panaccione, Carlo Terzuoli
+ * @version 1.0
+ * @since 5/06/2023
+ */
 public class CLI extends Observable<EventMessage> implements View {
 
     private String nickname;
@@ -34,6 +43,11 @@ public class CLI extends Observable<EventMessage> implements View {
     private Scanner in;
 
 
+    /**
+     * This method is used to run the CLI
+     * First, it prints the Logo of MyShelfie. Then it tries to establish a connection to the {@link Server} either
+     * with Socket or RMI, according to the input of the User.
+     */
     public void run() {
         printTitle();
         try {
@@ -45,11 +59,21 @@ public class CLI extends Observable<EventMessage> implements View {
         }
     }
 
+    /**
+     * This method is used to print the logo of MyShelfie on the CLI
+     */
     private void printLogo() {
         out = new PrintStream(System.out);
         out.println("myShelfie\n");
     }
 
+    /**
+     * This method is used to establish a connection with the {@link Server}, either via Socket or RMI, according to
+     * what is specified by the user input. Respectively, the connection will be established with RMI if the user input
+     * is "r", and Socket if it is "s"
+     * @throws RemoteException when the remote call fails
+     * @throws NotBoundException if there is no available {@link Server} with the binding specified by the method
+     */
     public void createConnection() throws RemoteException, NotBoundException {
         in = new Scanner(System.in);
         String connectionType = askConnectionType();
@@ -97,6 +121,11 @@ public class CLI extends Observable<EventMessage> implements View {
         }
     }
 
+    /**
+     * This method asks the user to answer with the type of connection he/she wants to establish: "r" for RMI
+     * or "s" for Socket
+     * @return the connection type chosen by the user if the input is valid
+     */
     public String askConnectionType() {
         String connectionType;
         do {
@@ -108,6 +137,11 @@ public class CLI extends Observable<EventMessage> implements View {
 
     }
 
+    /**
+     * This method is used to ask the user the address of the {@link Server} he wants to register to. If the user
+     * just presses ENTER the local host will be selected
+      * @return the address chosen by the user
+     */
     public String askServerAddress(){
         String address;
         do  {
@@ -122,6 +156,11 @@ public class CLI extends Observable<EventMessage> implements View {
         return address;
     }
 
+    /**
+     * This method is used to ask the user the port he/she wants to use for the connection. If the user
+     * just presses ENTER the default port will be selected
+     * @return the address chosen by the user
+     */
     public int askServerPort(){
         String serverPort;
         do {
@@ -136,6 +175,11 @@ public class CLI extends Observable<EventMessage> implements View {
         return Integer.parseInt(serverPort);
     }
 
+    /**
+     * This method is used to determine whether the port provided by the user is valid or not
+     * @param serverPort the port chosen by the user to be checked
+     * @return a {@code boolean} value specifying if the port provided is valid
+     */
     public boolean isValidPort(String serverPort) {
         try {
             int port = Integer.parseInt(serverPort);
@@ -146,6 +190,11 @@ public class CLI extends Observable<EventMessage> implements View {
         }
     }
 
+    /**
+     * This method is used to determine whether the address provided by the user is valid or not
+     * @param address the address chosen by the user to be checked
+     * @return a {@code boolean} value specifying if the address provided is valid
+     */
     public boolean isValidIPAddress(String address) {
         String regExp = "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
                 "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
@@ -155,6 +204,12 @@ public class CLI extends Observable<EventMessage> implements View {
     }
 
 
+    /**
+     * This method presents the user with the first snippet of the game, the game menu, on the command line
+     * interface. First it prints the menu,from which a is presented with many options. A user can decide to create or
+     * join game, to resume or to reload one, or finally the user can just decide to exit the menu
+     *
+     */
     public void gameMenu() {
         printMenu();
         boolean validOption;
@@ -194,25 +249,43 @@ public class CLI extends Observable<EventMessage> implements View {
 
     }
 
+    /**
+     * This method notifies the {@link Server} that a user wants to resume an already existing game
+     */
     private void resumeGame() {
         setChanged();
         notifyObservers(new ResumeGameMessage(getNickname()));
     }
 
+    /**
+     * This method notifies the {@link Server} that a user wants to reload an already existing game
+     */
     private void reloadGame() {
         setChanged();
         notifyObservers(new ReloadGameMessage(getNickname()));
     }
 
+    /**
+     * After a user has decided to create a game, he/she is asked to the specs of the game: the game name and
+     * the number of players that will play the game
+     */
     private void createGame() {
         askGameSpecs();
     }
 
+    /**
+     * This method notifies the {@link Server} that a user wants to join a game
+     */
     private void joinGame(){
         setChanged();
         notifyObservers(new JoinGameMessage(getNickname()));
     }
 
+    /**
+     * This method is used to notify the server with the number of players chosen by the player for the newly created game.
+     * At this point, the game is created and the creator waits for the other participants to connect to start playing.
+     * @param gameName the name of the game in which to choose the number of players.
+     */
     public void askNumberOfPlayers(String gameName) {
 
         int numOfPlayers = 0;
@@ -235,6 +308,10 @@ public class CLI extends Observable<EventMessage> implements View {
     }
 
 
+    /**
+     * This method is used to ask the player the number of players and game name which will characterize the
+     * game he/she is creating
+     */
     public void askGameSpecs(){
 
         String gameName = "";
@@ -260,6 +337,10 @@ public class CLI extends Observable<EventMessage> implements View {
         setChanged();
         notifyObservers(new GameSpecsMessage(getNickname(),gameName, numOfPlayers));
     }
+
+    /**
+     * This method is used to ask the player creating a new game the name of the game he/she is creating
+     */
     public void askGameName() {
 
         String gameName = "";
@@ -273,6 +354,9 @@ public class CLI extends Observable<EventMessage> implements View {
     }
 
 
+    /**
+     * This method is used to ask a player the nickname with which he/she will be playing games
+     */
     public void askNickname() {
         String nickName = "";
         while (nickName.length() < 1) {
@@ -284,6 +368,12 @@ public class CLI extends Observable<EventMessage> implements View {
         notifyObservers(new NicknameMessage(nickName));
     }
 
+    /**
+     * After selecting the option "Join game" the player is presented with a list containing all the available games
+     * currently waiting for other players to join before starting. A user can then decide which game he/she wants
+     * to join and such choice will be communicated to the {@link Server}
+     * @param availableGameNames the list of the names of the games in the lobby with missing participants to start.
+     */
     public void showGameNamesList(Set<String> availableGameNames) {
         if (availableGameNames.isEmpty()){
             out.println("No games available, please create a new one!");
@@ -312,14 +402,25 @@ public class CLI extends Observable<EventMessage> implements View {
         out.println(MessageCLI.TITLE);
     }
 
+    /**
+     * Method that prints the menu on command line interface
+     */
     public void printMenu() {
         out.println(MessageCLI.MENU);
     }
 
+    /**
+     * Getter method
+     * @return the nickname
+     */
     public String getNickname () {
         return this.nickname;
     }
 
+    /**
+     * Shows a generic message.
+     * @param message the message to be shown to the client.
+     */
     public void showMessage(MessageToClient message) {
 
         switch (message.getType()) {
@@ -492,6 +593,13 @@ public class CLI extends Observable<EventMessage> implements View {
         }
     }
 
+    /**
+     * This method overrides the {@code Observer update}: it is called by the {@link Server} when an {@link EventMessage} is generated
+     *  from the Model.
+     *  According to the {@EventMessage #type}, this method interacts differently with the User
+     * @param game the Observable class
+     * @param eventMessage the specific event of which the class is notified
+     */
     public void update(GameView game, EventMessage eventMessage) {
         switch (eventMessage.getType()) {
 

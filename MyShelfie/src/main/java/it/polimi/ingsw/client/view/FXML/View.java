@@ -15,6 +15,7 @@ import it.polimi.ingsw.model.Space;
 import it.polimi.ingsw.network.MessagesToClient.MessageToClient;
 import it.polimi.ingsw.network.eventMessages.EventMessage;
 import javafx.beans.Observable;
+import it.polimi.ingsw.network.Server;
 
 import java.io.IOException;
 import java.rmi.NotBoundException;
@@ -122,9 +123,8 @@ public interface View {
 
 
     /**
-     * This method overrides the {@code Observer update}: it is called by an {@link Observable} class,
-     * in this case a {@link GameView},
-     * when it is notified about an event passed as an {@link EventMessage}.
+     * This method overrides the {@code Observer update}: it is called by the {@link Server} when an {@link EventMessage} is generated
+     * from the Model.
      * According to the {@EventMessage #type}, this method interacts differently with the User
      * @param gameView the Observable class
      * @param eventMessage the specific event of which the class is notified

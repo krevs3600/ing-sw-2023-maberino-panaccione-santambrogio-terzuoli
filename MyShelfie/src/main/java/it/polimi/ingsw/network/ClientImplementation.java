@@ -9,6 +9,7 @@ import it.polimi.ingsw.network.MessagesToClient.requestMessage.LoginResponseMess
 import it.polimi.ingsw.network.MessagesToClient.requestMessage.RequestMessage;
 import it.polimi.ingsw.network.eventMessages.EventMessage;
 import it.polimi.ingsw.view.cli.CLI;
+import it.polimi.ingsw.view.*;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -88,9 +89,8 @@ public class ClientImplementation extends UnicastRemoteObject implements Client 
 
 
     /**
-     * Initialize connection to the {@link Server} and send {@link EventMessage}s to it. Works from
-     * {@link CLI} as well as from {@link GUI}.
-     * This method adds the {@link CLI} as an {@link Observer} of the {@link EventMessage}. Then, the {@link Server} is updated
+     * Initialize connection to the {@link Server} and send {@link EventMessage}s to it.
+     * This method adds either the {@link CLI} or the {@link View} as an {@link Observer} of the {@link EventMessage}. Then, the {@link Server} is updated
      * with such {@link EventMessage}
      */
     private void initialize(Server server) throws RemoteException {
