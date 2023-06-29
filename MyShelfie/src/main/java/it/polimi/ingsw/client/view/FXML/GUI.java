@@ -200,11 +200,13 @@ public class GUI extends Observable<EventMessage> implements View {
 
     @Override
     public void askNickname() {
-      //  this.nickname=this.nicknameController.getNickname();
-        // todo: ho settato il nickname dopo che arriva la risposta dal server invece che qui , vedere se funziona
-        setChanged();
-        notifyObservers(new NicknameMessage(this.nicknameController.getNickname()));
-
+        String nickname = nicknameController.getNickname();
+        if (!nickname.isEmpty()){
+            setChanged();
+            notifyObservers(new NicknameMessage(nickname));
+        } else {
+            showPopup("Field is empty,\nplease write your nickname");
+        }
     }
 
 
@@ -239,11 +241,22 @@ public class GUI extends Observable<EventMessage> implements View {
 
                         try {
                             serverStub.close();
+                            try {
+                                FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("RMIorSocket_scene.fxml"));
+                                scene = new Scene(fxmlLoader.load());
+                                this.stage = stage;
+                                Platform.runLater(() -> stage.setScene(scene));
+                                rmIorSocketController = fxmlLoader.getController();
+                                rmIorSocketController.setGui(this);
+                                showPopup("Server crashed, try to reconnect");
+                            } catch (IOException ee) {
+                                throw new RuntimeException(ee);
+                            }
+
                         } catch (RemoteException ex) {
                             System.err.println("Cannot close connection with server. Halting...");
-                            // todo: bisogna far comparire dei pop-up forse oppure chiudere totalmente lo stage
+                            System.exit(1);
                         }
-                        System.exit(1);
                     }
                 }
             });
@@ -276,6 +289,11 @@ public class GUI extends Observable<EventMessage> implements View {
         return 0;
     }
 
+    @Override
+    public void askGameSpecs() {
+        return;
+    }
+
     /**
      * This method is used to notify the server of the tile chosen by the player
      * by sending a message with the row and column of the chosen tile after the player has clicked on one tile in the {@code livingBoard_scene.fxml}.
@@ -301,26 +319,21 @@ public class GUI extends Observable<EventMessage> implements View {
      * otherwise a warning message will be displayed.
      *
      */
-    //TODO: askgamespecs
     public void askGameName() {
         String gameName = this.gameNameController.getTextField();
-        setChanged();
-        notifyObservers(new GameNameMessage(getNickname(), gameName));
+        if (!gameName.isEmpty()){
+            setChanged();
+            notifyObservers(new GameNameMessage(getNickname(), gameName));
+        } else {
+            showPopup("Please write a name for your game");
+        }
+
     }
 
     @Override
     public void showGameNamesList(Set<String> availableGameNames) {
         setChanged();
         notifyObservers(new GameNameChoiceMessage(getNickname(), this.gameNameListController.getGameToJoin()));
-
-    }
-
-    //todo secondo me si può fare lo stesso metodo nell'interfaccia view e poi implementarlo
-
-
-    //todo penso si possa togliere
-    public void askGameSpecs() {
-
     }
 
     @Override
@@ -380,15 +393,12 @@ public class GUI extends Observable<EventMessage> implements View {
                         throw new RuntimeException(e);
                     }
                 } else {
-                    this.numberOfPlayersController.missingNumberLabel.setVisible(true);
+                    showPopup("Please select the number of players");
                 }
             }
 
             case JOIN_GAME_RESPONSE -> {
-                // questo viene invocato prima di digitare il nome del gioco, perciò l'errore  della lobby si ha nel momento in cui chiedo di joinare ma non ci sono giochi disponibili
                 JoinGameResponseMessage joinGameResponseMessage = (JoinGameResponseMessage) message;
-                //showGameNamesList(joinGameResponseMessage.getAvailableGamesInLobby());//todo: aggiungere qui lo switch alla scena in cui viene mostrata la lista di giochi
-                //else if (createorJoinGameController.getJoinGameb()) {
                 if (!((JoinGameResponseMessage) message).getAvailableGamesInLobby().isEmpty()) {
                     try {
                         FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("GameNameList_scene.fxml"));
@@ -446,10 +456,7 @@ public class GUI extends Observable<EventMessage> implements View {
                     System.out.println(e.getMessage());
                 }
             }
-
-
             case JOIN_GAME_ERROR -> {
-                JoinErrorMessage joinErrorMessage = (JoinErrorMessage) message;
                 showPopup("No available games in the lobby");
             }
             case RESUME_GAME_ERROR -> {
@@ -481,7 +488,6 @@ public class GUI extends Observable<EventMessage> implements View {
 
             case PLAYER_JOINED_LOBBY_RESPONSE -> {
                 PlayerJoinedLobbyMessage player = (PlayerJoinedLobbyMessage) message;
-                //out.println("\n" + player.getNickname() + " joined lobby") TODO: settare il text della lobby ;
                 Platform.runLater(() -> lobbyController.PlayerJoinedGame.setText(player.getNickname() + " joined lobby"));
                 this.lobbyController.PlayerJoinedGame.setVisible(true);
                 // ok forse il comando sotto non ha senso perche sono nella GUI di un client che quindi vede il suo lobbyController
@@ -520,24 +526,8 @@ public class GUI extends Observable<EventMessage> implements View {
 
             case CLIENT_DISCONNECTION -> {
                 ClientDisconnectedMessage disconnectedMessage = (ClientDisconnectedMessage) message;
-             //   livingBoardController.TextForResilience.setText(message.getNickname() + " has disconnected but don't worry, the game goes on!");
-             //   livingBoardController.PaneForResilience.setVisible(true);
-
-
-
-             showLongPopup(message.getNickname() + " has disconnected but don't worry, the game goes on!");
-
-               // showPopup(message.getNickname() + " has disconnected");
-
-               
+                showLongPopup(message.getNickname() + " has disconnected but don't worry, the game goes on!");
             }
-            //todo verificare che non serva più
-
-           //  case DISCONNECTION_RESPONSE -> {
-           //      showPopup("You lost the connection to the server, and can no longer play");
-           //      createConnection();
-           //  }
-
             case WAIT_FOR_OTHER_PLAYERS -> livingBoardController.board.setDisable(true);
         }
 
@@ -553,8 +543,6 @@ public class GUI extends Observable<EventMessage> implements View {
         setChanged();
         notifyObservers(new GameCreationMessage(getNickname(), this.numberOfPlayersController.getNumberOfPlayersChosen(), gameName));
     }
-// todo : questi due metodi ora possono essere tolti perche il check lo facciamo direttamente nel controller della scena, però da errore perche altrimenti non implementiamo tutti i metodi dell'interfaccia.. è un problema?
-
     @Override
     public boolean isValidPort(String serverPort) {
         return false;
@@ -566,7 +554,6 @@ public class GUI extends Observable<EventMessage> implements View {
     public boolean isValidIPAddress(String address) {
         return false;
     }
-    // TODO: mettere tutto in un metodo che cambia il root Pane in base al path che do in input
     @Override
     public void gameMenu() {
         if (menuController.getCreateGame()) {
@@ -602,7 +589,6 @@ public class GUI extends Observable<EventMessage> implements View {
         this.game = game;
         switch (eventMessage.getType()) {
             case BOARD -> {
-                // todo: in questo caso deve comparire il pop up con i personal goal card e i common goal cards e si inizializza la scena
                 if (isFirstTime) {
                     try {
                         FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("livingBoard_scene.fxml"));
@@ -639,8 +625,6 @@ public class GUI extends Observable<EventMessage> implements View {
                         this.livingBoardController.setTurnLabelGreen();
                         this.livingBoardController.turnLabel.setText("YOUR TURN");
                         this.livingBoardController.setSphereTurnGreen();
-                       // showPopup("it's your turn"); // todo ricontrollare questo pop up non mi sembra che compaia
-                       // livingBoardController.OtherPlayerTurnLabel.setVisible(false);
                         livingBoardController.board.setDisable(false);
                         livingBoardController.disableColumnChoice();
                     });
@@ -651,8 +635,6 @@ public class GUI extends Observable<EventMessage> implements View {
                         livingBoardController.turnLabel.setText(eventMessage.getNickname()+" 'S TURN");
                         livingBoardController.board.setDisable(true);
                         livingBoardController.disableColumnChoice();
-                        // livingBoardController.OtherPlayerTurnLabel.setText("Wait... " + eventMessage.getNickname() + " is picking tiles");
-                        // livingBoardController.OtherPlayerTurnLabel.setVisible(true);
                     });
                 }
             }
@@ -932,7 +914,6 @@ public class GUI extends Observable<EventMessage> implements View {
                     throw new RuntimeException(e);
                 }
             }
-
             case "computeScore_scene.fxml" -> {
                 try {
                     FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("win_scene.fxml"));

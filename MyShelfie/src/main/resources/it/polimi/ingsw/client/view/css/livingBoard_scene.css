@@ -62,3 +62,6 @@
     -fx-border-color:#bbf4b0;
     -fx-border-width: 3;
 }
+#goalReached{
+    -fx-background-image: url("../scoring tokens/scoring_back_EMPTY.jpg");
+}

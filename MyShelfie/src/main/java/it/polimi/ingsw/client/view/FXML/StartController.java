@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.view.FXML;
 
 import it.polimi.ingsw.network.eventMessages.EventMessage;
 import it.polimi.ingsw.observer_observable.Observable;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -46,10 +47,9 @@ public class StartController extends Observable<EventMessage>{
 
 
     public void closeJavaFxMain(){
-       GuiApp.getWindow().close();
+        Platform.exit();
+        System.exit(0);
     }
-
-//TODO: refactor del metodo (createGame)
 
     /**
      *This method is used to switch from the initial fxml scene to the connection scene
@@ -57,7 +57,6 @@ public class StartController extends Observable<EventMessage>{
     public void switchToConnection(ActionEvent event) throws IOException {
         gui.askTypeOfConnection(gui.getStage());
     }
-
 
 }
 

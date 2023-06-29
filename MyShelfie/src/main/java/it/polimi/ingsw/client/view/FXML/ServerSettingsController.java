@@ -65,8 +65,6 @@ public class ServerSettingsController {
         address = ipAddress.getText().isEmpty() ? "127.0.0.1" : ipAddress.getText();
         chosenPort = port.getText().isEmpty() ? 1099 : Integer.parseInt(port.getText());
 
-        //TODO: check for empty value and for string instead of integer v
-        // alue
         if(isValidIPAddress(address) && isValidPort(chosenPort)) {
             gui.connectToServer(address, chosenPort);
         }

@@ -20,8 +20,6 @@ import javafx.scene.layout.AnchorPane;
 public class NumberOfPlayersController {
     public String resource = "NumberofPlayers_scene.fxml";
     @FXML
-    public AnchorPane PaneforParquet;
-    @FXML
     public RadioButton twoPlayers;
 
     @FXML
@@ -31,9 +29,6 @@ public class NumberOfPlayersController {
 
     @FXML
     public Button okButton;
-
-    @FXML
-    public Label missingNumberLabel;
 
     private int numberOfPlayersChosen;
 
@@ -51,7 +46,7 @@ public class NumberOfPlayersController {
         return this.gameName;
     }
 
-        public void setGameName(String gameName){
+    public void setGameName(String gameName){
         this.gameName=gameName;
     }
 

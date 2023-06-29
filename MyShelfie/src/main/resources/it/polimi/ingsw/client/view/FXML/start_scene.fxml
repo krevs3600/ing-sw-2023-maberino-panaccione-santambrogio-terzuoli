@@ -26,18 +26,12 @@
                <children>
                   <VBox prefHeight="409.0" prefWidth="575.0">
                      <children>
-                              <Button fx:id="playBtn" alignment="CENTER" mnemonicParsing="false" onAction="#switchToConnection" prefHeight="90.0" prefWidth="575.0" styleClass="playBtn" stylesheets="@../css/start_scene.css" text="Start " textAlignment="CENTER" textFill="#fffcfc">
-                                  <font>
-                                      <Font name="Libian SC Regular" size="40.0" />
-                                  </font>
+                              <Button fx:id="playBtn" alignment="CENTER" mnemonicParsing="false" onAction="#switchToConnection" prefHeight="90.0" prefWidth="575.0" styleClass="playBtn" stylesheets="@../css/start_scene.css" text="START " textAlignment="CENTER" >
                            <VBox.margin>
                               <Insets bottom="30.0" />
                            </VBox.margin>
                         </Button>
-                        <Button fx:id="quitBtn1" mnemonicParsing="false" onMouseClicked="#closeJavaFxMain" prefHeight="90.0" prefWidth="575.0" styleClass="quitBtn" stylesheets="@../css/start_scene.css" text="Exit " textAlignment="CENTER" textFill="#fffcfc">
-                           <font>
-                              <Font name="Libian SC Regular" size="40.0" />
-                           </font>
+                        <Button fx:id="quitBtn1" mnemonicParsing="false" onMouseClicked="#closeJavaFxMain" prefHeight="90.0" prefWidth="575.0" styleClass="quitBtn" stylesheets="@../css/start_scene.css" text="EXIT " textAlignment="CENTER">
                            <VBox.margin>
                               <Insets />
                            </VBox.margin>

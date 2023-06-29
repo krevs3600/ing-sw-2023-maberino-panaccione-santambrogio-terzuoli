@@ -24,14 +24,8 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<?import javafx.scene.layout.Pane?>
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="908.0" prefWidth="1510.0" styleClass="rootPane" stylesheets="@../css/livingBoard_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.FXML.LivingBoardController">
     <children>
-      <AnchorPane fx:id="PaneForPopup" prefHeight="823.0" prefWidth="1437.0" visible="false" />
-      <AnchorPane fx:id="PaneForPopup" prefHeight="823.0" prefWidth="1437.0" visible="false">
-         <children>
-         </children>
-      </AnchorPane>
         <BorderPane prefHeight="908.0" prefWidth="1510.0" style="-fx-border-width: 10;">
             <center>
                 <Group BorderPane.alignment="CENTER">
@@ -67,12 +61,12 @@
                                 </GridPane>
                                 <StackPane layoutX="517.0" layoutY="460.0" prefHeight="61.0" prefWidth="64.0" rotate="7.6">
                                     <children>
-                                        <ImageView fitHeight="65.0" fitWidth="62.0" pickOnBounds="true" preserveRatio="true"></ImageView>
+                                        <ImageView fitHeight="65.0" fitWidth="62.0" pickOnBounds="true" preserveRatio="true" />
                                     </children>
                                 </StackPane>
                                 <AnchorPane fx:id="anchorPaneForTheCandPGoalCards" layoutX="12.0" layoutY="105.0" prefHeight="453.0" prefWidth="609.0" visible="false">
                                     <children>
-                                        <ImageView fx:id="CommonGoalAchieved" fitHeight="431.0" fitWidth="499.0" layoutX="69.0" layoutY="-10.0" visible="false"></ImageView>
+                                        <ImageView fx:id="CommonGoalAchieved" fitHeight="431.0" fitWidth="499.0" layoutX="69.0" layoutY="-10.0" styleClass="goalReached" visible="false" />
                                         <Text fx:id="CommonGoalText" fill="#e8c77acf" layoutX="158.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Congratulations you have reached the first/second common goal! You will now receive a scoring token.. Keep it up!" visible="false" wrappingWidth="344.74981689453125">
                                             <font>
                                                 <Font name="Libian SC Regular" size="36.0" />
@@ -193,7 +187,7 @@
                             <children>
                                 <AnchorPane prefHeight="274.0" prefWidth="388.0">
                                     <children>
-                                        <ImageView fx:id="commonGoalCard1" fitHeight="175.0" fitWidth="274.0" layoutX="61.0" layoutY="47.0" pickOnBounds="true" preserveRatio="true"></ImageView>
+                                        <ImageView fx:id="commonGoalCard1" fitHeight="175.0" fitWidth="274.0" layoutX="61.0" layoutY="47.0" pickOnBounds="true" preserveRatio="true" />
                                         <StackPane layoutX="219.0" layoutY="95.0" prefHeight="74.0" prefWidth="69.0" rotate="-81.5">
                                             <rotationAxis>
                                                 <Point3D z="-1.0" />
@@ -337,7 +331,7 @@
                                             </children>
                                         </Group>
                                     </children></AnchorPane>
-                                <ImageView fx:id="personalCard" fitHeight="245.0" fitWidth="163.0" layoutX="179.0" layoutY="537.0"></ImageView>
+                                <ImageView fx:id="personalCard" fitHeight="245.0" fitWidth="163.0" layoutX="179.0" layoutY="537.0" />
                         <ImageView fx:id="tokenCommonGoalCard1" fitHeight="67.0" fitWidth="67.0" layoutX="93.0" layoutY="518.0" pickOnBounds="true" preserveRatio="true" />
                         <ImageView fx:id="tokenCommonGoalCard2" fitHeight="67.0" fitWidth="67.0" layoutX="93.0" layoutY="596.0" pickOnBounds="true" preserveRatio="true" />
                         <ImageView fx:id="seatToken" fitHeight="67.0" fitWidth="67.0" layoutX="93.0" layoutY="685.0" pickOnBounds="true" preserveRatio="true" />
