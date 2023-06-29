@@ -302,6 +302,8 @@ public class GameController implements Serializable {
      * @return the final score of the {@link Player}
      */
     public int computePlayerScoreEndGame(Player player){
+        int adjacentTilesScore = 0;
+        int persconalGoalCardScore = 0;
         //Computation of points from personal goal card
         ItemTile[][] bookshelf = player.getBookshelf().getGrid();
         int personalCardScore;
@@ -320,7 +322,6 @@ public class GameController implements Serializable {
         ArrayList<Integer> points;
         try {
             Reader file = new FileReader("src/main/java/it/polimi/ingsw/model/configs/PersonalGoalCards.json");
-            //Reader file = new FileReader("C:\\Users\\franc\\IdeaProjects\\ing-sw-2023-maberino-panaccione-santambrogio-terzuoli\\MyShelfie\\src\\main\\java\\it\\polimi\\ingsw\\model\\configs\\PersonalGoalCards.json");
             JSONParser parser = new JSONParser();
             Object jsonObj = parser.parse(file);
             JSONObject jsonObject = (JSONObject) jsonObj;
@@ -343,14 +344,17 @@ public class GameController implements Serializable {
                 for (int i = 0; i < pointsAdj.get(0).size(); i++) {
                     if (key.equals(pointsAdj.get(0).get(i))) {
                         score += (pointsAdj.get(1).get(i)) * adjacentTiles.get(key);
+                        adjacentTilesScore += (pointsAdj.get(1).get(i)) * adjacentTiles.get(key);
                     } else if (key > pointsAdj.get(0).get(3)) {
                         score += (pointsAdj.get(1).get(3)) * adjacentTiles.get(key);
+                        adjacentTilesScore += (pointsAdj.get(1).get(3)) * adjacentTiles.get(key);
                     }
                 }
             }
         }
         player.setAdjacentTilesScore(score);
         score += personalCardScore;
+        System.err.println("Score from Adjacent Tiles: " + adjacentTilesScore + " Personal goal card score: " + personalCardScore );
         return score;
     }
 

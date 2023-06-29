@@ -116,10 +116,46 @@ public class LivingRoomBoard  implements Serializable {
     public List<Space> getAllFreeTiles() {
         List<Space> freeSidesTiles = new ArrayList<>();
 
-        for (int i = 1; i < MAX_WIDTH - 1; i++) {
-            for (int j = 1; j < MAX_HEIGHT - 1; j++) {
+        for (int i = 0; i < MAX_WIDTH; i++) {
+            for (int j = 0; j < MAX_HEIGHT; j++) {
                 if (!getSpace(new Position(i, j)).isFree() && getSpace(new Position(i, j)).getType() != SpaceType.FORBIDDEN) {
-                    if (
+                    if (i==0){
+                        if (
+                                (getSpace(new Position(i, j - 1)).isFree() || getSpace(new Position(i, j - 1)).getType() == SpaceType.FORBIDDEN) &&
+                                        (getSpace(new Position(i + 1, j)).isFree() || getSpace(new Position(i + 1, j)).getType() == SpaceType.FORBIDDEN) &&
+                                        (getSpace(new Position(i, j + 1)).isFree() || getSpace(new Position(i, j + 1)).getType() == SpaceType.FORBIDDEN)
+                        ) {
+                            freeSidesTiles.add(getSpace(new Position(i, j)));
+                        }
+                    }
+                    else if (i==MAX_WIDTH-1) {
+                        if (
+                                (getSpace(new Position(i, j - 1)).isFree() || getSpace(new Position(i, j - 1)).getType() == SpaceType.FORBIDDEN) &&
+                                        (getSpace(new Position(i, j + 1)).isFree() || getSpace(new Position(i, j + 1)).getType() == SpaceType.FORBIDDEN) &&
+                                        (getSpace(new Position(i - 1, j)).isFree() || getSpace(new Position(i - 1, j)).getType() == SpaceType.FORBIDDEN)
+                        ) {
+                            freeSidesTiles.add(getSpace(new Position(i, j)));
+                        }
+                    }
+                    else if (j==0) {
+                        if (
+                                        (getSpace(new Position(i + 1, j)).isFree() || getSpace(new Position(i + 1, j)).getType() == SpaceType.FORBIDDEN) &&
+                                        (getSpace(new Position(i, j + 1)).isFree() || getSpace(new Position(i, j + 1)).getType() == SpaceType.FORBIDDEN) &&
+                                        (getSpace(new Position(i - 1, j)).isFree() || getSpace(new Position(i - 1, j)).getType() == SpaceType.FORBIDDEN)
+                        ) {
+                            freeSidesTiles.add(getSpace(new Position(i, j)));
+                        }
+                    }
+                    else if (j==MAX_HEIGHT-1) {
+                        if (
+                                (getSpace(new Position(i, j - 1)).isFree() || getSpace(new Position(i, j - 1)).getType() == SpaceType.FORBIDDEN) &&
+                                        (getSpace(new Position(i + 1, j)).isFree() || getSpace(new Position(i + 1, j)).getType() == SpaceType.FORBIDDEN) &&
+                                        (getSpace(new Position(i - 1, j)).isFree() || getSpace(new Position(i - 1, j)).getType() == SpaceType.FORBIDDEN)
+                        ) {
+                            freeSidesTiles.add(getSpace(new Position(i, j)));
+                        }
+                    }
+                    else if (
                             (getSpace(new Position(i, j - 1)).isFree() || getSpace(new Position(i, j - 1)).getType() == SpaceType.FORBIDDEN) &&
                                     (getSpace(new Position(i + 1, j)).isFree() || getSpace(new Position(i + 1, j)).getType() == SpaceType.FORBIDDEN) &&
                                     (getSpace(new Position(i, j + 1)).isFree() || getSpace(new Position(i, j + 1)).getType() == SpaceType.FORBIDDEN) &&

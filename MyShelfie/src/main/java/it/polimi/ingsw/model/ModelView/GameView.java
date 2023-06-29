@@ -256,7 +256,7 @@ public class GameView implements Serializable {
         String UP_MARGIN = "\n\n";
         String HEADER_PERSONAL_CARD = "YOUR PERSONAL GOAL CARD:";
 
-        HashMap<Integer, String> personalCard =  this.getSubscribers().get(0).getPersonalGoalCard().toDict();
+        HashMap<Integer, String> personalCard =  this.getSubscribers().get(getPersonalGameIndex(nickname)).getPersonalGoalCard().toDict();
         HashMap<Integer, String> gameBoard = this.getLivingRoomBoard().toDict();
         HashMap<Integer, String> bookshelf = this.getSubscribers().get(getPersonalGameIndex(nickname)).getBookshelf().toDict();
 

@@ -124,6 +124,7 @@ public class Game extends Observable<EventMessage>  implements Serializable {
         }
         else if (turnPhase.equals(GamePhase.INIT_TURN)){
             getBuffer().clear();
+            getTilePack().getTiles().clear();
             setAlongSideColumn(false);
             setAlongSideRow(false);
             setDrawableTiles();
