@@ -39,7 +39,7 @@ public class Game extends Observable<EventMessage>  implements Serializable {
 
     private Player firstPlayer;
     private GamePhase turnPhase;
-    private List<Space> drawableTiles = new ArrayList<>();
+    private List<Space> drawableTiles;
 
     private final TilePack tilePack;
 
@@ -47,7 +47,7 @@ public class Game extends Observable<EventMessage>  implements Serializable {
 
     private final List<Position> buffer;
     private boolean isFinalTurn;
-    private boolean isEnded = false;
+    private boolean isEnded;
 
     private boolean alongSideRow;
     private boolean alongSideColumn;
@@ -66,10 +66,12 @@ public class Game extends Observable<EventMessage>  implements Serializable {
         this.personalGoalCardDeck = new PersonalGoalCardDeck();
         this.tilePack = new TilePack();
         this.buffer = new ArrayList<>();
+        this.drawableTiles = new ArrayList<>();
         this.isFinalTurn = false;
         this.alongSideRow = false;
         this.alongSideColumn = false;
         this.firstPlayerHasEnded = false;
+        this.isEnded = false;
     }
 
     /**
@@ -112,38 +114,53 @@ public class Game extends Observable<EventMessage>  implements Serializable {
      */
     public void setFirstPlayer(Player firstPlayer) {this.firstPlayer=firstPlayer;}
 
+
+    /**
+     * This method sets the {@link Game#turnPhase} with a given one and then notifies the {@link Observer}s about the new event accordingly
+     * by calling the {@link Game#notifyObservers(EventMessage)}
+     * @param turnPhase the {@link GamePhase} set in the {@link Game#turnPhase} attribute
+     */
     public void setTurnPhase(GamePhase turnPhase) {
+
         this.turnPhase = turnPhase;
-        if (turnPhase.equals(GamePhase.PLACING_TILES)) {
-            setChanged();
-            notifyObservers(new PlacingTilesMessage(getCurrentPlayer().getName()));
-        }
-        else if (turnPhase.equals(GamePhase.INIT_GAME)) {
-            setChanged();
-            notifyObservers(new BoardMessage(getCurrentPlayer().getName(), new LivingRoomBoardView(getLivingRoomBoard())));
-        }
-        else if (turnPhase.equals(GamePhase.INIT_TURN)){
-            getBuffer().clear();
-            getTilePack().getTiles().clear();
-            setAlongSideColumn(false);
-            setAlongSideRow(false);
-            setDrawableTiles();
-            incrementCursor();
-            setChanged();
-            notifyObservers(new BoardMessage(getCurrentPlayer().getName(), new LivingRoomBoardView(getLivingRoomBoard())));
-            setChanged();
-            notifyObservers(new PlayerTurnMessage(getCurrentPlayer().getName()));
-        }
-        else if (turnPhase.equals(GamePhase.PICKING_TILES)) {
-            setChanged();
-            notifyObservers(new PickingTilesMessage(getCurrentPlayer().getName()));
-        }
-        else if (turnPhase.equals(GamePhase.COLUMN_CHOICE)) {
-            BookshelfView bookshelfView = new BookshelfView(getCurrentPlayer().getBookshelf(), getCurrentPlayer().getName());
-            setChanged();
-            notifyObservers(new BookshelfMessage(getCurrentPlayer().getName(), bookshelfView));
-            setChanged();
-            notifyObservers(new ColumnChoiceMessage(getCurrentPlayer().getName()));
+
+        switch (turnPhase) {
+
+            case PLACING_TILES -> {
+                setChanged();
+                notifyObservers(new PlacingTilesMessage(getCurrentPlayer().getName()));
+            }
+
+            case INIT_GAME ->  {
+                setChanged();
+                notifyObservers(new BoardMessage(getCurrentPlayer().getName(), new LivingRoomBoardView(getLivingRoomBoard())));
+            }
+
+            case INIT_TURN -> {
+                getBuffer().clear();
+                getTilePack().getTiles().clear();
+                setAlongSideColumn(false);
+                setAlongSideRow(false);
+                setDrawableTiles();
+                incrementCursor();
+                setChanged();
+                notifyObservers(new BoardMessage(getCurrentPlayer().getName(), new LivingRoomBoardView(getLivingRoomBoard())));
+                setChanged();
+                notifyObservers(new PlayerTurnMessage(getCurrentPlayer().getName()));
+            }
+
+            case PICKING_TILES -> {
+                setChanged();
+                notifyObservers(new PickingTilesMessage(getCurrentPlayer().getName()));
+            }
+
+            case COLUMN_CHOICE -> {
+                BookshelfView bookshelfView = new BookshelfView(getCurrentPlayer().getBookshelf(), getCurrentPlayer().getName());
+                setChanged();
+                notifyObservers(new BookshelfMessage(getCurrentPlayer().getName(), bookshelfView));
+                setChanged();
+                notifyObservers(new ColumnChoiceMessage(getCurrentPlayer().getName()));
+            }
         }
     }
 

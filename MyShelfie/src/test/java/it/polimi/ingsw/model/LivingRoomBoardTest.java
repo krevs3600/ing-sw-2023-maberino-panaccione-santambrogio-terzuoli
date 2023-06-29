@@ -40,6 +40,31 @@ public class LivingRoomBoardTest {
             assertEquals(2, livingRoomBoard.getCommonGoalCards().size());
             assertNotEquals(livingRoomBoard.getCommonGoalCards().get(0), livingRoomBoard.getCommonGoalCards().get(1));
         }
+
+        // check if the number of tiles is correct
+        int numOfTiles1=0;
+        for (int i=0; i<testLivingRoomBoard1.getMaxWidth(); i++) {
+            for (int j=0; j<testLivingRoomBoard1.getMaxWidth(); j++) {
+                if (testLivingRoomBoard1.getSpace(new Position(i, j)).getTile()!=null) numOfTiles1++;
+            }
+        }
+        assertEquals(29, numOfTiles1);
+
+        int numOfTiles2=0;
+        for (int i=0; i<testLivingRoomBoard2.getMaxWidth(); i++) {
+            for (int j=0; j<testLivingRoomBoard2.getMaxWidth(); j++) {
+                if (testLivingRoomBoard2.getSpace(new Position(i, j)).getTile()!=null) numOfTiles2++;
+            }
+        }
+        assertEquals(37, numOfTiles2);
+
+        int numOfTiles3=0;
+        for (int i=0; i<testLivingRoomBoard3.getMaxWidth(); i++) {
+            for (int j=0; j<testLivingRoomBoard3.getMaxWidth(); j++) {
+                if (testLivingRoomBoard3.getSpace(new Position(i, j)).getTile()!=null) numOfTiles3++;
+            }
+        }
+        assertEquals(45, numOfTiles3);
     }
 
     @Test
@@ -74,26 +99,42 @@ public class LivingRoomBoardTest {
     public void getAllFreeTilesTest() {
 
         // initial status: full living room boards, none of the tiles are free
-        for (LivingRoomBoard livingRoomBoard: testLivingRoomBoards) {
+        for (LivingRoomBoard livingRoomBoard : testLivingRoomBoards) {
             assertEquals(0, livingRoomBoard.getAllFreeTiles().size());
         }
 
         // after drawing all the tiles around a specific tile of a certain position: here (5, 5)
-        List<Position> positions = new ArrayList<>();
+        List<Position> positions1 = new ArrayList<>();
         Position position1 = new Position(5, 4);
-        positions.add(position1);
+        positions1.add(position1);
         Position position2 = new Position(4, 5);
-        positions.add(position2);
+        positions1.add(position2);
         Position position3 = new Position(3, 4);
-        positions.add(position3);
+        positions1.add(position3);
         Position position4 = new Position(4, 3);
-        positions.add(position4);
-        for (LivingRoomBoard livingRoomBoard: testLivingRoomBoards) {
-            for (Position positionToDraw: positions) {
+        positions1.add(position4);
+        for (LivingRoomBoard livingRoomBoard : testLivingRoomBoards) {
+            for (Position positionToDraw : positions1) {
                 livingRoomBoard.getSpace(positionToDraw).drawTile();
             }
             assertEquals(1, livingRoomBoard.getAllFreeTiles().size());
         }
+
+        // after isolating the tiles on the borders of the board
+        List<Position> positions2 = new ArrayList<>();
+        Position position5 = new Position(3, 7);
+        positions2.add(position5);
+        Position position6 = new Position(1, 3);
+        positions2.add(position6);
+        Position position7 = new Position(5, 1);
+        positions2.add(position7);
+        Position position8 = new Position(7, 5);
+        positions2.add(position8);
+        for (Position positionToDraw : positions2) {
+            testLivingRoomBoard2.getSpace(positionToDraw).drawTile();
+        }
+        assertEquals(4+1, testLivingRoomBoard2.getAllFreeTiles().size());
+
 
     }
 
@@ -168,10 +209,20 @@ public class LivingRoomBoardTest {
         for (Position position: positions) {
             testLivingRoomBoard3.getSpace(position).drawTile();
         }
-
+        int k=0;
         for (LivingRoomBoard livingRoomBoard: testLivingRoomBoards) {
             assertEquals(16, livingRoomBoard.getAllFreeTiles().size());
+            livingRoomBoard.refill();
+            int numOfTiles=0;
+            for (int i=0; i<testLivingRoomBoard1.getMaxWidth(); i++) {
+                for (int j=0; j<testLivingRoomBoard1.getMaxWidth(); j++) {
+                    if (livingRoomBoard.getSpace(new Position(i, j)).getTile()!=null) numOfTiles++;
+                }
+            }
+            assertEquals(29 + 8L *k, numOfTiles);
+            k++;
         }
+
     }
 
 

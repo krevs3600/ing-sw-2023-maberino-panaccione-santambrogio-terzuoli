@@ -28,6 +28,16 @@ public class IncreasingColumnsCommonGoalCardTest {
     }
 
     @Test
+    public void toStringTest() {
+        assertEquals("""
+                FIVE COLUMNS OF INCREASING OR DECREASING HEIGHT.
+                STARTING FROM THE FIRST COLUMN ON THE LEFT OR ON THE RIGHT,
+                 EACH NEXT COLUMN MUST BE MADE OF EXACTLY ONE MORE TILE.\s
+                TILES CAN BE OF ANY TYPE""", testCommonGoalCard.toString());
+        assertEquals("IncreasingColumnsCommonGoalCard", testCommonGoalCard.getType());
+    }
+
+    @Test
     public void checkPatternTest(){
 
         // empty bookshelf: toBeChecked false

@@ -24,6 +24,13 @@ public class TwoSquaresCommonGoalCardTest {
     }
 
     @Test
+    public void toStringTest() {
+        assertEquals( "TWO GROUPS EACH CONTAINING FOUR TILES OF THE SAME TYPE IN A 2X2 SQUARE\n" +
+                "THE TILES OF ONE SQUARE CAN BE DIFFERENT FROM THOSE OF THE OTHER SQUARE.", testCommonGoalCard.toString());
+        assertEquals("TwoSquaresCommonGoalCard", testCommonGoalCard.getType());
+    }
+
+    @Test
     public void checkPatternTest(){
 
         // empty bookshelf: toBeChecked false

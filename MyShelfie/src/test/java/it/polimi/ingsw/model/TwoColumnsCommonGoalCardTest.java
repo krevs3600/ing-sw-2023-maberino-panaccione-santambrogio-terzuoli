@@ -23,6 +23,12 @@ public class TwoColumnsCommonGoalCardTest {
     }
 
     @Test
+    public void toStringTest() {
+        assertEquals( "TWO COLUMNS EACH FORMED BY SIX DIFFERENT TYPES OF TILES", testCommonGoalCard.toString());
+        assertEquals("TwoColumnsCommonGoalCard", testCommonGoalCard.getType());
+    }
+
+    @Test
     public void checkPatternTest(){
 
         // empty bookshelf: toBeChecked false

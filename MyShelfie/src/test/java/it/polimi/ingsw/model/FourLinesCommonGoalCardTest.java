@@ -25,6 +25,13 @@ public class FourLinesCommonGoalCardTest {
     }
 
     @Test
+    public void toStringTest() {
+        assertEquals("FOUR LINES EACH FORMED BY 5 TILES OF MAXIMUM THREE DIFFERENT TYPES.\n" +
+                "ONE LINE CAN SHOW THE SAME OR A DIFFERENT COMBINATION OF ANOTHER LINE", testCommonGoalCard.toString());
+        assertEquals("FourLinesCommonGoalCard", testCommonGoalCard.getType());
+    }
+
+    @Test
     public void checkPatternTest(){
 
         // empty bookshelf: toBeChecked false

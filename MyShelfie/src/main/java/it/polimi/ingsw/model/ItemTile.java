@@ -26,11 +26,19 @@ public class ItemTile implements Serializable {
     }
 
     /**
-     * This getter method gets the type of the item tile
-     * @return TileType It returns the type of the item tile
+     * Getter method
+     * @return the {@link ItemTile#type} of the tile
      */
     public TileType getType() {
         return type;
+    }
+
+    /**
+     * Getter method
+     * @return the {@link ItemTile#imageIndex}
+     */
+    public String getImageIndex() {
+        return imageIndex;
     }
 
     /**
@@ -40,9 +48,5 @@ public class ItemTile implements Serializable {
     @Override
     public String toString() {
         return getType().getColorBackground() + " " + getType().getAbbreviation() + " " + "\033[0m";
-    }
-
-    public String getImageIndex() {
-        return imageIndex;
     }
 }

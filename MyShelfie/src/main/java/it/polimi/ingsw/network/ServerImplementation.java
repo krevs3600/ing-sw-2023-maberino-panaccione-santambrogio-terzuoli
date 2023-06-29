@@ -15,8 +15,6 @@ import it.polimi.ingsw.persistence.Storage;
 import it.polimi.ingsw.observer_observable.Observer;
 import java.io.IOException;
 import java.rmi.RemoteException;
-import java.rmi.server.RMIClientSocketFactory;
-import java.rmi.server.RMIServerSocketFactory;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
 
@@ -499,8 +497,6 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
 
                 for (Map.Entry<Client, GameController> entry : playerGame.entrySet()) {
                     if (entry.getValue().equals(controller)) {
-                        // todo: maybe add game.unsubscribe(String nickname)
-                        //entry.getKey().onMessage(new PlayerOfflineMessage(eventMessage.getNickname()));
                         int missingPlayers = game.getNumberOfPlayers().getValue() - game.getSubscribers().size();
                         try {
                             entry.getKey().onMessage(new WaitingResponseMessage(nickname, missingPlayers));
@@ -510,50 +506,25 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                     }
 
                 }
+            }
 
 
-                for (Map.Entry<Client, GameController> entry : playerGame.entrySet()) {
-                    if (entry.getValue().equals(disconnectedPlayersGame.get(nickname))) {
-                        try {
-                            entry.getKey().onMessage(new ClientDisconnectedMessage(nickname));
-                        } catch (IOException ex) {
-                            throw new RuntimeException(ex);
-                        }
-                    }
-                }
-                if (disconnectedPlayersGame.get(nickname).getGame().getCurrentPlayer().getName().equals(nickname)) {
+            for (Map.Entry<Client, GameController> entry : playerGame.entrySet()) {
+                if (entry.getValue().equals(disconnectedPlayersGame.get(nickname))) {
                     try {
-                        disconnectedPlayersGame.get(nickname).update(client, new EndTurnMessage(nickname));
+                        entry.getKey().onMessage(new ClientDisconnectedMessage(nickname));
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }
                 }
             }
+            if (disconnectedPlayersGame.get(nickname).getGame().getCurrentPlayer().getName().equals(nickname)) {
+                try {
+                    disconnectedPlayersGame.get(nickname).update(client, new EndTurnMessage(nickname));
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
         }
     }
 }
-
-
-/* todo disconnessioni durante la partita da rivedere assolutamente
-// ancora in lobby, in match
-if (playerGame  != null) {
-    if (playerGame.get(client) != null) {
-        GameController controller = playerGame.get(client);
-        // remove game name from set
-        currentGames.remove(controller.getGame().getGameName());
-        // let's notify the players
-        for (Client player : connectedClients.values()) {
-            player.onMessage(new PlayerOfflineMessage(eventMessage.getNickname()));
-            player.onMessage(new KillGameMessage(eventMessage.getNickname()));
-        }
-        // remove <client, controller> in the game of the disconnected player and clients from map
-        for (Player player : controller.getGame().getSubscribers()) {
-            playerGame.remove(connectedClients.get(player.getName()));
-            connectedClients.remove(player.getName());
-        }
-
-    } else {
-        currentPlayersNicknames.remove(eventMessage.getNickname());
-    }
-}
- */

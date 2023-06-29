@@ -23,7 +23,13 @@ public class CornersCommonGoalCardTest {
     }
 
     @Test
-    public void correctCheckPattern() {
+    public void toStringTest() {
+        assertEquals("FOUR TILES OF THE SAME TYPE IN THE FOUR CORNERS", testCommonGoalCard.toString());
+        assertEquals("CornersCommonGoalCard", testCommonGoalCard.getType());
+    }
+
+    @Test
+    public void checkPatternTest() {
 
         // empty bookshelf: toBeChecked false
         System.out.println(new BookshelfView(testBookshelf1, "test"));

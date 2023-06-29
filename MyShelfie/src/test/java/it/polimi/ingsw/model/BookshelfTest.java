@@ -210,4 +210,12 @@ public class BookshelfTest {
         assertEquals(m, testBookshelf.getNumberAdjacentTiles(TileType.CAT));
 
     }
+
+    @Test
+    public void insertTilesRandomlyTest() {
+        testBookshelf.insertTilesRandomly();
+        assertEquals(2, testBookshelf.getNumberInsertableTiles());
+        for (int i=1; i<testBookshelf.getMaxWidth(); i++)
+            assertEquals(0, testBookshelf.getNumberInsertableTilesColumn(i));
+    }
 }

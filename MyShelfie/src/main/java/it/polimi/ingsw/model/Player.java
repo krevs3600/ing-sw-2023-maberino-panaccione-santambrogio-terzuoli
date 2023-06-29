@@ -38,6 +38,8 @@ public class Player  implements Serializable {
     public Player(String name){
         this.name = name;
         this.bookshelf = new Bookshelf();
+        this.personalGoalCardScore = 0;
+        this.adjacentTilesScore = 0;
         this.score = 0;
         this.tokens = new ArrayList<>();
         this.firstCommonGoalAchieved = false;
@@ -92,24 +94,6 @@ public class Player  implements Serializable {
      */
     public void setScore (int incremental) { this.score += incremental;}
 
-    public void setPersonalGoalCardScore(int score){
-        this.personalGoalCardScore = score;
-        System.out.println(getName() + " pcg: " + score);
-    }
-
-    public int getPersonalGoalCardScore() {
-        return personalGoalCardScore;
-    }
-
-    public void setAdjacentTilesScore(int score){
-        this.adjacentTilesScore = score;
-        System.out.println(getName() + " adj: " + score);
-    }
-
-    public int getAdjacentTilesScore(){
-        return this.adjacentTilesScore;
-    }
-
     /**
      * Setter method
      * @param personalGoalCard sets the {@link Player#personalGoalCard} of the player
@@ -119,7 +103,32 @@ public class Player  implements Serializable {
     }
 
     /**
+     * Setter method
+     * @param score an {@code int} setting the {@link Player#personalGoalCardScore} of the player
+     */
+    public void setPersonalGoalCardScore(int score){
+        this.personalGoalCardScore = score;
+    }
+
+    /**
+     * Setter method
+     * @param score an {@code int} setting the {@link Player#adjacentTilesScore} of the player
+     */
+    public void setAdjacentTilesScore(int score){
+        this.adjacentTilesScore = score;
+    }
+
+    /**
+     * This method is called when the player is the first one who finished his {@link Bookshelf},
+     * setting to {@code True} the {@link Player#firstToFinish} {@code boolean}
+     */
+    public void setFirstToFinish() {
+        this.firstToFinish = true;
+    }
+
+    /**
      * This method is called when the player has achieved the first {@link CommonGoalCard} of the game
+     * setting to {@code True} the {@link Player#firstCommonGoalAchieved} {@code boolean}
      */
     public void hasAchievedFirstGoal () {
         this.firstCommonGoalAchieved = true;
@@ -127,9 +136,27 @@ public class Player  implements Serializable {
 
     /**
      * This method is called when the player has achieved the second {@link CommonGoalCard} of the game
+     * setting to {@code True} the {@link Player#secondCommonGoalAchieved} {@code boolean}
      */
     public void hasAchievedSecondGoal () { this.secondCommonGoalAchieved=true;}
 
+
+    /**
+     * Getter method
+     * @return {@link Player#personalGoalCardScore} of the player
+     */
+    public int getPersonalGoalCardScore() {
+        return personalGoalCardScore;
+    }
+
+
+    /**
+     * Getter method
+     * @return {@link Player#adjacentTilesScore} of the player
+     */
+    public int getAdjacentTilesScore(){
+        return this.adjacentTilesScore;
+    }
 
     /**
      * Getter method
@@ -164,6 +191,14 @@ public class Player  implements Serializable {
     public boolean isSecondCommonGoalAchieved () { return this.secondCommonGoalAchieved;}
 
     /**
+     * This method tells whether the player is the first one who has finished his {@link Bookshelf}
+     * @return the {@code boolean} that communicates whether he has finished first or not
+     */
+    public boolean isFirstToFinish(){
+        return firstToFinish;
+    }
+
+    /**
      * Getter method
      * @return  the {@code String} representing the name of the player
      */
@@ -184,12 +219,4 @@ public class Player  implements Serializable {
      * @return the {@link ScoringToken} of the player
      */
     public List<ScoringToken> getTokens () { return this.tokens;}
-
-    public void setFirstToFinish() {
-        this.firstToFinish = true;
-    }
-
-    public boolean isFirstToFinish(){
-        return firstToFinish;
-    }
 }
