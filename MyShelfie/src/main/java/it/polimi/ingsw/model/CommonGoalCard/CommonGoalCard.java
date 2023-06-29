@@ -50,14 +50,6 @@ public abstract class CommonGoalCard extends GoalCard  implements Serializable {
     }
 
     /**
-     * This method is used to pop the first scoring token from the stack of the common goal card
-     * @return ScoringToken It returns the first scoring token of the stack
-     */
-    public ScoringToken pop() {
-        return this.stack.pop();
-    }
-
-    /**
      * This getter method gets the stack of the common goal card
      * @return Stack<ScoringToken> It returns the stack of scoring tokens
      */

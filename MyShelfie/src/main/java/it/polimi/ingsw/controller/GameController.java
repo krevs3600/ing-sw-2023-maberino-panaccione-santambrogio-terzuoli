@@ -15,14 +15,15 @@ import it.polimi.ingsw.persistence.Storage;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
 import java.io.*;
 import java.rmi.RemoteException;
 import java.util.*;
+
 /**
  * <h1>Class GameController</h1>
- * The class GameController is used to keep track of everything that happens during the game. Every modification
- * to the state of the game must pass through the GameController
+ * The class GameController contains all the logic and applies the rules of the game. Every attempt to change
+ * the state of the game made by the players must pass through this class since it is the only one that has
+ * the right to modify the game model
  *
  * @author Carlo Terzuoli, Francesco Maberino, Francesca Pia Panaccione, Francesco Santambrogio
  * @version 1.0
@@ -40,24 +41,16 @@ public class GameController implements Serializable {
 
     /**
      * Class constructor
-     * @param game the {@link Game} that is going to be played
+     * @param game the {@link Game} that is going to be played and controlled by this class
      */
     public GameController( Game game){
         this.game = game;
     }
 
-    /**
-     * Getter method
-     * @return the object referring to the {@link Game#} that is being played
-     */
-    public Game getGame () {
-        return game;
-    }
-
 
     /**
-     * The update method's purpose is to have the {@link GameController} react to every message it receives in the correct manner and to handle
-     * it correctly.
+     * The purpose of this method is to manage every {@link EventMessage} it receives
+     * in the correct manner and modify the model accordingly
      * @param client who sends the message containing an action he/she wants to perform
      * @param eventMessage containing the desired action by the client
      */
@@ -65,222 +58,232 @@ public class GameController implements Serializable {
 
         switch (eventMessage.getType()) {
 
-            //In response to these messages, the controller creates a new player and adds it to the game
+            // In response to these messages, the controller creates a new player and adds it to the game
             case GAME_CHOICE, GAME_CREATION, GAME_SPECS -> {
                 Player newPlayer = new Player(eventMessage.getNickname());
-                game.subscribe(newPlayer);
+                getGame().subscribe(newPlayer);
             }
 
-            //once all the players have entered the game, the living room board can be initialized, the personal goal cards are distributed
-            //and the game can begin
+            // once all the players have entered the game, the living room board can be initialized, the personal goal cards are distributed
+            // and the game can begin
             case START_GAME -> {
-                game.initLivingRoomBoard();
+                getGame().initLivingRoomBoard();
                 for (Player player : game.getSubscribers()){
                     player.setPersonalGoalCard(game.getPersonalGoalCardDeck().draw());
                 }
-                game.setDrawableTiles();
-                game.startGame();
+                getGame().setDrawableTiles();
+                getGame().startGame();
             }
 
-            //every time a player moves to pick a tile, this case is triggered. The controller check whether the position the
-            //player has selected is legal. If so, it proceeds and adds the item tile located in such spot to the tile pack
-            //otherwise an error message is sent and the player is requested to select from a different position
+            // when triggered, the controller switches game phase to the subsequent one
+            case SWITCH_PHASE -> {
+                SwitchPhaseMessage switchPhaseMessage = (SwitchPhaseMessage) eventMessage;
+                getGame().setTurnPhase(switchPhaseMessage.getGamePhase());
+            }
+
+            // every time a player moves to pick a tile, this case is triggered. The controller checks whether the position the
+            // player has selected is legal. If so, it proceeds and adds the item tile located in such spot to the tile pack,
+            // otherwise an error message is sent and the player is requested to select a different position
             case TILE_POSITION -> {
                 TilePositionMessage tilePositionMessage = (TilePositionMessage) eventMessage;
 
-                if (game.getDrawableTiles().contains(game.getLivingRoomBoard().getSpace(tilePositionMessage.getPosition()))) {
-                    if (game.getBuffer().isEmpty()) {
-                        drawTileAndInsertInTilePack(tilePositionMessage);
+                // the position must be among the drawable ones
+                if (getGame().getDrawableTiles().contains(getGame().getLivingRoomBoard().getSpace(tilePositionMessage.getPosition()))) {
 
-                    } else if (game.getBuffer().size() == 1) {
+                    switch (getGame().getBuffer().size()) {
 
-                        if (game.getBuffer().get(0).isAdjacent(tilePositionMessage.getPosition())) {
-                            if (game.getCurrentPlayer().getBookshelf().getNumberInsertableTiles() >= game.getBuffer().size() + 1) {
-                                setAlongsideWhat(tilePositionMessage);
-                                drawTileAndInsertInTilePack(tilePositionMessage);
+                        // first case: the buffer of positions is empty, it is the first tile picked, no further checks to do
+                        case 0 -> drawTileAndInsertInTilePack(tilePositionMessage);
+
+                        // second case: the buffer of positions has already a tile, so it is the second tile picked
+                        // it must be adjacent to the already taken tile, saving the information about whether it is adjacent
+                        // along the row or along the column
+                        case 1 -> {
+                            if (getGame().getBuffer().get(0).isAdjacent(tilePositionMessage.getPosition())) {
+                                if (getGame().getCurrentPlayer().getBookshelf().getNumberInsertableTiles() >= getGame().getBuffer().size() + 1) {
+                                    setAlongsideWhat(tilePositionMessage);
+                                    drawTileAndInsertInTilePack(tilePositionMessage);
+                                } else {
+                                    try {
+                                        client.onMessage(new NotEnoughInsertableTilesErrorMessage(eventMessage.getNickname(), "THE NUMBER OF INSERTABLE TILES IN YOUR BOOKSHELF IS TOO SMALL,\n YOU CANNOT INSERT ALL OF THE TILES THEN"));
+                                    } catch (RemoteException e) {
+                                        System.err.println(e.getMessage());
+                                    }
+                                }
                             } else {
                                 try {
-                                client.onMessage(new NotEnoughInsertableTilesErrorMessage(eventMessage.getNickname(), "THE NUMBER OF INSERTABLE TILES IN YOUR BOOKSHELF IS TOO SMALL,\n YOU CANNOT INSERT ALL OF THE TILES THEN"));
+                                    client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), "INVALID POSITION, PLEASE CHOOSE ANOTHER ONE"));
                                 } catch (RemoteException e) {
-                                System.err.println("disconnection");
+                                    System.err.println(e.getMessage());
                                 }
                             }
-                        } else {
-                            try {
-                            client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), "INVALID POSITION, PLEASE CHOOSE ANOTHER ONE"));
-                        } catch (RemoteException e) {
-                            System.err.println("disconnection");
                         }
-                        }
-                    } else if (game.getBuffer().size() == 2) {
-                        boolean fairPosition = false;
-                        for (Position pos : game.getBuffer()) {
-                            if (pos.isAdjacent(tilePositionMessage.getPosition())) {
-                                fairPosition = true;
-                                break;
-                            }
-                        }
-                        if (fairPosition) {
 
-                            if (game.isAlongSideColumn()) {
-                                if (tilePositionMessage.getPosition().getColumn() == game.getBuffer().get(0).getColumn()) {
-                                        if (game.getCurrentPlayer().getBookshelf().getNumberInsertableTiles() >= game.getBuffer().size() + 1) {
+                        // third case: the buffer of positions has already two tiles, so it is the third tile picked
+                        // it must be adjacent to the already taken tiles and along the row if the already taken ones are adjacent
+                        // along the row or along the column otherwise
+                        case 2 -> {
+                            boolean fairPosition = false;
+                            for (Position pos : getGame().getBuffer()) {
+                                if (pos.isAdjacent(tilePositionMessage.getPosition())) {
+                                    fairPosition = true;
+                                    break;
+                                }
+                            }
+                            if (fairPosition) {
+
+                                if (getGame().isAlongSideColumn()) {
+                                    if (tilePositionMessage.getPosition().getColumn() == getGame().getBuffer().get(0).getColumn()) {
+                                        if (getGame().getCurrentPlayer().getBookshelf().getNumberInsertableTiles() >= getGame().getBuffer().size() + 1) {
                                             drawTileAndInsertInTilePack(tilePositionMessage);
                                         } else {
                                             try {
-                                            client.onMessage(new NotEnoughInsertableTilesErrorMessage(eventMessage.getNickname(), "THE NUMBER OF INSERTABLE TILES IN YOUR BOOKSHELF IS TOO SMALL\n, YOU CANNOT INSERT ALL OF THE TILES THEN"));
+                                                client.onMessage(new NotEnoughInsertableTilesErrorMessage(eventMessage.getNickname(), "THE NUMBER OF INSERTABLE TILES IN YOUR BOOKSHELF IS TOO SMALL\n, YOU CANNOT INSERT ALL OF THE TILES THEN"));
                                             } catch (RemoteException e) {
-                                                System.err.println("disconnection");
+                                                System.err.println(e.getMessage());
                                             }
                                         }
-                                }
-                                else {
-                                    try {
-                                    client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), "INVALID POSITION\n, PLEASE CHOOSE ANOTHER ONE"));
-                                    } catch (RemoteException e) {
-                                    System.err.println("disconnection");
-                                    }
-                                }
-                            } else if (game.isAlongSideRow()) {
-                                if (tilePositionMessage.getPosition().getRow() == game.getBuffer().get(0).getRow()) {
-                                    if (game.getCurrentPlayer().getBookshelf().getNumberInsertableTiles() >= game.getBuffer().size() + 1) {
-                                        drawTileAndInsertInTilePack(tilePositionMessage);
                                     } else {
                                         try {
-                                        client.onMessage(new NotEnoughInsertableTilesErrorMessage(eventMessage.getNickname(), "THE NUMBER OF INSERTABLE TILES IN YOUR BOOKSHELF IS TOO SMALL,\n YOU CANNOT INSERT ALL OF THE TILES THEN"));
+                                            client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), "INVALID POSITION\n, PLEASE CHOOSE ANOTHER ONE"));
                                         } catch (RemoteException e) {
-                                        System.err.println("disconnection");
+                                            System.err.println(e.getMessage());
+                                        }
+                                    }
+                                } else if (getGame().isAlongSideRow()) {
+                                    if (tilePositionMessage.getPosition().getRow() == getGame().getBuffer().get(0).getRow()) {
+                                        if (getGame().getCurrentPlayer().getBookshelf().getNumberInsertableTiles() >= getGame().getBuffer().size() + 1) {
+                                            drawTileAndInsertInTilePack(tilePositionMessage);
+                                        } else {
+                                            try {
+                                                client.onMessage(new NotEnoughInsertableTilesErrorMessage(eventMessage.getNickname(), "THE NUMBER OF INSERTABLE TILES IN YOUR BOOKSHELF IS TOO SMALL,\n YOU CANNOT INSERT ALL OF THE TILES THEN"));
+                                            } catch (RemoteException e) {
+                                                System.err.println(e.getMessage());
+                                            }
+                                        }
+                                    } else {
+                                        try {
+                                            client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), "INVALID POSITION\n PLEASE CHOOSE ANOTHER ONE"));
+                                        } catch (RemoteException e) {
+                                            System.err.println(e.getMessage());
                                         }
                                     }
                                 }
-                                else {
-                                    try {
-                                    client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), "INVALID POSITION\n PLEASE CHOOSE ANOTHER ONE"));
-                                    } catch (RemoteException e) {
-                                    System.err.println("disconnection");
-                                    }
+
+                            } else {
+                                try {
+                                    client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), "INVALID POSITION,\n PLEASE CHOOSE ANOTHER ONE"));
+                                } catch (RemoteException e) {
+                                    System.err.println(e.getMessage());
                                 }
                             }
+                        }
 
-                        } else {
+                        // if it is none of the cases above, an error message is sent
+                        default -> {
                             try {
-                            client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), "INVALID POSITION,\n PLEASE CHOOSE ANOTHER ONE"));
-                        } catch (RemoteException e) {
-                            System.err.println("disconnection");
+                                client.onMessage(new UpperBoundTilePackErrorMessage(eventMessage.getNickname(), "YOU CAN TAKE THREE TILES AT MOST!"));
+                            } catch (RemoteException e) {
+                                System.err.println(e.getMessage());
+                            }
                         }
-                            //throw new IllegalAccessError("Space forbidden or empty")
-                        }
-                    } else {
-                        try {
-                        client.onMessage(new UpperBoundTilePackErrorMessage(eventMessage.getNickname(), "YOU CAN TAKE THREE TILES AT MOST!"));
-                    } catch (RemoteException e) {
-                        System.err.println("disconnection");
                     }
-                        //throw new IllegalAccessError("Space forbidden or empty");
-                    }
-                }
-                else {
+                } else {
                     try {
-                    client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), "INVALID POSITION,\nPLEASE CHOOSE ANOTHER ONE"));
-                } catch (RemoteException e) {
-                    System.err.println("disconnection");
-                }
-                    //throw new IllegalAccessError("Space forbidden or empty");
+                        client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), "INVALID POSITION,\nPLEASE CHOOSE ANOTHER ONE"));
+                    } catch (RemoteException e) {
+                        System.err.println(e.getMessage());
+                    }
                 }
             }
 
-            //this case is used to select the column in which to insert the item tiles from the tile pack
+            // this case is used to select the column where to insert the item tiles from the tile pack
             case BOOKSHELF_COLUMN -> {
                 BookshelfColumnMessage bookshelfColumnMessage = (BookshelfColumnMessage) eventMessage;
-                if (game.getCurrentPlayer().getBookshelf().getNumberInsertableTilesColumn(bookshelfColumnMessage.getColumn()) < game.getTilePack().getSize()) {
+                if (getGame().getCurrentPlayer().getBookshelf().getNumberInsertableTilesColumn(bookshelfColumnMessage.getColumn()) < getGame().getTilePack().getSize()) {
                     try {
                     client.onMessage(new NotEnoughInsertableTilesInColumnErrorMessage(eventMessage.getNickname(), "THERE ARE NOT ENOUGH SPACES IN THIS COLUMN, \nPLEASE CHOOSE ANOTHER ONE"));
                 } catch (RemoteException e) {
-                    System.err.println("disconnection");
+                    System.err.println(e.getMessage());
                 }
                 }
                 try {
-                    game.setColumnChoice(bookshelfColumnMessage.getColumn());
-                    game.setTurnPhase(GamePhase.PLACING_TILES);
+                    getGame().setColumnChoice(bookshelfColumnMessage.getColumn());
+                    getGame().setTurnPhase(GamePhase.PLACING_TILES);
                 } catch (IndexOutOfBoundsException e) {
                     System.err.println("Illegal position, please provide another one");
                 }
             }
 
-            //the player can select which tile to insert first into the bookshelf from the tilepack. The tile will be inserted
-            //into the column the player has selected with the previous message
+            // the player can select which tile to insert first into the bookshelf from the tile pack. The tile will be inserted
+            // into the column the player has selected with the previous message
             case ITEM_TILE_INDEX -> {
                 ItemTileIndexMessage itemTileIndexMessage = (ItemTileIndexMessage) eventMessage;
-                game.getCurrentPlayer().insertTile(game.getTilePack(), game.getColumnChoice(), itemTileIndexMessage.getIndex());
-                try {
-                    game.setColumnChoice(game.getColumnChoice());
-                    game.setTurnPhase(GamePhase.PLACING_TILES);
-                } catch (IndexOutOfBoundsException e) {}
-                // TODO gestire le eccezioni!!
+                getGame().getCurrentPlayer().insertTile(getGame().getTilePack(), getGame().getColumnChoice(), itemTileIndexMessage.getIndex());
+                getGame().setColumnChoice(getGame().getColumnChoice());
+                getGame().setTurnPhase(GamePhase.PLACING_TILES);
             }
 
 
-            //when triggered, the controller switches game phase to the subsequent one
-            case SWITCH_PHASE -> {
-                SwitchPhaseMessage switchPhaseMessage = (SwitchPhaseMessage) eventMessage;
-                game.setTurnPhase(switchPhaseMessage.getGamePhase());
-            }
-
-            //every time a turn ends, several checks are performed. First, the controller checks if a common goal card pattern has been matched
-            //and if so, it awards the points to the player. It also checks if a player has completely filled the bookshelf. In this case, at the end of the present
-            //turn the game will end
+            // every time a turn ends, after saving the game controller, and therefore the game data, in a file,
+            // and after computing the score related to the common goals, several checks are performed.
+            // First, if the final turn has ended, it takes the winner and the game ends then,
+            // If it is not the final turn, the bookshelf of the player is full and nobody has filled his bookshelf before, the game enters the last turn
+            // If the game is not ended and there are only free tiles on the board, the refill method is called.
+            // otherwise the game proceeds with the next turn
             case END_TURN -> {
                 Storage storage = new Storage();
                 storage.store(this);
 
                 computeScoreMidGame();
 
-                if(game.isFinalTurn()) {
+                if(getGame().isFinalTurn()) {
                     // game is ended immediately
-                    if (game.getCurrentPlayer().equals(game.getLastPlayer())){
+                    if (getGame().getCurrentPlayer().equals(getGame().getLastPlayer())){
                         // getWinner updates the players' scores
                         Player winner = getWinner();
-                        game.endGame(winner);
+                        getGame().endGame(winner);
                     }
                 }
 
-                if (game.getCurrentPlayer().getBookshelf().isFull()) {
-                    if (!game.isFirstPlayerHasEnded()) {
-                        game.setFirstPlayerHasEnded();
-                        game.setFinalTurn();
-                        Player currentPlayer = game.getCurrentPlayer();
+                if (getGame().getCurrentPlayer().getBookshelf().isFull()) {
+                    if (!getGame().isFirstPlayerHasEnded()) {
+                        getGame().setFirstPlayerHasEnded();
+                        getGame().setFinalTurn();
+                        Player currentPlayer = getGame().getCurrentPlayer();
                         currentPlayer.setScore(1);
-                        if (currentPlayer.equals(game.getLastPlayer())){
+                        if (currentPlayer.equals(getGame().getLastPlayer())){
                             Player winner = getWinner();
 
-                            game.endGame(winner);
+                            getGame().endGame(winner);
                         }
                     }
                 }
 
-                if (!game.isEnded()){
-                    if(game.getLivingRoomBoard().getAllFreeTiles().size()==game.getLivingRoomBoard().getDrawableTiles().size()) {
-                        game.getLivingRoomBoard().refill();
+                if (!getGame().isEnded()){
+                    if(getGame().getLivingRoomBoard().getAllFreeTiles().size()==getGame().getLivingRoomBoard().getDrawableTiles().size()) {
+                        getGame().getLivingRoomBoard().refill();
                     }
-                    game.setTurnPhase(GamePhase.INIT_TURN);
+                    getGame().setTurnPhase(GamePhase.INIT_TURN);
                 }
             }
+
             case EASTER_EGG -> {
-                game.getCurrentPlayer().getBookshelf().insertTilesRandomly();
-                game.insertTileInTilePack(new ItemTile(TileType.CAT));
-                game.setTurnPhase(GamePhase.PICKING_TILES);
+                getGame().getCurrentPlayer().getBookshelf().insertTilesRandomly();
+                getGame().insertTileInTilePack(new ItemTile(TileType.CAT));
+                getGame().setTurnPhase(GamePhase.PICKING_TILES);
             }
         }
     }
 
     /**
-     * This method is used to compute the final score of the player at the end of the game
-     * @return player who has won the game
+     * This method is used to compute the final score of the {@link Player}s at the end of the game
+     * @return {@link Player} who has won the game, namely the one with the higher score
      */
     public Player getWinner() {
         Player winner = null;
         int max_score = 0;
-        for (Player player : game.getSubscribers()){
+        for (Player player : getGame().getSubscribers()){
             System.out.println(player.getName());
             int score = computePlayerScoreEndGame(player);
             System.out.println("mid game score: " + score);
@@ -297,13 +300,12 @@ public class GameController implements Serializable {
 
     /**
      * This method is used to compute the score of a {@link Player} once the game is finished. Specifically, the points
-     * regarding the adjacent groups of tiles as well as the points regarding the {@link PersonalGoalCard} of the player
+     * regarding the adjacent groups of tiles as well as the points regarding the {@link PersonalGoalCard} of the {@link Player}
      * are calculated
-     * @return the final score of the {@link Player}
+     * @return the {@code int} representing the final score of the {@link Player}
      */
     private int computePlayerScoreEndGame(Player player){
         int adjacentTilesScore = 0;
-        int persconalGoalCardScore = 0;
         //Computation of points from personal goal card
         ItemTile[][] bookshelf = player.getBookshelf().getGrid();
         int personalCardScore;
@@ -360,27 +362,26 @@ public class GameController implements Serializable {
 
 
     /**
-     * This method is used to keep track of score changes of a player during the game.
-     * In particular, the score is updated every time the player receives a scoring token
+     * This method is used to keep track of score changes of a {@link Player} during the game.
+     * In particular, the score is updated every time the {@link Player} receives a {@link ScoringToken}
+     * when he completes the goal of a {@link CommonGoalCard}
      */
     private void computeScoreMidGame() {
-        List<CommonGoalCard> commonGoalCards = game.getLivingRoomBoard().getCommonGoalCards();
-        for(CommonGoalCard card : commonGoalCards) {
-           Player currentPlayer = game.getCurrentPlayer();
-            if (card.toBeChecked(currentPlayer.getBookshelf())) {
-                if(card.checkPattern(currentPlayer.getBookshelf())){
-                    if(card.equals(commonGoalCards.get(0)) && !currentPlayer.isFirstCommonGoalAchieved()) {
-                        currentPlayer.winToken(card.getStack().get(card.getStack().size()-1));
-                        int value = game.popCommonGoalCardStack(0);
-                        currentPlayer.setScore(value);
-                        currentPlayer.hasAchievedFirstGoal();
-                    }
-                    if(card.equals(commonGoalCards.get(1)) && !currentPlayer.isSecondCommonGoalAchieved()) {
-                        currentPlayer.winToken(card.getStack().get(card.getStack().size()-1));
-                        int value = game.popCommonGoalCardStack(1);
-                        currentPlayer.setScore(value);
-                        currentPlayer.hasAchievedSecondGoal();
-                    }
+        List<CommonGoalCard> commonGoalCards = getGame().getLivingRoomBoard().getCommonGoalCards();
+        for (CommonGoalCard card : commonGoalCards) {
+            Player currentPlayer = getGame().getCurrentPlayer();
+            if (card.checkPattern(currentPlayer.getBookshelf())) {
+                if (card.equals(commonGoalCards.get(0)) && !currentPlayer.isFirstCommonGoalAchieved()) {
+                    currentPlayer.winToken(card.getStack().get(card.getStack().size() - 1));
+                    int value = getGame().popCommonGoalCardStack(0);
+                    currentPlayer.setScore(value);
+                    currentPlayer.hasAchievedFirstGoal();
+                }
+                if (card.equals(commonGoalCards.get(1)) && !currentPlayer.isSecondCommonGoalAchieved()) {
+                    currentPlayer.winToken(card.getStack().get(card.getStack().size() - 1));
+                    int value = getGame().popCommonGoalCardStack(1);
+                    currentPlayer.setScore(value);
+                    currentPlayer.hasAchievedSecondGoal();
                 }
             }
         }
@@ -388,16 +389,15 @@ public class GameController implements Serializable {
 
 
     /**
-     * This method is used to esatblish whether the {@link Player} is picking {@link ItemTile}s in vertical or
+     * This method is used to establish whether the {@link Player} is picking {@link ItemTile}s in vertical or
      * horizontal line, when the second {@link ItemTile} is being picked
      * @param tilePositionMessage the {@link EventMessage} containing the position that the {@link Player} intends to pick
-     *
      */
     private void setAlongsideWhat(TilePositionMessage tilePositionMessage){
-        if (tilePositionMessage.getPosition().getColumn() == game.getBuffer().get(0).getColumn()) {
-            game.setAlongSideColumn(true);
+        if (tilePositionMessage.getPosition().getColumn() == getGame().getBuffer().get(0).getColumn()) {
+            getGame().setAlongSideColumn(true);
         } else {
-            game.setAlongSideRow(true);
+            getGame().setAlongSideRow(true);
         }
     }
 
@@ -408,10 +408,19 @@ public class GameController implements Serializable {
      * @param tilePositionMessage containing the position the {@link Player} intends to pick
      */
     private void drawTileAndInsertInTilePack(TilePositionMessage tilePositionMessage) {
-        ItemTile itemTile = game.getLivingRoomBoard().getSpace(tilePositionMessage.getPosition()).drawTile();
-        game.getBuffer().add(tilePositionMessage.getPosition());
-        game.insertTileInTilePack(itemTile);
-        game.setTurnPhase(GamePhase.PICKING_TILES);
+        ItemTile itemTile = getGame().getLivingRoomBoard().getSpace(tilePositionMessage.getPosition()).drawTile();
+        getGame().getBuffer().add(tilePositionMessage.getPosition());
+        getGame().insertTileInTilePack(itemTile);
+        getGame().setTurnPhase(GamePhase.PICKING_TILES);
+    }
+
+
+    /**
+     * Getter method
+     * @return the object referring to the {@link Game#} that is being played
+     */
+    public Game getGame () {
+        return game;
     }
 }
 

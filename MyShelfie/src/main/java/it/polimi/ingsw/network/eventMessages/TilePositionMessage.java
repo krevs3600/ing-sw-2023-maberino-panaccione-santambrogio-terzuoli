@@ -1,5 +1,4 @@
 package it.polimi.ingsw.network.eventMessages;
-import it.polimi.ingsw.model.Bookshelf;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.network.Server;

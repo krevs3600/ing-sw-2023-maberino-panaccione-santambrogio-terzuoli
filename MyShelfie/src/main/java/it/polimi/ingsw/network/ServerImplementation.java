@@ -157,54 +157,8 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
             }
 
             //ping to check whether the client is still playing or it has disconnected
-            case PING -> {
-                //disconnectedPlayersGame.remove(eventMessage.getNickname(), playerGame.get(client));
-                System.out.println("Ping arrived from " + eventMessage.getNickname());
-            }
+            case PING ->  System.out.println("Ping arrived from " + eventMessage.getNickname());
 
-            //before creating a game, the server asks the client creating a new one to provide a game name, with which it
-            //will be identified by the server. The game name cannot be duplicated, so if a game name provided has already been
-            //taken, the server asks the client to come up with a new one
-            case GAME_NAME -> {
-                GameNameMessage gameNameMessage = (GameNameMessage) eventMessage;
-                // da capire cosa modificare
-                if (!currentLobbyGameNames.contains(gameNameMessage.getGameName()) && !currentGames.containsKey(gameNameMessage.getGameName())) {
-                    currentLobbyGameNames.add(gameNameMessage.getGameName());
-                    try {
-                    client.onMessage(new GameNameResponseMessage(gameNameMessage.getNickname(),gameNameMessage.getGameName(), true));
-                    } catch (RemoteException e) {
-                    System.err.println("disconnection");
-                    }
-                } else {
-                    try {
-                    client.onMessage(new GameNameResponseMessage(eventMessage.getNickname(), gameNameMessage.getGameName(), false));
-                } catch (RemoteException e) {
-                        System.err.println("disconnection");
-                    }
-                }
-            }
-
-            //message that a client uses to communicate to the server that it wants to create a new game. The number of
-            //player that are intended to play the game must be specified and must be within 2 and 4
-            case GAME_CREATION -> {
-                GameCreationMessage gameCreationMessage = (GameCreationMessage) eventMessage;
-                boolean isValid = false;
-                if (gameCreationMessage.getNumOfPlayers() > 1 && gameCreationMessage.getNumOfPlayers() < 5) {
-                    Game game = new Game(Arrays.stream(NumberOfPlayers.values()).filter(x -> x.getValue() == gameCreationMessage.getNumOfPlayers()).toList().get(0), gameCreationMessage.getGameName());
-                    GameController gameController = new GameController(game);
-                    playerGame.put(client, gameController);
-                    register(client);
-                    currentGames.put(gameCreationMessage.getGameName(), gameController);
-                    // first player is directly added
-                    gameController.update(client, gameCreationMessage);
-                    isValid = true;
-                }
-                try {
-                client.onMessage(new GameCreationResponseMessage(eventMessage.getNickname(), isValid));
-                } catch (RemoteException e) {
-                    System.err.println("disconnection");
-                }
-            }
 
             case GAME_SPECS -> {
                 GameSpecsMessage gameSpecsMessage = (GameSpecsMessage) eventMessage;
@@ -342,7 +296,7 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                     }
                 }
             }
-            // TODO check if game has been created
+
             //the client selects the game in which it wants to be added from the list previously provided by  the
             //server. The server register the client and adds it to the game, updating the game controller
             case GAME_CHOICE -> {
@@ -413,39 +367,13 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
             }
 
             //a client has disconnected from the server, which cannot reach it any longer
-            case DISCONNECT_CLIENT -> {
-                currentPlayersNicknames.remove(eventMessage.getNickname());
-            }
+            case DISCONNECT_CLIENT -> currentPlayersNicknames.remove(eventMessage.getNickname());
 
             //prendo il controller associato al client e su di questo chiamo l'update passando
             //the game controller related to the cliend is updted with the message the client is sending
             default -> playerGame.get(client).update(client, eventMessage);
         }
     }
-
-            /*else {
-                // kill game
-                currentGames.remove(game.getGameName());
-
-                for (Map.Entry<Client, GameController> entry : playerGame.entrySet()) {
-                    if (entry.getValue().equals(controller)) {
-                        // todo: maybe add game.unsubscribe(String nickname)
-                        Client c = entry.getKey();
-                        if (!entry.getKey().equals(client)) {
-
-                            c.onMessage(new PlayerOfflineMessage(eventMessage.getNickname()));
-                            c.onMessage(new KillGameMessage(eventMessage.getNickname()));
-                        }
-                        playerGame.remove(c);
-                    }
-
-                }
-                for (Player player : game.getSubscribers()) {
-                    getConnectedClients().remove(player.getName());
-                }
-            }
-            */
-        //client.onMessage(new DisconnectionResponseMessage(eventMessage.getNickname()));
 
     /**
      * This method removes a {@link Game} name from the lobby

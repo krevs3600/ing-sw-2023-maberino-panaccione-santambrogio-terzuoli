@@ -17,7 +17,6 @@ import it.polimi.ingsw.network.Server;
  */
 public abstract class RequestMessage extends MessageToClient {
 
-    private final long serialVersionUID = 1L;
 
     /**
      * Class constructor

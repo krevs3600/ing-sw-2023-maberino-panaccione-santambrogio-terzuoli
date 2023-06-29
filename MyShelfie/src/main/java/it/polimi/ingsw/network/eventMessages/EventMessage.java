@@ -1,6 +1,5 @@
 package it.polimi.ingsw.network.eventMessages;
 
-import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.model.Player;
 

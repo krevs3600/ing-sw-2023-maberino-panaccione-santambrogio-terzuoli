@@ -1,9 +1,5 @@
 package it.polimi.ingsw.network.eventMessages;
 
-import it.polimi.ingsw.model.LivingRoomBoard;
-import it.polimi.ingsw.model.Space;
-import it.polimi.ingsw.model.utils.NumberOfPlayers;
-
 /**
  * <h1>Enumeration MessageType</h1>
  * The enumeration SpaceType contains all the types of a {@link EventMessage}.

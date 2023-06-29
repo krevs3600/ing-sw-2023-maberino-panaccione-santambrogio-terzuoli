@@ -5,8 +5,6 @@ import it.polimi.ingsw.network.MessagesToClient.MessageToClientType;
 import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.network.Client;
 
-import java.io.Serializable;
-
 
 /**
  * <h1>Abstract Class ErrorMessage</h1>
@@ -19,7 +17,6 @@ import java.io.Serializable;
  * @since 5/18/2023
  */
 public abstract class ErrorMessage extends MessageToClient {
-    private final long serialVersionUID = 1L;
 
     private final MessageToClientType type;
     private final String errorMessage;

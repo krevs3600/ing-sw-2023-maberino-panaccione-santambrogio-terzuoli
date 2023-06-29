@@ -1,7 +1,6 @@
 package it.polimi.ingsw.network.eventMessages;
 
 import it.polimi.ingsw.model.CommonGoalCard.CommonGoalCard;
-import it.polimi.ingsw.model.ModelView.LivingRoomBoardView;
 import it.polimi.ingsw.model.Player;
 
 /**

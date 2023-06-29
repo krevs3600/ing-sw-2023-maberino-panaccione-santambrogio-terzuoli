@@ -1,6 +1,5 @@
 package it.polimi.ingsw.network.eventMessages;
 
-import it.polimi.ingsw.model.LivingRoomBoard;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Bookshelf;
 /**

@@ -1,6 +1,5 @@
 package it.polimi.ingsw.network.MessagesToClient.errorMessages;
 
-import it.polimi.ingsw.model.Bookshelf;
 import it.polimi.ingsw.model.ItemTile;
 import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.MessagesToClient.MessageToClientType;
