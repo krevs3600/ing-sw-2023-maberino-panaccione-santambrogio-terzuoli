@@ -11,7 +11,7 @@ import it.polimi.ingsw.model.LivingRoomBoard;
  * The class TilePositionMessage extends the abstract class EventMessage. This type of message is used to signal to the {@link Server}
  * that the current {@link Player} has selected a {@link Position} inside the {@link LivingRoomBoard} from which to pick an {@link ItemTile}
  *
- * @author Francesco Maberino, Carlo Terzuoli
+ * @author Carlo Terzuoli, Francesco Maberino
  * @version 1.0
  * @since 5/9/2023
  */

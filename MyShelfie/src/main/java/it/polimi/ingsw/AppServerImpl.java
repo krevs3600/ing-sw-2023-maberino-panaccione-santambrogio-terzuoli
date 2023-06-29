@@ -13,6 +13,14 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+/**
+ * <h1>Class AppServerImpl</h1>
+ * The class AppServerImpl is used to run the Server
+ *
+ * @author Francesco Santambrogio, Francesco Maberino
+ * @version 1.0
+ * @since 5/18/2023
+ */
 
 public class AppServerImpl extends UnicastRemoteObject implements AppServer
 {
@@ -32,6 +40,9 @@ public class AppServerImpl extends UnicastRemoteObject implements AppServer
         return instance;
     }
 
+    /**
+     * Main method
+     */
     public static void main(String[] args) {
 
         Thread rmiThread = new Thread(() -> {
@@ -61,6 +72,10 @@ public class AppServerImpl extends UnicastRemoteObject implements AppServer
 
     }
 
+    /**
+     * Method to start new RMI connection
+     * @throws RemoteException
+     */
     private static void startRMI() throws RemoteException {
         AppServerImpl server = getInstance();
 
@@ -68,6 +83,10 @@ public class AppServerImpl extends UnicastRemoteObject implements AppServer
         registry.rebind("MyShelfieServer", server);
     }
 
+    /**
+     * Method to start new Socket connection
+     * @throws RemoteException
+     */
     public static void startSocket() throws RemoteException {
         AppServerImpl instance = getInstance();
         try (ServerSocket serverSocket = new ServerSocket(1244)) {
@@ -99,6 +118,12 @@ public class AppServerImpl extends UnicastRemoteObject implements AppServer
         }
     }
 
+    /**
+     * Connect method
+     * @return if no {@link Server} has already been created, it instantiates one, otherwise it return the already
+     * existing one
+     * @throws RemoteException
+     */
     @Override
     public Server connect() throws RemoteException {
         if (server == null) {

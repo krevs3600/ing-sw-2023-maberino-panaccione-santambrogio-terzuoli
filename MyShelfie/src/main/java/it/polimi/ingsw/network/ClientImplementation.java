@@ -19,7 +19,7 @@ import it.polimi.ingsw.observer_observable.Observer;
  * Class that implements the {@link Client} interface. It is used to communicate with the {@link Server}
  * and update the View
  *
- * @author Francesco Maberino, Francesco Santambrogio
+ * @author Francesco Maberino, Francesco Santambrogio, Francesca Pia Panaccione
  * @version 1.0
  * @since 5/10/2023
  */
