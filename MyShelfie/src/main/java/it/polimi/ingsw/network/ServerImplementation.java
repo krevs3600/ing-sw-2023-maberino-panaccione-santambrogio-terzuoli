@@ -179,18 +179,20 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                 boolean isValidGameName = false;
                 boolean isValidNumOfPlayers = false;
                 if (!currentLobbyGameNames.contains(gameSpecsMessage.getGameName()) && !currentGames.containsKey(gameSpecsMessage.getGameName())) {
-                    currentLobbyGameNames.add(gameSpecsMessage.getGameName());
                     isValidGameName = true;
-                    if(gameSpecsMessage.getNumOfPlayers() > 1 && gameSpecsMessage.getNumOfPlayers() < 5){
-                        Game game = new Game(Arrays.stream(NumberOfPlayers.values()).filter(x -> x.getValue() == gameSpecsMessage.getNumOfPlayers()).toList().get(0), gameSpecsMessage.getGameName());
-                        GameController gameController = new GameController(game);
-                        playerGame.put(client, gameController);
-                        register(client);
-                        currentGames.put(gameSpecsMessage.getGameName(), gameController);
-                        // first player is directly added
-                        gameController.update(client, gameSpecsMessage);
+                }
+                if(gameSpecsMessage.getNumOfPlayers() > 1 && gameSpecsMessage.getNumOfPlayers() < 5){
                         isValidNumOfPlayers = true;
-                    }
+                }
+                if (isValidGameName && isValidNumOfPlayers) {
+                    currentLobbyGameNames.add(gameSpecsMessage.getGameName());
+                    Game game = new Game(Arrays.stream(NumberOfPlayers.values()).filter(x -> x.getValue() == gameSpecsMessage.getNumOfPlayers()).toList().get(0), gameSpecsMessage.getGameName());
+                    GameController gameController = new GameController(game);
+                    playerGame.put(client, gameController);
+                    register(client);
+                    currentGames.put(gameSpecsMessage.getGameName(), gameController);
+                    // first player is directly added
+                    gameController.update(client, gameSpecsMessage);
                 }
                 try {
                 client.onMessage(new GameSpecsResponseMessage(eventMessage.getNickname(), isValidGameName, isValidNumOfPlayers));

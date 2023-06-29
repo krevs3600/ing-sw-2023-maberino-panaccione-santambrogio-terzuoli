@@ -23,6 +23,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -112,6 +113,7 @@ public class CLI extends Observable<EventMessage> implements View {
         do  {
             out.print("\nPlease insert the server address (press ENTER for localhost): ");
             address = in.nextLine();
+            if (!isValidIPAddress(address) && !address.equals("")) System.err.println("\ninvalid choice");
         } while (!isValidIPAddress(address) && !address.equals(""));
         if(address.equals("")){
             out.println("\nUsing default address...");
@@ -155,24 +157,31 @@ public class CLI extends Observable<EventMessage> implements View {
 
     public void gameMenu() {
         printMenu();
-        out.print(">>> ");
-        int menuOption = in.nextInt();
-        in.nextLine();
+        boolean validOption;
+        do  {
+            validOption = true;
+            out.print(">>> ");
+            int menuOption = in.nextInt();
+            in.nextLine();
 
-        switch (menuOption) {
+            switch (menuOption) {
 
-            case 1 -> createGame();
-            case 2 -> joinGame();
-            case 3 -> resumeGame();
-            case 4 -> reloadGame();
-            case 5 -> {
-                out.println("Closing game...");
-                setChanged();
-                notifyObservers(new ExitMessage(getNickname()));
+                case 1 -> createGame();
+                case 2 -> joinGame();
+                case 3 -> resumeGame();
+                case 4 -> reloadGame();
+                case 5 -> {
+                    out.println("Closing game...");
+                    setChanged();
+                    notifyObservers(new ExitMessage(getNickname()));
 
+                }
+                default -> {
+                    validOption = false;
+                    System.err.println("Invalid option, please try again");
+                }
             }
-            default -> out.println("\nInvalid option, please try again");
-        }
+        } while (!validOption);
 
     }
 
@@ -196,11 +205,21 @@ public class CLI extends Observable<EventMessage> implements View {
     }
 
     public void askNumberOfPlayers(String gameName) {
-            int numOfPlayers = 0;
+
+        int numOfPlayers = 0;
             while (numOfPlayers <= 0) {
-                out.print("Please insert the number of players: ");
-                numOfPlayers = in.nextInt();
-                in.nextLine();
+                boolean isNumber;
+                do {
+                    isNumber = true;
+                    out.print("Please insert the number of players: ");
+                    try {
+                        numOfPlayers = in.nextInt();
+                        in.nextLine();
+                    } catch (InputMismatchException e) {
+                        isNumber= false;
+                    }
+                }while (!isNumber);
+
             }
             setChanged();
             notifyObservers(new GameCreationMessage(getNickname(), numOfPlayers, gameName));
@@ -212,11 +231,21 @@ public class CLI extends Observable<EventMessage> implements View {
         String gameName = "";
 
         while (gameName.length() < 1 || numOfPlayers <= 0) {
+
             out.print(getNickname() + " choose your game's name: ");
             gameName = in.nextLine();
-            out.print("Please insert the number of players: ");
-            numOfPlayers = in.nextInt();
-            in.nextLine();
+
+            boolean isNumber;
+            do {
+                isNumber = true;
+                out.print("Please insert the number of players: ");
+                try {
+                    numOfPlayers = in.nextInt();
+                    in.nextLine();
+                } catch (InputMismatchException e) {
+                    isNumber= false;
+                }
+            }while (!isNumber);
         }
 
         setChanged();
@@ -297,7 +326,7 @@ public class CLI extends Observable<EventMessage> implements View {
                     System.out.println("Valid number of players 😊 ");
                     System.out.println("Waiting for other players... ");
                 } else {
-                    System.err.println("Invalid number of players, please choose a number within the available range");
+                    System.err.println("Invalid number of players, please choose a number within the available range (2-4)");
                     askGameSpecs();
                 }
             }
@@ -419,11 +448,32 @@ public class CLI extends Observable<EventMessage> implements View {
                 if (this.nickname.equals(game.getCurrentPlayer().getName())) {
                     out.println("\n" + eventMessage.getNickname() + " it's your turn!");
                     out.println("\nPlease enter a position: ");
-                    out.print("r: ");
-                    int r = in.nextInt();
+
+                    boolean isValidRow;
+                    int r = 0;
+                    do {
+                        isValidRow = true;
+                        out.print("r: ");
+                        try {
+                            r = in.nextInt();
+                        } catch (InputMismatchException e) {
+                            isValidRow = false;
+                        }
+                    }while (!isValidRow);
+
                     in.nextLine();
-                    System.out.print("c: ");
-                    int c = in.nextInt();
+
+                    boolean isValidColumn;
+                    int c = 0;
+                    do {
+                        isValidColumn = true;
+                        out.print("c: ");
+                        try {
+                            c = in.nextInt();
+                        } catch (InputMismatchException e) {
+                            isValidColumn = false;
+                        }
+                    }while (!isValidColumn);
                     in.nextLine();
                     setChanged();
                     notifyObservers(new TilePositionMessage(eventMessage.getNickname(), new Position(r, c)));
