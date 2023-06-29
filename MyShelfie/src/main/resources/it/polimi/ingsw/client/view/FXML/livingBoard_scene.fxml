@@ -75,10 +75,7 @@
                                                 <Image url="@../scoring%20tokens/scoring_back_EMPTY.jpg" />
                                             </image>
                                         </ImageView>
-                                        <Text fx:id="CommonGoalText" fill="#e8c77acf" layoutX="158.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Congratulations you have reached the first/second common goal! You will now receive a scoring token.. Keep it up!" visible="false" wrappingWidth="344.74981689453125">
-                                            <font>
-                                                <Font name="Libian SC Regular" size="36.0" />
-                                            </font>
+                                        <Text fx:id="CommonGoalText" fill="#e8c77acf" layoutX="158.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Text" text="Congratulations you have reached the first/second common goal! You will now receive a scoring token.. Keep it up!" visible="false" wrappingWidth="344.74981689453125">
                                         </Text>
                                     </children>
                                 </AnchorPane>
@@ -154,13 +151,13 @@
                         </AnchorPane>
                         <AnchorPane fx:id="PaneForResilience" layoutX="-2.0" layoutY="231.0" prefHeight="189.0" prefWidth="636.0" style="-fx-background-color: #A00000; -fx-background-radius: 50px;" visible="false">
                            <children>
-                              <Text fx:id="TextForResilience" fill="WHITE" layoutX="61.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="520.9506225585938" />
+                              <Text fx:id="TextForResilience" fill="WHITE" layoutX="61.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Text" textAlignment="CENTER" wrappingWidth="520.9506225585938" />
                            </children>
                         </AnchorPane>
                         <AnchorPane layoutX="96.0" layoutY="-105.0" prefHeight="99.0" prefWidth="439.0">
                            <children>
                               <Sphere fx:id="sphereTurn" layoutX="120.0" layoutY="65.0" radius="14.0" />
-                              <Text fx:id="turnLabel" layoutX="172.0" layoutY="77.0" strokeType="OUTSIDE" strokeWidth="0.0" text="YOUR TURN" wrappingWidth="223.65435791015625">
+                              <Text fx:id="turnLabel" layoutX="172.0" layoutY="77.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="LabelText" text="YOUR TURN" wrappingWidth="223.65435791015625">
                                  <font>
                                     <Font size="24.0" />
                                  </font>
@@ -193,7 +190,7 @@
                     <children>
                         <Group>
                             <children>
-                                <AnchorPane prefHeight="274.0" prefWidth="388.0">
+                                <AnchorPane layoutY="20.0" prefHeight="274.0" prefWidth="388.0">
                                     <children>
                                         <ImageView fx:id="commonGoalCard1" fitHeight="175.0" fitWidth="274.0" layoutX="61.0" layoutY="47.0" pickOnBounds="true" preserveRatio="true" />
                                         <StackPane layoutX="219.0" layoutY="95.0" prefHeight="74.0" prefWidth="69.0" rotate="-81.5">
@@ -204,17 +201,12 @@
                                                 <ImageView fx:id="tokenCommonCard1" fitHeight="67.0" fitWidth="67.0" pickOnBounds="true" preserveRatio="true" rotate="-90.0" />
                                             </children>
                                         </StackPane>
-                              <TitledPane fx:id="descriptionFirstCG" expanded="false" layoutX="58.0" layoutY="22.0" prefHeight="211.0" prefWidth="271.0">
+                              <TitledPane fx:id="descriptionFirstCG" expanded="false" layoutX="58.0" layoutY="42.0" prefHeight="211.0" prefWidth="271.0" styleClass="Text">
                                  <content>
-                                    <Text fx:id="descriptionCommonGoalCard1_text" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" textAlignment="CENTER" wrappingWidth="268.21630859375">
-                                       <font>
-                                          <Font name="Libian SC Regular" size="16.0" />
-                                       </font>
+                                    <Text fx:id="descriptionCommonGoalCard1_text" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="TinyText" text="Text" textAlignment="CENTER" wrappingWidth="268.21630859375">
                                     </Text>
                                  </content>
-                                 <font>
-                                    <Font name="Libian SC Regular" size="13.0" />
-                                 </font></TitledPane>
+                                 </TitledPane>
                                     </children>
                                 </AnchorPane>
                             </children>
@@ -229,17 +221,12 @@
                                                 <ImageView fx:id="tokenCommonCard2" fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true" />
                                             </children>
                                         </StackPane>
-                              <TitledPane fx:id="descriptionSecondCG" expanded="false" layoutX="60.0" layoutY="21.0" prefHeight="223.0" prefWidth="266.0">
+                              <TitledPane fx:id="descriptionSecondCG" expanded="false" layoutX="60.0" layoutY="21.0" prefHeight="223.0" prefWidth="266.0" styleClass="Text">
                                  <content>
-                                    <Text fx:id="descriptionCommonGoalCard2_text" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" textAlignment="CENTER" wrappingWidth="264.21630859375">
-                                       <font>
-                                          <Font name="Libian SC Regular" size="14.0" />
-                                       </font>
+                                    <Text fx:id="descriptionCommonGoalCard2_text" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="TinyText" text="Text" textAlignment="CENTER" wrappingWidth="264.21630859375">
                                     </Text>
                                  </content>
-                                 <font>
-                                    <Font name="Libian SC Regular" size="13.0" />
-                                 </font></TitledPane>
+                                 </TitledPane>
                                     </children>
                                 </AnchorPane>
                             </children>
@@ -272,9 +259,9 @@
                                         <Image url="@../boards/bookshelf.png" />
                                     </image>
                                 </ImageView>
-                                <Button fx:id="nextPlayer" layoutX="233.0" layoutY="29.0" mnemonicParsing="false" onMouseClicked="#changeBookshelf" prefHeight="5.0" prefWidth="29.0" text="&gt;" textFill="WHITE" />
-                                <Button fx:id="previousPlayer" layoutX="74.0" layoutY="29.0" mnemonicParsing="false" onMouseClicked="#changeBookshelf" prefHeight="5.0" prefWidth="29.0" text="&lt;" textFill="WHITE" />
-                                <Button fx:id="playerBookshelf" layoutX="105.0" layoutY="29.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="126.0" text="Player Name" textFill="WHITE" />
+                                <Button fx:id="nextPlayer" layoutX="233.0" layoutY="29.0" mnemonicParsing="false" onMouseClicked="#changeBookshelf" prefHeight="5.0" prefWidth="29.0" styleClass="TinyText" text="&gt;" textFill="WHITE" />
+                                <Button fx:id="previousPlayer" layoutX="74.0" layoutY="29.0" mnemonicParsing="false" onMouseClicked="#changeBookshelf" prefHeight="5.0" prefWidth="29.0" styleClass="TinyText" text="&lt;" textFill="WHITE" />
+                                <Button fx:id="playerBookshelf" layoutX="105.0" layoutY="29.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="126.0" styleClass="TinyText" text="Player Name" textFill="WHITE" />
                             </children>
                         </AnchorPane>
                     </children>
@@ -343,14 +330,11 @@
                         <ImageView fx:id="tokenCommonGoalCard1" fitHeight="67.0" fitWidth="67.0" layoutX="93.0" layoutY="518.0" pickOnBounds="true" preserveRatio="true" />
                         <ImageView fx:id="tokenCommonGoalCard2" fitHeight="67.0" fitWidth="67.0" layoutX="93.0" layoutY="596.0" pickOnBounds="true" preserveRatio="true" />
                         <ImageView fx:id="seatToken" fitHeight="67.0" fitWidth="67.0" layoutX="93.0" layoutY="685.0" pickOnBounds="true" preserveRatio="true" />
-                        <TitledPane animated="false" expanded="false" layoutX="179.0" layoutY="510.0" prefHeight="273.0" prefWidth="164.0" text="Personal Goal Card">
+                        <TitledPane animated="false" expanded="false" layoutX="179.0" layoutY="510.0" prefHeight="273.0" prefWidth="164.0" styleClass="Text" text="PERSONAL GOAL CARD">
                           <content>
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                  <children>
-                                    <Text layoutX="27.0" layoutY="22.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Place tiles in your bookshelf as you see in the picture. The more tiles you will position correctly, the more points you will receive!" textAlignment="CENTER" wrappingWidth="107.3701171875">
-                                       <font>
-                                          <Font name="Libian SC Regular" size="18.0" />
-                                       </font>
+                                    <Text layoutX="27.0" layoutY="22.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="TinyText" text="PLACE TILES IN YOUR BOOKSHELF AS YOU SEE IN THE PICTURE.THE MORE TILES YOU WILL POSITION CORRECTLY THE MORE POINTS YOU WILL RECEIVE!" textAlignment="CENTER" wrappingWidth="107.3701171875">
                                     </Text>
                                  </children>
                               </AnchorPane>
@@ -367,10 +351,7 @@
          <bottom>
             <AnchorPane prefHeight="99.0" prefWidth="1510.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button fx:id="ExitGame_button" layoutX="615.0" layoutY="3.0" mnemonicParsing="false" onMouseClicked="#ExitGame" prefHeight="45.0" prefWidth="230.0" style="-fx-background-radius: 20px;" text="EXIT GAME" textFill="#fff4f4">
-                     <font>
-                        <Font name="HanziPen SC Regular" size="13.0" />
-                     </font>
+                  <Button fx:id="ExitGame_button" layoutX="615.0" layoutY="3.0" mnemonicParsing="false" onMouseClicked="#ExitGame" prefHeight="45.0" prefWidth="230.0" style="-fx-background-radius: 20px;" styleClass="button" stylesheets="@../css/livingBoard_scene.css" text="EXIT GAME">
                   </Button>
                </children>
             </AnchorPane>

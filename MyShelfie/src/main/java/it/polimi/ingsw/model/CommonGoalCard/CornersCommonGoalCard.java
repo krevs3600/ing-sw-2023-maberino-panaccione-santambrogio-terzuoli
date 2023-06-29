@@ -52,7 +52,7 @@ public class CornersCommonGoalCard extends CommonGoalCard {
      */
     @Override
     public String toString(){
-        return "Four tiles of the same type in the four corners";
+        return "FOUR TILES OF THE SAME TYPE IN THE FOUR CORNERS";
     }
     @Override
     public String getType () {

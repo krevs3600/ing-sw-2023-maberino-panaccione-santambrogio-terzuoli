@@ -75,8 +75,8 @@ public class TwoLinesCommonGoalCard extends CommonGoalCard{
      */
     @Override
     public String toString(){
-        return "Two lines each formed by five different types of tiles\n" +
-                "One line can show the same or a different combination of the other line.";
+        return "TWO LINES EACH FORMED BY FIVE DIFFERENT TYPES OF TILES\n" +
+                "ONE LINE CAN SHOW THE SAME OR A DIFFERENT COMBINATION OF THE OTHER LINE.";
     }
     @Override
     public String getType () {

@@ -14,45 +14,21 @@
     <children>
         <AnchorPane prefHeight="200.0" prefWidth="200.0">
             <children>
-                <Label fx:id="myscoretext" layoutX="77.0" layoutY="1.0" prefHeight="82.0" prefWidth="1003.0" text="Your Score:   X points" textFill="WHITE">
-                    <font>
-                        <Font name="Libian SC Regular" size="36.0" />
-                    </font>
+                <Label fx:id="myscoretext" layoutX="77.0" layoutY="1.0" prefHeight="82.0" prefWidth="1003.0" styleClass="WinText" text="Your Score:   X points">
                 </Label>
                 <Separator layoutX="85.0" layoutY="84.0" prefHeight="5.0" prefWidth="1233.0" />
-                <Label fx:id="secondPlayerScoreTxt" layoutX="77.0" layoutY="102.0" prefHeight="82.0" prefWidth="1003.0" text="P1 Score:    X points " textFill="WHITE">
-                    <font>
-                        <Font name="Libian SC Regular" size="36.0" />
-                    </font>
+                <Label fx:id="secondPlayerScoreTxt" layoutX="77.0" layoutY="102.0" prefHeight="82.0" prefWidth="1003.0" styleClass="WinText" text="P1 Score:    X points ">
                 </Label>
                 <Separator layoutX="94.0" layoutY="176.0" prefHeight="2.0" prefWidth="1220.0" />
-                <Label fx:id="thirdPlayerScoreTxt" layoutX="77.0" layoutY="181.0" prefHeight="82.0" prefWidth="1003.0" text="P2 Score:   X points " textFill="WHITE" visible="false">
-                    <font>
-                        <Font name="Libian SC Regular" size="36.0" />
-                    </font>
+                <Label fx:id="thirdPlayerScoreTxt" layoutX="77.0" layoutY="181.0" prefHeight="82.0" prefWidth="1003.0" styleClass="WinText" text="P2 Score:   X points " visible="false">
                 </Label>
                 <Separator fx:id="lineone" layoutX="88.0" layoutY="249.0" prefHeight="8.0" prefWidth="1233.0" visible="false" />
-                <Label fx:id="fourthPlayerScoretxt" layoutX="77.0" layoutY="260.0" prefHeight="82.0" prefWidth="1003.0" text="P3 Score:   X points " textFill="WHITE" visible="false">
+                <Label fx:id="fourthPlayerScoretxt" layoutX="77.0" layoutY="260.0" prefHeight="82.0" prefWidth="1003.0" styleClass="WinText" text="P3 Score:   X points " visible="false">
                     <font>
                         <Font name="Libian SC Regular" size="36.0" />
                     </font>
                 </Label>
                 <Separator fx:id="linetwo" layoutX="88.0" layoutY="328.0" prefHeight="8.0" prefWidth="1233.0" visible="false" />
-                <Button fx:id="viewD_2player" layoutX="550.0" layoutY="109.0" mnemonicParsing="false" onMouseClicked="#second_p_score" prefHeight="60.0" prefWidth="319.0" text="view detail" textFill="WHITE">
-                    <font>
-                        <Font name="Libian SC Regular" size="26.0" />
-                    </font>
-                </Button>
-                <Button fx:id="viewD_3player" layoutX="554.0" layoutY="185.0" mnemonicParsing="false" onMouseClicked="#second_p_score" prefHeight="60.0" prefWidth="319.0" text="view detail" textFill="WHITE" visible="false">
-                    <font>
-                        <Font name="Libian SC Regular" size="26.0" />
-                    </font>
-                </Button>
-                <Button fx:id="viewD_4player" layoutX="554.0" layoutY="268.0" mnemonicParsing="false" onMouseClicked="#fourth_p_score" prefHeight="60.0" prefWidth="319.0" text="view detail" textFill="WHITE" visible="false">
-                    <font>
-                        <Font name="Libian SC Regular" size="26.0" />
-                    </font>
-                </Button>
                 <ImageView fx:id="Trophy_2" fitHeight="200.0" fitWidth="200.0" layoutX="467.0" layoutY="377.0">
                     <image>
                         <Image url="@../itemtiles/Trofei1.1.png" />
@@ -76,35 +52,17 @@
                         <Cursor fx:constant="DEFAULT" />
                     </cursor>
                 </ImageView>
-                <Label fx:id="congratulations" layoutX="585.0" layoutY="601.0" text="Congratulations!" textFill="WHITE">
-                    <font>
-                        <Font name="Libian SC Regular" size="48.0" />
-                    </font>
+                <Label fx:id="congratulations" layoutX="615.0" layoutY="601.0" prefHeight="30.0" prefWidth="319.0" stylesheets="@../css/livingBoard_scene.css"  styleClass="CongratText" text="CONGRATULATIONS!" >
                 </Label>
-                <Label fx:id="youWonTheGame" layoutX="490.0" layoutY="630.0" prefHeight="114.0" prefWidth="645.0" text="You've won the game " textFill="WHITE">
-                    <font>
-                        <Font name="Libian SC Regular" size="64.0" />
-                    </font>
+                <Label fx:id="youWonTheGame" layoutX="599.0" layoutY="646.0" prefHeight="114.0" prefWidth="296.0" stylesheets="@../css/livingBoard_scene.css" styleClass="CongratText" text="YOU'VE WON THE GAME ">
                 </Label>
-                <Label fx:id="bestPlayer" layoutX="320.0" layoutY="688.0" text="You are the best player of all time " textFill="#fffefe">
-                    <font>
-                        <Font name="Libian SC Regular" size="72.0" />
-                    </font>
+                <Label fx:id="bestPlayer" layoutX="550.0" layoutY="798.0" stylesheets="@../css/livingBoard_scene.css" styleClass="CongratText" text="YOU ARE THE BEST PLAYER OF ALL TIME ">
                 </Label>
-                <Label fx:id="lost" layoutX="600.0" layoutY="583.0" prefHeight="107.0" prefWidth="680.0" text="Sorry...you lost! " visible="false">
-                    <font>
-                        <Font name="Libian SC Regular" size="48.0" />
-                    </font>
+                <Label fx:id="lost" layoutX="401.0" layoutY="583.0" prefHeight="107.0" prefWidth="593.0" styleClass="LoseText" text="SORRY...YOU LOST! " visible="false">
                 </Label>
-                <Label fx:id="dontGiveUp" layoutX="556.0" layoutY="651.0" text="...but don't give up " visible="false">
-                    <font>
-                        <Font name="Libian SC Regular" size="48.0" />
-                    </font>
+                <Label fx:id="dontGiveUp" layoutX="469.0" layoutY="665.0" prefHeight="97.0" prefWidth="444.0" styleClass="LoseText" text="...BUT DON'T GIVE UP " visible="false">
                 </Label>
-                <Label fx:id="willBeBetter" layoutX="436.0" layoutY="690.0" text="it will be better next time!" visible="false">
-                    <font>
-                        <Font name="Libian SC Regular" size="72.0" />
-                    </font>
+                <Label fx:id="willBeBetter" layoutX="391.0" layoutY="759.0" prefHeight="82.0" prefWidth="660.0" styleClass="LoseText" text="IT WILL BE BETTER NEXT TIME!" visible="false">
                 </Label>
             <ImageView fx:id="fail_4" fitHeight="128.0" fitWidth="200.0" layoutX="1083.0" layoutY="513.0">
                <image>
@@ -126,12 +84,9 @@
                   <Image url="@../misc/575fcbe20f3561554e346b0e.png" />
                </image>
             </ImageView>
-            <Button fx:id="MyScoreDetail" layoutX="547.0" layoutY="18.0" mnemonicParsing="false" onMouseClicked="#showDetailsOfTheScore" prefHeight="60.0" prefWidth="319.0" text="view detail" textFill="WHITE">
-               <font>
-                  <Font name="Libian SC Regular" size="26.0" />
-               </font>
+            <Button fx:id="MyScoreDetail" layoutX="547.0" layoutY="18.0" mnemonicParsing="false" onMouseClicked="#showDetailsOfTheScore" prefHeight="60.0" prefWidth="319.0" styleClass="WinText" text="VIEW DETAIL">
             </Button>
-            <Button fx:id="backToMenu" layoutX="1231.0" layoutY="337.0" mnemonicParsing="false" onMouseClicked="#backToMenu" prefHeight="42.0" prefWidth="251.0" text="      Go back to the initial menu" textFill="WHITE" />
+            <Button fx:id="backToMenu" layoutX="1231.0" layoutY="337.0" mnemonicParsing="false" onMouseClicked="#backToMenu" prefHeight="42.0" prefWidth="251.0" styleClass="WinText" text="     GO BACK TO THE INITIAL MENU" />
             <ImageView fitHeight="30.0" fitWidth="28.0" layoutX="1240.0" layoutY="335.0">
                <image>
                   <Image url="@../Publisher_material/casa2.png" />

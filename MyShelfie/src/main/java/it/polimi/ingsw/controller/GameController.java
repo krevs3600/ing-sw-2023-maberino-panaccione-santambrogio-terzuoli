@@ -100,14 +100,14 @@ public class GameController implements Serializable {
                                 drawTileAndInsertInTilePack(tilePositionMessage);
                             } else {
                                 try {
-                                client.onMessage(new NotEnoughInsertableTilesErrorMessage(eventMessage.getNickname(), "The number of insertable tiles in your bookshelf is too small, you cannot insert all of the tiles then"));
+                                client.onMessage(new NotEnoughInsertableTilesErrorMessage(eventMessage.getNickname(), "THE NUMBER OF INSERTABLE TILES IN YOUR BOOKSHELF IS TOO SMALL,\n YOU CANNOT INSERT ALL OF THE TILES THEN"));
                                 } catch (RemoteException e) {
                                 System.err.println("disconnection");
                                 }
                             }
                         } else {
                             try {
-                            client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), "Invalid position, please choose another one"));
+                            client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), "INVALID POSITION, PLEASE CHOOSE ANOTHER ONE"));
                         } catch (RemoteException e) {
                             System.err.println("disconnection");
                         }
@@ -128,7 +128,7 @@ public class GameController implements Serializable {
                                             drawTileAndInsertInTilePack(tilePositionMessage);
                                         } else {
                                             try {
-                                            client.onMessage(new NotEnoughInsertableTilesErrorMessage(eventMessage.getNickname(), "The number of insertable tiles in your bookshelf is too small, you cannot insert all of the tiles then"));
+                                            client.onMessage(new NotEnoughInsertableTilesErrorMessage(eventMessage.getNickname(), "THE NUMBER OF INSERTABLE TILES IN YOUR BOOKSHELF IS TOO SMALL\n, YOU CANNOT INSERT ALL OF THE TILES THEN"));
                                             } catch (RemoteException e) {
                                                 System.err.println("disconnection");
                                             }
@@ -136,7 +136,7 @@ public class GameController implements Serializable {
                                 }
                                 else {
                                     try {
-                                    client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), "Invalid position, please choose another one"));
+                                    client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), "INVALID POSITION\n, PLEASE CHOOSE ANOTHER ONE"));
                                     } catch (RemoteException e) {
                                     System.err.println("disconnection");
                                     }
@@ -147,7 +147,7 @@ public class GameController implements Serializable {
                                         drawTileAndInsertInTilePack(tilePositionMessage);
                                     } else {
                                         try {
-                                        client.onMessage(new NotEnoughInsertableTilesErrorMessage(eventMessage.getNickname(), "The number of insertable tiles in your bookshelf is too small, you cannot insert all of the tiles then"));
+                                        client.onMessage(new NotEnoughInsertableTilesErrorMessage(eventMessage.getNickname(), "THE NUMBER OF INSERTABLE TILES IN YOUR BOOKSHELF IS TOO SMALL,\n YOU CANNOT INSERT ALL OF THE TILES THEN"));
                                         } catch (RemoteException e) {
                                         System.err.println("disconnection");
                                         }
@@ -155,7 +155,7 @@ public class GameController implements Serializable {
                                 }
                                 else {
                                     try {
-                                    client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), "Invalid position, please choose another one"));
+                                    client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), "INVALID POSITION\n PLEASE CHOOSE ANOTHER ONE"));
                                     } catch (RemoteException e) {
                                     System.err.println("disconnection");
                                     }
@@ -164,7 +164,7 @@ public class GameController implements Serializable {
 
                         } else {
                             try {
-                            client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), "Invalid position, please choose another one"));
+                            client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), "INVALID POSITION,\n PLEASE CHOOSE ANOTHER ONE"));
                         } catch (RemoteException e) {
                             System.err.println("disconnection");
                         }
@@ -172,7 +172,7 @@ public class GameController implements Serializable {
                         }
                     } else {
                         try {
-                        client.onMessage(new UpperBoundTilePackErrorMessage(eventMessage.getNickname(), "You can take three tiles at most!"));
+                        client.onMessage(new UpperBoundTilePackErrorMessage(eventMessage.getNickname(), "YOU CAN TAKE THREE TILES AT MOST!"));
                     } catch (RemoteException e) {
                         System.err.println("disconnection");
                     }
@@ -181,7 +181,7 @@ public class GameController implements Serializable {
                 }
                 else {
                     try {
-                    client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), "Invalid position, please choose another one"));
+                    client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), "INVALID POSITION,\nPLEASE CHOOSE ANOTHER ONE"));
                 } catch (RemoteException e) {
                     System.err.println("disconnection");
                 }
@@ -194,7 +194,7 @@ public class GameController implements Serializable {
                 BookshelfColumnMessage bookshelfColumnMessage = (BookshelfColumnMessage) eventMessage;
                 if (game.getCurrentPlayer().getBookshelf().getNumberInsertableTilesColumn(bookshelfColumnMessage.getColumn()) < game.getTilePack().getSize()) {
                     try {
-                    client.onMessage(new NotEnoughInsertableTilesInColumnErrorMessage(eventMessage.getNickname(), "There are not enough spaces in this column, please choose another one"));
+                    client.onMessage(new NotEnoughInsertableTilesInColumnErrorMessage(eventMessage.getNickname(), "THERE ARE NOT ENOUGH SPACES IN THIS COLUMN, \nPLEASE CHOOSE ANOTHER ONE"));
                 } catch (RemoteException e) {
                     System.err.println("disconnection");
                 }

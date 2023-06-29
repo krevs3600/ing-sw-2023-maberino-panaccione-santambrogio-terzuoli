@@ -54,9 +54,11 @@ public class IncreasingColumnsCommonGoalCard extends CommonGoalCard{
     @Override
     public String toString(){
         return """
-                Five columns of increasing or decreasing height.
-                Starting from the first column on the left or on the right, each next column must be made of exactly one more tile.\s
-                Tiles can be of any type""";
+                FIVE COLUMNS OF INCREASING OR DECREASING HEIGHT.
+                STARTING FROM THE FIRST COLUMN ON THE LEFT OR ON THE RIGHT,
+                 EACH NEXT COLUMN MUST BE MADE OF EXACTLY ONE MORE TILE.\s
+                TILES CAN BE OF ANY TYPE""";
+
     }
     @Override
     public String getType () {

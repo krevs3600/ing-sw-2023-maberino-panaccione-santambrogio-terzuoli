@@ -325,13 +325,13 @@ public class LivingBoardController {
         try {
             commonGoalCard1.setImage(new Image(new FileInputStream(getCommonGoalCardPic(gameView.getLivingRoomBoard().getCommonGoalCards().get(0)))));
             descriptioncommonGoalCard1=gameView.getLivingRoomBoard().getCommonGoalCards().get(0).toString();
-            descriptionFirstCG.setText("First common goal card ");
+            descriptionFirstCG.setText("FIRST COMMON GOAL CARD ");
             descriptionCommonGoalCard1_text.setText(descriptioncommonGoalCard1);
 
             commonGoalCard2.setImage(new Image(new FileInputStream(getCommonGoalCardPic(gameView.getLivingRoomBoard().getCommonGoalCards().get(1)))));
             descriptioncommonGoalCard2=gameView.getLivingRoomBoard().getCommonGoalCards().get(1).toString();
 
-            descriptionSecondCG.setText("Second common goal card");
+            descriptionSecondCG.setText("SECOND COMMON GOAL CARD");
             descriptionCommonGoalCard2_text.setText(descriptioncommonGoalCard2);
         } catch (FileNotFoundException e) {
             System.err.println(e.getMessage());

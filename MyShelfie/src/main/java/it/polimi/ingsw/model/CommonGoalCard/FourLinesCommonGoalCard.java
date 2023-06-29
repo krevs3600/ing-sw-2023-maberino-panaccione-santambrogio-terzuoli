@@ -85,8 +85,8 @@ public class FourLinesCommonGoalCard extends CommonGoalCard  {
      */
     @Override
     public String toString(){
-        return "Four lines each formed by 5 tiles of maximum three different types.\n" +
-                "One line can show the same or a different combination of another line";
+        return "FOUR LINES EACH FORMED BY 5 TILES OF MAXIMUM THREE DIFFERENT TYPES.\n" +
+                "ONE LINE CAN SHOW THE SAME OR A DIFFERENT COMBINATION OF ANOTHER LINE";
     }
     @Override
     public String getType () {

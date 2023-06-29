@@ -74,8 +74,8 @@ public class TwoSquaresCommonGoalCard extends CommonGoalCard{
      */
     @Override
     public String toString(){
-        return "Two groups each containing four tiles of the same type in a 2x2 square\n" +
-                "The tiles of one square can be different from those of the other square.";
+        return "TWO GROUPS EACH CONTAINING FOUR TILES OF THE SAME TYPE IN A 2X2 SQUARE\n" +
+                "THE TILES OF ONE SQUARE CAN BE DIFFERENT FROM THOSE OF THE OTHER SQUARE.";
     }
     @Override
     public String getType () {

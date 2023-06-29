@@ -6,6 +6,48 @@
 .Text {
     -fx-font-family: 'LillyBelle';
     -fx-text-fill: #451616;
+    -fx-font-size: 10;
+}
+
+
+.TextPoints {
+    -fx-font-family: 'LillyBelle';
+    -fx-text-fill: #451616;
+    -fx-font-size: 30;
+}
+.LabelText {
+    -fx-font-family: 'LillyBelle';
+    -fx-text-fill: #451616;
+    -fx-font-size: 25;
+}
+.WinText {
+    -fx-font-family: 'LillyBelle';
+    -fx-text-fill: linear-gradient(to bottom, #FFD700, #B8860B);
+    -fx-effect: dropshadow(gaussian, #8B6914, 2, 0, 0, 0);
+    -fx-font-size: 26;
+}
+
+.
+
+.CongratText {
+    -fx-font-family: 'LillyBelle';
+    -fx-font-size: 48;
+    -fx-text-fill: #BCECAC;
+    -fx-effect: dropshadow(gaussian, #5E7954, 2, 0, 0, 0);
+}
+
+.LoseText {
+    -fx-font-family: 'LillyBelle';
+    -fx-font-size: 48;
+    -fx-text-fill: #FF8080;
+    -fx-effect: dropshadow(gaussian, #8B0000, 2, 0, 0, 0);
+}
+
+.TinyText {
+    -fx-font-family: 'LillyBelle';
+    -fx-font-size: 11.5;
+    -fx-text-fill: #FFDAB9;
+    -fx-effect: dropshadow(gaussian, #8B7355, 2, 0, 0, 0);
 }
 
 .Board {
@@ -30,7 +72,9 @@
 
 .popup {
     -fx-background-image: url("../misc/base_pagina2.jpg");
-
+    -fx-font-family: 'LillyBelle';
+    -fx-text-fill: white;
+    -fx-font-size: 13;
     -fx-border-color: transparent;
     -fx-border-width: 0;
     -fx-background-radius: 0;
@@ -59,3 +103,8 @@
     -fx-border-color:#bbf4b0;
     -fx-border-width: 3;
 }
+#goalReached{
+    -fx-background-image: url("../scoring tokens/scoring_back_EMPTY.jpg");
+}
+
+

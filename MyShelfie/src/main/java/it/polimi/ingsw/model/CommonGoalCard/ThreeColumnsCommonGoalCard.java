@@ -75,8 +75,8 @@ public class ThreeColumnsCommonGoalCard extends CommonGoalCard {
      */
     @Override
     public String toString(){
-        return "Three columns each formed by six tiles of maximum three different types.\n" +
-                "One column can show the same or a different combination of another column";
+        return "THREE COLUMNS EACH FORMED BY SIX TILES OF MAXIMUM THREE DIFFERENT TYPES.\n" +
+                "ONE COLUMN CAN SHOW THE SAME OR A DIFFERENT COMBINATION OF ANOTHER COLUMN";
     }
     @Override
     public String getType () {

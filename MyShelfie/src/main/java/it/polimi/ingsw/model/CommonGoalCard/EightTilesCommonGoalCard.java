@@ -61,7 +61,7 @@ public class EightTilesCommonGoalCard extends CommonGoalCard {
      */
     @Override
     public String toString(){
-        return "Eight tiles of the same type. There is no restriction about the position of these tiles";
+        return "EIGHT TILES OF THE SAME TYPE.THERE IS NO RESTRICTION ABOUT THE POSITION OF THESE TILES";
     }
     @Override
     public String getType () {

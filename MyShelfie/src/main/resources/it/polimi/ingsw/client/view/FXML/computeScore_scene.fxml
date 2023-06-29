@@ -37,10 +37,7 @@
                   <Insets bottom="12.0" left="18.0" right="25.0" top="11.0" />
                </padding>
             </GridPane>
-            <Button layoutX="549.0" layoutY="15.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="456.0" text="Compute score" textFill="#fcfcfc">
-               <font>
-                  <Font name="Libian SC Regular" size="36.0" />
-               </font>
+            <Button layoutX="549.0" layoutY="15.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="456.0" text="COMPUTE SCORE" textFill="#fcfcfc" styleClass="button">
             </Button>
             <ImageView fitHeight="509.0" fitWidth="518.0" layoutX="35.0" layoutY="172.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -72,41 +69,20 @@
                   <Image url="@../scoringtokens/Adjacent_Tiles.png" />
                </image>
             </ImageView>
-            <Label fx:id="commonPoint1" layoutX="944.0" layoutY="192.0" text="= 0 points" textFill="#f8f5f5">
-               <font>
-                  <Font name="Libian SC Regular" size="36.0" />
-               </font>
+            <Label fx:id="commonPoint1" layoutX="944.0" layoutY="192.0" text="= 0 points" styleClass="TextPoints" >
             </Label>
-            <Label fx:id="commonPoint2" layoutX="944.0" layoutY="342.0" text="= 0 points " textFill="#fffdfd">
-               <font>
-                  <Font name="Libian SC Regular" size="36.0" />
-               </font>
+            <Label fx:id="commonPoint2" layoutX="944.0" layoutY="342.0" text="= 0 points " styleClass="TextPoints">
             </Label>
-            <Label fx:id="endGamePoint" layoutX="944.0" layoutY="491.0" text="= 0 points " textFill="#fffdfd">
-               <font>
-                  <Font name="Libian SC Regular" size="36.0" />
-               </font>
+            <Label fx:id="endGamePoint" layoutX="944.0" layoutY="491.0" text="= 0 points "  styleClass="TextPoints" >
             </Label>
-            <Label fx:id="personalGoalPoint" layoutX="944.0" layoutY="622.0" text="= 0 points " textFill="#fffdfd">
-               <font>
-                  <Font name="Libian SC Regular" size="36.0" />
-               </font>
+            <Label fx:id="personalGoalPoint" layoutX="944.0" layoutY="622.0" text="= 0 points " styleClass="TextPoints">
             </Label>
-            <Label fx:id="generalPoint" layoutX="944.0" layoutY="742.0" text="= 0 points " textFill="#fffdfd">
-               <font>
-                  <Font name="Libian SC Regular" size="36.0" />
-               </font>
+            <Label fx:id="generalPoint" layoutX="944.0" layoutY="742.0" text="= 0 points " styleClass="TextPoints">
             </Label>
             <Line endX="687.0" endY="1.220703125E-4" layoutX="831.0" layoutY="818.0" startX="-258.44573974609375" startY="1.220703125E-4" stroke="#fff9f9" />
-            <Label layoutX="775.0" layoutY="832.0" prefHeight="33.0" prefWidth="203.0" text="Total" textFill="WHITE">
-               <font>
-                  <Font name="Libian SC Regular" size="36.0" />
-               </font>
+            <Label layoutX="775.0" layoutY="832.0" prefHeight="33.0" prefWidth="203.0" text="TOTAL" styleClass="TextPoints">
             </Label>
-            <Label fx:id="totalScore" layoutX="943.0" layoutY="829.0" prefHeight="33.0" prefWidth="203.0" text="= X points " textFill="WHITE">
-               <font>
-                  <Font name="Libian SC Regular" size="36.0" />
-               </font>
+            <Label fx:id="totalScore" layoutX="943.0" layoutY="829.0" prefHeight="33.0" prefWidth="203.0" text="= X points " styleClass="TextPoints" >
             </Label>
             <ImageView fx:id="checkFirstCommonGoal" fitHeight="67.0" fitWidth="74.0" layoutX="557.0" layoutY="182.0">
                <image>
@@ -133,12 +109,9 @@
                   <Image url="@../misc/x_mark.png" />
                </image>
             </ImageView>
-            <Button layoutX="1276.0" layoutY="833.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="216.0" text="BACK" textFill="WHITE">
-               <font>
-                  <Font size="30.0" />
-               </font>
+            <Button layoutX="1276.0" layoutY="833.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="216.0" text="BACK" textFill="WHITE" styleClass="button">
             </Button>
-            <Button fx:id="backToMenu" layoutX="1201.0" layoutY="30.0" mnemonicParsing="false" onMouseClicked="#backToMenu" prefHeight="42.0" prefWidth="251.0" text="      Go back to the initial menu" textFill="WHITE" />
+            <Button fx:id="backToMenu" layoutX="1201.0" layoutY="30.0" mnemonicParsing="false" onMouseClicked="#backToMenu" prefHeight="42.0" prefWidth="251.0" text="      GO BACK TO THE INITIAL MENU" styleClass="Text" />
             <ImageView fitHeight="28.0" fitWidth="30.0" layoutX="1212.0" layoutY="29.0">
                <image>
                   <Image url="@../Publisher_material/casa2.png" />

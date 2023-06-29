@@ -205,7 +205,7 @@ public class GUI extends Observable<EventMessage> implements View {
             setChanged();
             notifyObservers(new NicknameMessage(nickname));
         } else {
-            showPopup("Field is empty,\nplease write your nickname");
+            showPopup("FIELD IS EMPTY,\nPLEASE WRITE YOUR NICKNAME");
         }
     }
 
@@ -355,7 +355,7 @@ public class GUI extends Observable<EventMessage> implements View {
                         throw new RuntimeException(e);
                     }
                 } else {
-                    showPopup("Unavailable nickname, please choose another one");
+                    showPopup("UNAVAILABLE NICKNAME, PLEASE CHOOSE ANOTHER ONE");
                 }
             }
             case GAME_NAME_RESPONSE -> {
@@ -373,7 +373,7 @@ public class GUI extends Observable<EventMessage> implements View {
                         throw new RuntimeException(e);
                     }
                 } else {
-                    showPopup("Invalid game name, please choose another one");
+                    showPopup("INVALID GAME NAME, PLEASE CHOOSE ANOTHER ONE");
                 }
             }
 
@@ -444,7 +444,7 @@ public class GUI extends Observable<EventMessage> implements View {
                         // updating turn infos
                         livingBoardController.setSphereTurnRed();
                         livingBoardController.setTurnLabelRed();
-                        livingBoardController.turnLabel.setText("Wait for your turn");
+                        livingBoardController.turnLabel.setText("WAIT FOR YOUR TURN");
                         // disabling gui elements
                         livingBoardController.tilePack.setDisable(true);
                         livingBoardController.disableColumnChoice();
@@ -457,7 +457,7 @@ public class GUI extends Observable<EventMessage> implements View {
                 }
             }
             case JOIN_GAME_ERROR -> {
-                showPopup("No available games in the lobby");
+                showPopup("NO AVAILABLE GAMES IN THE LOBBY");
             }
             case RESUME_GAME_ERROR -> {
                 ResumeGameErrorMessage resumeGameErrorMessage = (ResumeGameErrorMessage) message;
@@ -482,12 +482,12 @@ public class GUI extends Observable<EventMessage> implements View {
                         throw new RuntimeException(e);
                     }
                 }
-                Platform.runLater(() -> lobbyController.NumberOfMissingPlayers.setText("Waiting for" + waitingResponseMessage.getMissingPlayers() + " players....."));
+                Platform.runLater(() -> lobbyController.NumberOfMissingPlayers.setText("WAITING FOR "  +  waitingResponseMessage.getMissingPlayers() + " PLAYERS....."));
                 lobbyController.NumberOfMissingPlayers.setVisible(true);
             }
             case PLAYER_JOINED_LOBBY_RESPONSE -> {
                 PlayerJoinedLobbyMessage player = (PlayerJoinedLobbyMessage) message;
-                Platform.runLater(() -> lobbyController.PlayerJoinedGame.setText(player.getNickname() + " joined lobby"));
+                Platform.runLater(() -> lobbyController.PlayerJoinedGame.setText(player.getNickname() + " JOINED LOBBY"));
                 this.lobbyController.PlayerJoinedGame.setVisible(true);
                 // ok forse il comando sotto non ha senso perche sono nella GUI di un client che quindi vede il suo lobbyController
                 //  this.lobbyController.NumberOfMissingPlayers.setText("Waiting for"+ this.lobbyController.getPinLobby());
@@ -646,7 +646,7 @@ public class GUI extends Observable<EventMessage> implements View {
                         if (!livingBoardController.wasMessageSent()) {
                             livingBoardController.setMessageSent(true);
                             Platform.runLater(() ->
-                                    showPopup("Choose an item tile to insert from the tilepack \ninto the selected column"));
+                                    showPopup("CHOOSE AN ITEM TILE TO INSERT FROM THE TILEPACK \nINTO THE SELECTED COLUMN"));
                         }
                     } else if (game.getTurnPhase().equals(GamePhase.PLACING_TILES)) {
                         livingBoardController.setMessageSent(false);
@@ -685,21 +685,21 @@ public class GUI extends Observable<EventMessage> implements View {
 
                         livingBoardController.anchorPaneForTheCandPGoalCards.setVisible(true);
                         livingBoardController.CommonGoalAchieved.setVisible(true);
-                        livingBoardController.CommonGoalText.setText("You completed the " + number + " common goal");
+                        livingBoardController.CommonGoalText.setText("YOU COMPLETED THE " + number + " COMMON GOAL");
                         livingBoardController.CommonGoalText.setVisible(true);
                         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(5000), event -> livingBoardController.anchorPaneForTheCandPGoalCards.setVisible(false)));
                         timeline.play();
-                        showPopup("You completed the " + number + " common goal");
+                        showPopup("YOU COMPLETED THE " + number + " COMMON GOAL");
                     } else {
-                        showPopup(eventMessage.getNickname() + " completed the " + number + " common goal");
+                        showPopup(eventMessage.getNickname() + " COMPLETED THE " + number + " COMMON GOAL");
                     }
                 });
             }
             case LAST_TURN -> {
                 if (this.nickname.equals(game.getCurrentPlayer().getName())) {
-                    showPopup("\nCongrats, you filled your bookshelf! You have an extra point!");
+                    showPopup("\nCONGRATS, YOU FILLED YOUR BOOKSHELF! YOU HAVE AN EXTRA POINT!");
                 } else {
-                    showPopup("\n" + eventMessage.getNickname() + " filled his bookshelf...");
+                    showPopup("\n" + eventMessage.getNickname() + " FILLED HIS BOOKSHELF...");
                 }
             }
             case END_GAME -> {
@@ -725,26 +725,24 @@ public class GUI extends Observable<EventMessage> implements View {
                     winController.fail_2.setVisible(false);
                     winController.fail_3.setVisible(false);
                     winController.fail_4.setVisible(false);
-                    winController.congratulations.setText("Congratulations " + eventMessage.getNickname() + "!");
+                    winController.congratulations.setText("CONGRATULATIONS " + eventMessage.getNickname() + "!");
                 } else {
                     winController.bestPlayer.setVisible(false);
                     winController.congratulations.setVisible(false);
                     winController.youWonTheGame.setVisible(false);
                     winController.lost.setVisible(true);
-                    winController.lost.setText("Sorry " + this.nickname + "...... you lost");
+                    winController.lost.setText("Sorry " + this.nickname + "...... YOU LOST");
                     winController.dontGiveUp.setVisible(true);
                     winController.willBeBetter.setVisible(true);
-                    Platform.runLater(() -> showPopup(eventMessage.getNickname() + " won"));
+                    Platform.runLater(() -> showPopup(eventMessage.getNickname() + " WON"));
                 }
 
                 if (game.getNumberOfPlayers().equals(NumberOfPlayers.THREE_PLAYERS) || game.getNumberOfPlayers().equals(NumberOfPlayers.FOUR_PLAYERS)) {
                     winController.lineone.setVisible(true);
                     winController.thirdPlayerScoreTxt.setVisible(true);
-                    winController.viewD_3player.setVisible(true);
                     if (game.getNumberOfPlayers().equals(NumberOfPlayers.FOUR_PLAYERS)) {
                         winController.linetwo.setVisible(true);
                         winController.fourthPlayerScoretxt.setVisible(true);
-                        winController.viewD_4player.setVisible(true);
                     }
                 }
 
@@ -752,11 +750,11 @@ public class GUI extends Observable<EventMessage> implements View {
 
                 for (int i = 0; i < game.otherPlayersList(playerClient).size(); i++) {
                     if (i == 0) { // 2 giocatori1
-                        winController.secondPlayerScoreTxt.setText(game.otherPlayersList(playerClient).get(0).getName() + "'s score is:  " + game.otherPlayersList(playerClient).get(0).getScore());
+                        winController.secondPlayerScoreTxt.setText(game.otherPlayersList(playerClient).get(0).getName() + "'S SCORE IS:  " + game.otherPlayersList(playerClient).get(0).getScore());
                     } else if (i == 1) { // 3 giocatori
-                        winController.thirdPlayerScoreTxt.setText(game.otherPlayersList(playerClient).get(1).getName() + "'s score is:  " + game.otherPlayersList(playerClient).get(1).getScore());
+                        winController.thirdPlayerScoreTxt.setText(game.otherPlayersList(playerClient).get(1).getName() + "'S SCORE IS:  " + game.otherPlayersList(playerClient).get(1).getScore());
                     } else if (i == 2) {
-                        winController.fourthPlayerScoretxt.setText(game.otherPlayersList(playerClient).get(2).getName() + "'s score is:  " + game.otherPlayersList(playerClient).get(2).getScore());
+                        winController.fourthPlayerScoretxt.setText(game.otherPlayersList(playerClient).get(2).getName() + "'S SCORE IS:  " + game.otherPlayersList(playerClient).get(2).getScore());
                     }
                 }
             }

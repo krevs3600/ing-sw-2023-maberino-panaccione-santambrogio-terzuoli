@@ -59,8 +59,8 @@ public class SixGroupsCommonGoalCard extends CommonGoalCard {
      */
     @Override
     public String toString(){
-        return "Six groups each containing at least two tiles of the same type.\n" +
-                "The tiles of one group can be different from those of another group";
+        return "SIX GROUPS EACH CONTAINING AT LEAST TWO TILES OF THE SAME TYPE.\n" +
+                "THE TILES OF ONE GROUP CAN BE DIFFERENT FROM THOSE OF ANOTHER GROUP";
     }
     @Override
     public String getType () {

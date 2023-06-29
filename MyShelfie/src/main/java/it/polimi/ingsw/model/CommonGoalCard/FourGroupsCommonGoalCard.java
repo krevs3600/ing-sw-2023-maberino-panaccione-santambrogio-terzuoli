@@ -62,8 +62,8 @@ public class FourGroupsCommonGoalCard extends CommonGoalCard {
      */
     @Override
     public String toString(){
-        return "Four groups each containing at least 4 tiles of the same type.\n" +
-                "The tiles of one group can be different from those of another group";
+        return "FOUR OUR GROUPS EACH CONTAING AT LEAST 4 TILES OF THE SAME TYPE.\n" +
+                "THE TILES OF ONE GROUP CAN BE DIFFERENT FROM THOSE OF ANOTHER GROUP";
     }
     @Override
     public String getType () {
