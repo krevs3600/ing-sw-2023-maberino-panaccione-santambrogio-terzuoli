@@ -95,6 +95,7 @@ public class LivingRoomBoard  implements Serializable {
             this.commonGoalCards.add(cgc1);
             this.commonGoalCards.add(cgc2);
         } catch (IOException | ParseException e) {
+            // should not be thrown normally
             throw new RuntimeException(e);
         }
 
@@ -116,8 +117,8 @@ public class LivingRoomBoard  implements Serializable {
     public List<Space> getAllFreeTiles() {
         List<Space> freeSidesTiles = new ArrayList<>();
 
-        for (int i = 0; i < MAX_WIDTH; i++) {
-            for (int j = 0; j < MAX_HEIGHT; j++) {
+        for (int i = 0; i < getMaxWidth(); i++) {
+            for (int j = 0; j < getMaxHeight(); j++) {
                 if (!getSpace(new Position(i, j)).isFree() && getSpace(new Position(i, j)).getType() != SpaceType.FORBIDDEN) {
                     if (i==0){
                         if (
@@ -128,7 +129,7 @@ public class LivingRoomBoard  implements Serializable {
                             freeSidesTiles.add(getSpace(new Position(i, j)));
                         }
                     }
-                    else if (i==MAX_WIDTH-1) {
+                    else if (i==getMaxWidth()-1) {
                         if (
                                 (getSpace(new Position(i, j - 1)).isFree() || getSpace(new Position(i, j - 1)).getType() == SpaceType.FORBIDDEN) &&
                                         (getSpace(new Position(i, j + 1)).isFree() || getSpace(new Position(i, j + 1)).getType() == SpaceType.FORBIDDEN) &&
@@ -146,7 +147,7 @@ public class LivingRoomBoard  implements Serializable {
                             freeSidesTiles.add(getSpace(new Position(i, j)));
                         }
                     }
-                    else if (j==MAX_HEIGHT-1) {
+                    else if (j==getMaxHeight()-1) {
                         if (
                                 (getSpace(new Position(i, j - 1)).isFree() || getSpace(new Position(i, j - 1)).getType() == SpaceType.FORBIDDEN) &&
                                         (getSpace(new Position(i + 1, j)).isFree() || getSpace(new Position(i + 1, j)).getType() == SpaceType.FORBIDDEN) &&
@@ -176,11 +177,11 @@ public class LivingRoomBoard  implements Serializable {
     public List<Space> getDrawableTiles() {
         List<Space> drawablesTiles = new ArrayList<>();
 
-        for (int i = 0; i < MAX_WIDTH; i++) {
-            for (int j = 0; j < MAX_HEIGHT; j++) {
+        for (int i = 0; i < getMaxWidth(); i++) {
+            for (int j = 0; j < getMaxHeight(); j++) {
                 if (!getSpace(new Position(i, j)).isFree() && getSpace(new Position(i,j)).getType() == SpaceType.PLAYABLE) {
                     // inner spaces
-                    if (i==0 || i==MAX_HEIGHT-1 || j==0 || j==MAX_WIDTH-1){
+                    if (i==0 || i==getMaxHeight()-1 || j==0 || j==getMaxWidth()-1){
                         drawablesTiles.add(getSpace(new Position(i, j)));
                     }
                     else if (
@@ -218,8 +219,8 @@ public class LivingRoomBoard  implements Serializable {
      * This method draws the {@link ItemTile}s from the {@link Bag} and places them randomly in the {@link LivingRoomBoard} on the playable {@link Space}s.
      */
     private void placeTilesRandomly() {
-        for (int i = 0; i < MAX_WIDTH; i++) {
-            for (int j = 0; j < MAX_HEIGHT; j++) {
+        for (int i = 0; i < getMaxWidth(); i++) {
+            for (int j = 0; j < getMaxHeight(); j++) {
                 if (getSpace(new Position(i, j)).getType() == SpaceType.PLAYABLE) {
                     getSpace(new Position(i, j)).setTile(getBag().drawTile());
                 }

@@ -33,7 +33,7 @@ public class Bag implements Serializable {
     public Bag(){
         for(TileType type: TileType.values()){
             for(int i=0; i<MAX_SIZE_PER_TYPE; i++){
-                bag.add(new ItemTile(type));
+                getBag().add(new ItemTile(type));
                 this.size++;
             }
         }
@@ -48,7 +48,7 @@ public class Bag implements Serializable {
         if(this.size > 0){
             int randNumber = ThreadLocalRandom.current().nextInt(0, bag.size());
             ItemTile toBeDrawn = bag.get(randNumber);
-            bag.remove(randNumber);
+            getBag().remove(randNumber);
             size--;
             return toBeDrawn;
         } else {
@@ -69,7 +69,7 @@ public class Bag implements Serializable {
                 int randNumber = ThreadLocalRandom.current().nextInt(0, bag.size());
                 ItemTile elem = bag.get(randNumber);
                 toBeDrawn.add(elem);
-                bag.remove(randNumber);
+                getBag().remove(randNumber);
                 size--;
 
             }
@@ -88,9 +88,9 @@ public class Bag implements Serializable {
      * @exception IllegalArgumentException The exception is thrown if the number of items to insert exceeds the available {@link Bag#size} of the {@link Bag#bag}
      */
     public void insertTiles(List<ItemTile> leftovers) throws IllegalArgumentException{
-        if (this.getSize() + leftovers.size() <= MAX_SIZE) {
+        if (this.getSize() + leftovers.size() <= getMaxSize()) {
             for(ItemTile item: leftovers){
-                bag.add(item);
+                getBag().add(item);
                 size++;
             }
         } else {

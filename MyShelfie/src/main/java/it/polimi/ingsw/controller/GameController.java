@@ -266,7 +266,7 @@ public class GameController implements Serializable {
                 }
             }
             case EASTER_EGG -> {
-                game.getCurrentPlayer().getBookshelf().insertTileTest();
+                game.getCurrentPlayer().getBookshelf().insertTilesRandomly();
                 game.insertTileInTilePack(new ItemTile(TileType.CAT));
                 game.setTurnPhase(GamePhase.PICKING_TILES);
             }

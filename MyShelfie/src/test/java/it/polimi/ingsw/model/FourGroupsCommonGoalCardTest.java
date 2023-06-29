@@ -23,6 +23,13 @@ public class FourGroupsCommonGoalCardTest {
     }
 
     @Test
+    public void toStringTest() {
+        assertEquals("FOUR OUR GROUPS EACH CONTAING AT LEAST 4 TILES OF THE SAME TYPE.\n" +
+                "THE TILES OF ONE GROUP CAN BE DIFFERENT FROM THOSE OF ANOTHER GROUP", testCommonGoalCard.toString());
+        assertEquals("FourGroupsCommonGoalCard", testCommonGoalCard.getType());
+    }
+
+    @Test
     public void checkPatternTest(){
 
         // empty bookshelf: toBeChecked false

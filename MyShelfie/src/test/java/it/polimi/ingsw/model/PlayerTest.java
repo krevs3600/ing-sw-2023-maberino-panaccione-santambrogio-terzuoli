@@ -125,4 +125,38 @@ public class PlayerTest {
         assertTrue(player.isSecondCommonGoalAchieved());
     }
 
+    @Test
+    public void setPersonalGoalCardScoreTest() {
+
+        // initial state: no score
+        assertEquals(0, player.getPersonalGoalCardScore());
+
+        // after obstaining a score
+        player.setPersonalGoalCardScore(9);
+        assertEquals(9, player.getPersonalGoalCardScore());
+    }
+
+    @Test
+    public void setAdjacentTilesScoreTest() {
+
+        // initial state: no score
+        assertEquals(0, player.getAdjacentTilesScore());
+
+        // after obtaining a score
+        player.setAdjacentTilesScore(16);
+        assertEquals(16, player.getAdjacentTilesScore());
+    }
+
+
+    @Test
+    public void setFirstToFinishTest(){
+
+        // initial state: player has not finished yet
+        assertFalse(player.isFirstToFinish());
+
+        // after finishing
+        player.setFirstToFinish();
+        assertTrue(player.isFirstToFinish());
+    }
+
 }

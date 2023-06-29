@@ -2,6 +2,7 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.utils.GamePhase;
 import it.polimi.ingsw.model.utils.NumberOfPlayers;
+import it.polimi.ingsw.model.utils.Position;
 import it.polimi.ingsw.model.utils.TileType;
 import org.junit.Before;
 import org.junit.Test;
@@ -50,6 +51,7 @@ public class GameTest {
         assertFalse(game1.isFinalTurn());
 
         // after the final turn has started
+        game1.subscribe(new Player("Test"));
         game1.setFinalTurn();
         assertTrue(game1.isFinalTurn());
     }
@@ -149,6 +151,8 @@ public class GameTest {
 
         game1.subscribe(new Player("Test1"));
         game1.subscribe(new Player("Test2"));
+        game1.getSubscribers().get(0).setStatus(PlayerStatus.ACTIVE);
+        game1.getSubscribers().get(1).setStatus(PlayerStatus.ACTIVE);
 
         // before incrementing the cursor
         assertEquals(0, game1.getCursor());
@@ -158,6 +162,13 @@ public class GameTest {
         assertEquals(1, game1.getCursor());
 
         // after further incrementing the cursor to come back to the initial value
+        game1.incrementCursor();
+        assertEquals(0, game1.getCursor());
+
+        // if another player subscribes but not active, the cursor skips him
+        game1.subscribe(new Player("Test3"));
+        game1.getSubscribers().get(2).setStatus(PlayerStatus.INACTIVE);
+        game1.incrementCursor();
         game1.incrementCursor();
         assertEquals(0, game1.getCursor());
 
@@ -173,5 +184,100 @@ public class GameTest {
         Player player = new Player("Test");
         game1.setFirstPlayer(player);
         assertEquals(player, game1.getFirstPlayer());
+    }
+
+    @Test
+    public void setFirstPlayerHasEnded() {
+
+        game1.subscribe(new Player("Test1"));
+
+        // before first player has finished
+        assertFalse(game1.isFirstPlayerHasEnded());
+
+        // after the first player has ended
+        game1.setFirstPlayerHasEnded();
+        assertTrue(game1.isFirstPlayerHasEnded());
+    }
+
+    @Test
+    public void setAlongTest() {
+
+        // before setting
+        assertFalse(game1.isAlongSideRow());
+        assertFalse(game1.isAlongSideColumn());
+
+        // after setting the column boolean
+        game1.setAlongSideColumn(true);
+        assertFalse(game1.isAlongSideRow());
+        assertTrue(game1.isAlongSideColumn());
+
+        // after setting also the row boolean
+        game1.setAlongSideRow(true);
+        assertTrue(game1.isAlongSideRow());
+        assertTrue(game1.isAlongSideColumn());
+    }
+
+    @Test
+    public void setColumnChoice() {
+
+        game1.subscribe(new Player("Test1"));
+
+        // if the choice is within the bounds
+        int choice = 3;
+        game1.setColumnChoice(choice);
+        assertEquals(choice, game1.getColumnChoice());
+
+        // if the choice is outside the bounds: an exception is thrown
+        Exception exception = assertThrows(IndexOutOfBoundsException.class, () -> game1.setColumnChoice(10));
+
+        String expectedMessage = "invalid column, please choose another one;";
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    public void setTurnPhaseTest () {
+
+        game1.subscribe(new Player("Test1"));
+        game1.subscribe(new Player("Test2"));
+        game1.getSubscribers().get(0).setStatus(PlayerStatus.ACTIVE);
+        game1.getSubscribers().get(1).setStatus(PlayerStatus.ACTIVE);
+        game1.initLivingRoomBoard();
+
+        game1.setTurnPhase(GamePhase.PLACING_TILES);
+        assertEquals(game1.getTurnPhase(), GamePhase.PLACING_TILES);
+
+        game1.setTurnPhase(GamePhase.INIT_GAME);
+        assertEquals(game1.getTurnPhase(), GamePhase.INIT_GAME);
+
+        // before setting the init turn phase
+        game1.getBuffer().add(new Position(0, 0));
+        game1.getTilePack().getTiles().add(new ItemTile(TileType.CAT));
+        game1.setAlongSideColumn(true);
+        game1.setAlongSideRow(true);
+        assertEquals(1, game1.getBuffer().size());
+        assertEquals(1, game1.getTilePack().getSize());
+        assertTrue(game1.isAlongSideColumn());
+        assertTrue(game1.isAlongSideRow());
+        assertEquals(0, game1.getDrawableTiles().size());
+        assertEquals(0, game1.getCursor());
+
+        // after setting the init turn phase
+        game1.setTurnPhase(GamePhase.INIT_TURN);
+        assertEquals(game1.getTurnPhase(), GamePhase.INIT_TURN);
+
+        assertEquals(0, game1.getBuffer().size());
+        assertEquals(0, game1.getTilePack().getSize());
+        assertFalse(game1.isAlongSideColumn());
+        assertFalse(game1.isAlongSideRow());
+        assertEquals(game1.getLivingRoomBoard().getDrawableTiles().size(), game1.getDrawableTiles().size());
+        assertEquals(1, game1.getCursor());
+
+        game1.setTurnPhase(GamePhase.PICKING_TILES);
+        assertEquals(game1.getTurnPhase(), GamePhase.PICKING_TILES);
+
+        game1.setTurnPhase(GamePhase.COLUMN_CHOICE);
+        assertEquals(game1.getTurnPhase(), GamePhase.COLUMN_CHOICE);
     }
 }

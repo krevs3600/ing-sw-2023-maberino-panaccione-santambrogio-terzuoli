@@ -67,6 +67,7 @@ public class PersonalGoalCardDeck implements Drawable, Serializable {
             }
 
         } catch (ParseException | IOException e) {
+            // should not be thrown normally
             throw new RuntimeException(e);
         }
     }

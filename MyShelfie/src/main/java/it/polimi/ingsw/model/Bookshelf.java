@@ -86,35 +86,6 @@ public class Bookshelf  implements Serializable {
         return this.getNumberInsertableTiles() == 0;
     }
 
-    /**
-     * This method is used to insert all the tiles of the tile pack in the specified column of the bookshelf
-     * @param tp the tile pack that is emptied and from which the item tiles are inserted in the bookshelf
-     * @param column the selected column where the item tiles are inserted
-     * @exception IndexOutOfBoundsException The exception is thrown if the selected column is not within the available range,
-     * or if the selected column has not enough space to receive all the item tiles to insert
-     */
-
-    //TODO: da togliere
-    @Deprecated
-    public void insertTile(TilePack tp, int column) throws IndexOutOfBoundsException{
-        if (column >= 0 && column < getMaxWidth()) {
-            int insertableTiles = getNumberInsertableTilesColumn(column);
-            if (insertableTiles >= tp.getTiles().size()) {
-                int size = tp.getTiles().size();
-                for (int j = 0; j < size; j++) { //
-                    grid[insertableTiles - j - 1][column] = tp.getTiles().get(0);
-                    tp.getTiles().remove(0);
-                    this.numberOfTiles++;
-                }
-
-            } else {
-                throw new IndexOutOfBoundsException("Not enough space in this column, please select another column or remove some tiles from the tile pack");
-            }
-        }
-        else {
-            throw new IndexOutOfBoundsException("Invalid column, please select a column ranging from 0 to " + (getMaxWidth()-1));
-        }
-    }
 
     /**
      * This method is used to insert a {@link ItemTile} taken from a specific position of the {@link TilePack}
@@ -287,8 +258,11 @@ public class Bookshelf  implements Serializable {
         return MAX_HEIGHT;
     }
 
-    //TODO: da togliere alla fine
-    public void insertTileTest() {
+    /**
+     * This method is used to insert randomly {@link ItemTile}s to fully fill the {@link Bookshelf},
+     * exploited in testing and in the easter egg
+     */
+    public void insertTilesRandomly() {
         for (int r=0; r<6; r++){
             for(int c=0; c<5;c++){
                 grid[r][c] = new ItemTile(TileType.values()[new Random().nextInt(0,5)]);

@@ -21,6 +21,13 @@ public class TwoLinesCommonGoalCardTest {
     }
 
     @Test
+    public void toStringTest() {
+        assertEquals(     "TWO LINES EACH FORMED BY FIVE DIFFERENT TYPES OF TILES\n" +
+                "ONE LINE CAN SHOW THE SAME OR A DIFFERENT COMBINATION OF THE OTHER LINE.", testCommonGoalCard.toString());
+        assertEquals("TwoLinesCommonGoalCard", testCommonGoalCard.getType());
+    }
+
+    @Test
     public void checkPatternTest(){
 
         // empty bookshelf: toBeChecked false

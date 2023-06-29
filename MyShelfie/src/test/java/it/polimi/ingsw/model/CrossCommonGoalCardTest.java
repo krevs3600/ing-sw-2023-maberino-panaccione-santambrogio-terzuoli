@@ -24,6 +24,12 @@ public class CrossCommonGoalCardTest {
     }
 
     @Test
+    public void toStringTest() {
+        assertEquals("FIVE TILES OF THE SAME TYPE FORMING AN 'X'", testCommonGoalCard.toString());
+        assertEquals("CrossCommonGoalCard", testCommonGoalCard.getType());
+    }
+
+    @Test
     public void checkPatternTest(){
 
         // empty bookshelf: toBeChecked false

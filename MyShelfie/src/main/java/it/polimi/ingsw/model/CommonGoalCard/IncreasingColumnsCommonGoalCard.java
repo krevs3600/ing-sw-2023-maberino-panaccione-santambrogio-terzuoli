@@ -35,16 +35,16 @@ public class IncreasingColumnsCommonGoalCard extends CommonGoalCard{
      * @return boolean It returns true if the bookshelf has the disposition of item tiles described by the common goal, false otherwise
      */
     public boolean checkPattern(Bookshelf b) {
-        boolean increasingOrder = true;
-        for (int i=0; i<b.getMaxWidth()-1 && increasingOrder; i++) {
-            increasingOrder = (b.getNumberInsertableTilesColumn(i) == b.getNumberInsertableTilesColumn(i+1) + 1);
-        }
-        if (increasingOrder) return true;
-        increasingOrder = true;
-        for (int i=b.getMaxWidth()-1; i>0 && increasingOrder; i--) {
-            increasingOrder = (b.getNumberInsertableTilesColumn(i) == b.getNumberInsertableTilesColumn(i-1) + 1);
-        }
-        return increasingOrder;
+        if (toBeChecked(b)) {
+            boolean increasingOrder = true;
+            for (int i = 0; i < b.getMaxWidth() - 1 && increasingOrder; i++) {
+                increasingOrder = (b.getNumberInsertableTilesColumn(i) == b.getNumberInsertableTilesColumn(i + 1) + 1);}
+            if (increasingOrder) return true;
+            increasingOrder = true;
+            for (int i = b.getMaxWidth() - 1; i > 0 && increasingOrder; i--) {
+                increasingOrder = (b.getNumberInsertableTilesColumn(i) == b.getNumberInsertableTilesColumn(i - 1) + 1);}
+            return increasingOrder;}
+        return false;
     }
 
     /**

@@ -21,6 +21,13 @@ public class SixGroupsCommonGoalCardTest {
     }
 
     @Test
+    public void toStringTest() {
+        assertEquals("SIX GROUPS EACH CONTAINING AT LEAST TWO TILES OF THE SAME TYPE.\n" +
+                "THE TILES OF ONE GROUP CAN BE DIFFERENT FROM THOSE OF ANOTHER GROUP", testCommonGoalCard.toString());
+        assertEquals("SixGroupsCommonGoalCard", testCommonGoalCard.getType());
+    }
+
+    @Test
     public void checkPatternTest(){
 
         // empty bookshelf: toBeChecked false

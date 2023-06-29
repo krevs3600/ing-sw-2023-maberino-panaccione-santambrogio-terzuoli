@@ -23,6 +23,13 @@ public class ThreeColumnsCommonGoalCardTest {
     }
 
     @Test
+    public void toStringTest() {
+        assertEquals( "THREE COLUMNS EACH FORMED BY SIX TILES OF MAXIMUM THREE DIFFERENT TYPES.\n" +
+                "ONE COLUMN CAN SHOW THE SAME OR A DIFFERENT COMBINATION OF ANOTHER COLUMN", testCommonGoalCard.toString());
+        assertEquals("ThreeColumnsCommonGoalCard", testCommonGoalCard.getType());
+    }
+
+    @Test
     public void checkPatternTest(){
 
         // empty bookshelf: toBeChecked false

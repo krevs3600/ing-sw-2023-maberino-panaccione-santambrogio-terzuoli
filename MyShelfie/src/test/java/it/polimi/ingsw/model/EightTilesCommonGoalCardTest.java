@@ -23,6 +23,12 @@ public class EightTilesCommonGoalCardTest {
     }
 
     @Test
+    public void toStringTest() {
+        assertEquals("EIGHT TILES OF THE SAME TYPE.THERE IS NO RESTRICTION ABOUT THE POSITION OF THESE TILES", testCommonGoalCard.toString());
+        assertEquals("EightTilesCommonGoalCard", testCommonGoalCard.getType());
+    }
+
+    @Test
     public void checkPatternTest(){
 
         // empty bookshelf: toBeChecked false
