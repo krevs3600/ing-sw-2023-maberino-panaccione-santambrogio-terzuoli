@@ -43,7 +43,8 @@ public class NicknameController {
     //TODO: refactor field
 
     @FXML
-    TextField nicknameTextFiled;
+    TextField nicknameTextField;
+
 
 
 
@@ -71,7 +72,7 @@ public class NicknameController {
 
 
     public void connect(MouseEvent event) throws IOException {
-        this.nickname = nicknameTextFiled.getText();
+        this.nickname = nicknameTextField.getText();
         gui.askNickname();
     }
 

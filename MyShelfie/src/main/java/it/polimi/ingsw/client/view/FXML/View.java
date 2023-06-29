@@ -39,43 +39,55 @@ import java.util.Set;
 public interface View {
 
     /**
-     * Asks the user for the type of connection he wants  (RMI or Socket)
+     * This method asks the user to answer with the type of connection he/she wants to establish: "r" for RMI
+     * or "s" for Socket
+     * @return the connection type chosen by the user if the input is valid
      */
 
     String askConnectionType();
 
     /**
-     * Creates a connection either of type RMI or Socket depending on the user's choice.
+     * This method is used to establish a connection with the {@link Server}, either via Socket or RMI, according to
+     * what is specified by the user input. In CLI, the connection will be established with RMI if the user input
+     * is "r", and Socket if it is "s". In GUI , depends on the button clicked by the user: the {@link RMIorSocketController RMI_button}
+     * or the the {@link RMIorSocketController TCP_button}
+     * @throws RemoteException when the remote call fails
+     * @throws NotBoundException if there is no available {@link Server} with the binding specified by the method
      */
 
     void createConnection()  throws RemoteException, NotBoundException;
 
     /**
-     * Asks the user to choose a Nickname.
+     * This method is used to ask a player the nickname with which he/she will be playing games
      */
     void askNickname();
 
     /**
-     * Asks the user to choose a Server address.
+     * This method is used to ask the user the address of the {@link Server} he wants to register to. If the user
+     * just presses ENTER the local host will be selected
+     * @return the address chosen by the user
      */
 
     String askServerAddress();
 
 
     /**
-     * Asks the user to choose a Server port.
+     * This method is used to ask the user the port he/she wants to use for the connection. If the user
+     * just presses ENTER the default port will be selected
+     * @return the address chosen by the user
      */
     int askServerPort();
 
     /**
-     * Asks the creator of the game for the specifications of the game: the name and the number of players.
+     * This method is used to ask the player the number of players and game name which will characterize the
+     * game he/she is creating
      */
 
     void askGameSpecs();
 
 
     /**
-     * Asks the creator of the game to choose a name for it.
+     * This method is used to ask the player creating a new game the name of the game he/she is creating
      */
     void askGameName();
 
@@ -95,42 +107,69 @@ public interface View {
    void showMessage(MessageToClient message) throws IOException;
 
     /**
-     * Asks the user how many players he wants to play with.
+     * This method is used to notify the server with the number of players chosen by the player for the newly created game.
+     * At this point, the game is created and the creator waits for the other participants to connect to start playing.
      * @param gameName the name of the game in which to choose the number of players.
      */
     void askNumberOfPlayers(String gameName);
 
     /**
-     * Checks the validity of the port inserted by the user
+     * This method is used to determine whether the port provided by the user is valid or not
      * @param serverPort the port chosen by the user to be checked
+     * @return a {@code boolean} value specifying if the port provided is valid
      */
-
     boolean isValidPort(String serverPort);
 
     /**
-     * Checks the validity of the IPaddress inserted by the user
+     * This method is used to determine whether the address provided by the user is valid or not
      * @param address the address chosen by the user to be checked
+     * @return a {@code boolean} value specifying if the address provided is valid
      */
      boolean isValidIPAddress(String address);
 
     /**
-     * Shows the user the menu of the game
-     * with the available options: create a new game, join a game or exit the game.
+     *This method is used to shows the different possible options to the user.
+     * A user can decide to create or
+     * join game, to resume or to reload one, or finally the user can just decide to exit the menu
+     *
      */
 
     void gameMenu();
+
+    /**
+     * Notifies the {@link Server} that a user wants to resume an already existing game
+     */
+    void resumeGame();
+
+    /**
+     * Notifies the {@link Server} that a user wants to reload an already existing game
+     */
+
+    void reloadGame();
 
 
 
     /**
      * This method overrides the {@code Observer update}: it is called by the {@link Server} when an {@link EventMessage} is generated
-     * from the Model.
-     * According to the {@EventMessage #type}, this method interacts differently with the User
+     *  from the Model.
+     *  According to the {@EventMessage #type}, this method interacts differently with the User
      * @param gameView the Observable class
      * @param eventMessage the specific event of which the class is notified
      */
      void update(GameView gameView, EventMessage eventMessage);
 
+    /**
+     *This method delete all the observers
+     */
+
     void deleteAllObservers();
+
+
+    /**
+     * This method is used to notify the server
+     * about the client's choice to enter a game after pressing the {@link MenuController#joinGame} button
+     * in the fxml {@code CreateOrJoinGame_scene} or after typing "2" in the command line interface.
+     */
+    void joinGame();
 }
 

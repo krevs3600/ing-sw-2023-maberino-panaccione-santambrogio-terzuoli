@@ -15,6 +15,7 @@ import it.polimi.ingsw.network.MessagesToClient.errorMessages.JoinErrorMessage;
 import it.polimi.ingsw.network.MessagesToClient.errorMessages.ReloadGameErrorMessage;
 import it.polimi.ingsw.network.MessagesToClient.errorMessages.ResumeGameErrorMessage;
 import it.polimi.ingsw.network.MessagesToClient.requestMessage.*;
+import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.network.Socket.ServerStub;
 import it.polimi.ingsw.network.eventMessages.*;
 import it.polimi.ingsw.observer_observable.Observable;
@@ -73,34 +74,16 @@ public class GUI extends Observable<EventMessage> implements View {
     private NumberOfPlayersController numberOfPlayersController;
     private GameNameListController gameNameListController;
     private String nickname;
-    private GameView game; // aggiunto referenza al game
+    private GameView game;
     private Thread pingThread;
 
     private int scoreOfThisClient;
-    /**
-     * Getter method
-     * @return the current stage of the game
-     */
+
 
     public Stage getStage() {
         return stage;
     }
 
-
-
-
-
-    /*
-     * This method is used to set the {@link GUI client} that decided to start
-     * the game via the graphical interface and to which response messages are sent from the server
-     * @param client the client instance
-
-
-
-    public void setClient(ClientImplementation client) {
-        this.client = client;
-    }
- */
 
 
     /**
@@ -126,22 +109,7 @@ public class GUI extends Observable<EventMessage> implements View {
         startController.setGui(this);
     }
 
-    /*
-     * Getter method
-     * @return the instance of the {@link GUI#client}
 
-
-
-    public ClientImplementation getClient() {
-        return this.client;
-    }
-*/
-
-    /**
-     * This method is used to notify the server
-     * about the client's choice to enter a game after pressing the {@link MenuController#joinGame} button
-     * in the fxml {@code CreateOrJoinGame_scene}.
-     */
 
     public void joinGame() {
         setChanged();
@@ -150,11 +118,6 @@ public class GUI extends Observable<EventMessage> implements View {
 
 
 
-    @Override
-    public String askConnectionType() {
-
-        return null;
-    }
 
     /**
      *This method is used to notify the server about the client's choice to
@@ -184,6 +147,11 @@ public class GUI extends Observable<EventMessage> implements View {
         Platform.runLater(() -> stage.setScene(scene));
         rmIorSocketController = fxmlLoader.getController();
         rmIorSocketController.setGui(this);
+    }
+
+    @Override
+    public String askConnectionType() {
+        return null;
     }
 
     @Override
@@ -239,6 +207,7 @@ public class GUI extends Observable<EventMessage> implements View {
                         serverStub.receive(client);
                     } catch (RemoteException e) {
                         System.err.println("Cannot receive from server. Stopping...");
+
                         try {
                             serverStub.close();
                             try {
@@ -274,7 +243,10 @@ public class GUI extends Observable<EventMessage> implements View {
             throw new RuntimeException(e);
         }
     }
-
+    /**
+     * Getter method
+     * @return the nickname of the client
+     */
     public String getNickname () {
         return this.nickname;
     }
@@ -331,11 +303,13 @@ public class GUI extends Observable<EventMessage> implements View {
 
     }
 
+
     @Override
     public void showGameNamesList(Set<String> availableGameNames) {
         setChanged();
         notifyObservers(new GameNameChoiceMessage(getNickname(), this.gameNameListController.getGameToJoin()));
     }
+
 
     @Override
     public void showMessage(MessageToClient message) {
@@ -379,9 +353,6 @@ public class GUI extends Observable<EventMessage> implements View {
             }
 
             case GAME_CREATION -> {
-                // nel caso della GUI è sempre valido il gioco creato, perchè il nome l'ho controllato precedentemente e il
-                // numero di giocatori viene selezionato attrvaerso i bottoni che indicano gi il range giusto di gioco,
-                // anzi in realtà potrebbe premere ok prima di selezionare il numero di giocatori
                 GameCreationResponseMessage gameCreationResponseMessage = (GameCreationResponseMessage) message;
                 if (gameCreationResponseMessage.isValidGameCreation()) {
                     try {
@@ -490,9 +461,7 @@ public class GUI extends Observable<EventMessage> implements View {
                 PlayerJoinedLobbyMessage player = (PlayerJoinedLobbyMessage) message;
                 Platform.runLater(() -> lobbyController.PlayerJoinedGame.setText(player.getNickname() + " JOINED LOBBY"));
                 this.lobbyController.PlayerJoinedGame.setVisible(true);
-                // ok forse il comando sotto non ha senso perche sono nella GUI di un client che quindi vede il suo lobbyController
-                //  this.lobbyController.NumberOfMissingPlayers.setText("Waiting for"+ this.lobbyController.getPinLobby());
-                //  this.lobbyController.NumberOfMissingPlayers.setVisible(true);
+
             }
             case ILLEGAL_POSITION, UPPER_BOUND_TILEPACK, NOT_ENOUGH_INSERTABLE_TILES -> {
                 if (getNickname().equals(message.getNickname())) {
@@ -505,8 +474,6 @@ public class GUI extends Observable<EventMessage> implements View {
             case NOT_ENOUGH_INSERTABLE_TILES_IN_COLUMN -> {
                 ErrorMessage errorMessage = (ErrorMessage) message;
                 showPopup(errorMessage.getErrorMessage());
-                // quindi poi automaticamente risceglie la colonna
-                // ma le avevo disabilitate...
                 livingBoardController.resetColumnChoice();
             }
             case PLAYER_OFFLINE -> {
@@ -539,6 +506,8 @@ public class GUI extends Observable<EventMessage> implements View {
         setChanged();
         notifyObservers(new GameCreationMessage(getNickname(), this.numberOfPlayersController.getNumberOfPlayersChosen(), gameName));
     }
+
+
     @Override
     public boolean isValidPort(String serverPort) {
         return false;
@@ -563,17 +532,25 @@ public class GUI extends Observable<EventMessage> implements View {
         }
     }
 
+    /**
+     * This method notifies the {@link Server} that a user wants to resume an already existing game
+     */
+   @Override
     public void resumeGame() {
         setChanged();
         notifyObservers(new ResumeGameMessage(getNickname()));
     }
 
+    /**
+     * This method notifies the {@link Server} that a user wants to reload an already existing game
+     */
+    @Override
     public void reloadGame() {
         setChanged();
         notifyObservers(new ReloadGameMessage(getNickname()));
     }
 
-    // booleano per distinguere la prima volta del gioco e le altre
+    // boolean to check the first time playing
     private boolean isFirstTime = true;
 
 
@@ -769,7 +746,7 @@ public class GUI extends Observable<EventMessage> implements View {
         Popup popup = new Popup();
         Label noSelection = new Label(text);
         noSelection.setStyle(
-                "-fx-background-color: #DAA520; -fx-text-fill: #FFFFFF;-fx-font-size: 30; -fx-padding: 30px;-fx-font-family:'LillyBelle';-fx-background-radius: 20px;-fx-text-alignment: center;");
+                "-fx-background-color: #FF7F50; -fx-text-fill: #FFFFFF;-fx-font-size: 30; -fx-padding: 30px;-fx-font-family:'LillyBelle';-fx-background-radius: 20px;-fx-text-alignment: center;");
         popup.getContent().add(noSelection);
         popup.setAutoHide(true);
         PauseTransition pause = new PauseTransition(Duration.seconds(3.5));
@@ -783,11 +760,15 @@ public class GUI extends Observable<EventMessage> implements View {
         }
     }
 
+    /**
+     *This method is used to display a red pop-up for the disconnection of a player
+     * @param text the message that appears in the popup
+     */
 
     public void showLongPopup(String text){
         Popup popup = new Popup();
         Label noSelection = new Label(text);
-        noSelection.setStyle("-fx-background-color: #f17c1c;-fx-text-alignment: 'center'; -fx-text-fill: #FFFFFF;-fx-font-size: 30; -fx-padding: 30px;-fx-font-family:'LillyBelle';-fx-background-radius: 20px;");
+        noSelection.setStyle("-fx-background-color: #FF7F50; -fx-text-fill: #FFFFFF;-fx-text-alignment: 'center';-fx-font-size: 30; -fx-padding: 30px;-fx-font-family:'LillyBelle';-fx-background-radius: 20px;");
         popup.getContent().add(noSelection);
         popup.setX(300);
         popup.setAutoHide(true);
@@ -817,15 +798,7 @@ public class GUI extends Observable<EventMessage> implements View {
         setChanged();
         notifyObservers(new ItemTileIndexMessage(nickname, itemTileIndex));
     }
-   /* public static Stage getWindow(){
-        return window;
-    }
-    public static Scene getActiveScene() {return activeScene;}
-    public static double getWidth() {return width;}
-    public static double getHeight() {return height;}
 
-
-    */
 
 
     /**
@@ -851,6 +824,10 @@ public class GUI extends Observable<EventMessage> implements View {
         }
     }
 
+    /**
+     *This method is used to go back to the previous stage
+     *after pressing the "back" button
+     */
 
     public void goBackToPreviousScene(String resource){
         String[] resources = {
