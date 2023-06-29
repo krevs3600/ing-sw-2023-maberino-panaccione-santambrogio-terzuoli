@@ -211,6 +211,7 @@ public class LivingBoardController {
      * Enemy's index according to the order of the subscribers' list in game
      */
     private int watchedPlayer;
+    boolean messageSent = false;
 
 
     /**
@@ -720,7 +721,12 @@ public class LivingBoardController {
         turnLabel.setFill(Color.SPRINGGREEN);
     }
 
-
+    public void setMessageSent(boolean bool){
+        messageSent = bool;
+    }
+    public boolean wasMessageSent() {
+        return messageSent;
+    }
 }
 
 

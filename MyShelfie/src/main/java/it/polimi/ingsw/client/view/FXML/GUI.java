@@ -485,7 +485,6 @@ public class GUI extends Observable<EventMessage> implements View {
                 Platform.runLater(() -> lobbyController.NumberOfMissingPlayers.setText("Waiting for" + waitingResponseMessage.getMissingPlayers() + " players....."));
                 lobbyController.NumberOfMissingPlayers.setVisible(true);
             }
-
             case PLAYER_JOINED_LOBBY_RESPONSE -> {
                 PlayerJoinedLobbyMessage player = (PlayerJoinedLobbyMessage) message;
                 Platform.runLater(() -> lobbyController.PlayerJoinedGame.setText(player.getNickname() + " joined lobby"));
@@ -494,7 +493,6 @@ public class GUI extends Observable<EventMessage> implements View {
                 //  this.lobbyController.NumberOfMissingPlayers.setText("Waiting for"+ this.lobbyController.getPinLobby());
                 //  this.lobbyController.NumberOfMissingPlayers.setVisible(true);
             }
-
             case ILLEGAL_POSITION, UPPER_BOUND_TILEPACK, NOT_ENOUGH_INSERTABLE_TILES -> {
                 if (getNickname().equals(message.getNickname())) {
                     ErrorMessage errorMessage = (ErrorMessage) message;
@@ -503,7 +501,6 @@ public class GUI extends Observable<EventMessage> implements View {
 
                 }
             }
-
             case NOT_ENOUGH_INSERTABLE_TILES_IN_COLUMN -> {
                 ErrorMessage errorMessage = (ErrorMessage) message;
                 showPopup(errorMessage.getErrorMessage());
@@ -513,17 +510,12 @@ public class GUI extends Observable<EventMessage> implements View {
             }
             case PLAYER_OFFLINE -> {
                 PlayerOfflineMessage offlineMessage = (PlayerOfflineMessage) message;
-
                 showPopup(offlineMessage.getNickname() + " got disconnected");
             }
-
-
             case KILL_GAME -> {
                 showPopup("Game down");
                 createConnection();
             }
-
-
             case CLIENT_DISCONNECTION -> {
                 ClientDisconnectedMessage disconnectedMessage = (ClientDisconnectedMessage) message;
                 showLongPopup(message.getNickname() + " has disconnected but don't worry, the game goes on!");
@@ -550,8 +542,6 @@ public class GUI extends Observable<EventMessage> implements View {
     public boolean isValidPort(String serverPort) {
         return false;
     }
-
-
 
     @Override
     public boolean isValidIPAddress(String address) {
@@ -620,6 +610,7 @@ public class GUI extends Observable<EventMessage> implements View {
                         showPopup("NEW TURN HAS JUST STARTED");
                     });
                 }
+
             }
 
             case PLAYER_TURN -> {
@@ -652,9 +643,13 @@ public class GUI extends Observable<EventMessage> implements View {
                         livingBoardController.setGameView(game);
                     });
                     if (game.getTilePack().getTiles().size() > 0) {
-                        Platform.runLater(() ->
-                                showPopup("Choose an item tile to insert from the tilepack \ninto the selected column"));
+                        if (!livingBoardController.wasMessageSent()) {
+                            livingBoardController.setMessageSent(true);
+                            Platform.runLater(() ->
+                                    showPopup("Choose an item tile to insert from the tilepack \ninto the selected column"));
+                        }
                     } else if (game.getTurnPhase().equals(GamePhase.PLACING_TILES)) {
+                        livingBoardController.setMessageSent(false);
                         setChanged();
                         notifyObservers(new EndTurnMessage(eventMessage.getNickname()));
                     }
@@ -775,7 +770,8 @@ public class GUI extends Observable<EventMessage> implements View {
     public void showPopup(String text){
         Popup popup = new Popup();
         Label noSelection = new Label(text);
-        noSelection.setStyle("-fx-background-color: #DAA520; -fx-text-fill: #FFFFFF;-fx-font-size: 30; -fx-padding: 30px;-fx-font-family:'Libian SC';-fx-background-radius: 20px;");
+        noSelection.setStyle(
+                "-fx-background-color: #DAA520; -fx-text-fill: #FFFFFF;-fx-font-size: 30; -fx-padding: 30px;-fx-font-family:'LillyBelle';-fx-background-radius: 20px;-fx-text-alignment: center;");
         popup.getContent().add(noSelection);
         popup.setAutoHide(true);
         PauseTransition pause = new PauseTransition(Duration.seconds(3.5));
@@ -793,7 +789,7 @@ public class GUI extends Observable<EventMessage> implements View {
     public void showLongPopup(String text){
         Popup popup = new Popup();
         Label noSelection = new Label(text);
-        noSelection.setStyle("-fx-background-color: #DAA520; -fx-text-fill: #FFFFFF;-fx-font-size: 30; -fx-padding: 30px;-fx-font-family:'Libian SC';-fx-background-radius: 20px;");
+        noSelection.setStyle("-fx-background-color: #f17c1c; -fx-text-fill: #FFFFFF;-fx-font-size: 30; -fx-padding: 30px;-fx-font-family:'Libian SC';-fx-background-radius: 20px;");
         popup.getContent().add(noSelection);
         popup.setAutoHide(true);
         PauseTransition pause = new PauseTransition(Duration.seconds(3));
