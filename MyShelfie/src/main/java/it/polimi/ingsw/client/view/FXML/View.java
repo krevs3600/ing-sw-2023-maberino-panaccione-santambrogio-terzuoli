@@ -87,11 +87,6 @@ public interface View {
 
 
     /**
-     * This method is used to ask the player creating a new game the name of the game he/she is creating
-     */
-    void askGameName();
-
-    /**
      * Shows the list of the available games to the users who want to join a game.
      * @param availableGameNames the list of the names of the games in the lobby with missing participants to start.
      */
@@ -106,12 +101,6 @@ public interface View {
 
    void showMessage(MessageToClient message) throws IOException;
 
-    /**
-     * This method is used to notify the server with the number of players chosen by the player for the newly created game.
-     * At this point, the game is created and the creator waits for the other participants to connect to start playing.
-     * @param gameName the name of the game in which to choose the number of players.
-     */
-    void askNumberOfPlayers(String gameName);
 
     /**
      * This method is used to determine whether the port provided by the user is valid or not

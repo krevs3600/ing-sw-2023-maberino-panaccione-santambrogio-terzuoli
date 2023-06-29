@@ -71,7 +71,6 @@ public class GUI extends Observable<EventMessage> implements View {
     private ComputeScoreController computeScoreController;
     private LivingBoardController livingBoardController;
     private GameNameController gameNameController;
-    private NumberOfPlayersController numberOfPlayersController;
     private GameNameListController gameNameListController;
     private String nickname;
     private GameView game;
@@ -264,7 +263,14 @@ public class GUI extends Observable<EventMessage> implements View {
 
     @Override
     public void askGameSpecs() {
-        return;
+        String gameName = this.gameNameController.getTextField();
+        if (gameName.isEmpty()){
+            showPopup("Please write a name for your game");
+        }
+        else {
+            setChanged();
+            notifyObservers(new GameSpecsMessage(getNickname(), gameName, this.gameNameController.getNumberOfPlayersChosen()));
+        }
     }
 
     /**
@@ -292,16 +298,16 @@ public class GUI extends Observable<EventMessage> implements View {
      * otherwise a warning message will be displayed.
      *
      */
-    public void askGameName() {
-        String gameName = this.gameNameController.getTextField();
-        if (!gameName.isEmpty()){
-            setChanged();
-            notifyObservers(new GameNameMessage(getNickname(), gameName));
-        } else {
-            showPopup("Please write a name for your game");
-        }
-
-    }
+ //   public void askGameName() {
+ //       String gameName = this.gameNameController.getTextField();
+ //       if (!gameName.isEmpty()){
+ //           setChanged();
+ //           notifyObservers(new GameNameMessage(getNickname(), gameName));
+ //       } else {
+ //           showPopup("Please write a name for your game");
+ //       }
+ //
+ //   }
 
 
     @Override
@@ -333,28 +339,13 @@ public class GUI extends Observable<EventMessage> implements View {
                     showPopup("UNAVAILABLE NICKNAME, PLEASE CHOOSE ANOTHER ONE");
                 }
             }
-            case GAME_NAME_RESPONSE -> {
-                GameNameResponseMessage gameNameResponseMessage = (GameNameResponseMessage) message;
-                if (gameNameResponseMessage.isValidGameName()) {
-                    try {
-                        FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("NumberofPlayers_scene.fxml"));
-                        scene = new Scene(fxmlLoader.load());
-                        NumberOfPlayersController numberOfPlayersController = fxmlLoader.getController();
-                        this.numberOfPlayersController = numberOfPlayersController;
-                        numberOfPlayersController.setGui(this);
-                        numberOfPlayersController.setGameName(gameNameResponseMessage.getGameName());
-                        Platform.runLater(() -> stage.setScene(scene));
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                } else {
+
+            case GAME_SPECS -> {
+                GameSpecsResponseMessage gameSpecsResponseMessage = (GameSpecsResponseMessage) message;
+                if (!gameSpecsResponseMessage.isValidGameName()) {
                     showPopup("INVALID GAME NAME, PLEASE CHOOSE ANOTHER ONE");
                 }
-            }
-
-            case GAME_CREATION -> {
-                GameCreationResponseMessage gameCreationResponseMessage = (GameCreationResponseMessage) message;
-                if (gameCreationResponseMessage.isValidGameCreation()) {
+                if(gameSpecsResponseMessage.isValidGameCreation()){
                     try {
                         FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("lobby_scene.fxml"));
                         scene = new Scene(fxmlLoader.load());
@@ -365,9 +356,10 @@ public class GUI extends Observable<EventMessage> implements View {
                         throw new RuntimeException(e);
                     }
                 } else {
-                    showPopup("Please select the number of players");
+                    showPopup("PLEASE SELECT THE NUMBER OF PLAYERS");
                 }
             }
+
 
             case JOIN_GAME_RESPONSE -> {
                 JoinGameResponseMessage joinGameResponseMessage = (JoinGameResponseMessage) message;
@@ -496,18 +488,6 @@ public class GUI extends Observable<EventMessage> implements View {
 
     }
 
-    /**
-     *This method is used to notify the server with the number of players chosen by the player for the newly created game.
-     * At this point, the game is created and the creator waits for the other participants to connect to start playing.
-     * @param gameName the name chosen for the game by the creator.
-     */
-
-    public void askNumberOfPlayers(String gameName) {
-        setChanged();
-        notifyObservers(new GameCreationMessage(getNickname(), this.numberOfPlayersController.getNumberOfPlayersChosen(), gameName));
-    }
-
-
     @Override
     public boolean isValidPort(String serverPort) {
         return false;
@@ -521,7 +501,7 @@ public class GUI extends Observable<EventMessage> implements View {
     public void gameMenu() {
         if (menuController.getCreateGame()) {
             try {
-                FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("GameName_scene.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("GameCreation_scene.fxml"));
                 scene = new Scene(fxmlLoader.load());
                 gameNameController = fxmlLoader.getController();
                 gameNameController.setGui(this);
@@ -832,7 +812,7 @@ public class GUI extends Observable<EventMessage> implements View {
     public void goBackToPreviousScene(String resource){
         String[] resources = {
                 "start_scene.fxml", "RMIorSocket_scene.fxml", "AddressIp_scene.fxml", "login_scene.fxml",
-                "Menu_scene.fxml", "GameName_scene.fxml", "NumberofPlayers_scene.fxml", "GameNameList_scene.fxml",
+                "Menu_scene.fxml", "GameCreation_scene.fxml", "GameNameList_scene.fxml",
                 "livingBoard_scene.fxml", "win_scene.fxml", "computeScore_scene.fxml"};
         switch (resource) {
             case "RMIorSocket_scene.fxml" -> {
@@ -880,7 +860,7 @@ public class GUI extends Observable<EventMessage> implements View {
                     throw new RuntimeException(e);
                 }
             }
-            case "GameName_scene.fxml", "GameNameList_scene.fxml","win_scene.fxml" -> {
+            case "GameCreation_scene.fxml", "GameNameList_scene.fxml","win_scene.fxml" -> {
                 try {
                     FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("Menu_scene.fxml"));
                     scene = new Scene(fxmlLoader.load());

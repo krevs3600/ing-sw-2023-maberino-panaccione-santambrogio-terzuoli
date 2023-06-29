@@ -257,30 +257,6 @@ public class CLI extends Observable<EventMessage> implements View {
     }
 
 
-    @Override
-    public void askNumberOfPlayers(String gameName) {
-        int numOfPlayers = 0;
-            while (numOfPlayers <= 0) {
-                boolean isNumber;
-                do {
-                    isNumber = true;
-                    out.print("Please insert the number of players: ");
-                    try {
-                        numOfPlayers = in.nextInt();
-                        in.nextLine();
-                    } catch (InputMismatchException e) {
-                        isNumber= false;
-                    }
-                }while (!isNumber);
-
-            }
-            setChanged();
-            notifyObservers(new GameCreationMessage(getNickname(), numOfPlayers, gameName));
-    }
-
-
-
-
 
     @Override
     public void askGameSpecs(){
@@ -312,18 +288,18 @@ public class CLI extends Observable<EventMessage> implements View {
     }
 
 
-    @Override
-    public void askGameName() {
 
-        String gameName = "";
-        while (gameName.length() < 1) {
-            out.print(getNickname() + " choose your game's name: ");
-            gameName = in.nextLine();
-        }
-        setChanged();
-        notifyObservers(new GameNameMessage(getNickname(),gameName));
-
-    }
+   // public void askGameName() {
+   //
+   //     String gameName = "";
+   //     while (gameName.length() < 1) {
+   //         out.print(getNickname() + " choose your game's name: ");
+   //         gameName = in.nextLine();
+   //     }
+   //     setChanged();
+   //     notifyObservers(new GameNameMessage(getNickname(),gameName));
+   //
+   // }
 
 
 
@@ -688,7 +664,6 @@ public class CLI extends Observable<EventMessage> implements View {
             case COLUMN_CHOICE -> {
                 if (getNickname().equals(game.getCurrentPlayer().getName())) {
                     out.print("In which column you want to insert your item tiles?\n");
-
                     boolean validColumn = false;
                     int column = 0;
                     while (!validColumn) {

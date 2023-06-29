@@ -1,13 +1,10 @@
 package it.polimi.ingsw.client.view.FXML;
 
-import it.polimi.ingsw.model.Bookshelf;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 
 /**
  * <h1>Class GameNameController</h1>
@@ -21,7 +18,7 @@ import javafx.scene.layout.AnchorPane;
 
 
 public class GameNameController {
-    public String resource = "GameName_scene.fxml";
+    public String resource = "GameCreationGameCreation_scene.fxml";
 
     @FXML
     public TextField textField;
@@ -29,8 +26,16 @@ public class GameNameController {
     @FXML
     public Button ok;
 
+
     @FXML
-    public Label alreadyTakenGameName;
+    public RadioButton twoPlayers;
+
+    @FXML
+    public RadioButton threePlayers;
+    @FXML
+    public RadioButton fourPlayers;
+
+    private int numberOfPlayersChosen;
 
     private GUI gui;
 
@@ -53,9 +58,18 @@ public class GameNameController {
      */
 
 
-    public void gameNameChosen(MouseEvent mouseEvent) {
+    public void gameSpec(MouseEvent mouseEvent) {
+        if (twoPlayers.isSelected()) {
+            this.numberOfPlayersChosen = 2;
+        } else if (threePlayers.isSelected()) {
+            this.numberOfPlayersChosen = 3;
+        } else if (fourPlayers.isSelected()) {
+            this.numberOfPlayersChosen = 4;
+        } else {
+            this.numberOfPlayersChosen = 0;
+        }
         this.gameName = textField.getText();
-        gui.askGameName();
+        gui.askGameSpecs();
     }
 
     /**
@@ -69,5 +83,35 @@ public class GameNameController {
 
     public void goBack(){
         gui.goBackToPreviousScene(resource);
+    }
+
+  //  /**
+  //   *
+  //   This method is used to take the number of players chosen by the game creator as soon as he confirms his choice by pressing the {@link NumberOfPlayersController oKButton} in the
+  //   {@code NumberofPlayers_scene} and after that, the number is sent to the GUI to set the game.
+  //   * @param mouseEvent the click on the {@link GameNameController oKButton}
+  //   */
+  //
+  //  public void numberOfPlayerChosen(MouseEvent mouseEvent) {
+  //      if (twoPlayers.isSelected()) {
+  //          this.numberOfPlayersChosen = 2;
+  //      } else if (threePlayers.isSelected()) {
+  //          this.numberOfPlayersChosen = 3;
+  //      } else if (fourPlayers.isSelected()) {
+  //          this.numberOfPlayersChosen = 4;
+  //      } else {
+  //          this.numberOfPlayersChosen = 0;
+  //      }
+  //      this.gui.askNumberOfPlayers(this.gameName);
+  //  }
+
+    /**
+     * Getter method
+     * @return the {@link GameNameController#numberOfPlayersChosen} present in the {@link GameNameController}
+     * which is the number of players chosen by the creator of the game for the newly created game.
+     *
+     */
+    public int getNumberOfPlayersChosen(){
+        return numberOfPlayersChosen;
     }
 }
