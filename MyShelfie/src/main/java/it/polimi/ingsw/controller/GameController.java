@@ -24,8 +24,9 @@ import java.util.*;
  * The class GameController is used to keep track of everything that happens during the game. Every modification
  * to the state of the game must pass through the GameController
  *
+ * @author Carlo Terzuoli, Francesco Maberino, Francesca Pia Panaccione, Francesco Santambrogio
  * @version 1.0
- * @since 4/30/2023
+ * @since 06/05/2023
  */
 
 public class GameController implements Serializable {
@@ -59,8 +60,6 @@ public class GameController implements Serializable {
      * it correctly.
      * @param client who sends the message containing an action he/she wants to perform
      * @param eventMessage containing the desired action by the client
-     * @throws IllegalArgumentException
-     * @throws IOException
      */
     public void update(Client client, EventMessage eventMessage) throws IllegalArgumentException, IOException {
 
@@ -203,7 +202,9 @@ public class GameController implements Serializable {
                 try {
                     game.setColumnChoice(bookshelfColumnMessage.getColumn());
                     game.setTurnPhase(GamePhase.PLACING_TILES);
-                } catch (IndexOutOfBoundsException e) {}
+                } catch (IndexOutOfBoundsException e) {
+                    System.err.println("Illegal position, please provide another one");
+                }
             }
 
             //the player can select which tile to insert first into the bookshelf from the tilepack. The tile will be inserted
@@ -250,9 +251,8 @@ public class GameController implements Serializable {
                         Player currentPlayer = game.getCurrentPlayer();
                         currentPlayer.setScore(1);
                         if (currentPlayer.equals(game.getLastPlayer())){
-                            // TODO: show always the score to the clients, updating it when needed
                             Player winner = getWinner();
-                            // TODO: create a new message specific to the case when the last player in the rotation fills the bookshelf
+
                             game.endGame(winner);
                         }
                     }
@@ -388,9 +388,10 @@ public class GameController implements Serializable {
 
 
     /**
-     * This method is used to keep track of whether the {@link Player} is picking {@link ItemTile}s in vertical or
-     * horizontal line, when more than one {@link ItemTile} are being picked
-     * @param tilePositionMessage
+     * This method is used to esatblish whether the {@link Player} is picking {@link ItemTile}s in vertical or
+     * horizontal line, when the second {@link ItemTile} is being picked
+     * @param tilePositionMessage the {@link EventMessage} containing the position that the {@link Player} intends to pick
+     *
      */
     private void setAlongsideWhat(TilePositionMessage tilePositionMessage){
         if (tilePositionMessage.getPosition().getColumn() == game.getBuffer().get(0).getColumn()) {

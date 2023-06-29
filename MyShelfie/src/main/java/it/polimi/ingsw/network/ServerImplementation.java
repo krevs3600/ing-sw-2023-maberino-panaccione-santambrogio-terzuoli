@@ -12,6 +12,7 @@ import it.polimi.ingsw.network.MessagesToClient.errorMessages.ResumeGameErrorMes
 import it.polimi.ingsw.network.MessagesToClient.requestMessage.*;
 import it.polimi.ingsw.network.eventMessages.*;
 import it.polimi.ingsw.persistence.Storage;
+import it.polimi.ingsw.observer_observable.Observer;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.RMIClientSocketFactory;
@@ -21,8 +22,14 @@ import java.util.*;
 
 /**
  * <h1>Class ServerImplementation</h1>
- * The class ServerImplementation implements the Server interface and is used to communicate with the clients
+ * The class {@link ServerImplementation} implements the {@link Server} interface and is used to communicate with the {@link Client}s.
+ * It handles both RMI and Socket connections.
+ * It is also used to keep track of the instances of {@link Game} that are currently playing as well as of
+ * the players that are playing them, or that got disconnected
  *
+ * @author Francesco Maberino, Francesco Santambrogio, Francesca Pia Panaccione, Carlo Terzuoli
+ * @version 1.0
+ * @since 5/10/2023
  * @version 1.0
  */
 public class ServerImplementation extends UnicastRemoteObject implements Server {
@@ -39,29 +46,20 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
 
     /**
      * Constructor class
-     * Default RMI constructor
-     * @throws RemoteException
+     * Default constructor
      */
     public ServerImplementation() throws RemoteException {
         super();
     }
 
-    /**
-     * Constructor class
-     * RMI constructor, communication on selected port
-     * @throws RemoteException
-     */
-    public ServerImplementation(int port) throws RemoteException {
-        super(port);
-    }
 
-    public ServerImplementation(int port, RMIClientSocketFactory csf, RMIServerSocketFactory ssf) throws RemoteException {
-        super(port, csf, ssf);
-    }
+
 
     /**
-     * This method is used to register a {@link Client} into the server. It will be sent instances of {@link GameView}
-     * as the game progresses, so it will be able to see the game
+     * This method is used to register a {@link Client} into the server. The {@link Client} be sent instances of {@link GameView}
+     * as the game progresses, so it will be able to see the game and play it.
+     * The method adds the {@link GameView} as {@link Observer} of the {@link Game}. Then, the {@link Client} is updated with
+     * such {@link GameView}
      * @param client the {@link Client} to be added
      */
     @Override
@@ -100,11 +98,10 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
     }
 
     /**
-     * The update method's purpose is to have the {@link ServerImplementation} react to every message it receives in the correct manner and to handle
-     *  it correctly.
+     * The update method's purpose is to have the {@link ServerImplementation} react to every {@link EventMessage} it receives in the correct manner and to handle
+     *  each correctly.
      * @param client from which it receives the {@link EventMessage}
-     * @param eventMessage cointaining the action to be performed
-     * @throws IOException
+     * @param eventMessage containing the action to be performed
      */
     @Override
     public void update(Client client, EventMessage eventMessage) throws IOException {
@@ -453,26 +450,19 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
         //client.onMessage(new DisconnectionResponseMessage(eventMessage.getNickname()));
 
     /**
-     * This method removes a game name from the lobby
-     * @param gameName specified by the client
+     * This method removes a {@link Game} name from the lobby
+     * @param gameName that is needed to be removed
      */
     @Override
     public void removeGameFromLobby(String gameName) {
         this.currentLobbyGameNames.remove(gameName);
     }
 
-    /**
-     * This method removes a client
-     * @param client
-     */
-    @Override
-    public void removeClient(Client client){
 
-    }
 
     /**
      * Getter method
-     * @return a containing the {@link Player#name} associated to the clients as key and the {@link Client} object as value
+     * @return a containing the name associated to the clients as key and the {@link Client} object as value
      */
     public Map<String, Client> getConnectedClients() {
         return connectedClients;

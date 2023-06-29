@@ -11,9 +11,18 @@ import it.polimi.ingsw.network.eventMessages.EventMessage;
 import it.polimi.ingsw.view.cli.CLI;
 import java.io.IOException;
 import java.rmi.RemoteException;
-import java.rmi.server.RMIClientSocketFactory;
-import java.rmi.server.RMIServerSocketFactory;
 import java.rmi.server.UnicastRemoteObject;
+import it.polimi.ingsw.observer_observable.Observer;
+
+/**
+ * <h1>Class ClientImplementation</h1>
+ * Class that implements the {@link Client} interface. It is used to communicate with the {@link Server}
+ * and update the View
+ *
+ * @author Francesco Maberino, Francesco Santambrogio
+ * @version 1.0
+ * @since 5/10/2023
+ */
 public class ClientImplementation extends UnicastRemoteObject implements Client {
 
     View view;
@@ -23,6 +32,11 @@ public class ClientImplementation extends UnicastRemoteObject implements Client 
         return view;
     }
 
+    /**
+     * Class constructor
+     * @param view that is linked to the {@link ClientImplementation}
+     * @param server with which the {@link ClientImplementation} intends to communicate
+     */
     public ClientImplementation(View view, Server server) throws RemoteException {
         super();
         this.view = view;
@@ -30,24 +44,22 @@ public class ClientImplementation extends UnicastRemoteObject implements Client 
     }
 
 
-    public ClientImplementation(View view, Server server, int port) throws RemoteException {
-        super(port);
-        this.view = view;
-        initialize(server);
-    }
-
-    public ClientImplementation(View view, Server server, int port, RMIClientSocketFactory csf, RMIServerSocketFactory ssf) throws RemoteException {
-        super(port, csf, ssf);
-        this.view = view;
-        initialize(server);
-    }
-
+    /**
+     *This method is used by the client to update correctly the View after receiving an {@link EventMessage}
+     * @param gameView with which the View will be updated
+     * @param eventMessage that prompts the necessity of the update
+     */
     @Override
     //TODO: lancio eccezione al chiamante inserendo update in una coda fino a che la connessione torna
     public void update(GameView gameView, EventMessage eventMessage) {
         view.update(gameView, eventMessage);
     }
 
+    /**
+     * This method is used to let the {@link Server} communicate directly with the {@link Client}
+     * via to asynchronous messages
+     * @param message the message to be sent to the {@link Client}
+     */
     public void onMessage(MessageToClient message) throws IOException {
 
         //just to set the parameters, maybe it will be a problem with concurrency (?)
@@ -75,8 +87,12 @@ public class ClientImplementation extends UnicastRemoteObject implements Client 
     }
 
 
-
-
+    /**
+     * Initialize connection to the {@link Server} and send {@link EventMessage}s to it. Works from
+     * {@link CLI} as well as from {@link GUI}.
+     * This method adds the {@link CLI} as an {@link Observer} of the {@link EventMessage}. Then, the {@link Server} is updated
+     * with such {@link EventMessage}
+     */
     private void initialize(Server server) throws RemoteException {
         if (view instanceof CLI){
             ((CLI)view).addObserver((observable, eventMessage) -> {
@@ -101,6 +117,10 @@ public class ClientImplementation extends UnicastRemoteObject implements Client 
         }
     }
 
+    /**
+     * Getter method
+     * @return the {@link ClientImplementation#nickname} linked with the {@link ClientImplementation}
+     */
     public String getNickname() {
         return this.nickname;
     }
