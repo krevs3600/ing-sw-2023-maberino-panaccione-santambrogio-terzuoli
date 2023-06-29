@@ -24,7 +24,7 @@ Complete rules | ![#c5f015](https://via.placeholder.com/15/008000/000000?text=+)
 | Persistence | ![#c5f015](https://via.placeholder.com/15/008000/000000?text=+) |](https://maven.apache.org/)
 | Disconnections resilience | ![#c5f015](https://via.placeholder.com/15/008000/000000?text=+) |
 
-# UML
+## UML
 
 ## Jar Execution↩︎
 
