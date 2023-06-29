@@ -35,7 +35,7 @@ public class CLI extends Observable<EventMessage> implements View {
 
 
     public void run() {
-        printLogo();
+        printTitle();
         try {
             createConnection();
         } catch (RemoteException ignored) {
@@ -100,7 +100,7 @@ public class CLI extends Observable<EventMessage> implements View {
     public String askConnectionType() {
         String connectionType;
         do {
-            out.print("Please insert a connection type: socket (s) or RMI (r): ");
+            out.print("\nfPlease insert a connection type: socket (s) or RMI (r): ");
             connectionType = in.nextLine();
             if (!connectionType.equals("s") && !connectionType.equals("r")) System.err.println("\ninvalid choice");
         } while (!connectionType.equals("s") && !connectionType.equals("r"));
@@ -159,10 +159,19 @@ public class CLI extends Observable<EventMessage> implements View {
         printMenu();
         boolean validOption;
         do  {
-            validOption = true;
-            out.print(">>> ");
-            int menuOption = in.nextInt();
-            in.nextLine();
+            validOption = false;
+            int menuOption = 0;
+            while (!validOption) {
+                try {
+                    out.print(">>> ");
+                    String input = in.nextLine();
+                    menuOption = Integer.parseInt(input);
+                    in.nextLine();
+                    if (menuOption > 0) validOption = true;
+                } catch (NumberFormatException e) {
+                    System.err.println("This is not a valid input, please insert a number");
+                }
+            }
 
             switch (menuOption) {
 
@@ -227,27 +236,27 @@ public class CLI extends Observable<EventMessage> implements View {
 
 
     public void askGameSpecs(){
-        int numOfPlayers = 0;
+
         String gameName = "";
-
-        while (gameName.length() < 1 || numOfPlayers <= 0) {
-
+        while (gameName.length() < 1) {
             out.print(getNickname() + " choose your game's name: ");
             gameName = in.nextLine();
-
-            boolean isNumber;
-            do {
-                isNumber = true;
-                out.print("Please insert the number of players: ");
-                try {
-                    numOfPlayers = in.nextInt();
-                    in.nextLine();
-                } catch (InputMismatchException e) {
-                    isNumber= false;
-                }
-            }while (!isNumber);
+            if (gameName.length() < 1) System.err.println("Please insert at least one character");
         }
 
+        boolean isValidNumber = false;
+        int numOfPlayers = 0;
+        while (!isValidNumber) {
+            try {
+                out.print("Please insert the number of players: ");
+                String input = in.nextLine();
+                numOfPlayers = Integer.parseInt(input);
+                in.nextLine();
+                if (numOfPlayers >= 0) isValidNumber = true;
+            } catch (NumberFormatException e) {
+                System.err.println("This is not a valid input, please insert a number");
+            }
+        }
         setChanged();
         notifyObservers(new GameSpecsMessage(getNickname(),gameName, numOfPlayers));
     }
@@ -290,7 +299,7 @@ public class CLI extends Observable<EventMessage> implements View {
             gameChoice = in.nextLine();
 
             if(!availableGameNames.contains(gameChoice)) {
-                System.err.println("Invalid game choice");
+                System.err.println("\nInvalid game choice");
             }
         }while(!availableGameNames.contains(gameChoice));
 
@@ -299,6 +308,7 @@ public class CLI extends Observable<EventMessage> implements View {
     }
 
     public void printTitle() {
+        out = new PrintStream(System.out);
         out.println(MessageCLI.TITLE);
     }
 
@@ -326,7 +336,7 @@ public class CLI extends Observable<EventMessage> implements View {
                     System.out.println("Valid number of players 😊 ");
                     System.out.println("Waiting for other players... ");
                 } else {
-                    System.err.println("Invalid number of players, please choose a number within the available range (2-4)");
+                    System.err.println("\nInvalid number of players, please choose a number within the available range (2-4)");
                     askGameSpecs();
                 }
             }
@@ -353,7 +363,7 @@ public class CLI extends Observable<EventMessage> implements View {
                     }).start();
                     gameMenu();
                 } else {
-                        System.err.println("Invalid nickname, please choose another one\n");
+                        System.err.println("\nInvalid nickname, please choose another one");
                         askNickname();
                     }
 
@@ -412,12 +422,38 @@ public class CLI extends Observable<EventMessage> implements View {
                                 notifyObservers(new SwitchPhaseMessage(errorMessage.getNickname(), GamePhase.COLUMN_CHOICE));
                             }
                             case "" -> {
-                                out.print("r: ");
-                                int r = in.nextInt();
+                                boolean validRow = false;
+                                int r = 0;
+                                while (!validRow) {
+                                    try {
+                                        out.print("r: ");
+                                        String input = in.nextLine();
+                                        r = Integer.parseInt(input);
+                                        in.nextLine();
+                                        if (r >= 0) validRow = true;
+                                    } catch (NumberFormatException e) {
+                                        System.err.println("\nThis is not a valid input, please insert a number");
+                                    }
+                                }
+
                                 in.nextLine();
-                                System.out.print("c: ");
-                                int c = in.nextInt();
+
+                                boolean validColumn = false;
+                                int c = 0;
+                                while (!validColumn) {
+                                    try {
+                                        out.print("c: ");
+                                        String input = in.nextLine();
+                                        c = Integer.parseInt(input);
+                                        in.nextLine();
+                                        if (c >= 0) validColumn = true;
+                                    } catch (NumberFormatException e) {
+                                        System.err.println("\nThis is not a valid input, please insert a number");
+                                    }
+                                }
+
                                 in.nextLine();
+
                                 setChanged();
                                 notifyObservers(new TilePositionMessage(message.getNickname(), new Position(r, c)));
                             }
@@ -429,8 +465,23 @@ public class CLI extends Observable<EventMessage> implements View {
                 ErrorMessage errorMessage = (ErrorMessage) message;
                 out.println(errorMessage.getErrorMessage());
                 out.print("In which column you want to insert your item tiles?\n");
-                int column = in.nextInt();
+
+                boolean validColumn = false;
+                int column = 0;
+                while (!validColumn) {
+                    try {
+                        out.print("column: ");
+                        String input = in.nextLine();
+                        column = Integer.parseInt(input);
+                        in.nextLine();
+                        if (column >= 0) validColumn = true;
+                    } catch (NumberFormatException e) {
+                        System.err.println("\nThis is not a valid input, please insert a number");
+                    }
+                }
+
                 in.nextLine();
+
                 setChanged();
                 notifyObservers(new BookshelfColumnMessage(message.getNickname(), column));
             }
@@ -446,35 +497,41 @@ public class CLI extends Observable<EventMessage> implements View {
 
             case PLAYER_TURN -> {
                 if (this.nickname.equals(game.getCurrentPlayer().getName())) {
-                    out.println("\n" + eventMessage.getNickname() + " it's your turn!");
+                    out.println("\n" + eventMessage.getNickname() + ", it's your turn!");
                     out.println("\nPlease enter a position: ");
 
-                    boolean isValidRow;
+                    boolean validRow = false;
                     int r = 0;
-                    do {
-                        isValidRow = true;
-                        out.print("r: ");
+                    while (!validRow) {
                         try {
-                            r = in.nextInt();
-                        } catch (InputMismatchException e) {
-                            isValidRow = false;
+                            out.print("r: ");
+                            String input = in.nextLine();
+                            r = Integer.parseInt(input);
+                            in.nextLine();
+                            if (r >= 0) validRow = true;
+                        } catch (NumberFormatException e) {
+                            System.err.println("\nThis is not a valid input, please insert a number");
                         }
-                    }while (!isValidRow);
+                    }
 
                     in.nextLine();
 
-                    boolean isValidColumn;
+                    boolean validColumn = false;
                     int c = 0;
-                    do {
-                        isValidColumn = true;
-                        out.print("c: ");
+                    while (!validColumn) {
                         try {
-                            c = in.nextInt();
-                        } catch (InputMismatchException e) {
-                            isValidColumn = false;
+                            out.print("c: ");
+                            String input = in.nextLine();
+                            c = Integer.parseInt(input);
+                            in.nextLine();
+                            if (c >= 0) validColumn = true;
+                        } catch (NumberFormatException e) {
+                            System.err.println("\nThis is not a valid input, please insert a number");
                         }
-                    }while (!isValidColumn);
+                    }
+
                     in.nextLine();
+
                     setChanged();
                     notifyObservers(new TilePositionMessage(eventMessage.getNickname(), new Position(r, c)));
                 }
@@ -507,12 +564,39 @@ public class CLI extends Observable<EventMessage> implements View {
                             }
                             case "" -> {
                                 out.println("\nPlease enter a position: ");
-                                out.print("r: ");
-                                int r = in.nextInt();
+
+                                boolean validRow = false;
+                                int r = 0;
+                                while (!validRow) {
+                                    try {
+                                        out.print("r: ");
+                                        String input = in.nextLine();
+                                        r = Integer.parseInt(input);
+                                        in.nextLine();
+                                        if (r >= 0) validRow = true;
+                                    } catch (NumberFormatException e) {
+                                        System.err.println("\nThis is not a valid input, please insert a number");
+                                    }
+                                }
+
                                 in.nextLine();
-                                System.out.print("c: ");
-                                int c = in.nextInt();
+
+                                boolean validColumn = false;
+                                int c = 0;
+                                while (!validColumn) {
+                                    try {
+                                        out.print("c: ");
+                                        String input = in.nextLine();
+                                        c = Integer.parseInt(input);
+                                        in.nextLine();
+                                        if (c >= 0) validColumn = true;
+                                    } catch (NumberFormatException e) {
+                                        System.err.println("\nThis is not a valid input, please insert a number");
+                                    }
+                                }
+
                                 in.nextLine();
+
                                 setChanged();
                                 notifyObservers(new TilePositionMessage(eventMessage.getNickname(), new Position(r, c)));
                             }
@@ -528,8 +612,23 @@ public class CLI extends Observable<EventMessage> implements View {
             case COLUMN_CHOICE -> {
                 if (getNickname().equals(game.getCurrentPlayer().getName())) {
                     out.print("In which column you want to insert your item tiles?\n");
-                    int column = in.nextInt();
+
+                    boolean validColumn = false;
+                    int column = 0;
+                    while (!validColumn) {
+                        try {
+                            out.print("column: ");
+                            String input = in.nextLine();
+                            column = Integer.parseInt(input);
+                            in.nextLine();
+                            if (column >= 0) validColumn = true;
+                        } catch (NumberFormatException e) {
+                            System.err.println("\nThis is not a valid input, please insert a number");
+                        }
+                    }
+
                     in.nextLine();
+
                     setChanged();
                     notifyObservers(new BookshelfColumnMessage(eventMessage.getNickname(), column));
                 }
@@ -546,7 +645,23 @@ public class CLI extends Observable<EventMessage> implements View {
                 if (getNickname().equals(game.getCurrentPlayer().getName())) {
                     if (game.getTilePack().getTiles().size() > 0) {
                         out.print("Choose an item tile to insert from the tile pack into the selected column\n");
-                        int itemTileIndex = in.nextInt();
+
+                        boolean validIndex = false;
+                        int itemTileIndex = 0;
+                        while (!validIndex) {
+                            try {
+                                out.print("index: ");
+                                String input = in.nextLine();
+                                itemTileIndex = Integer.parseInt(input);
+                                in.nextLine();
+                                if (itemTileIndex >= 0) validIndex = true;
+                            } catch (NumberFormatException e) {
+                                System.err.println("\nThis is not a valid input, please insert a number");
+                            }
+                        }
+
+                        in.nextLine();
+
                         setChanged();
                         notifyObservers(new ItemTileIndexMessage(eventMessage.getNickname(), itemTileIndex));
                     } else {
