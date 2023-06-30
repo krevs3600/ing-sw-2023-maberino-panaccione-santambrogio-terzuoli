@@ -517,7 +517,7 @@ public class CLI extends Observable<EventMessage> implements View {
                     String answer;
                     do {
                         out.printToCLI("If you wish to stop picking tiles type 'stop', otherwise press ENTER\n", ColorCLI.CYAN_T);
-                        out.printToCLI(">>> ", ColorCLI.WHITE);
+                        out.printToCLI(">>> ", ColorCLI.WHITE_T);
                         answer = in.nextLine();
                         switch (answer) {
                             case "stop" -> {
@@ -563,7 +563,7 @@ public class CLI extends Observable<EventMessage> implements View {
                         int itemTileIndex = 0;
                         while (!validIndex) {
                             try {
-                                out.printToCLI("index: ", ColorCLI.CYAN);
+                                out.printToCLI("index: ", ColorCLI.CYAN_T);
                                 String input = in.nextLine();
                                 itemTileIndex = Integer.parseInt(input);
                                 if (itemTileIndex >= 0) validIndex = true;
@@ -641,7 +641,7 @@ public class CLI extends Observable<EventMessage> implements View {
     }
 
     private int askColumnChoice () {
-        out.printToCLI("In which column you want to insert your item tiles?\n>>> ", ColorCLI.CYAN_T);
+        out.printToCLI("In which column you want to insert your item tiles?\n ", ColorCLI.CYAN_T);
         boolean validColumn = false;
         int column = 0;
         while (!validColumn) {
