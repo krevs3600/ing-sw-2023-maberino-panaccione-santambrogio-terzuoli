@@ -1,5 +1,4 @@
 # Prova Finale Ingegneria del Software- AA 2022-2023 
-![alt text](../src/main/resources/it/polimi/ingsw/view/gui/misc/MyShelfie.png)
 
 📚🏆Implementatation of the game table [My Shelfie](https://www.craniocreations.it/prodotto/my-shelfie) 📚🏆
 
@@ -30,7 +29,7 @@ The Maven Shade Plugin was used to construct the jars. Below are provided the pr
 ```bash
 java mvn clean package
 ```
-The ```target/``  folder will include the compiled jars under the names of ```PSP47 -server.jar``` e ```PSP47 -client.jar```.
+The ```target/```  folder will include the compiled jars under the names of ```PSP47 -server.jar``` e ```PSP47 -client.jar```.
 
 ### CLI
 
