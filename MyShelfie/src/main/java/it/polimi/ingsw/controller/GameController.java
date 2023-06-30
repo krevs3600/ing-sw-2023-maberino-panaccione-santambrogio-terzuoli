@@ -59,7 +59,7 @@ public class GameController implements Serializable {
         switch (eventMessage.getType()) {
 
             // In response to these messages, the controller creates a new player and adds it to the game
-            case GAME_CHOICE, GAME_CREATION, GAME_SPECS -> {
+            case GAME_CHOICE, GAME_SPECS -> {
                 Player newPlayer = new Player(eventMessage.getNickname());
                 getGame().subscribe(newPlayer);
             }
@@ -104,18 +104,11 @@ public class GameController implements Serializable {
                                     setAlongsideWhat(tilePositionMessage);
                                     drawTileAndInsertInTilePack(tilePositionMessage);
                                 } else {
-                                    try {
-                                        client.onMessage(new NotEnoughInsertableTilesErrorMessage(eventMessage.getNickname(), "THE NUMBER OF INSERTABLE TILES IN YOUR BOOKSHELF IS TOO SMALL,\n YOU CANNOT INSERT ALL OF THE TILES THEN"));
-                                    } catch (RemoteException e) {
-                                        System.err.println(e.getMessage());
-                                    }
+                                    try {client.onMessage(new NotEnoughInsertableTilesErrorMessage(eventMessage.getNickname(), "THE NUMBER OF INSERTABLE TILES IN YOUR BOOKSHELF IS TOO SMALL,\n YOU CANNOT INSERT ALL OF THE TILES THEN"));} catch (RemoteException e) {System.err.println(e.getMessage());}
                                 }
                             } else {
                                 try {
-                                    client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), "INVALID POSITION, PLEASE CHOOSE ANOTHER ONE"));
-                                } catch (RemoteException e) {
-                                    System.err.println(e.getMessage());
-                                }
+                                    client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), "INVALID POSITION, PLEASE CHOOSE ANOTHER ONE"));} catch (RemoteException e) {System.err.println(e.getMessage());}
                             }
                         }
 
@@ -138,81 +131,43 @@ public class GameController implements Serializable {
                                             drawTileAndInsertInTilePack(tilePositionMessage);
                                         } else {
                                             try {
-                                                client.onMessage(new NotEnoughInsertableTilesErrorMessage(eventMessage.getNickname(), "THE NUMBER OF INSERTABLE TILES IN YOUR BOOKSHELF IS TOO SMALL\n, YOU CANNOT INSERT ALL OF THE TILES THEN"));
-                                            } catch (RemoteException e) {
-                                                System.err.println(e.getMessage());
-                                            }
+                                                client.onMessage(new NotEnoughInsertableTilesErrorMessage(eventMessage.getNickname(), "THE NUMBER OF INSERTABLE TILES IN YOUR BOOKSHELF IS TOO SMALL\n, YOU CANNOT INSERT ALL OF THE TILES THEN"));} catch (RemoteException e) {System.err.println(e.getMessage());}
                                         }
                                     } else {
-                                        try {
-                                            client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), "INVALID POSITION\n, PLEASE CHOOSE ANOTHER ONE"));
-                                        } catch (RemoteException e) {
-                                            System.err.println(e.getMessage());
-                                        }
+                                        try {client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), "INVALID POSITION\n, PLEASE CHOOSE ANOTHER ONE"));} catch (RemoteException e) {System.err.println(e.getMessage());}
                                     }
                                 } else if (getGame().isAlongSideRow()) {
                                     if (tilePositionMessage.getPosition().getRow() == getGame().getBuffer().get(0).getRow()) {
                                         if (getGame().getCurrentPlayer().getBookshelf().getNumberInsertableTiles() >= getGame().getBuffer().size() + 1) {
                                             drawTileAndInsertInTilePack(tilePositionMessage);
                                         } else {
-                                            try {
-                                                client.onMessage(new NotEnoughInsertableTilesErrorMessage(eventMessage.getNickname(), "THE NUMBER OF INSERTABLE TILES IN YOUR BOOKSHELF IS TOO SMALL,\n YOU CANNOT INSERT ALL OF THE TILES THEN"));
-                                            } catch (RemoteException e) {
-                                                System.err.println(e.getMessage());
-                                            }
+                                            try {client.onMessage(new NotEnoughInsertableTilesErrorMessage(eventMessage.getNickname(), "THE NUMBER OF INSERTABLE TILES IN YOUR BOOKSHELF IS TOO SMALL,\n YOU CANNOT INSERT ALL OF THE TILES THEN"));} catch (RemoteException e) {System.err.println(e.getMessage());}
                                         }
                                     } else {
-                                        try {
-                                            client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), "INVALID POSITION\n PLEASE CHOOSE ANOTHER ONE"));
-                                        } catch (RemoteException e) {
-                                            System.err.println(e.getMessage());
-                                        }
+                                        try {client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), "INVALID POSITION\n PLEASE CHOOSE ANOTHER ONE"));} catch (RemoteException e) {System.err.println(e.getMessage());}
                                     }
                                 }
 
-                            } else {
-                                try {
-                                    client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), "INVALID POSITION,\n PLEASE CHOOSE ANOTHER ONE"));
-                                } catch (RemoteException e) {
-                                    System.err.println(e.getMessage());
-                                }
+                            }
+                            else {
+                                try {client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), "INVALID POSITION,\n PLEASE CHOOSE ANOTHER ONE"));} catch (RemoteException e) {System.err.println(e.getMessage());}
                             }
                         }
 
                         // if it is none of the cases above, an error message is sent
-                        default -> {
-                            try {
-                                client.onMessage(new UpperBoundTilePackErrorMessage(eventMessage.getNickname(), "YOU CAN TAKE THREE TILES AT MOST!"));
-                            } catch (RemoteException e) {
-                                System.err.println(e.getMessage());
-                            }
-                        }
-                    }
-                } else {
-                    try {
-                        client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), "INVALID POSITION,\nPLEASE CHOOSE ANOTHER ONE"));
-                    } catch (RemoteException e) {
-                        System.err.println(e.getMessage());
-                    }
-                }
+                        default -> {try {client.onMessage(new UpperBoundTilePackErrorMessage(eventMessage.getNickname(), "YOU CAN TAKE THREE TILES AT MOST!"));} catch (RemoteException e) {System.err.println(e.getMessage());}}}
+                } else {try {client.onMessage(new IllegalTilePositionErrorMessage(eventMessage.getNickname(), "INVALID POSITION,\nPLEASE CHOOSE ANOTHER ONE"));} catch (RemoteException e) {System.err.println(e.getMessage());}}
             }
 
             // this case is used to select the column where to insert the item tiles from the tile pack
             case BOOKSHELF_COLUMN -> {
                 BookshelfColumnMessage bookshelfColumnMessage = (BookshelfColumnMessage) eventMessage;
                 if (getGame().getCurrentPlayer().getBookshelf().getNumberInsertableTilesColumn(bookshelfColumnMessage.getColumn()) < getGame().getTilePack().getSize()) {
-                    try {
-                    client.onMessage(new NotEnoughInsertableTilesInColumnErrorMessage(eventMessage.getNickname(), "THERE ARE NOT ENOUGH SPACES IN THIS COLUMN, \nPLEASE CHOOSE ANOTHER ONE"));
-                } catch (RemoteException e) {
-                    System.err.println(e.getMessage());
-                }
-                }
+                    try {client.onMessage(new NotEnoughInsertableTilesInColumnErrorMessage(eventMessage.getNickname(), "THERE ARE NOT ENOUGH SPACES IN THIS COLUMN, \nPLEASE CHOOSE ANOTHER ONE"));} catch (RemoteException e) {System.err.println(e.getMessage());}}
                 try {
                     getGame().setColumnChoice(bookshelfColumnMessage.getColumn());
                     getGame().setTurnPhase(GamePhase.PLACING_TILES);
-                } catch (IndexOutOfBoundsException e) {
-                    System.err.println("Illegal position, please provide another one");
-                }
+                } catch (IndexOutOfBoundsException e) {System.err.println(e.getMessage());}
             }
 
             // the player can select which tile to insert first into the bookshelf from the tile pack. The tile will be inserted
@@ -254,7 +209,6 @@ public class GameController implements Serializable {
                         currentPlayer.setScore(1);
                         if (currentPlayer.equals(getGame().getLastPlayer())){
                             Player winner = getWinner();
-
                             getGame().endGame(winner);
                         }
                     }
@@ -311,13 +265,13 @@ public class GameController implements Serializable {
         int personalCardScore;
         int score = 0;
         int count = 0;
-        for (Map.Entry<Integer, TileType> element :
-                player.getPersonalGoalCard().getScoringItemTiles().entrySet()) {
-            try{
-                if (bookshelf[(element.getKey())/5][(element.getKey())%5].getType().equals(element.getValue())) {
+        for (Map.Entry<Integer, TileType> element : player.getPersonalGoalCard().getScoringItemTiles().entrySet()) {
+            try {
+                if (bookshelf[(element.getKey()) / 5][(element.getKey()) % 5].getType().equals(element.getValue())) {
                     count++;
                 }
-            } catch (NullPointerException ignored){
+            }catch (NullPointerException e) {
+                System.err.println(e.getMessage());
             }
         }
         // loading points rule
@@ -329,9 +283,7 @@ public class GameController implements Serializable {
             JSONObject jsonObject = (JSONObject) jsonObj;
             // read points from json
             points = new ArrayList<>(((ArrayList<Long>)jsonObject.get("points")).stream().map(Long::intValue).toList());
-        } catch (IOException | ParseException e) {
-            throw new RuntimeException(e);
-        }
+        } catch (IOException | ParseException e) {throw new RuntimeException(e);}
         personalCardScore = points.get(count);
         player.setPersonalGoalCardScore(personalCardScore);
 

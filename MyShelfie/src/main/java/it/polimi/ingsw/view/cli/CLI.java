@@ -289,20 +289,6 @@ public class CLI extends Observable<EventMessage> implements View {
 
 
 
-   // public void askGameName() {
-   //
-   //     String gameName = "";
-   //     while (gameName.length() < 1) {
-   //         out.print(getNickname() + " choose your game's name: ");
-   //         gameName = in.nextLine();
-   //     }
-   //     setChanged();
-   //     notifyObservers(new GameNameMessage(getNickname(),gameName));
-   //
-   // }
-
-
-
     @Override
     public void askNickname() {
         String nickName = "";
