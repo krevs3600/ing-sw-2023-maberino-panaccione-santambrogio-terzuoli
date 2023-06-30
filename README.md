@@ -30,7 +30,7 @@ The Maven Shade Plugin was used to construct the jars. Below are provided the pr
 ```bash
 java mvn clean package
 ```
-The ```target/``  folder will include the compiled jars under the names of ```PSP47 -server.jar``` e ```PSP47 -client.jar```.
+The ```target/```  folder will include the compiled jars under the names of ```PSP47 -server.jar``` e ```PSP47 -client.jar```.
 
 ### CLI
 
