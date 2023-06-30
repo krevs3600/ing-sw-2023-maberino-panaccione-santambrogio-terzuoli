@@ -7,7 +7,7 @@ import it.polimi.ingsw.network.MessagesToClient.MessageToClientType;
 /**
  * <h1>Class ClientDisconnectedMessage</h1>
  * The class ClientDisconnectedMessage extends the abstract class RequestMessage. The purpose of this message is to
- * let the {@link Client} know that tit has been disconnected from the {@link Game}
+ * let the others know that the {@link Client} has been disconnected from the {@link Game}
  *
  * @author Francesco Santambrogio
  * @version 1.0

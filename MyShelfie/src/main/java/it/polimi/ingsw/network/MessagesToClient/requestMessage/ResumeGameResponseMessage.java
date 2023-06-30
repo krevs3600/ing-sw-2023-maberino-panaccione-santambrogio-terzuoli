@@ -10,7 +10,7 @@ import java.util.Set;
 /**
  * <h1>Class ResumeGameResponseMessage</h1>
  * The class ResumeGameResponseMessage extends the abstract class RequestMessage. This message is sent by the {@link Server}
- *  * a {@link Client} who tried to resume a {@link Game}
+ *  a {@link Client} who correctly tried to resume a {@link Game}
  *
  * @author Francesco Santambrogio
  * @version 1.0

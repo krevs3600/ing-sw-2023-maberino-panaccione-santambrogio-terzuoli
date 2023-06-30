@@ -4,8 +4,8 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Bookshelf;
 /**
  * <h1>Class PlacingTilesMessage</h1>
- * The class PlacingTilesMessage extends the abstract class EventMessage. A {@link Player} is placing tiles
- * in the {@link Bookshelf}
+ * The class PlacingTilesMessage extends the abstract class EventMessage. It communicates the {@link Player} that he/she chose
+ * a valid column from the {@link Bookshelf}
  *
  * @author Francesco Santambrogio
  * @version 1.0

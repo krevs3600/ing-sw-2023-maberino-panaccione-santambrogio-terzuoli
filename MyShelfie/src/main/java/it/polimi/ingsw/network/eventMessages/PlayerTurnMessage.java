@@ -5,7 +5,7 @@ import it.polimi.ingsw.model.Player;
 /**
  * <h1>Class PlayerTurnMessage</h1>
  * The class PlayerTurnMessage extends the abstract class EventMessage. The purpose of this message is to
- * communicate that it' a {@link Player}'s turn to play
+ * communicate that it's his/her turn to play
  *
  * @author Francesco Santambrogio, Carlo Terzuoli
  * @version 1.0

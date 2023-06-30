@@ -1,8 +1,20 @@
 package it.polimi.ingsw.observer_observable;
 
+import it.polimi.ingsw.network.Client;
+import it.polimi.ingsw.network.Server;
+
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * <h1>Class Observable</h1>
+ * The abstract class Observable is related to the Observer-Observable design pattern. Specifically it is an implemented
+ * by {@link EventMessage}. When one happens, the Observer gets notified and can react correctly
+ *
+ * @author Francesco Maberino, Francesco Santambrogio
+ * @version 1.0
+ * @since 5/10/2023
+ */
 public abstract class Observable<EventMessage> {
 
 

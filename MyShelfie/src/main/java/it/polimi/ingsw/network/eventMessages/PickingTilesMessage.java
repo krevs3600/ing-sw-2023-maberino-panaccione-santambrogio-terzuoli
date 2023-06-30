@@ -4,8 +4,8 @@ import it.polimi.ingsw.model.LivingRoomBoard;
 
 /**
  * <h1>Class PickingTilesMessage</h1>
- * The class PickingTilesMessage extends the abstract class EventMessage. A {@link Player} is picking tiles
- * form the {@link LivingRoomBoard}
+ * The class PickingTilesMessage extends the abstract class EventMessage. It communicates to {@link Player} that he/she
+ * chose a valid position from the {@link LivingRoomBoard}
  *
  * @author Francesco Santambrogio
  * @version 1.0
