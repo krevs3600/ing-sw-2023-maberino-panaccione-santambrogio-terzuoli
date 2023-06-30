@@ -75,19 +75,12 @@ public class ComputeScoreController {
         // loading the configuration of the bookshelf
         updateBookshelf(game.getPlayer(nickname).getBookshelf(), bookshelf);
         // loading the two CommonGoalCards
-        try {
-            commonGoalCard1.setImage(new Image(new FileInputStream(getCommonGoalCardPic(game.getLivingRoomBoard().getCommonGoalCards().get(0)))));
-            commonGoalCard2.setImage(new Image(new FileInputStream(getCommonGoalCardPic(game.getLivingRoomBoard().getCommonGoalCards().get(1)))));
-        } catch (FileNotFoundException e) {
-            System.err.println(e.getMessage());
-        }
+        commonGoalCard1.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(getCommonGoalCardPic(game.getLivingRoomBoard().getCommonGoalCards().get(0))))));
+        commonGoalCard2.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(getCommonGoalCardPic(game.getLivingRoomBoard().getCommonGoalCards().get(1))))));
         // loading the PersonalGoalCard
         int num = game.getPlayer(nickname).getPersonalGoalCard().getPath();
-        try {
-            personalGoalCard.setImage(new Image(new FileInputStream("src/main/resources/it/polimi/ingsw/client/view/personal goal cards/Personal_Goals" + num + ".png")));
-        } catch (FileNotFoundException e) {
-            System.err.println(e.getMessage());
-        }
+        personalGoalCard.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/personal goal cards/Personal_Goals" + num + ".png"))));
+
         commonPoint1.setFont(font);
         commonPoint2.setFont(font);
         personalGoalPoint.setFont(font);
@@ -99,13 +92,9 @@ public class ComputeScoreController {
 
     public void loadScore(PlayerView player) {
         // loading the checkmark image from path
-        String checkmarkPath = "src/main/resources/it/polimi/ingsw/client/view/misc/checkmark.png";
-        Image checkmark = null;
-        try {
-            checkmark = new Image(new FileInputStream(checkmarkPath));
-        } catch (FileNotFoundException e) {
-            System.err.println("Can't find image checkmark.png in " + checkmarkPath);
-        }
+        String checkmarkPath = "/misc/checkmark.png";
+        Image checkmark = new Image(Objects.requireNonNull(getClass().getResourceAsStream(checkmarkPath)));
+
         // updating CommonGoalCards points
         System.out.println(player.getTokens());
         for (ScoringToken scoringToken : player.getTokens()){
