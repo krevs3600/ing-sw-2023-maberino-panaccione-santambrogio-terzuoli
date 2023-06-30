@@ -300,10 +300,8 @@ public class CLI extends Observable<EventMessage> implements View {
         String nickName = "";
         while (nickName.length() < 1) {
             out.printToCLI("Please insert your name: ", ColorCLI.CYAN_T);
-            nickName = in.nextLine().trim();
-
+            nickName = in.nextLine();
             this.nickname = nickName;
-            System.out.println(nickname);
         }
         setChanged();
         notifyObservers(new NicknameMessage(nickName));
@@ -449,7 +447,7 @@ public class CLI extends Observable<EventMessage> implements View {
                     out.printToCLI(errorMessage.getErrorMessage() + "\n", ColorCLI.RED_T);
                     String answer;
                     do {
-                        out.printToCLI("\nIf you wish to stop picking tiles type 'stop', otherwise press ENTER", ColorCLI.CYAN_T);
+                        out.printToCLI("\nIf you wish to stop picking tiles type 'stop', otherwise press ENTER\n", ColorCLI.CYAN_T);
                         out.printToCLI(">>> ", ColorCLI.WHITE_T);
                         answer = in.nextLine();
                         switch (answer) {
@@ -504,7 +502,7 @@ public class CLI extends Observable<EventMessage> implements View {
             }
 
             case BOARD -> {
-                out.printToCLI(game.toCLI(getNickname() + "\n"), ColorCLI.RESET);
+                out.printToCLI(game.toCLI(getNickname()) + "\n", ColorCLI.RESET);
                 if (!this.nickname.equals(game.getCurrentPlayer().getName())) {
                     out.printToCLI("\nIt's " + eventMessage.getNickname() + "'s turn\n", ColorCLI.WHITE_T);
                 }
@@ -515,10 +513,10 @@ public class CLI extends Observable<EventMessage> implements View {
 
             case PICKING_TILES -> {
                 if (this.nickname.equals(game.getCurrentPlayer().getName())) {
-                    out.printToCLI(game.toCLI(getNickname() + "\n"), ColorCLI.RESET);
+                    out.printToCLI(game.toCLI(getNickname()) + "\n", ColorCLI.RESET);
                     String answer;
                     do {
-                        out.printToCLI("If you wish to stop picking tiles type 'stop', otherwise press ENTER\n", ColorCLI.CYAN);
+                        out.printToCLI("If you wish to stop picking tiles type 'stop', otherwise press ENTER\n", ColorCLI.CYAN_T);
                         out.printToCLI(">>> ", ColorCLI.WHITE);
                         answer = in.nextLine();
                         switch (answer) {
@@ -550,7 +548,7 @@ public class CLI extends Observable<EventMessage> implements View {
             }
 
             case BOOKSHELF -> {
-                out.printToCLI(game.toCLI(getNickname() + "\n"), ColorCLI.RESET);
+                out.printToCLI(game.toCLI(getNickname()) + "\n", ColorCLI.RESET);
                 if (!getNickname().equals(game.getCurrentPlayer().getName())) {
                     out.printToCLI(eventMessage.getNickname() + " is inserting tiles in the bookshelf\n", ColorCLI.WHITE_T);
                 }
