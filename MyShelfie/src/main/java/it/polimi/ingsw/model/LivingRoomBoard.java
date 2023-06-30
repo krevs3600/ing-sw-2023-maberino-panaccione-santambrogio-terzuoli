@@ -53,10 +53,9 @@ public class LivingRoomBoard  implements Serializable {
         CommonGoalCardDeck commonGoalCardDeck = new CommonGoalCardDeck();
         //endGameToken.push(new EndGameToken());
 
-        String path = "src/main/java/it/polimi/ingsw/model/configs/LivingRoomBoard.json";
-        //String path = "C:\\Users\\franc\\IdeaProjects\\ing-sw-2023-maberino-panaccione-santambrogio-terzuoli\\MyShelfie\\src\\main\\java\\it\\polimi\\ingsw\\model\\configs\\LivingRoomBoard.json";
+        String path = "/configs/LivingRoomBoard.json";
         try {
-            Reader file = new FileReader(path);
+            Reader file = new InputStreamReader(getClass().getResourceAsStream(path));
             JSONParser parser = new JSONParser();
             Object jsonObj = parser.parse(file);
             JSONObject jsonObject = (JSONObject) jsonObj;

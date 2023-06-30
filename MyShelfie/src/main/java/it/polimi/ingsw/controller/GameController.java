@@ -43,7 +43,7 @@ public class GameController implements Serializable {
      * Class constructor
      * @param game the {@link Game} that is going to be played and controlled by this class
      */
-    public GameController( Game game){
+    public GameController(Game game){
         this.game = game;
     }
 
@@ -277,7 +277,8 @@ public class GameController implements Serializable {
         // loading points rule
         ArrayList<Integer> points;
         try {
-            Reader file = new FileReader("src/main/java/it/polimi/ingsw/model/configs/PersonalGoalCards.json");
+            String path = "/configs/PersonalGoalCards.json";
+            Reader file = new InputStreamReader(getClass().getResourceAsStream(path));
             JSONParser parser = new JSONParser();
             Object jsonObj = parser.parse(file);
             JSONObject jsonObject = (JSONObject) jsonObj;

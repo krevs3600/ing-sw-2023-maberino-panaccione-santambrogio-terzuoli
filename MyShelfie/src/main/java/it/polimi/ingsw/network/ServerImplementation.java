@@ -136,7 +136,6 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                                     throw new RuntimeException(ex);
                                 }
                             }
-
                         }
                     }).start();
 

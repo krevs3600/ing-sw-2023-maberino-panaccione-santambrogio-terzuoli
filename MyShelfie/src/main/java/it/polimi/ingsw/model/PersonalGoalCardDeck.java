@@ -35,9 +35,8 @@ public class PersonalGoalCardDeck implements Drawable, Serializable {
     public PersonalGoalCardDeck () {
         this.deck = new ArrayList<>();
         try {
-            String path = "src/main/java/it/polimi/ingsw/model/configs/PersonalGoalCards.json";
-            //String path = "C:\\Users\\franc\\IdeaProjects\\ing-sw-2023-maberino-panaccione-santambrogio-terzuoli\\MyShelfie\\src\\main\\java\\it\\polimi\\ingsw\\model\\configs\\PersonalGoalCards.json";
-            Reader file = new FileReader(path);
+            String path = "/configs/PersonalGoalCards.json";
+            Reader file = new InputStreamReader(getClass().getResourceAsStream(path));
             JSONParser parser = new JSONParser();
             Object jsonObj = parser.parse(file);
             JSONObject jsonObject = (JSONObject) jsonObj;
