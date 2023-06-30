@@ -58,14 +58,6 @@ public class CLI extends Observable<EventMessage> implements View {
         }
     }
 
-    /**
-     * This method is used to print the logo of MyShelfie on the CLI
-     */
-    private void printLogo() {
-        out = new PrintStream(System.out);
-        out.println("myShelfie\n");
-    }
-
 
     @Override
     public void createConnection() throws RemoteException, NotBoundException {
@@ -352,23 +344,6 @@ public class CLI extends Observable<EventMessage> implements View {
 
         switch (message.getType()) {
 
-            case GAME_SPECS -> {
-                GameSpecsResponseMessage gameSpecsResponseMessage = (GameSpecsResponseMessage) message;
-                if (gameSpecsResponseMessage.isValidGameName()) {
-                    System.out.println("Available game name");
-                } else {
-                    System.err.println("The game name is already taken, please choose another game name");
-                    askGameSpecs();
-                }
-                if(gameSpecsResponseMessage.isValidGameCreation()){
-                    System.out.println("Valid number of players");
-                    System.out.println("Waiting for other players... ");
-                } else {
-                    System.err.println("\nInvalid number of players, please choose a number within the available range (2-4)");
-                    askGameSpecs();
-                }
-            }
-
             case LOGIN_RESPONSE -> {
                 LoginResponseMessage loginResponseMessage = (LoginResponseMessage) message;
                 if (loginResponseMessage.isValidNickname()) {
@@ -391,31 +366,41 @@ public class CLI extends Observable<EventMessage> implements View {
                     }).start();
                     gameMenu();
                 } else {
-                        System.err.println("\nInvalid nickname, please choose another one");
-                        askNickname();
-                    }
-
+                    System.err.println("\nInvalid nickname, please choose another one");
+                    askNickname();
                 }
+
+            }
+
+            case GAME_SPECS -> {
+                GameSpecsResponseMessage gameSpecsResponseMessage = (GameSpecsResponseMessage) message;
+                if (gameSpecsResponseMessage.isValidGameName()) {
+                    System.out.println("Available game name");
+                } else {
+                    System.err.println("The game name is already taken, please choose another game name");
+                    askGameSpecs();
+                }
+                if(gameSpecsResponseMessage.isValidGameCreation()){
+                    System.out.println("Valid number of players");
+                    System.out.println("Waiting for other players... ");
+                } else {
+                    System.err.println("\nInvalid number of players, please choose a number within the available range (2-4)");
+                    askGameSpecs();
+                }
+            }
 
             case JOIN_GAME_RESPONSE -> {
                 JoinGameResponseMessage joinGameResponseMessage= (JoinGameResponseMessage) message;
                 showGameNamesList(joinGameResponseMessage.getAvailableGamesInLobby());
 
             }
-
-            case RESUME_GAME_RESPONSE -> out.println("Waiting to resume the game...");
-
             case JOIN_GAME_ERROR -> {
                 JoinErrorMessage joinErrorMessage = (JoinErrorMessage) message;
                 System.err.println(joinErrorMessage.getErrorMessage());
                 gameMenu();
             }
 
-            case RELOAD_GAME_ERROR -> {
-                ReloadGameErrorMessage reloadGameErrorMessage = (ReloadGameErrorMessage) message;
-                System.err.println(reloadGameErrorMessage.getErrorMessage());
-                gameMenu();
-            }
+            case RESUME_GAME_RESPONSE -> out.println("Waiting to resume the game...");
 
             case RESUME_GAME_ERROR -> {
                 ResumeGameErrorMessage resumeGameErrorMessage = (ResumeGameErrorMessage) message;
@@ -432,10 +417,18 @@ public class CLI extends Observable<EventMessage> implements View {
                     out.println("Waiting for " + waitingResponseMessage.getMissingPlayers() + " players... ");
                 }
             }
+
+            case RELOAD_GAME_ERROR -> {
+                ReloadGameErrorMessage reloadGameErrorMessage = (ReloadGameErrorMessage) message;
+                System.err.println(reloadGameErrorMessage.getErrorMessage());
+                gameMenu();
+            }
+
             case PLAYER_JOINED_LOBBY_RESPONSE -> {
                 PlayerJoinedLobbyMessage player = (PlayerJoinedLobbyMessage) message;
                 out.println("\n" + player.getNickname() + " joined lobby");
             }
+
             case ILLEGAL_POSITION, UPPER_BOUND_TILEPACK, NOT_ENOUGH_INSERTABLE_TILES -> {
                     ErrorMessage errorMessage = (ErrorMessage) message;
                     out.println(errorMessage.getErrorMessage());
@@ -450,33 +443,9 @@ public class CLI extends Observable<EventMessage> implements View {
                                 notifyObservers(new SwitchPhaseMessage(errorMessage.getNickname(), GamePhase.COLUMN_CHOICE));
                             }
                             case "" -> {
-                                boolean validRow = false;
-                                int r = 0;
-                                while (!validRow) {
-                                    try {
-                                        out.print("r: ");
-                                        String input = in.nextLine();
-                                        r = Integer.parseInt(input);
-                                        if (r >= 0) validRow = true;
-                                    } catch (NumberFormatException e) {
-                                        System.err.println("\nThis is not a valid input, please insert a number");
-                                    }
-                                }
-                                boolean validColumn = false;
-                                int c = 0;
-                                while (!validColumn) {
-                                    try {
-                                        out.print("c: ");
-                                        String input = in.nextLine();
-                                        c = Integer.parseInt(input);
-                                        if (c >= 0) validColumn = true;
-                                    } catch (NumberFormatException e) {
-                                        out.println("This is not a valid input, please insert a number");
-                                    }
-                                }
-
+                                Position position = askPositionChoice();
                                 setChanged();
-                                notifyObservers(new TilePositionMessage(message.getNickname(), new Position(r, c)));
+                                notifyObservers(new TilePositionMessage(message.getNickname(), position));
                             }
                         }
                     } while (!answer.equals("stop") && !answer.equals(""));
@@ -485,24 +454,7 @@ public class CLI extends Observable<EventMessage> implements View {
             case NOT_ENOUGH_INSERTABLE_TILES_IN_COLUMN -> {
                 ErrorMessage errorMessage = (ErrorMessage) message;
                 out.println(errorMessage.getErrorMessage());
-                out.print("In which column you want to insert your item tiles?\n>>> ");
-
-                boolean validColumn = false;
-                int column = 0;
-                while (!validColumn) {
-                    try {
-                        out.print("column: ");
-                        String input = in.nextLine();
-                        column = Integer.parseInt(input);
-                        in.nextLine();
-                        if (column >= 0) validColumn = true;
-                    } catch (NumberFormatException e) {
-                        out.println("This is not a valid input, please insert a number");
-                    }
-                }
-
-                in.nextLine();
-
+                int column = askColumnChoice();
                 setChanged();
                 notifyObservers(new BookshelfColumnMessage(message.getNickname(), column));
             }
@@ -519,7 +471,7 @@ public class CLI extends Observable<EventMessage> implements View {
     /**
      * This method overrides the {@code Observer update}: it is called by the {@link Server} when an {@link EventMessage} is generated
      *  from the Model.
-     *  According to the {@EventMessage #type}, this method interacts differently with the User
+     *  According to the type of {@link EventMessage}, this method interacts differently with the User
      * @param game the Observable class
      * @param eventMessage the specific event of which the class is notified
      */
@@ -530,45 +482,18 @@ public class CLI extends Observable<EventMessage> implements View {
                 if (this.nickname.equals(game.getCurrentPlayer().getName())) {
                     out.println("\n" + eventMessage.getNickname() + ", it's your turn!");
                     out.println("Please enter a position: ");
-
-                    boolean validRow = false;
-                    int r = 0;
-                    while (!validRow) {
-                        try {
-                            out.print("r: ");
-                            String input = in.nextLine();
-                            r = Integer.parseInt(input);
-                            if (r >= 0) validRow = true;
-                        } catch (NumberFormatException e) {
-                            System.err.println("\nThis is not a valid input, please insert a number");
-                        }
-                    }
-                    boolean validColumn = false;
-                    int c = 0;
-                    while (!validColumn) {
-                        try {
-                            out.print("c: ");
-                            String input = in.nextLine();
-                            c = Integer.parseInt(input);
-                            if (c >= 0) validColumn = true;
-                        } catch (NumberFormatException e) {
-                            System.err.println("\nThis is not a valid input, please insert a number");
-                        }
-                    }
+                    Position position = askPositionChoice();
                     setChanged();
-                    notifyObservers(new TilePositionMessage(eventMessage.getNickname(), new Position(r, c)));
+                    notifyObservers(new TilePositionMessage(eventMessage.getNickname(), position));
                 }
             }
 
             case BOARD -> {
-
                 out.println(game.toCLI(getNickname()));
-
                 if (!this.nickname.equals(game.getCurrentPlayer().getName())) {
                     out.println("\nIt's " + eventMessage.getNickname() + "'s turn\n");
                 }
             }
-
 
             case TILE_PACK -> out.println(game.toCLI(getNickname()));
 
@@ -587,34 +512,9 @@ public class CLI extends Observable<EventMessage> implements View {
                             }
                             case "" -> {
                                 out.println("\nPlease enter a position: ");
-
-                                boolean validRow = false;
-                                int r = 0;
-                                while (!validRow) {
-                                    try {
-                                        out.print("r: ");
-                                        String input = in.nextLine();
-                                        r = Integer.parseInt(input);
-                                        if (r >= 0) validRow = true;
-                                    } catch (NumberFormatException e) {
-                                        System.err.println("\nThis is not a valid input, please insert a number");
-                                    }
-                                }
-                                boolean validColumn = false;
-                                int c = 0;
-                                while (!validColumn) {
-                                    try {
-                                        out.print("c: ");
-                                        String input = in.nextLine();
-                                        c = Integer.parseInt(input);
-                                        in.nextLine();
-                                        if (c >= 0) validColumn = true;
-                                    } catch (NumberFormatException e) {
-                                        System.err.println("\nThis is not a valid input, please insert a number");
-                                    }
-                                }
+                                Position position = askPositionChoice();
                                 setChanged();
-                                notifyObservers(new TilePositionMessage(eventMessage.getNickname(), new Position(r, c)));
+                                notifyObservers(new TilePositionMessage(eventMessage.getNickname(), position));
                             }
                             case "Patrick" -> {
                                 setChanged();
@@ -627,20 +527,7 @@ public class CLI extends Observable<EventMessage> implements View {
 
             case COLUMN_CHOICE -> {
                 if (getNickname().equals(game.getCurrentPlayer().getName())) {
-                    out.print("In which column you want to insert your item tiles?\n");
-                    boolean validColumn = false;
-                    int column = 0;
-                    while (!validColumn) {
-                        try {
-                            out.print("column: ");
-                            String input = in.nextLine();
-                            column = Integer.parseInt(input);
-                            in.nextLine();
-                            if (column >= 0) validColumn = true;
-                        } catch (NumberFormatException e) {
-                            out.println("\nThis is not a valid input, please insert a number");
-                        }
-                    }
+                    int column = askColumnChoice();
                     setChanged();
                     notifyObservers(new BookshelfColumnMessage(eventMessage.getNickname(), column));
                 }
@@ -709,5 +596,53 @@ public class CLI extends Observable<EventMessage> implements View {
 
             }
         }
+    }
+
+    private Position askPositionChoice () {
+        boolean validRow = false;
+        int r = 0;
+        while (!validRow) {
+            try {
+                out.print("r: ");
+                String input = in.nextLine();
+                r = Integer.parseInt(input);
+                if (r >= 0) validRow = true;
+            } catch (NumberFormatException e) {
+                System.err.println("\nThis is not a valid input, please insert a number");
+            }
+        }
+        boolean validColumn = false;
+        int c = 0;
+        while (!validColumn) {
+            try {
+                out.print("c: ");
+                String input = in.nextLine();
+                c = Integer.parseInt(input);
+                if (c >= 0) validColumn = true;
+            } catch (NumberFormatException e) {
+                out.println("This is not a valid input, please insert a number");
+            }
+        }
+
+        return new Position(r, c);
+    }
+
+    private int askColumnChoice () {
+        out.print("In which column you want to insert your item tiles?\n>>> ");
+        boolean validColumn = false;
+        int column = 0;
+        while (!validColumn) {
+            try {
+                out.print("column: ");
+                String input = in.nextLine();
+                column = Integer.parseInt(input);
+                in.nextLine();
+                if (column >= 0) validColumn = true;
+            } catch (NumberFormatException e) {
+                out.println("This is not a valid input, please insert a number");
+            }
+        }
+        in.nextLine();
+        return column;
     }
 }
