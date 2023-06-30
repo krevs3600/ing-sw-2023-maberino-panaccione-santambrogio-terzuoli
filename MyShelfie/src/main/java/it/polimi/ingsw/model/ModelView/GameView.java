@@ -223,6 +223,15 @@ public class GameView implements Serializable {
      * @return the reordered list of subscribers
      */
     private List<Integer> orderedIndexes(String nickname){
+        System.out.println(nickname.trim());
+        System.out.println("inizio");
+        for (Character c : nickname.toCharArray()){
+            System.out.println(c);
+        }
+        System.out.println("fine");
+        for (PlayerView player : getSubscribers()){
+            System.out.println(player.getName());
+        }
         List<String> subscriberNames = new ArrayList<>(getSubscribers().stream().map(PlayerView::getName).toList());
         List<Integer> subscribersIndex = new ArrayList<>();
 

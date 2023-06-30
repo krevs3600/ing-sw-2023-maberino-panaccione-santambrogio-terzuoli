@@ -38,8 +38,18 @@ import java.util.Set;
 public class CLI extends Observable<EventMessage> implements View {
 
     private String nickname;
-    private PrintStream out;
     private Scanner in;
+    private Printer out;
+
+    private class Printer {
+        private final PrintStream out;
+        private Printer(PrintStream out){
+            this.out = out;
+        }
+        private void printToCLI(String string, ColorCLI color){
+            out.print(color.getCode() + string + ColorCLI.RESET.getCode());
+        }
+    }
 
 
     /**
@@ -74,9 +84,9 @@ public class CLI extends Observable<EventMessage> implements View {
                     new ClientImplementation(this, server.connect());
                     askNickname();
                 } catch (NotBoundException e) {
-                    System.err.println("Error: not bound exception registry");
+                    out.printToCLI("Error: not bound exception registry\n", ColorCLI.RED_T);
                 } catch (RemoteException re) {
-                    System.err.println("Couldn't connect to server " + address + " on port " + port);
+                    out.printToCLI("Couldn't connect to server " + address + " on port " + port + "\n", ColorCLI.RED_T);
                     createConnection();
                 }
             }
@@ -90,12 +100,12 @@ public class CLI extends Observable<EventMessage> implements View {
                         try {
                             serverStub.receive(client);
                         } catch (RemoteException e) {
-                            System.err.println("Cannot receive from server. Stopping...");
+                            out.printToCLI("Cannot receive from server. Stopping...\n", ColorCLI.RED_T);
 
                             try {
                                 serverStub.close();
                             } catch (RemoteException ex) {
-                                System.err.println("Cannot close connection with server. Halting...");
+                                out.printToCLI("Cannot close connection with server. Halting...\n", ColorCLI.RED_T);
                             }
                             System.exit(1);
                         }
@@ -112,9 +122,11 @@ public class CLI extends Observable<EventMessage> implements View {
     public String askConnectionType() {
         String connectionType;
         do {
-            out.print("Please insert a connection type: socket (s) or RMI (r): ");
+            out.printToCLI("Please insert a connection type: socket (s) or RMI (r): ", ColorCLI.YELLOW_T);
             connectionType = in.nextLine();
-            if (!connectionType.equals("s") && !connectionType.equals("r")) System.err.println("Error: invalid choice");
+            if (!connectionType.equals("s") && !connectionType.equals("r")) {
+                out.printToCLI("Error: invalid choice\n", ColorCLI.RED_T);
+            }
         } while (!connectionType.equals("s") && !connectionType.equals("r"));
         return connectionType;
 
@@ -125,12 +137,12 @@ public class CLI extends Observable<EventMessage> implements View {
     public String askServerAddress(){
         String address;
         do  {
-            out.print("Please insert the server address (press ENTER for localhost): ");
+            out.printToCLI("Please insert the server address (press ENTER for localhost): ", ColorCLI.YELLOW_T);
             address = in.nextLine();
-            if (!isValidIPAddress(address) && !address.equals("")) System.err.println("Error: invalid choice");
+            if (!isValidIPAddress(address) && !address.equals("")) System.err.println("Error: invalid choice\n");
         } while (!isValidIPAddress(address) && !address.equals(""));
         if(address.equals("")){
-            out.println("Using default address...");
+            out.printToCLI("Using default address...\n", ColorCLI.PURPLE_T);
             address = "127.0.0.1";
         }
         return address;
@@ -142,10 +154,10 @@ public class CLI extends Observable<EventMessage> implements View {
     public int askServerPort(){
         String serverPort;
         do {
-            out.print("Please insert the ip port (press ENTER for default): ");
+            out.printToCLI("Please insert the ip port (press ENTER for default): ", ColorCLI.YELLOW_T);
             serverPort = in.nextLine();
             if (serverPort.equals("")){
-                out.println("Using default port...");
+                out.printToCLI("Using default port...\n", ColorCLI.PURPLE_T);
                 return 1099;
             }
         } while (!isValidPort(serverPort));
@@ -161,7 +173,7 @@ public class CLI extends Observable<EventMessage> implements View {
             int port = Integer.parseInt(serverPort);
             return port >= 1 && port <= 65535;
         } catch (NumberFormatException e){
-            out.println("Error: input is not a number!");
+            out.printToCLI("Error: input is not a number!\n", ColorCLI.RED_T);
             return false;
         }
     }
@@ -188,12 +200,12 @@ public class CLI extends Observable<EventMessage> implements View {
             int menuOption = 0;
             while (!validOption) {
                 try {
-                    out.print(">>> ");
+                    out.printToCLI(">>> ", ColorCLI.WHITE_T);
                     String input = in.nextLine();
                     menuOption = Integer.parseInt(input);
                     if (menuOption > 0) validOption = true;
                 } catch (NumberFormatException e) {
-                    System.err.println("\nThis is not a valid input, please insert a number");
+                    out.printToCLI("This is not a valid input, please insert a number\n", ColorCLI.RED_T);
                 }
             }
 
@@ -204,14 +216,14 @@ public class CLI extends Observable<EventMessage> implements View {
                 case 3 -> resumeGame();
                 case 4 -> reloadGame();
                 case 5 -> {
-                    out.println("Closing game...");
+                    out.printToCLI("Closing game...\n", ColorCLI.RED_T);
                     setChanged();
                     notifyObservers(new ExitMessage(getNickname()));
 
                 }
                 default -> {
                     validOption = false;
-                    System.err.println("Invalid option, please try again");
+                    out.printToCLI("Invalid option, please try again\n", ColorCLI.RED_T);
                 }
             }
         } while (!validOption);
@@ -253,26 +265,28 @@ public class CLI extends Observable<EventMessage> implements View {
 
         String gameName = "";
         while (gameName.length() < 1) {
-            out.print(getNickname() + " choose your game's name: ");
+            out.printToCLI(getNickname() + " choose your game's name: ", ColorCLI.CYAN_T);
             gameName = in.nextLine();
-            if (gameName.length() < 1) System.err.println("Please insert at least one character");
+            if (gameName.length() < 1) {
+                out.printToCLI("Please insert at least one character\n", ColorCLI.RED_T);
+            }
         }
 
         boolean isValidNumber = false;
         int numOfPlayers = 0;
         while (!isValidNumber) {
             try {
-                out.print("Please insert the number of players: ");
+                out.printToCLI("Please insert the number of players: ", ColorCLI.CYAN_T);
                 String input = in.nextLine();
                 numOfPlayers = Integer.parseInt(input);
                 if (numOfPlayers >= 2 && numOfPlayers <= 4) {
                     isValidNumber = true;
                 }
                 else{
-                    out.println("Players in range 2 to 4");
+                    out.printToCLI("Players in range 2 to 4", ColorCLI.RED_T);
                 }
             } catch (NumberFormatException e) {
-                System.err.println("\nThis is not a valid input, please insert a number");
+                out.printToCLI("This is not a valid input, please insert a number\n", ColorCLI.RED_T);
             }
         }
         setChanged();
@@ -285,9 +299,11 @@ public class CLI extends Observable<EventMessage> implements View {
     public void askNickname() {
         String nickName = "";
         while (nickName.length() < 1) {
-            out.print("Please insert your name: ");
-            nickName = in.nextLine();
+            out.printToCLI("Please insert your name: ", ColorCLI.CYAN_T);
+            nickName = in.nextLine().trim();
+
             this.nickname = nickName;
+            System.out.println(nickname);
         }
         setChanged();
         notifyObservers(new NicknameMessage(nickName));
@@ -297,20 +313,20 @@ public class CLI extends Observable<EventMessage> implements View {
     @Override
     public void showGameNamesList(Set<String> availableGameNames) {
         if (availableGameNames.isEmpty()){
-            out.println("No games available, please create a new one!");
+            out.printToCLI("No games available, please create a new one!\n", ColorCLI.RED_T);
         } else {
-            out.println("Available games in lobby:\n");
+            out.printToCLI("Available games in lobby:\n", ColorCLI.WHITE_T);
             for (String game : availableGameNames) {
-                out.println("> " + game);
+                out.printToCLI("> " + game + "\n", ColorCLI.CYAN_T);
             }
         }
         String gameChoice;
         do {
-            out.print("Enter the game's name to join: ");
+            out.printToCLI("Enter the game's name to join: ", ColorCLI.CYAN_T);
             gameChoice = in.nextLine();
 
             if(!availableGameNames.contains(gameChoice)) {
-                System.err.println("\nInvalid game choice");
+                out.printToCLI("Invalid game choice\n", ColorCLI.RED_T);
             }
         }while(!availableGameNames.contains(gameChoice));
 
@@ -319,15 +335,15 @@ public class CLI extends Observable<EventMessage> implements View {
     }
 
     public void printTitle() {
-        out = new PrintStream(System.out);
-        out.println(MessageCLI.TITLE);
+        out = new Printer(System.out);
+        out.printToCLI(MessageCLI.TITLE + "\n", ColorCLI.RESET);
     }
 
     /**
      * Method that prints the menu on command line interface
      */
     public void printMenu() {
-        out.println(MessageCLI.MENU);
+        out.printToCLI(MessageCLI.MENU + "\n", ColorCLI.BLUE_T);
     }
 
     /**
@@ -344,10 +360,27 @@ public class CLI extends Observable<EventMessage> implements View {
 
         switch (message.getType()) {
 
+            case GAME_SPECS -> {
+                GameSpecsResponseMessage gameSpecsResponseMessage = (GameSpecsResponseMessage) message;
+                if (gameSpecsResponseMessage.isValidGameName()) {
+                    out.printToCLI("Available game name\n", ColorCLI.GREEN_T);
+                } else {
+                    out.printToCLI("The game name is already taken, please choose another game name\n", ColorCLI.RED_T);
+                    askGameSpecs();
+                }
+                if(gameSpecsResponseMessage.isValidGameCreation()){
+                    out.printToCLI("Valid number of players\n", ColorCLI.GREEN_T);
+                    out.printToCLI("Waiting for other players...\n", ColorCLI.YELLOW_T);
+                } else {
+                    out.printToCLI("Invalid number of players, please choose a number within the available range (2-4)", ColorCLI.RED);
+                    askGameSpecs();
+                }
+            }
+
             case LOGIN_RESPONSE -> {
                 LoginResponseMessage loginResponseMessage = (LoginResponseMessage) message;
                 if (loginResponseMessage.isValidNickname()) {
-                    System.out.println("Available nickname " + loginResponseMessage.getNickname());
+                    out.printToCLI("Available nickname " + loginResponseMessage.getNickname(), ColorCLI.GREEN_T);
                     new Thread(() -> {
                         try {
                             while (true) {
@@ -366,27 +399,10 @@ public class CLI extends Observable<EventMessage> implements View {
                     }).start();
                     gameMenu();
                 } else {
-                    System.err.println("\nInvalid nickname, please choose another one");
-                    askNickname();
-                }
+                        out.printToCLI("Invalid nickname, please choose another one\n", ColorCLI.RED_T);
+                        askNickname();
+                    }
 
-            }
-
-            case GAME_SPECS -> {
-                GameSpecsResponseMessage gameSpecsResponseMessage = (GameSpecsResponseMessage) message;
-                if (gameSpecsResponseMessage.isValidGameName()) {
-                    System.out.println("Available game name");
-                } else {
-                    System.err.println("The game name is already taken, please choose another game name");
-                    askGameSpecs();
-                }
-                if(gameSpecsResponseMessage.isValidGameCreation()){
-                    System.out.println("Valid number of players");
-                    System.out.println("Waiting for other players... ");
-                } else {
-                    System.err.println("\nInvalid number of players, please choose a number within the available range (2-4)");
-                    askGameSpecs();
-                }
             }
 
             case JOIN_GAME_RESPONSE -> {
@@ -394,17 +410,24 @@ public class CLI extends Observable<EventMessage> implements View {
                 showGameNamesList(joinGameResponseMessage.getAvailableGamesInLobby());
 
             }
+
+            case RESUME_GAME_RESPONSE -> out.printToCLI("Waiting to resume the game...", ColorCLI.YELLOW_T);
+
             case JOIN_GAME_ERROR -> {
                 JoinErrorMessage joinErrorMessage = (JoinErrorMessage) message;
-                System.err.println(joinErrorMessage.getErrorMessage());
+                out.printToCLI(joinErrorMessage.getErrorMessage() + "\n", ColorCLI.RED_T);
                 gameMenu();
             }
 
-            case RESUME_GAME_RESPONSE -> out.println("Waiting to resume the game...");
+            case RELOAD_GAME_ERROR -> {
+                ReloadGameErrorMessage reloadGameErrorMessage = (ReloadGameErrorMessage) message;
+                out.printToCLI(reloadGameErrorMessage.getErrorMessage() + "\n", ColorCLI.RED_T);
+                gameMenu();
+            }
 
             case RESUME_GAME_ERROR -> {
                 ResumeGameErrorMessage resumeGameErrorMessage = (ResumeGameErrorMessage) message;
-                System.err.println(resumeGameErrorMessage.getErrorMessage());
+                out.printToCLI(resumeGameErrorMessage.getErrorMessage() + "\n", ColorCLI.RED_T);
                 gameMenu();
             }
 
@@ -412,30 +435,22 @@ public class CLI extends Observable<EventMessage> implements View {
                 //assert message instanceof WaitingResponseMessage;
                 WaitingResponseMessage waitingResponseMessage = (WaitingResponseMessage) message;
                 if (waitingResponseMessage.getMissingPlayers() == 1) {
-                    out.println("Waiting for 1 player... ");
+                    out.printToCLI("Waiting for 1 player... \n", ColorCLI.YELLOW_T);
                 } else {
-                    out.println("Waiting for " + waitingResponseMessage.getMissingPlayers() + " players... ");
+                    out.printToCLI("Waiting for " + waitingResponseMessage.getMissingPlayers() + " players... \n",  ColorCLI.YELLOW_T);
                 }
             }
-
-            case RELOAD_GAME_ERROR -> {
-                ReloadGameErrorMessage reloadGameErrorMessage = (ReloadGameErrorMessage) message;
-                System.err.println(reloadGameErrorMessage.getErrorMessage());
-                gameMenu();
-            }
-
             case PLAYER_JOINED_LOBBY_RESPONSE -> {
                 PlayerJoinedLobbyMessage player = (PlayerJoinedLobbyMessage) message;
-                out.println("\n" + player.getNickname() + " joined lobby");
+                out.printToCLI( player.getNickname() + " joined lobby\n", ColorCLI.GREEN_T);
             }
-
             case ILLEGAL_POSITION, UPPER_BOUND_TILEPACK, NOT_ENOUGH_INSERTABLE_TILES -> {
                     ErrorMessage errorMessage = (ErrorMessage) message;
-                    out.println(errorMessage.getErrorMessage());
+                    out.printToCLI(errorMessage.getErrorMessage() + "\n", ColorCLI.RED_T);
                     String answer;
                     do {
-                        out.println("\nIf you wish to stop picking tiles type 'stop', otherwise press ENTER");
-                        out.print(">>> ");
+                        out.printToCLI("\nIf you wish to stop picking tiles type 'stop', otherwise press ENTER", ColorCLI.CYAN_T);
+                        out.printToCLI(">>> ", ColorCLI.WHITE_T);
                         answer = in.nextLine();
                         switch (answer) {
                             case "stop" -> {
@@ -453,15 +468,15 @@ public class CLI extends Observable<EventMessage> implements View {
 
             case NOT_ENOUGH_INSERTABLE_TILES_IN_COLUMN -> {
                 ErrorMessage errorMessage = (ErrorMessage) message;
-                out.println(errorMessage.getErrorMessage());
+                out.printToCLI(errorMessage.getErrorMessage() + "\n", ColorCLI.RED_T);
                 int column = askColumnChoice();
                 setChanged();
                 notifyObservers(new BookshelfColumnMessage(message.getNickname(), column));
             }
 
-            case WAIT_FOR_OTHER_PLAYERS -> out.println("Waiting for other players to reconnect...");
+            case WAIT_FOR_OTHER_PLAYERS -> out.printToCLI("Waiting for other players to reconnect...\n", ColorCLI.YELLOW_T);
 
-            case CLIENT_DISCONNECTION -> out.println(message.getNickname() + " has disconnected");
+            case CLIENT_DISCONNECTION -> out.printToCLI(message.getNickname() + " has disconnected\n", ColorCLI.RED_T);
         }
     }
 
@@ -480,8 +495,8 @@ public class CLI extends Observable<EventMessage> implements View {
 
             case PLAYER_TURN -> {
                 if (this.nickname.equals(game.getCurrentPlayer().getName())) {
-                    out.println("\n" + eventMessage.getNickname() + ", it's your turn!");
-                    out.println("Please enter a position: ");
+                    out.printToCLI("\n" + eventMessage.getNickname() + ", it's your turn!\n", ColorCLI.CYAN_T);
+                    out.printToCLI("Please enter a position: \n", ColorCLI.CYAN_T);
                     Position position = askPositionChoice();
                     setChanged();
                     notifyObservers(new TilePositionMessage(eventMessage.getNickname(), position));
@@ -489,21 +504,22 @@ public class CLI extends Observable<EventMessage> implements View {
             }
 
             case BOARD -> {
-                out.println(game.toCLI(getNickname()));
+                out.printToCLI(game.toCLI(getNickname() + "\n"), ColorCLI.RESET);
                 if (!this.nickname.equals(game.getCurrentPlayer().getName())) {
-                    out.println("\nIt's " + eventMessage.getNickname() + "'s turn\n");
+                    out.printToCLI("\nIt's " + eventMessage.getNickname() + "'s turn\n", ColorCLI.WHITE_T);
                 }
             }
 
-            case TILE_PACK -> out.println(game.toCLI(getNickname()));
+
+            case TILE_PACK -> out.printToCLI(game.toCLI(getNickname()) + "\n", ColorCLI.RESET);
 
             case PICKING_TILES -> {
                 if (this.nickname.equals(game.getCurrentPlayer().getName())) {
-                    out.println(game.toCLI(getNickname()));
+                    out.printToCLI(game.toCLI(getNickname() + "\n"), ColorCLI.RESET);
                     String answer;
                     do {
-                        out.println("\nIf you wish to stop picking tiles type 'stop', otherwise press ENTER");
-                        out.print(">>> ");
+                        out.printToCLI("If you wish to stop picking tiles type 'stop', otherwise press ENTER\n", ColorCLI.CYAN);
+                        out.printToCLI(">>> ", ColorCLI.WHITE);
                         answer = in.nextLine();
                         switch (answer) {
                             case "stop" -> {
@@ -511,7 +527,7 @@ public class CLI extends Observable<EventMessage> implements View {
                                 notifyObservers(new SwitchPhaseMessage(getNickname(), GamePhase.COLUMN_CHOICE));
                             }
                             case "" -> {
-                                out.println("\nPlease enter a position: ");
+                                out.printToCLI("Please enter a position: \n", ColorCLI.CYAN_T);
                                 Position position = askPositionChoice();
                                 setChanged();
                                 notifyObservers(new TilePositionMessage(eventMessage.getNickname(), position));
@@ -534,27 +550,27 @@ public class CLI extends Observable<EventMessage> implements View {
             }
 
             case BOOKSHELF -> {
-                out.println(game.toCLI(getNickname()));
+                out.printToCLI(game.toCLI(getNickname() + "\n"), ColorCLI.RESET);
                 if (!getNickname().equals(game.getCurrentPlayer().getName())) {
-                    out.println("\n" + eventMessage.getNickname() + " is inserting tiles in the bookshelf\n");
+                    out.printToCLI(eventMessage.getNickname() + " is inserting tiles in the bookshelf\n", ColorCLI.WHITE_T);
                 }
             }
 
             case PLACING_TILES -> {
                 if (getNickname().equals(game.getCurrentPlayer().getName())) {
                     if (game.getTilePack().getTiles().size() > 0) {
-                        out.print("Choose an item tile to insert from the tile pack into the selected column\n");
+                        out.printToCLI("Choose an item tile to insert from the tile pack into the selected column\n", ColorCLI.CYAN_T);
 
                         boolean validIndex = false;
                         int itemTileIndex = 0;
                         while (!validIndex) {
                             try {
-                                out.print("index: ");
+                                out.printToCLI("index: ", ColorCLI.CYAN);
                                 String input = in.nextLine();
                                 itemTileIndex = Integer.parseInt(input);
                                 if (itemTileIndex >= 0) validIndex = true;
                             } catch (NumberFormatException e) {
-                                System.err.println("\nThis is not a valid input, please insert a number");
+                                out.printToCLI("This is not a valid input, please insert a number\n", ColorCLI.RED_T);
                             }
                         }
                         setChanged();
@@ -568,21 +584,21 @@ public class CLI extends Observable<EventMessage> implements View {
 
             case LAST_TURN -> {
                 if (getNickname().equals(game.getCurrentPlayer().getName())) {
-                    out.println("\nCongrats, you filled your bookshelf! You have an extra point!");
+                    out.printToCLI("\nCongrats, you filled your bookshelf! You have an extra point!\n", ColorCLI.GREEN_T);
                 } else {
-                    out.println("\n" + eventMessage.getNickname() + " filled his bookshelf...");
+                    out.printToCLI("\n" + eventMessage.getNickname() + " filled his bookshelf...\n", ColorCLI.WHITE_T);
                 }
             }
 
             case END_GAME -> {
-                out.println("\n");
+                out.printToCLI("\n", ColorCLI.WHITE);
                 for (PlayerView playerView : game.getSubscribers()) {
-                    out.println(playerView.getName() + "'s score is " + playerView.getScore() + " points");
+                    out.printToCLI(playerView.getName() + "'s score is " + playerView.getScore() + " points", ColorCLI.WHITE_T);
                 }
                 if (eventMessage.getNickname().equals(getNickname())) {
-                    out.println("\nCongratulations, you won!");
+                    out.printToCLI("\nCongratulations, you won!", ColorCLI.GREEN_T);
                 }
-                out.println("Game has ended... Hope you had fun!");
+                out.printToCLI("Game has ended... Hope you had fun!", ColorCLI.CYAN_T);
                 setChanged();
                 notifyObservers(new DisconnectClientMessage(eventMessage.getNickname()));
 
@@ -603,46 +619,43 @@ public class CLI extends Observable<EventMessage> implements View {
         int r = 0;
         while (!validRow) {
             try {
-                out.print("r: ");
+                out.printToCLI("r: ", ColorCLI.WHITE_T);
                 String input = in.nextLine();
                 r = Integer.parseInt(input);
                 if (r >= 0) validRow = true;
             } catch (NumberFormatException e) {
-                System.err.println("\nThis is not a valid input, please insert a number");
+                out.printToCLI("This is not a valid input, please insert a number\n", ColorCLI.RED_T);
             }
         }
         boolean validColumn = false;
         int c = 0;
         while (!validColumn) {
             try {
-                out.print("c: ");
+                out.printToCLI("c: ", ColorCLI.WHITE_T);
                 String input = in.nextLine();
                 c = Integer.parseInt(input);
                 if (c >= 0) validColumn = true;
             } catch (NumberFormatException e) {
-                out.println("This is not a valid input, please insert a number");
+                out.printToCLI("This is not a valid input, please insert a number\n", ColorCLI.RED_T);
             }
         }
-
         return new Position(r, c);
     }
 
     private int askColumnChoice () {
-        out.print("In which column you want to insert your item tiles?\n>>> ");
+        out.printToCLI("In which column you want to insert your item tiles?\n>>> ", ColorCLI.CYAN_T);
         boolean validColumn = false;
         int column = 0;
         while (!validColumn) {
             try {
-                out.print("column: ");
+                out.printToCLI("column: ", ColorCLI.WHITE_T);
                 String input = in.nextLine();
                 column = Integer.parseInt(input);
-                in.nextLine();
                 if (column >= 0) validColumn = true;
             } catch (NumberFormatException e) {
-                out.println("This is not a valid input, please insert a number");
+                out.printToCLI("This is not a valid input, please insert a number\n", ColorCLI.RED_T);
             }
         }
-        in.nextLine();
         return column;
     }
 }
