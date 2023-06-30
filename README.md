@@ -1,5 +1,5 @@
 # Prova Finale Ingegneria del Software- AA 2022-2023 
-![alt text](src/main/resources/it/polimi/ingsw/view/gui/misc/MyShelfie.png)
+![alt text](../src/main/resources/it/polimi/ingsw/view/gui/misc/MyShelfie.png)
 
 📚🏆Implementatation of the game table [My Shelfie](https://www.craniocreations.it/prodotto/my-shelfie) 📚🏆
 
