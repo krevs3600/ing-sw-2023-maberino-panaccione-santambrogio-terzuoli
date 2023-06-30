@@ -121,7 +121,7 @@ public class GameControllerTest {
     }
 
     @Test
-    public void switchPhaseMessageTest() throws IOException {;
+    public void switchPhaseMessageTest() throws IOException {
         gameSpecsMessage2P = new GameSpecsMessage("Player1","twoPlayersGameName", 2);
         gameNameChoiceMessage2P = new GameNameChoiceMessage("Player2", "twoPlayersGameName");
         startGameMessage2P = new StartGameMessage("Player1");
