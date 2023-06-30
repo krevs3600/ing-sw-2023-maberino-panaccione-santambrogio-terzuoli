@@ -24,13 +24,35 @@ Complete rules | ![#c5f015](https://via.placeholder.com/15/008000/000000?text=+)
 | Persistence | ![#c5f015](https://via.placeholder.com/15/008000/000000?text=+) |](https://maven.apache.org/)
 | Disconnections resilience | ![#c5f015](https://via.placeholder.com/15/008000/000000?text=+) |
 
-## UML
 
 ## Jar Execution↩︎
+The Maven Shade Plugin was used to construct the jars. Below are provided the pre-compiled jars. Go to the project's root and issue the following command to compile the jars yourself:
+```bash
+java mvn clean package
+```
+The ```target/``  folder will include the compiled jars under the names of ```PSP47 -server.jar``` e ```PSP47 -client.jar```.
 
+### CLI
 
+Type the following command from the terminal to start My Shelfie  with CLI:
+```bash
+java -jar PSP47-client.jar --cli
+```
 
-## Text Coverage ✔️
+#### GUI
+
+Type the following command from the terminal to start My Shelfie  with GUI:
+```bash
+java -jar PSP47-client.jar
+```
+
+#### SERVER 
+
+Type the following command from the terminal to start My Shelfie  with GUI:
+```bash
+java -jar PSP47-server.jar
+```
+
 
 
 ## Tools ⚙️
