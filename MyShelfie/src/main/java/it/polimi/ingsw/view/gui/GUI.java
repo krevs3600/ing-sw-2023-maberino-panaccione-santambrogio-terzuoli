@@ -93,8 +93,8 @@ public class GUI extends Observable<EventMessage> implements View {
      */
     public void gameMenuGUI(Stage stage) throws IOException {
         try{
-            URL url = new File("src/main/resources/it/polimi/ingsw/view/gui/FXML/start_scene.fxml").toURI().toURL();
-            FXMLLoader fxmlLoader = new FXMLLoader(url);
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("/FXML/start_scene.fxml"));
             Scene scene = new Scene(fxmlLoader.load());
             stage.setTitle("myShelfie!");
             stage.setScene(scene);
@@ -145,9 +145,9 @@ public class GUI extends Observable<EventMessage> implements View {
      */
 
     public void askTypeOfConnection(Stage stage) throws IOException {
-        URL url = new File("src/main/resources/it/polimi/ingsw//view/gui/FXML/RMIorSocket_scene.fxml/").toURI().toURL();
-        FXMLLoader fxmlLoader = new FXMLLoader(url);
-        scene = new Scene(fxmlLoader.load());
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("/FXML/RMIorSocket_scene.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
         this.stage = stage;
         Platform.runLater(() -> stage.setScene(scene));
         rmIorSocketController = fxmlLoader.getController();
@@ -162,9 +162,9 @@ public class GUI extends Observable<EventMessage> implements View {
     @Override
     public void createConnection() {
         try {
-            URL url = new File("src/main/resources/it/polimi/ingsw/view/gui/FXML/AddressIp_scene.fxml/").toURI().toURL();
-            FXMLLoader fxmlLoader = new FXMLLoader(url);
-            scene = new Scene(fxmlLoader.load());
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("/FXML/AddressIp_scene.fxml"));
+            Scene scene = new Scene(fxmlLoader.load());
             Platform.runLater(() -> stage.setScene(scene));
             serverSettingsController = fxmlLoader.getController();
             serverSettingsController.setGui(this);
@@ -217,9 +217,9 @@ public class GUI extends Observable<EventMessage> implements View {
                         try {
                             serverStub.close();
                             try {
-                                URL url = new File("src/main/resources/it/polimi/ingsw/view/gui/FXML/RMIorSocket_scene.fxml/").toURI().toURL();
-                                FXMLLoader fxmlLoader = new FXMLLoader(url);
-                                scene = new Scene(fxmlLoader.load());
+                                FXMLLoader fxmlLoader = new FXMLLoader();
+                                fxmlLoader.setLocation(getClass().getResource("/FXML/RMIorSocket_scene.fxml"));
+                                Scene scene = new Scene(fxmlLoader.load());
                                 Platform.runLater(() -> stage.setScene(scene));
                                 rmIorSocketController = fxmlLoader.getController();
                                 rmIorSocketController.setGui(this);
@@ -240,9 +240,9 @@ public class GUI extends Observable<EventMessage> implements View {
         }
 
         try {
-            URL url = new File("src/main/resources/it/polimi/ingsw/view/gui/FXML/login_scene.fxml/").toURI().toURL();
-            FXMLLoader fxmlLoader = new FXMLLoader(url);
-            scene = new Scene(fxmlLoader.load());
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("/FXML/login_scene.fxml"));
+            Scene scene = new Scene(fxmlLoader.load());
             Platform.runLater(() -> stage.setScene(scene));
             nicknameController = fxmlLoader.getController();
             nicknameController.setGui(this);
@@ -333,9 +333,9 @@ public class GUI extends Observable<EventMessage> implements View {
                 if (loginResponseMessage.isValidNickname()) {
 
                     try {
-                        URL url = new File("src/main/resources/it/polimi/ingsw/view/gui/FXML/Menu_scene.fxml/").toURI().toURL();
-                        FXMLLoader fxmlLoader = new FXMLLoader(url);
-                        scene = new Scene(fxmlLoader.load());
+                        FXMLLoader fxmlLoader = new FXMLLoader();
+                        fxmlLoader.setLocation(getClass().getResource("/FXML/Menu_scene.fxml"));
+                        Scene scene = new Scene(fxmlLoader.load());
                         this.nickname = ((LoginResponseMessage) message).getNickname();
                         MenuController menuController = fxmlLoader.getController();
                         menuController.setGui(this);
@@ -356,9 +356,9 @@ public class GUI extends Observable<EventMessage> implements View {
                 }
                 if(gameSpecsResponseMessage.isValidGameCreation()){
                     try {
-                        URL url = new File("src/main/resources/it/polimi/ingsw/view/gui/FXML/lobby_scene.fxml/").toURI().toURL();
-                        FXMLLoader fxmlLoader = new FXMLLoader(url);
-                        scene = new Scene(fxmlLoader.load());
+                        FXMLLoader fxmlLoader = new FXMLLoader();
+                        fxmlLoader.setLocation(getClass().getResource("/FXML/lobby_scene.fxml"));
+                        Scene scene = new Scene(fxmlLoader.load());
                         lobbyController = fxmlLoader.getController();
                         lobbyController.setGui(this);
                         Platform.runLater(() -> stage.setScene(scene));
@@ -375,9 +375,9 @@ public class GUI extends Observable<EventMessage> implements View {
                 JoinGameResponseMessage joinGameResponseMessage = (JoinGameResponseMessage) message;
                 if (!((JoinGameResponseMessage) message).getAvailableGamesInLobby().isEmpty()) {
                     try {
-                        URL url = new File("src/main/resources/it/polimi/ingsw/view/gui/FXML/GameNameList_scene.fxml/").toURI().toURL();
-                        FXMLLoader fxmlLoader = new FXMLLoader(url);
-                        scene = new Scene(fxmlLoader.load());
+                        FXMLLoader fxmlLoader = new FXMLLoader();
+                        fxmlLoader.setLocation(getClass().getResource("/FXML/GameNameList_scene.fxml"));
+                        Scene scene = new Scene(fxmlLoader.load());
                         GameNameListController gameNameListController = fxmlLoader.getController();
                         gameNameListController.setGui(this);
                         this.gameNameListController = gameNameListController;
@@ -402,8 +402,8 @@ public class GUI extends Observable<EventMessage> implements View {
                 menuController.joinGame.setDisable(true);
                 // reloading the livingBoard_scene
                 try {
-                    URL url = new File("src/main/resources/it/polimi/ingsw/view/gui/FXML/livingBoard_scene.fxml/").toURI().toURL();
-                    FXMLLoader fxmlLoader = new FXMLLoader(url);
+                    FXMLLoader fxmlLoader = new FXMLLoader();
+                    fxmlLoader.setLocation(getClass().getResource("/FXML/livingBoard_scene.fxml"));
                     Scene scene = new Scene(fxmlLoader.load());
                     livingBoardController = fxmlLoader.getController();
                     livingBoardController.setGui(this);
@@ -413,9 +413,9 @@ public class GUI extends Observable<EventMessage> implements View {
                         // updating board and bookshelves
                         livingBoardController.initialize(game, nickname);
                         livingBoardController.updateLivingRoomBoard(game.getLivingRoomBoard());
-                        LivingBoardController.updateBookshelf(game.getPlayer(nickname).getBookshelf(), livingBoardController.bookshelf);
+                        livingBoardController.updateBookshelf(game.getPlayer(nickname).getBookshelf(), livingBoardController.bookshelf);
                         BookshelfView otherBookshelf = game.getSubscribers().get(livingBoardController.getWatchedPlayer()).getBookshelf();
-                        LivingBoardController.updateBookshelf(otherBookshelf, livingBoardController.otherBookshelf);
+                        livingBoardController.updateBookshelf(otherBookshelf, livingBoardController.otherBookshelf);
                         // updating turn infos
                         livingBoardController.setSphereTurnRed();
                         livingBoardController.setTurnLabelRed();
@@ -448,9 +448,9 @@ public class GUI extends Observable<EventMessage> implements View {
                 WaitingResponseMessage waitingResponseMessage = (WaitingResponseMessage) message;
                 if (this.lobbyController == null) {
                     try {
-                        URL url = new File("src/main/resources/it/polimi/ingsw/view/gui/FXML/lobby_scene.fxml/").toURI().toURL();
-                        FXMLLoader fxmlLoader = new FXMLLoader(url);
-                        scene = new Scene(fxmlLoader.load());
+                        FXMLLoader fxmlLoader = new FXMLLoader();
+                        fxmlLoader.setLocation(getClass().getResource("/FXML/lobby_scene.fxml"));
+                        Scene scene = new Scene(fxmlLoader.load());
                         lobbyController = fxmlLoader.getController();
                         lobbyController.setGui(this);
                         Platform.runLater(() -> stage.setScene(scene));
@@ -514,9 +514,9 @@ public class GUI extends Observable<EventMessage> implements View {
     public void gameMenu() {
         if (menuController.getCreateGame()) {
             try {
-                URL url = new File("src/main/resources/it/polimi/ingsw/view/gui/FXML/GameCreation_scene.fxml/").toURI().toURL();
-                FXMLLoader fxmlLoader = new FXMLLoader(url);
-                scene = new Scene(fxmlLoader.load());
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getResource("/FXML/GameCreation_scene.fxml"));
+                Scene scene = new Scene(fxmlLoader.load());
                 gameNameController = fxmlLoader.getController();
                 gameNameController.setGui(this);
                 Platform.runLater(() -> stage.setScene(scene));
@@ -556,9 +556,9 @@ public class GUI extends Observable<EventMessage> implements View {
             case BOARD -> {
                 if (isFirstTime) {
                     try {
-                        URL url = new File("src/main/resources/it/polimi/ingsw/view/gui/FXML/livingBoard_scene.fxml/").toURI().toURL();
-                        FXMLLoader fxmlLoader = new FXMLLoader(url);
-                        scene = new Scene(fxmlLoader.load());
+                        FXMLLoader fxmlLoader = new FXMLLoader();
+                        fxmlLoader.setLocation(getClass().getResource("/FXML/livingBoard_scene.fxml"));
+                        Scene scene = new Scene(fxmlLoader.load());
                         livingBoardController = fxmlLoader.getController();
                         livingBoardController.setGui(this);
 
@@ -610,8 +610,8 @@ public class GUI extends Observable<EventMessage> implements View {
                 if (this.nickname.equals(game.getCurrentPlayer().getName())) {
                     Platform.runLater(() -> {
                         livingBoardController.updateTilePack(game.getTilePack());
-                        LivingBoardController.updateBookshelf(game.getCurrentPlayer().getBookshelf(), livingBoardController.bookshelf);
-                        LivingBoardController.updateBookshelf(game.getPlayer(livingBoardController.getPlayers().get(livingBoardController.getWatchedPlayer())).getBookshelf(), livingBoardController.otherBookshelf);
+                        livingBoardController.updateBookshelf(game.getCurrentPlayer().getBookshelf(), livingBoardController.bookshelf);
+                        livingBoardController.updateBookshelf(game.getPlayer(livingBoardController.getPlayers().get(livingBoardController.getWatchedPlayer())).getBookshelf(), livingBoardController.otherBookshelf);
                         livingBoardController.setGameView(game);
                     });
                     if (game.getTilePack().getTiles().size() > 0) {
@@ -627,7 +627,7 @@ public class GUI extends Observable<EventMessage> implements View {
                     }
                 } else {
                     Platform.runLater(() -> {
-                        LivingBoardController.updateBookshelf(game.getPlayer(livingBoardController.getPlayers().get(livingBoardController.getWatchedPlayer())).getBookshelf(), livingBoardController.otherBookshelf);
+                        livingBoardController.updateBookshelf(game.getPlayer(livingBoardController.getPlayers().get(livingBoardController.getWatchedPlayer())).getBookshelf(), livingBoardController.otherBookshelf);
                     });
                 }
             }
@@ -675,9 +675,9 @@ public class GUI extends Observable<EventMessage> implements View {
             }
             case END_GAME -> {
                 try {
-                    URL url = new File("src/main/resources/it/polimi/ingsw/view/gui/FXML/win_scene.fxml/").toURI().toURL();
-                    FXMLLoader fxmlLoader = new FXMLLoader(url);
-                    scene = new Scene(fxmlLoader.load());
+                    FXMLLoader fxmlLoader = new FXMLLoader();
+                    fxmlLoader.setLocation(getClass().getResource("/FXML/win_scene.fxml"));
+                    Scene scene = new Scene(fxmlLoader.load());
                     WinController winController = fxmlLoader.getController();
                     winController.setGui(this);
                     winController.setGame(game);
@@ -806,9 +806,9 @@ public class GUI extends Observable<EventMessage> implements View {
 
     public void showThisClientScores(GameView game) {
         try {
-            URL url = new File("src/main/resources/it/polimi/ingsw/view/gui/FXML/computeScore_scene.fxml/").toURI().toURL();
-            FXMLLoader fxmlLoader = new FXMLLoader(url);
-            scene = new Scene(fxmlLoader.load());
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("/FXML/computeScore_scene.fxml"));
+            Scene scene = new Scene(fxmlLoader.load());
             computeScoreController = fxmlLoader.getController();
             computeScoreController.setGui(this);
             Platform.runLater(() -> {
@@ -834,9 +834,9 @@ public class GUI extends Observable<EventMessage> implements View {
         switch (resource) {
             case "RMIorSocket_scene.fxml" -> {
                 try {
-                    URL url = new File("src/main/resources/it/polimi/ingsw/view/gui/FXML/start_scene.fxml/").toURI().toURL();
-                    FXMLLoader fxmlLoader = new FXMLLoader(url);
-                    scene = new Scene(fxmlLoader.load());
+                    FXMLLoader fxmlLoader = new FXMLLoader();
+                    fxmlLoader.setLocation(getClass().getResource("/FXML/start_scene.fxml"));
+                    Scene scene = new Scene(fxmlLoader.load());
                     stage.setScene(scene);
                     startController = fxmlLoader.getController();
                     startController.setGui(this);
@@ -846,9 +846,9 @@ public class GUI extends Observable<EventMessage> implements View {
             }
             case "AddressIp_scene.fxml" -> {
                 try {
-                    URL url = new File("src/main/resources/it/polimi/ingsw/view/gui/FXML/RMIorSocket_scene.fxml/").toURI().toURL();
-                    FXMLLoader fxmlLoader = new FXMLLoader(url);
-                    scene = new Scene(fxmlLoader.load());
+                    FXMLLoader fxmlLoader = new FXMLLoader();
+                    fxmlLoader.setLocation(getClass().getResource("/FXML/RMIorSocket_scene.fxml"));
+                    Scene scene = new Scene(fxmlLoader.load());
                     Platform.runLater(() -> stage.setScene(scene));
                     rmIorSocketController = fxmlLoader.getController();
                     rmIorSocketController.setGui(this);
@@ -858,9 +858,9 @@ public class GUI extends Observable<EventMessage> implements View {
             }
             case "login_scene.fxml" -> {
                 try {
-                    URL url = new File("src/main/resources/it/polimi/ingsw/view/gui/FXML/AddressIp_scene.fxml/").toURI().toURL();
-                    FXMLLoader fxmlLoader = new FXMLLoader(url);
-                    scene = new Scene(fxmlLoader.load());
+                    FXMLLoader fxmlLoader = new FXMLLoader();
+                    fxmlLoader.setLocation(getClass().getResource("/FXML/AddressIp_scene.fxml"));
+                    Scene scene = new Scene(fxmlLoader.load());
                     Platform.runLater(() -> stage.setScene(scene));
                     serverSettingsController = fxmlLoader.getController();
                     serverSettingsController.setGui(this);
@@ -870,9 +870,9 @@ public class GUI extends Observable<EventMessage> implements View {
             }
             case "Menu_scene.fxml" -> {
                 try {
-                    URL url = new File("src/main/resources/it/polimi/ingsw/view/gui/FXML/login_scene.fxml/").toURI().toURL();
-                    FXMLLoader fxmlLoader = new FXMLLoader(url);
-                    scene = new Scene(fxmlLoader.load());
+                    FXMLLoader fxmlLoader = new FXMLLoader();
+                    fxmlLoader.setLocation(getClass().getResource("/FXML/login_scene.fxml"));
+                    Scene scene = new Scene(fxmlLoader.load());
                     Platform.runLater(() -> stage.setScene(scene));
                     nicknameController = fxmlLoader.getController();
                     nicknameController.setGui(this);
@@ -882,9 +882,9 @@ public class GUI extends Observable<EventMessage> implements View {
             }
             case "GameCreation_scene.fxml", "GameNameList_scene.fxml","win_scene.fxml" -> {
                 try {
-                    URL url = new File("src/main/resources/it/polimi/ingsw/view/gui/FXML/Menu_scene.fxml/").toURI().toURL();
-                    FXMLLoader fxmlLoader = new FXMLLoader(url);
-                    scene = new Scene(fxmlLoader.load());
+                    FXMLLoader fxmlLoader = new FXMLLoader();
+                    fxmlLoader.setLocation(getClass().getResource("/FXML/Menu_scene.fxml"));
+                    Scene scene = new Scene(fxmlLoader.load());
                     menuController = fxmlLoader.getController();
                     menuController.setGui(this);
                     Platform.runLater(() -> stage.setScene(scene));
@@ -894,9 +894,9 @@ public class GUI extends Observable<EventMessage> implements View {
             }
             case "computeScore_scene.fxml" -> {
                 try {
-                    URL url = new File("src/main/resources/it/polimi/ingsw/view/gui/FXML/win_scene.fxml/").toURI().toURL();
-                    FXMLLoader fxmlLoader = new FXMLLoader(url);
-                    scene = new Scene(fxmlLoader.load());
+                    FXMLLoader fxmlLoader = new FXMLLoader();
+                    fxmlLoader.setLocation(getClass().getResource("/FXML/win_scene.fxml"));
+                    Scene scene = new Scene(fxmlLoader.load());
                     WinController winController = fxmlLoader.getController();
                     winController.setGui(this);
                     winController.setGame(game);

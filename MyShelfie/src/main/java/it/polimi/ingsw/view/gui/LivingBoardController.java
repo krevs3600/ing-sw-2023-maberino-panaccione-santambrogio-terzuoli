@@ -18,10 +18,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Sphere;
 import javafx.scene.text.Text;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.*;
 
 /**
@@ -126,18 +122,10 @@ public class LivingBoardController {
     public Button playerBookshelf;
 
     @FXML
-    public AnchorPane PaneForPopup;
-    @FXML
-    public Text textPopUp;
-
-    @FXML
     public ImageView CommonGoalAchieved;
 
     @FXML
     public Text CommonGoalText;
-
-    @FXML
-    public Text textForPopUp;
 
     @FXML
     public TitledPane descriptionFirstCG;
@@ -236,8 +224,8 @@ public class LivingBoardController {
      * @param itemTile ItemTile
      * @return image's path of the ItemTile
      */
-    private static String tilePath(ItemTile itemTile){
-        String path = "src/main/resources/it/polimi/ingsw/view/gui/itemtiles/";
+    private String tilePath(ItemTile itemTile){
+        String path = "/itemtiles/";
         return path.concat(itemTile.getType().toString()).concat("1.").concat(itemTile.getImageIndex()).concat(".png");
     }
 
@@ -255,11 +243,7 @@ public class LivingBoardController {
         }
         // set firstSeatToken
         if (nickname.equals(gameView.getSubscribers().get(0).getName())){
-            try {
-                seatToken.setImage(new Image(new FileInputStream("src/main/resources/it/polimi/ingsw/view/gui/misc/firstplayertoken.png")));
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+            seatToken.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/misc/firstplayertoken.png"))));
         }
         // INIT LIVING_ROOM_BOARD
 
@@ -267,15 +251,11 @@ public class LivingBoardController {
             for (int c=0; c<9; c++){
                 SpaceView space = gameView.getLivingRoomBoard().getSpace(new Position(r,c));
                 if (!space.isFree() && space.getType() == SpaceType.PLAYABLE){
-                    try {
-                        ImageView imageView = new ImageView(new Image(new FileInputStream(tilePath(space.getTile()))));
-                        imageView.setFitWidth((board.getPrefWidth() - ((board.getColumnCount()-1)*board.getHgap()))/board.getColumnCount()-10);
-                        imageView.setFitHeight((board.getPrefHeight() - ((board.getRowCount()-1)*board.getVgap()))/board.getRowCount()-10);
-                        imageView.setOnMouseClicked(this::boardTileClicked);
-                        board.add(imageView, c, r);
-                    } catch (FileNotFoundException e) {
-                        System.err.println(e.getMessage());
-                    }
+                    ImageView imageView = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream(tilePath(space.getTile())))));
+                    imageView.setFitWidth((board.getPrefWidth() - ((board.getColumnCount()-1)*board.getHgap()))/board.getColumnCount()-10);
+                    imageView.setFitHeight((board.getPrefHeight() - ((board.getRowCount()-1)*board.getVgap()))/board.getRowCount()-10);
+                    imageView.setOnMouseClicked(this::boardTileClicked);
+                    board.add(imageView, c, r);
                 }
                 else {
                     board.add(new ImageView(), c, r);
@@ -315,28 +295,19 @@ public class LivingBoardController {
 
         //init personal Card
         int num = gameView.getSubscribers().stream().filter(x-> x.getName().equals(nickname)).toList().get(0).getPersonalGoalCard().getPath();
-        try {
-            personalCard.setImage(new Image(new FileInputStream("src/main/resources/it/polimi/ingsw/view/gui/personal goal cards/Personal_Goals" + num + ".png")));
-        } catch (FileNotFoundException e) {
-            System.err.println(e.getMessage());
-        }
+        personalCard.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/personal goal cards/Personal_Goals" + num + ".png"))));
 
         //init common goal card
-        try {
-            commonGoalCard1.setImage(new Image(new FileInputStream(getCommonGoalCardPic(gameView.getLivingRoomBoard().getCommonGoalCards().get(0)))));
-            descriptioncommonGoalCard1=gameView.getLivingRoomBoard().getCommonGoalCards().get(0).toString();
-            descriptionFirstCG.setText("FIRST COMMON GOAL CARD ");
-            descriptionCommonGoalCard1_text.setText(descriptioncommonGoalCard1);
+        commonGoalCard1.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(getCommonGoalCardPic(gameView.getLivingRoomBoard().getCommonGoalCards().get(0))))));
+        descriptioncommonGoalCard1=gameView.getLivingRoomBoard().getCommonGoalCards().get(0).toString();
+        descriptionFirstCG.setText("FIRST COMMON GOAL CARD ");
+        descriptionCommonGoalCard1_text.setText(descriptioncommonGoalCard1);
 
-            commonGoalCard2.setImage(new Image(new FileInputStream(getCommonGoalCardPic(gameView.getLivingRoomBoard().getCommonGoalCards().get(1)))));
-            descriptioncommonGoalCard2=gameView.getLivingRoomBoard().getCommonGoalCards().get(1).toString();
+        commonGoalCard2.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(getCommonGoalCardPic(gameView.getLivingRoomBoard().getCommonGoalCards().get(1))))));
+        descriptioncommonGoalCard2=gameView.getLivingRoomBoard().getCommonGoalCards().get(1).toString();
 
-            descriptionSecondCG.setText("SECOND COMMON GOAL CARD");
-            descriptionCommonGoalCard2_text.setText(descriptioncommonGoalCard2);
-        } catch (FileNotFoundException e) {
-            System.err.println(e.getMessage());
-        }
-
+        descriptionSecondCG.setText("SECOND COMMON GOAL CARD");
+        descriptionCommonGoalCard2_text.setText(descriptioncommonGoalCard2);
     }
 
 
@@ -354,14 +325,11 @@ public class LivingBoardController {
     public void initScoringToken(CommonGoalCardView card, ImageView stackImageView) {
         Stack<ScoringToken> stack = card.getStack();
         if (stack.size()>0){
-            String resource = "src/main/resources/it/polimi/ingsw/view/gui/scoring tokens/scoring_";
+            String resource = "/scoring tokens/scoring_";
             String initToken = resource.concat(String.valueOf(stack.pop().getValue()) + ".jpg");
-            try{
-                Image image = new Image(new FileInputStream(initToken));
-                stackImageView.setImage(image);
-            } catch (FileNotFoundException e){
-                e.printStackTrace();
-            }
+            Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(initToken)));
+            stackImageView.setImage(image);
+
         }
     }
 
@@ -387,19 +355,15 @@ public class LivingBoardController {
      * @param bookshelf player's bookshelf
      * @param bookshelfGrid JavaFX gridPane
      */
-    public static void updateBookshelf(BookshelfView bookshelf, GridPane bookshelfGrid) {
+    public void updateBookshelf(BookshelfView bookshelf, GridPane bookshelfGrid) {
         initBookshelf(bookshelfGrid);
         for(int r=0;r<bookshelfGrid.getRowCount(); r++){
             for (int c=0; c<bookshelfGrid.getColumnCount(); c++){
 
                 if (bookshelf.getGrid()[r][c] != null){
-                    try {
-                        Image tile = new Image(new FileInputStream(tilePath(bookshelf.getGrid()[r][c])));
-                        ImageView bookshelfImage = (ImageView) bookshelfGrid.getChildren().get(r*5 + c);
-                        bookshelfImage.setImage(tile);
-                    } catch (IOException e){
-                        System.err.println(e.getMessage());
-                    }
+                    Image tile = new Image(Objects.requireNonNull(getClass().getResourceAsStream(tilePath(bookshelf.getGrid()[r][c]))));
+                    ImageView bookshelfImage = (ImageView) bookshelfGrid.getChildren().get(r*5 + c);
+                    bookshelfImage.setImage(tile);
                 } else {
                     ImageView bookshelfImage = (ImageView) bookshelfGrid.getChildren().get(r*5 + c);
                     bookshelfImage.setImage(null);
@@ -417,11 +381,7 @@ public class LivingBoardController {
         for (int i=0; i<3; i++){
             ImageView imageView = (ImageView) tilePack.getChildren().get(i);
             if (i<tilePackView.getTiles().size()){
-                try {
-                    imageView.setImage(new Image(new FileInputStream(tilePath(tilePackView.getTiles().get(i)))));
-                } catch (IOException e){
-                    System.err.println(e.getMessage());
-                }
+                imageView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(tilePath(tilePackView.getTiles().get(i))))));
                 imageView.setOnMouseClicked(this::packTileClicked);
             } else {
                 imageView.setImage(null);
@@ -438,12 +398,8 @@ public class LivingBoardController {
             for (int c=0; c<9; c++){
                 SpaceView space = livingRoomBoardView.getSpace(new Position(r,c));
                 ImageView imageView = (ImageView) board.getChildren().get(r*9 + c);
-                if (!space.isFree() && space.getType().equals(SpaceType.PLAYABLE)){
-                    try {
-                        imageView.setImage(new Image(new FileInputStream(tilePath(space.getTile()))));
-                    } catch (FileNotFoundException e) {
-                        System.err.println(e.getMessage());
-                    }
+                if (!space.isFree() && space.getType().equals(SpaceType.PLAYABLE)) {
+                    imageView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(tilePath(space.getTile())))));
                 }
                 else {
                     imageView.setImage(null);
@@ -535,7 +491,7 @@ public class LivingBoardController {
      * @return String image's path to the correct representation of the commonGoalCard
      */
     public static String getCommonGoalCardPic(CommonGoalCardView card){
-        String path = "src/main/resources/it/polimi/ingsw/view/gui/common goal cards/";
+        String path = "/common goal cards/";
         switch (card.getType()) {
             case "TwoSquaresCommonGoalCard" -> {
                 return path + "1.jpg";
@@ -628,22 +584,15 @@ public class LivingBoardController {
      */
     public void updateTokens(GameView gameView, int commonGoalCardIndex) {
         Stack<ScoringToken> oldStack = gameView.getLivingRoomBoard().getCommonGoalCards().get(commonGoalCardIndex).getStack();
-        String path = "src/main/resources/it/polimi/ingsw/view/gui/scoring tokens/scoring_";
+        String path = "/scoring tokens/scoring_";
         String poppedTokenPath = path.concat(String.valueOf(oldStack.pop().getValue()) + ".jpg");
         Image poppedToken = null;
         Image nextToken = null;
-        try {
-            poppedToken = new Image(new FileInputStream(poppedTokenPath));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        poppedToken = new Image(Objects.requireNonNull(getClass().getResourceAsStream(poppedTokenPath)));
+
         if (oldStack.size()>0){
             String nextTokenPath = path.concat(String.valueOf(oldStack.pop().getValue()) + ".jpg");
-            try {
-                nextToken = new Image(new FileInputStream(nextTokenPath));
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+            nextToken = new Image(Objects.requireNonNull(getClass().getResourceAsStream(nextTokenPath)));
         }
 
         if (commonGoalCardIndex == 0) {

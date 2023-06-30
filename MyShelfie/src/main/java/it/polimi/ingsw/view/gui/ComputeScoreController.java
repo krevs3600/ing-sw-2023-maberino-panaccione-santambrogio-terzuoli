@@ -1,5 +1,7 @@
 package it.polimi.ingsw.view.gui;
 
+import it.polimi.ingsw.model.ItemTile;
+import it.polimi.ingsw.model.ModelView.BookshelfView;
 import it.polimi.ingsw.model.ModelView.GameView;
 import it.polimi.ingsw.model.ModelView.PlayerView;
 import it.polimi.ingsw.model.RomanNumber;
@@ -15,9 +17,9 @@ import javafx.scene.text.Font;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.Objects;
 
 import static it.polimi.ingsw.view.gui.LivingBoardController.getCommonGoalCardPic;
-import static it.polimi.ingsw.view.gui.LivingBoardController.updateBookshelf;
 
 public class ComputeScoreController {
     public String resource = "computeScore_scene.fxml";
@@ -150,5 +152,54 @@ public class ComputeScoreController {
 
     public void backToMenu(MouseEvent mouseEvent) {
         gui.goBackToPreviousScene("win_scene.fxml");
+    }
+
+    /**
+     * Initialize ImageViews of the bookshelf in the gridPane
+     * @param bookshelfGrid gridPane
+     */
+    public static void initBookshelf(GridPane bookshelfGrid){
+        for(int r=0;r<bookshelfGrid.getRowCount(); r++){
+            for (int c=0; c<bookshelfGrid.getColumnCount(); c++){
+                ImageView imageView = new ImageView();
+                imageView.setFitWidth((bookshelfGrid.getPrefWidth() - (int)bookshelfGrid.getPadding().getLeft() - (int)bookshelfGrid.getPadding().getRight() - ((bookshelfGrid.getColumnCount()-1)*bookshelfGrid.getHgap()))/bookshelfGrid.getColumnCount());
+                imageView.setFitHeight((bookshelfGrid.getPrefHeight() - (int)bookshelfGrid.getPadding().getTop() - (int)bookshelfGrid.getPadding().getBottom() - ((bookshelfGrid.getRowCount()-1)*bookshelfGrid.getVgap()))/bookshelfGrid.getRowCount());
+                imageView.setImage(null);
+                imageView.setOnMouseClicked(null);
+                bookshelfGrid.add(imageView, c,r);
+            }
+        }
+    }
+
+    /**
+     * Load the current tiles' displacement of the provided bookshelf in the gridPane
+     * @param bookshelf player's bookshelf
+     * @param bookshelfGrid JavaFX gridPane
+     */
+    public void updateBookshelf(BookshelfView bookshelf, GridPane bookshelfGrid) {
+        initBookshelf(bookshelfGrid);
+        for(int r=0;r<bookshelfGrid.getRowCount(); r++){
+            for (int c=0; c<bookshelfGrid.getColumnCount(); c++){
+
+                if (bookshelf.getGrid()[r][c] != null){
+                    Image tile = new Image(Objects.requireNonNull(getClass().getResourceAsStream(tilePath(bookshelf.getGrid()[r][c]))));
+                    ImageView bookshelfImage = (ImageView) bookshelfGrid.getChildren().get(r*5 + c);
+                    bookshelfImage.setImage(tile);
+                } else {
+                    ImageView bookshelfImage = (ImageView) bookshelfGrid.getChildren().get(r*5 + c);
+                    bookshelfImage.setImage(null);
+                }
+            }
+        }
+    }
+
+    /**
+     * Given an ItemTile it return its graphical representation's path
+     * @param itemTile ItemTile
+     * @return image's path of the ItemTile
+     */
+    private String tilePath(ItemTile itemTile){
+        String path = "/itemtiles/";
+        return path.concat(itemTile.getType().toString()).concat("1.").concat(itemTile.getImageIndex()).concat(".png");
     }
 }
