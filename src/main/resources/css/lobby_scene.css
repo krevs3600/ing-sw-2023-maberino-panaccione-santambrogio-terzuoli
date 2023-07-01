@@ -1,0 +1,21 @@
+.rootPane {
+    -fx-background-image: url("../misc/scene_background.png");
+    -fx-background-size: stretch;
+}
+
+
+.Text {
+    -fx-font-family: 'LillyBelle';
+    -fx-font-size: 38;
+    -fx-text-fill: #FFA54F;
+    -fx-effect: dropshadow(gaussian, #8B4513, 2, 0, 0, 0);
+}
+
+.Text2{
+    -fx-font-family: 'LillyBelle';
+    -fx-font-size: 32;
+    -fx-text-fill: #BCECAC;
+    -fx-effect: dropshadow(gaussian, #5E7954, 2, 0, 0, 0);
+}
+
+
