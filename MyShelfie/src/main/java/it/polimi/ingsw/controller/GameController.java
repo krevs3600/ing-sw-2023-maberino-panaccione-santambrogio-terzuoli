@@ -303,6 +303,7 @@ public class GameController implements Serializable {
                     } else if (key > pointsAdj.get(0).get(3)) {
                         score += (pointsAdj.get(1).get(3)) * adjacentTiles.get(key);
                         adjacentTilesScore += (pointsAdj.get(1).get(3)) * adjacentTiles.get(key);
+                        break;
                     }
                 }
             }
