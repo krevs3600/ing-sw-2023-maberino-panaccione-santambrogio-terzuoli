@@ -242,7 +242,7 @@ public class GameController implements Serializable {
         int max_score = 0;
         for (Player player : getGame().getSubscribers()){
             int score = player.getScore();
-            if(score > max_score) {
+            if(score >= max_score) {
                 max_score = score;
                 winner = player;
             }

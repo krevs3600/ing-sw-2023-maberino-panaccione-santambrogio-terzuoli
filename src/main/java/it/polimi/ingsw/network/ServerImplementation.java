@@ -70,6 +70,22 @@ public class ServerImplementation extends UnicastRemoteObject implements Server 
                     Storage storage = new Storage();
                     storage.delete();
                 }
+
+                int numDisconnectedPlayers = 0;
+                for (Player player: game.getSubscribers()) {
+                    if (disconnectedPlayersGame.containsKey(player.getName())) numDisconnectedPlayers++;
+                }
+                if (numDisconnectedPlayers==game.getSubscribers().size()) {
+                    savedGames.remove(playerGame.get(client));
+                    Storage storage = new Storage();
+                    storage.delete();
+                    currentGames.remove(game.getGameName());
+                    for (Player player: game.getSubscribers()) {
+                        disconnectedPlayersGame.remove(player.getName());
+                    }
+                    return;
+                }
+
                 if (disconnectedPlayersGame.containsKey(eventMessage.getNickname()) && (eventMessage instanceof PlayerTurnMessage)) {
                     System.out.println("Skipping the " + eventMessage.getNickname() + "'s turn");
                     if (!connectedClients.containsValue(client)) {

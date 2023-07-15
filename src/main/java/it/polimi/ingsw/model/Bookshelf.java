@@ -214,6 +214,20 @@ public class Bookshelf  implements Serializable {
                         }
                     }
 
+                    for (int w=0; w<getMaxHeight(); w++) {
+                        for (int z=0; z<getMaxWidth(); z++) {
+                            if (auxiliary[w][z] == 2) {
+                                auxiliary[w][z] = 1;
+                                counter++;
+                                if (w > 0 && grid[w - 1][z] != null && grid[w - 1][z].getType().equals(type) && auxiliary[w - 1][z] == 0) {
+                                    auxiliary[w - 1][z] = 2;
+                                    w -= 2;
+                                }
+
+                            }
+                        }
+                    }
+
                     if (m.containsKey(counter)) m.replace(counter, m.get(counter) + 1);
                     else {m.put(counter, 1);}
                     counter = 0;

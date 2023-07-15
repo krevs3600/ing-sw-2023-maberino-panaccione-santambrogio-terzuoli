@@ -589,7 +589,7 @@ public class CLI extends Observable<EventMessage> implements View {
             }
 
             case END_GAME -> {
-                out.printToCLI("\n", ColorCLI.WHITE);
+                out.printToCLI("\n", ColorCLI.WHITE_T);
                 for (PlayerView playerView : game.getSubscribers()) {
                     out.printToCLI(playerView.getName() + "'s score is " + playerView.getScore() + " points\n", ColorCLI.WHITE_T);
                 }

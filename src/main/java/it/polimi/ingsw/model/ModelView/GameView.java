@@ -264,10 +264,19 @@ public class GameView implements Serializable {
 
         game = game.concat(UP_MARGIN);
         Stack<ScoringToken> stack = getCommonGoalCards().get(0).getStack();
-        game = game.concat(stack.get(stack.size()-1).toString() + " ");
+        if (stack.size()>0){
+            game = game.concat(stack.get(stack.size()-1).toString() + " ");
+        } else {
+            game = game.concat("[   ] ");
+        }
+
         game = game.concat(getCommonGoalCards().get(0).toString() + "\n\n");
         stack = getCommonGoalCards().get(1).getStack();
-        game = game.concat(stack.get(stack.size()-1).toString() + " ");
+        if (stack.size()>0){
+            game = game.concat(stack.get(stack.size()-1).toString() + " ");
+        } else {
+            game = game.concat("[   ] ");
+        }
         game = game.concat(getCommonGoalCards().get(1).toString() + "\n\n");
 
         int personal = 0;
